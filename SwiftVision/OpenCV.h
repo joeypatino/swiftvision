@@ -2,6 +2,6 @@
 
 @interface OpenCV : NSObject
 + (NSString *)version;
-//+ (cv::Mat)imRead:(NSString *)fileName;
++ (UIImage *)resize:(UIImage *)img to:(CGSize)minSize;
 
 @end

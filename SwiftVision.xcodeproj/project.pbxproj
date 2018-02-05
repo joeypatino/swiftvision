@@ -17,11 +17,13 @@
 		D40B28592028860D00CA8559 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D40B28582028860D00CA8559 /* Assets.xcassets */; };
 		D40B285C2028860D00CA8559 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = D40B285A2028860D00CA8559 /* LaunchScreen.storyboard */; };
 		D40B28632028874200CA8559 /* SwiftVision.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D40B28392028856300CA8559 /* SwiftVision.framework */; };
-		D40B286520288C9400CA8559 /* UIImage+OpenCV.h in Headers */ = {isa = PBXBuildFile; fileRef = D40B286420288C9400CA8559 /* UIImage+OpenCV.h */; };
+		D40B286520288C9400CA8559 /* UIImage+OpenCV.h in Headers */ = {isa = PBXBuildFile; fileRef = D40B286420288C9400CA8559 /* UIImage+OpenCV.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		D40B286720288EE100CA8559 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D40B286620288EE100CA8559 /* CoreGraphics.framework */; };
 		D40B286920288EEA00CA8559 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D40B286820288EEA00CA8559 /* UIKit.framework */; };
 		D40B286B20288F2E00CA8559 /* UIImage+OpenCV.mm in Sources */ = {isa = PBXBuildFile; fileRef = D40B286A20288F2E00CA8559 /* UIImage+OpenCV.mm */; };
 		D40B2889202891D800CA8559 /* PrefixHeader.pch in Headers */ = {isa = PBXBuildFile; fileRef = D40B2888202891D800CA8559 /* PrefixHeader.pch */; };
+		D48B4B712028AC0600DFA7AC /* input_image.jpeg in Resources */ = {isa = PBXBuildFile; fileRef = D48B4B702028AC0600DFA7AC /* input_image.jpeg */; };
+		D48B4B732028B6DC00DFA7AC /* 90550036_edit.jpg in Resources */ = {isa = PBXBuildFile; fileRef = D48B4B722028B6DC00DFA7AC /* 90550036_edit.jpg */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -53,6 +55,8 @@
 		D40B286820288EEA00CA8559 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		D40B286A20288F2E00CA8559 /* UIImage+OpenCV.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = "UIImage+OpenCV.mm"; sourceTree = "<group>"; };
 		D40B2888202891D800CA8559 /* PrefixHeader.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PrefixHeader.pch; sourceTree = "<group>"; };
+		D48B4B702028AC0600DFA7AC /* input_image.jpeg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = input_image.jpeg; sourceTree = "<group>"; };
+		D48B4B722028B6DC00DFA7AC /* 90550036_edit.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = 90550036_edit.jpg; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -123,6 +127,8 @@
 		D40B28502028860D00CA8559 /* OpenCVDemo */ = {
 			isa = PBXGroup;
 			children = (
+				D48B4B702028AC0600DFA7AC /* input_image.jpeg */,
+				D48B4B722028B6DC00DFA7AC /* 90550036_edit.jpg */,
 				D40B28512028860D00CA8559 /* AppDelegate.swift */,
 				D40B28532028860D00CA8559 /* ViewController.swift */,
 				D40B28552028860D00CA8559 /* Main.storyboard */,
@@ -142,8 +148,8 @@
 			files = (
 				D40B2889202891D800CA8559 /* PrefixHeader.pch in Headers */,
 				D40B283E2028856300CA8559 /* SwiftVision.h in Headers */,
-				D40B2849202885AA00CA8559 /* OpenCV.h in Headers */,
 				D40B286520288C9400CA8559 /* UIImage+OpenCV.h in Headers */,
+				D40B2849202885AA00CA8559 /* OpenCV.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -239,6 +245,8 @@
 			files = (
 				D40B285C2028860D00CA8559 /* LaunchScreen.storyboard in Resources */,
 				D40B28592028860D00CA8559 /* Assets.xcassets in Resources */,
+				D48B4B712028AC0600DFA7AC /* input_image.jpeg in Resources */,
+				D48B4B732028B6DC00DFA7AC /* 90550036_edit.jpg in Resources */,
 				D40B28572028860D00CA8559 /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -426,10 +434,7 @@
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				KEEP_PRIVATE_EXTERNS = NO;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-				OTHER_CPLUSPLUSFLAGS = (
-					"$(OTHER_CFLAGS)",
-					"-fvisibility=hidden",
-				);
+				OTHER_CPLUSPLUSFLAGS = "$(OTHER_CFLAGS)";
 				PRODUCT_BUNDLE_IDENTIFIER = com.onitaps.SwiftVision;
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
 				SEPARATE_SYMBOL_EDIT = NO;
@@ -460,10 +465,7 @@
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				KEEP_PRIVATE_EXTERNS = NO;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-				OTHER_CPLUSPLUSFLAGS = (
-					"$(OTHER_CFLAGS)",
-					"-fvisibility=hidden",
-				);
+				OTHER_CPLUSPLUSFLAGS = "$(OTHER_CFLAGS)";
 				PRODUCT_BUNDLE_IDENTIFIER = com.onitaps.SwiftVision;
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
 				SEPARATE_SYMBOL_EDIT = NO;

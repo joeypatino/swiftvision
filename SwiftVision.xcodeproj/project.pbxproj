@@ -17,24 +17,20 @@
 		D40B28592028860D00CA8559 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D40B28582028860D00CA8559 /* Assets.xcassets */; };
 		D40B285C2028860D00CA8559 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = D40B285A2028860D00CA8559 /* LaunchScreen.storyboard */; };
 		D40B28632028874200CA8559 /* SwiftVision.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D40B28392028856300CA8559 /* SwiftVision.framework */; };
-		D40B286520288C9400CA8559 /* UIImage+OpenCV.h in Headers */ = {isa = PBXBuildFile; fileRef = D40B286420288C9400CA8559 /* UIImage+OpenCV.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		D40B286720288EE100CA8559 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D40B286620288EE100CA8559 /* CoreGraphics.framework */; };
 		D40B286920288EEA00CA8559 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D40B286820288EEA00CA8559 /* UIKit.framework */; };
-		D40B286B20288F2E00CA8559 /* UIImage+OpenCV.mm in Sources */ = {isa = PBXBuildFile; fileRef = D40B286A20288F2E00CA8559 /* UIImage+OpenCV.mm */; };
 		D40B2889202891D800CA8559 /* PrefixHeader.pch in Headers */ = {isa = PBXBuildFile; fileRef = D40B2888202891D800CA8559 /* PrefixHeader.pch */; };
 		D48B4B712028AC0600DFA7AC /* input_image.jpeg in Resources */ = {isa = PBXBuildFile; fileRef = D48B4B702028AC0600DFA7AC /* input_image.jpeg */; };
 		D48B4B732028B6DC00DFA7AC /* 90550036_edit.jpg in Resources */ = {isa = PBXBuildFile; fileRef = D48B4B722028B6DC00DFA7AC /* 90550036_edit.jpg */; };
+		D4A572C2202A1E1500D8F4B0 /* UIImageContours.h in Headers */ = {isa = PBXBuildFile; fileRef = D4A572C0202A1E1500D8F4B0 /* UIImageContours.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		D4A572C3202A1E1500D8F4B0 /* UIImageContours.mm in Sources */ = {isa = PBXBuildFile; fileRef = D4A572C1202A1E1500D8F4B0 /* UIImageContours.mm */; };
+		D4A572C9202A1E2800D8F4B0 /* UIImage+OpenCV.h in Headers */ = {isa = PBXBuildFile; fileRef = D4A572C5202A1E2800D8F4B0 /* UIImage+OpenCV.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		D4A572CA202A1E2800D8F4B0 /* UIImage+Mat.h in Headers */ = {isa = PBXBuildFile; fileRef = D4A572C6202A1E2800D8F4B0 /* UIImage+Mat.h */; };
+		D4A572CB202A1E2800D8F4B0 /* UIImage+OpenCV.mm in Sources */ = {isa = PBXBuildFile; fileRef = D4A572C7202A1E2800D8F4B0 /* UIImage+OpenCV.mm */; };
+		D4A572CC202A1E2800D8F4B0 /* UIImage+Mat.mm in Sources */ = {isa = PBXBuildFile; fileRef = D4A572C8202A1E2800D8F4B0 /* UIImage+Mat.mm */; };
+		D4A572CF202A348800D8F4B0 /* Contour.h in Headers */ = {isa = PBXBuildFile; fileRef = D4A572CD202A348800D8F4B0 /* Contour.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		D4A572D0202A348800D8F4B0 /* Contour.mm in Sources */ = {isa = PBXBuildFile; fileRef = D4A572CE202A348800D8F4B0 /* Contour.mm */; };
 /* End PBXBuildFile section */
-
-/* Begin PBXContainerItemProxy section */
-		D40B28612028873500CA8559 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = D40B28302028856300CA8559 /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = D40B28382028856300CA8559;
-			remoteInfo = SwiftVision;
-		};
-/* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
 		D40B28392028856300CA8559 /* SwiftVision.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = SwiftVision.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -50,13 +46,19 @@
 		D40B28582028860D00CA8559 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		D40B285B2028860D00CA8559 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		D40B285D2028860D00CA8559 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		D40B286420288C9400CA8559 /* UIImage+OpenCV.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.objc; path = "UIImage+OpenCV.h"; sourceTree = "<group>"; };
 		D40B286620288EE100CA8559 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
 		D40B286820288EEA00CA8559 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
-		D40B286A20288F2E00CA8559 /* UIImage+OpenCV.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = "UIImage+OpenCV.mm"; sourceTree = "<group>"; };
 		D40B2888202891D800CA8559 /* PrefixHeader.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PrefixHeader.pch; sourceTree = "<group>"; };
 		D48B4B702028AC0600DFA7AC /* input_image.jpeg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = input_image.jpeg; sourceTree = "<group>"; };
 		D48B4B722028B6DC00DFA7AC /* 90550036_edit.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = 90550036_edit.jpg; sourceTree = "<group>"; };
+		D4A572C0202A1E1500D8F4B0 /* UIImageContours.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UIImageContours.h; sourceTree = "<group>"; };
+		D4A572C1202A1E1500D8F4B0 /* UIImageContours.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = UIImageContours.mm; sourceTree = "<group>"; };
+		D4A572C5202A1E2800D8F4B0 /* UIImage+OpenCV.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImage+OpenCV.h"; sourceTree = "<group>"; };
+		D4A572C6202A1E2800D8F4B0 /* UIImage+Mat.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImage+Mat.h"; sourceTree = "<group>"; };
+		D4A572C7202A1E2800D8F4B0 /* UIImage+OpenCV.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = "UIImage+OpenCV.mm"; sourceTree = "<group>"; };
+		D4A572C8202A1E2800D8F4B0 /* UIImage+Mat.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = "UIImage+Mat.mm"; sourceTree = "<group>"; };
+		D4A572CD202A348800D8F4B0 /* Contour.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Contour.h; sourceTree = "<group>"; };
+		D4A572CE202A348800D8F4B0 /* Contour.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = Contour.mm; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -107,8 +109,8 @@
 				D40B283D2028856300CA8559 /* Info.plist */,
 				D40B2847202885AA00CA8559 /* OpenCV.h */,
 				D40B2848202885AA00CA8559 /* OpenCV.mm */,
-				D40B286420288C9400CA8559 /* UIImage+OpenCV.h */,
-				D40B286A20288F2E00CA8559 /* UIImage+OpenCV.mm */,
+				D4A572C4202A1E2800D8F4B0 /* Extensions */,
+				D4A572BF202A1E1500D8F4B0 /* Models */,
 				D40B2888202891D800CA8559 /* PrefixHeader.pch */,
 			);
 			path = SwiftVision;
@@ -139,6 +141,28 @@
 			path = OpenCVDemo;
 			sourceTree = "<group>";
 		};
+		D4A572BF202A1E1500D8F4B0 /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				D4A572C0202A1E1500D8F4B0 /* UIImageContours.h */,
+				D4A572C1202A1E1500D8F4B0 /* UIImageContours.mm */,
+				D4A572CD202A348800D8F4B0 /* Contour.h */,
+				D4A572CE202A348800D8F4B0 /* Contour.mm */,
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
+		D4A572C4202A1E2800D8F4B0 /* Extensions */ = {
+			isa = PBXGroup;
+			children = (
+				D4A572C5202A1E2800D8F4B0 /* UIImage+OpenCV.h */,
+				D4A572C7202A1E2800D8F4B0 /* UIImage+OpenCV.mm */,
+				D4A572C6202A1E2800D8F4B0 /* UIImage+Mat.h */,
+				D4A572C8202A1E2800D8F4B0 /* UIImage+Mat.mm */,
+			);
+			path = Extensions;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXHeadersBuildPhase section */
@@ -146,10 +170,13 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D4A572C2202A1E1500D8F4B0 /* UIImageContours.h in Headers */,
 				D40B2889202891D800CA8559 /* PrefixHeader.pch in Headers */,
+				D4A572CF202A348800D8F4B0 /* Contour.h in Headers */,
+				D4A572C9202A1E2800D8F4B0 /* UIImage+OpenCV.h in Headers */,
 				D40B283E2028856300CA8559 /* SwiftVision.h in Headers */,
-				D40B286520288C9400CA8559 /* UIImage+OpenCV.h in Headers */,
 				D40B2849202885AA00CA8559 /* OpenCV.h in Headers */,
+				D4A572CA202A1E2800D8F4B0 /* UIImage+Mat.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -185,7 +212,6 @@
 			buildRules = (
 			);
 			dependencies = (
-				D40B28622028873500CA8559 /* PBXTargetDependency */,
 			);
 			name = OpenCVDemo;
 			productName = OpenCVDemo;
@@ -258,8 +284,11 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				D40B286B20288F2E00CA8559 /* UIImage+OpenCV.mm in Sources */,
 				D40B284A202885AA00CA8559 /* OpenCV.mm in Sources */,
+				D4A572CC202A1E2800D8F4B0 /* UIImage+Mat.mm in Sources */,
+				D4A572D0202A348800D8F4B0 /* Contour.mm in Sources */,
+				D4A572C3202A1E1500D8F4B0 /* UIImageContours.mm in Sources */,
+				D4A572CB202A1E2800D8F4B0 /* UIImage+OpenCV.mm in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -273,14 +302,6 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
-
-/* Begin PBXTargetDependency section */
-		D40B28622028873500CA8559 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = D40B28382028856300CA8559 /* SwiftVision */;
-			targetProxy = D40B28612028873500CA8559 /* PBXContainerItemProxy */;
-		};
-/* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
 		D40B28552028860D00CA8559 /* Main.storyboard */ = {
@@ -415,7 +436,8 @@
 		D40B28422028856300CA8559 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				CLANG_ALLOW_NON_MODULAR_INCLUDES_IN_FRAMEWORK_MODULES = YES;
+				CLANG_ALLOW_NON_MODULAR_INCLUDES_IN_FRAMEWORK_MODULES = NO;
+				CLANG_ENABLE_MODULES = YES;
 				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
 				CLANG_WARN_DOCUMENTATION_COMMENTS = NO;
 				CODE_SIGN_IDENTITY = "";
@@ -446,7 +468,8 @@
 		D40B28432028856300CA8559 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				CLANG_ALLOW_NON_MODULAR_INCLUDES_IN_FRAMEWORK_MODULES = YES;
+				CLANG_ALLOW_NON_MODULAR_INCLUDES_IN_FRAMEWORK_MODULES = NO;
+				CLANG_ENABLE_MODULES = YES;
 				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
 				CLANG_WARN_DOCUMENTATION_COMMENTS = NO;
 				CODE_SIGN_IDENTITY = "";

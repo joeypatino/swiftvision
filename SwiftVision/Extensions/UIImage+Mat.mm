@@ -1,9 +1,6 @@
-#import "UIImage+OpenCV.h"
-#include <vector>
+#import "UIImage+Mat.h"
 
-using namespace cv;
-
-@implementation UIImage (OpenCV)
+@implementation UIImage (Mat)
 - (instancetype)initWithCVMat:(cv::Mat)cvMat {
     NSData *data = [NSData dataWithBytes:cvMat.data length:cvMat.elemSize()*cvMat.total()];
     CGColorSpaceRef colorSpace;
@@ -83,30 +80,5 @@ using namespace cv;
 
     return cvMat;
 }
-
-- (UIImage *)resizeTo:(CGSize)size {
-    NSLog(@"%s `size`: %@", __PRETTY_FUNCTION__, NSStringFromCGSize(size));
-    NSLog(@"%s `originalSize`: %@", __PRETTY_FUNCTION__, NSStringFromCGSize(self.size));
-
-    Mat inImage = [self mat];
-    Mat outImage;
-    cv::Size axis = cv::Size(0, 0);
-
-    float scl_x = float(self.size.width) / size.width;
-    float scl_y = float(self.size.height) / size.height;
-    float scl = 1.0 / fmaxf(scl_x, scl_y);
-    NSLog(@"%s `scale`: %f", __PRETTY_FUNCTION__, scl);
-
-    resize(inImage, outImage, axis, scl, scl, INTER_AREA);
-    return [[UIImage alloc] initWithCVMat: outImage];
-}
-
-//+ (instancetype)rectangle {
-//
-//    std::vector<int> outImage(size, 0);
-//    // rectangle(&outImage, Point pt1, Point pt2, const Scalar& color, int thickness=1, int lineType=8, int shift=0)
-//
-//    return [[UIImage alloc] initWithCVMat: outImage];
-//}
 
 @end

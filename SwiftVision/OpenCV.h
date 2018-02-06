@@ -1,7 +1,8 @@
 #import <UIKit/UIKit.h>
+#import "UIImage+OpenCV.h"
+#import "UIImageContours.h"
 
 @interface OpenCV : NSObject
 + (NSString *)version;
-+ (UIImage *)resize:(UIImage *)img to:(CGSize)minSize;
 
 @end

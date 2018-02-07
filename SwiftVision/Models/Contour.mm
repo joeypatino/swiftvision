@@ -18,4 +18,5 @@
 - (void)dealloc {
     free(self.points);
 }
+
 @end

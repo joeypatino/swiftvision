@@ -2,16 +2,15 @@
 
 @class UIImageContours;
 @interface UIImage (OpenCV)
-- (UIImage *)resizeTo:(CGSize)minSize;
-- (UIImage *)rectangle;
+- (UIImage *_Nullable)resizeTo:(CGSize)minSize;
+- (UIImage *_Nullable)rectangle;
 
-- (UIImage *)threshold:(float)blockSize constant:(float)constant;
-- (UIImage *)dilate:(CGSize)kernelSize;
-- (UIImage *)erode:(CGSize)kernelSize;
+- (UIImage *_Nullable)threshold:(float)blockSize constant:(float)constant;
+- (UIImage *_Nullable)dilate:(CGSize)kernelSize;
+- (UIImage *_Nullable)erode:(CGSize)kernelSize;
 
-- (UIImage *)elementwiseMinimum:(UIImage *)img;
+- (UIImage *_Nullable)elementwiseMinimum:(UIImage * _Nonnull)img;
 
-- (UIImageContours *)contours;
+- (UIImageContours *_Nonnull)contours;
 
 @end
-

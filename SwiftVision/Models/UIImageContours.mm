@@ -6,6 +6,7 @@ using namespace std;
 
 @interface Contour ()
 - (instancetype)initWithCVMat:(cv::Mat)cvMat;
+@property (nonatomic, assign) cv::Mat mat;
 @end
 
 @interface UIImageContours ()
@@ -15,7 +16,6 @@ using namespace std;
 @end
 
 @implementation UIImageContours
-
 - (instancetype)initWithImage:(UIImage *)image {
     self = [super init];
     self.image = [[self masked: image] copy];
@@ -41,10 +41,6 @@ using namespace std;
     return self.contours[idx];
 }
 
-- (void)setObject:(Contour *)obj atIndexedSubscript:(NSInteger)idx {
-    // do nothing! no setter available
-}
-
 #pragma MARK -
 
 - (NSArray<Contour *> *)processContours:(cv::Mat)cvMat {
@@ -56,22 +52,22 @@ using namespace std;
     NSMutableArray <Contour *> *foundContours = @[].mutableCopy;
 
     cv::Mat outImage = cv::Mat(contours);
-//    NSLog(@"found %zul contours", outImage.total());
-//    NSLog(@"cols: %i", outImage.cols);
-//    NSLog(@"rows: %i", outImage.rows);
-
     for (int j = 0; j < outImage.total(); j++) {
         cv::Mat c = cv::Mat(outImage.at<vector<cv::Point>>(j));
         if (c.empty()) continue;
 
         Contour *cc = [[Contour alloc] initWithCVMat:c];
         [foundContours addObject:cc];
-        for (int i = 0; i < c.total(); i++) {
-            cv::Point p = c.at<cv::Point>(i);
-//            NSLog(@"Point[%i]::{%i, %i}", i, p.x, p.y);
-        }
     }
     return foundContours;
+}
+
+- (UIImage *)renderedContours {
+    cv::Mat outImage = cv::Mat::zeros(self.image.size.height, self.image.size.width, CV_8UC3);
+    [self.contours enumerateObjectsUsingBlock:^(Contour *contour, NSUInteger idx, BOOL *stop) {
+        cv::drawContours(outImage, contour.mat, -1, cv::Scalar(255, 0, 0), -1);
+    }];
+    return [[UIImage alloc] initWithCVMat:outImage];
 }
 
 @end

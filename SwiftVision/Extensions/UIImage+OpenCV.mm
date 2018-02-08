@@ -1,3 +1,4 @@
+#import <opencv2/opencv.hpp>
 #import "UIImage+OpenCV.h"
 #import "UIImageContours.h"
 #import "UIImage+Mat.h"

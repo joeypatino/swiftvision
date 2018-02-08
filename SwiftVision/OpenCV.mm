@@ -1,3 +1,4 @@
+#import <opencv2/opencv.hpp>
 #import "OpenCV.h"
 #import "UIImage+OpenCV.h"
 

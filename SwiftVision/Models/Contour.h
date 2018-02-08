@@ -5,4 +5,5 @@
 @property (nonatomic, assign, readonly) CGRect bounds;
 @property (nonatomic, assign, readonly) CGFloat aspect;
 @property (nonatomic, assign, readonly) NSInteger size;
+@property (nonatomic, assign, readonly) CGFloat area;
 @end

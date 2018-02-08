@@ -1,3 +1,4 @@
+#import <opencv2/opencv.hpp>
 #import "UIImage+Mat.h"
 
 @implementation UIImage (Mat)

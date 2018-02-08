@@ -1,3 +1,4 @@
+#import <opencv2/opencv.hpp>
 #import "Contour.h"
 
 @interface Contour ()
@@ -17,6 +18,7 @@
     _bounds = CGRectMake(boundingRect.x, boundingRect.y, boundingRect.width, boundingRect.height);
     _points = (CGPoint *)malloc(sizeof(CGPoint) * _size);
     _aspect = boundingRect.height / boundingRect.width;
+    _area = cv::contourArea(cvMat);
 
     for (int i = 0; i < cvMat.total(); i++) {
         cv::Point p = cvMat.at<cv::Point>(i);

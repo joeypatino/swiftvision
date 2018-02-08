@@ -30,6 +30,8 @@
 		D4A572CC202A1E2800D8F4B0 /* UIImage+Mat.mm in Sources */ = {isa = PBXBuildFile; fileRef = D4A572C8202A1E2800D8F4B0 /* UIImage+Mat.mm */; };
 		D4A572CF202A348800D8F4B0 /* Contour.h in Headers */ = {isa = PBXBuildFile; fileRef = D4A572CD202A348800D8F4B0 /* Contour.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		D4A572D0202A348800D8F4B0 /* Contour.mm in Sources */ = {isa = PBXBuildFile; fileRef = D4A572CE202A348800D8F4B0 /* Contour.mm */; };
+		D4E89963202C9DA600D76FAF /* Contour.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4E89962202C9DA600D76FAF /* Contour.swift */; };
+		D4E89966202CA40B00D76FAF /* CGRectOutline.h in Headers */ = {isa = PBXBuildFile; fileRef = D4E89964202CA40B00D76FAF /* CGRectOutline.h */; settings = {ATTRIBUTES = (Public, ); }; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -59,6 +61,8 @@
 		D4A572C8202A1E2800D8F4B0 /* UIImage+Mat.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = "UIImage+Mat.mm"; sourceTree = "<group>"; };
 		D4A572CD202A348800D8F4B0 /* Contour.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Contour.h; sourceTree = "<group>"; };
 		D4A572CE202A348800D8F4B0 /* Contour.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = Contour.mm; sourceTree = "<group>"; };
+		D4E89962202C9DA600D76FAF /* Contour.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Contour.swift; sourceTree = "<group>"; };
+		D4E89964202CA40B00D76FAF /* CGRectOutline.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CGRectOutline.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -144,6 +148,7 @@
 		D4A572BF202A1E1500D8F4B0 /* Models */ = {
 			isa = PBXGroup;
 			children = (
+				D4E89964202CA40B00D76FAF /* CGRectOutline.h */,
 				D4A572C0202A1E1500D8F4B0 /* UIImageContours.h */,
 				D4A572C1202A1E1500D8F4B0 /* UIImageContours.mm */,
 				D4A572CD202A348800D8F4B0 /* Contour.h */,
@@ -159,6 +164,7 @@
 				D4A572C7202A1E2800D8F4B0 /* UIImage+OpenCV.mm */,
 				D4A572C6202A1E2800D8F4B0 /* UIImage+Mat.h */,
 				D4A572C8202A1E2800D8F4B0 /* UIImage+Mat.mm */,
+				D4E89962202C9DA600D76FAF /* Contour.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -174,6 +180,7 @@
 				D40B2889202891D800CA8559 /* PrefixHeader.pch in Headers */,
 				D4A572CF202A348800D8F4B0 /* Contour.h in Headers */,
 				D4A572C9202A1E2800D8F4B0 /* UIImage+OpenCV.h in Headers */,
+				D4E89966202CA40B00D76FAF /* CGRectOutline.h in Headers */,
 				D40B283E2028856300CA8559 /* SwiftVision.h in Headers */,
 				D40B2849202885AA00CA8559 /* OpenCV.h in Headers */,
 				D4A572CA202A1E2800D8F4B0 /* UIImage+Mat.h in Headers */,
@@ -230,6 +237,7 @@
 				TargetAttributes = {
 					D40B28382028856300CA8559 = {
 						CreatedOnToolsVersion = 9.2;
+						LastSwiftMigration = 0920;
 						ProvisioningStyle = Automatic;
 					};
 					D40B284E2028860D00CA8559 = {
@@ -286,6 +294,7 @@
 			files = (
 				D40B284A202885AA00CA8559 /* OpenCV.mm in Sources */,
 				D4A572CC202A1E2800D8F4B0 /* UIImage+Mat.mm in Sources */,
+				D4E89963202C9DA600D76FAF /* Contour.swift in Sources */,
 				D4A572D0202A348800D8F4B0 /* Contour.mm in Sources */,
 				D4A572C3202A1E1500D8F4B0 /* UIImageContours.mm in Sources */,
 				D4A572CB202A1E2800D8F4B0 /* UIImage+OpenCV.mm in Sources */,
@@ -461,6 +470,8 @@
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
 				SEPARATE_SYMBOL_EDIT = NO;
 				SKIP_INSTALL = YES;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 3.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Debug;
@@ -493,6 +504,7 @@
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
 				SEPARATE_SYMBOL_EDIT = NO;
 				SKIP_INSTALL = YES;
+				SWIFT_VERSION = 3.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Release;

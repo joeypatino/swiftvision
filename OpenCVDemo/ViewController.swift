@@ -30,13 +30,21 @@ class ViewController: UIViewController {
                 return
         }
 
-        imageView.image = contours.renderedContours { contour in
-            let size = contour.bounds.size
-            if contour.aspect > 1.25 { return false }
-            if size.width < 6 { return false }
-            if size.height < 2 { return false }
-            if size.height > 32 { return false }
-            return true
+        let intermediateImage = contours.render(filteredBy: { contour in
+                let size = contour.bounds.size
+                if contour.aspect > 1.25 { return false }
+                if size.width < 6 { return false }
+                if size.height < 2 { return false }
+                if size.height > 32 { return false }
+
+                return true
+            })?
+            .dilate(CGSize(width: 24, height: 14))?
+            .erode(CGSize(width: 5, height: 7))
+
+        imageView.image = intermediateImage?.contours()
+            .render(inColor: .white, mode: .fill) { contour in
+                return contour.area > 3000
         }
     }
 

@@ -1,31 +1,18 @@
 #import <UIKit/UIKit.h>
 #import "Contour.h"
+#import "CGRectOutline.h"
 
-struct CGRectOutline {
-    CGPoint topLeft;
-    CGPoint botLeft;
-    CGPoint botRight;
-    CGPoint topRight;
+typedef NS_ENUM(NSUInteger, ContourRenderingMode) {
+    ContourRenderingModeOutline,
+    ContourRenderingModeFill
 };
 
-static inline struct CGRectOutline
-CGRectOutlineMake(CGPoint topLeft, CGPoint botLeft, CGPoint botRight, CGPoint topRight) {
-    struct CGRectOutline outline;
-
-    outline.topLeft = topLeft;
-    outline.botLeft = botLeft;
-    outline.botRight = botRight;
-    outline.topRight = topRight;
-
-    return outline;
-}
-
-@class Contour;
 @interface UIImageContours : NSObject
-@property (nonatomic, strong, readonly) UIImage * _Nullable renderedContours;
 - (instancetype _Nonnull)init NS_UNAVAILABLE;
 - (instancetype _Nonnull)initWithImage:(UIImage * _Nonnull)image NS_DESIGNATED_INITIALIZER;
-- (UIImage * _Nullable)renderedContours:(nullable BOOL (^)(Contour * _Nonnull contour))filtered;
+- (UIImage * _Nullable)render:(nullable BOOL (^)(Contour * _Nonnull contour))filter NS_SWIFT_NAME(render(filteredBy:));
+- (UIImage * _Nullable)render:(UIColor * _Nonnull)color mode:(ContourRenderingMode)mode filtered:(nullable BOOL (^)(Contour * _Nonnull c))filter NS_SWIFT_NAME(render(inColor:mode:filteredBy:));
 - (Contour * _Nullable)objectAtIndexedSubscript:(NSInteger)idx;
 - (NSInteger)count;
 @end
+

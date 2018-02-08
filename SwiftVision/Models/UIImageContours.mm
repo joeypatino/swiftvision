@@ -1,3 +1,4 @@
+#import <opencv2/opencv.hpp>
 #import "UIImageContours.h"
 #import "UIImage+Mat.h"
 #import "UIImage+OpenCV.h"
@@ -27,7 +28,7 @@
 - (cv::Mat)grayScaleMat:(UIImage *)image {
     cv::Mat inputImage = [image mat];
     cv::Mat outImage;
-    cv::cvtColor(inputImage, outImage, CV_RGB2GRAY);
+    cv::cvtColor(inputImage, outImage, cv::COLOR_RGBA2GRAY);
 
     return outImage;
 }
@@ -57,23 +58,42 @@
     return foundContours;
 }
 
-- (UIImage *)renderedContours {
-    return [self renderedContours:nil];
+- (UIImage *)render:(BOOL (^)(Contour *c))filter {
+    return [self render:[UIColor whiteColor] mode:ContourRenderingModeOutline filtered:filter];
 }
 
-- (UIImage *)renderedContours:(BOOL (^)(Contour *c))filtered {
-    cv::Mat outImage = cv::Mat::zeros(self.image.size.height, self.image.size.width, CV_8UC1);
-    cv::Scalar color = cv::Scalar(255, 0, 0);
+- (UIImage *)render:(UIColor *)color mode:(ContourRenderingMode)mode filtered:(BOOL (^)(Contour *c))filter {
+    cv::Mat outImage = cv::Mat::zeros(self.image.size.height, self.image.size.width, CV_8UC4);
+
+    cv::Scalar contourColor = [self scalarColorFrom:color];
     std::vector<std::vector<cv::Point> > contours;
 
     for (int i = 0; i < self.contours.count; i++){
         Contour *contour = self.contours[i];
-        if (filtered) if (!filtered(contour)) continue;
+        if (filter) if (!filter(contour)) continue;
         contours.push_back(contour.mat);
     }
 
-    cv::drawContours(outImage, contours, -1, color, 1);
+    switch (mode) {
+        case ContourRenderingModeOutline:
+            cv::drawContours(outImage, contours, -1, contourColor, 1);
+            break;
+        case ContourRenderingModeFill:
+            cv::drawContours(outImage, contours, -1, contourColor, -1);
+            break;
+    }
+
     return [[UIImage alloc] initWithCVMat:outImage];
+}
+
+- (cv::Scalar)scalarColorFrom:(UIColor *)color {
+    CGFloat red;
+    CGFloat green;
+    CGFloat blue;
+    CGFloat alpha;
+    [color getRed:&red green:&green blue:&blue alpha:&alpha];
+
+    return cv::Scalar(red * 255.0, green * 255.0, blue * 255.0, alpha * 255.0);
 }
 
 @end

@@ -16,6 +16,7 @@
 @end
 
 @implementation UIImageContours
+// MARK: -
 - (instancetype)initWithImage:(UIImage *)image {
     self = [super init];
     self.image = image;
@@ -25,13 +26,7 @@
     return self;
 }
 
-- (cv::Mat)grayScaleMat:(UIImage *)image {
-    cv::Mat inputImage = [image mat];
-    cv::Mat outImage;
-    cv::cvtColor(inputImage, outImage, cv::COLOR_RGBA2GRAY);
-
-    return outImage;
-}
+// MARK: -
 
 - (NSInteger)count {
     return self.contours.count;
@@ -41,22 +36,7 @@
     return self.contours[idx];
 }
 
-#pragma MARK -
-
-- (NSArray<Contour *> *)processContours:(cv::Mat)cvMat {
-    NSMutableArray <Contour *> *foundContours = @[].mutableCopy;
-    std::vector<std::vector<cv::Point> > contours;
-
-    cv::findContours(cvMat, contours, cv::RETR_EXTERNAL, cv::CHAIN_APPROX_NONE);
-    cv::Mat outImage = cv::Mat(contours);
-
-    for (int j = 0; j < outImage.total(); j++) {
-        cv::Mat contour = cv::Mat(outImage.at<std::vector<cv::Point>>(j));
-        if (contour.empty()) continue;
-        [foundContours addObject:[[Contour alloc] initWithCVMat:contour.clone()]];
-    }
-    return foundContours;
-}
+// MARK: -
 
 - (UIImage *)render:(BOOL (^)(Contour *c))filter {
     return [self render:[UIColor whiteColor] mode:ContourRenderingModeOutline filtered:filter];
@@ -84,6 +64,31 @@
     }
 
     return [[UIImage alloc] initWithCVMat:outImage];
+}
+
+// MARK: -
+
+- (NSArray<Contour *> *)processContours:(cv::Mat)cvMat {
+    NSMutableArray <Contour *> *foundContours = @[].mutableCopy;
+    std::vector<std::vector<cv::Point> > contours;
+
+    cv::findContours(cvMat, contours, cv::RETR_EXTERNAL, cv::CHAIN_APPROX_NONE);
+    cv::Mat outImage = cv::Mat(contours);
+
+    for (int j = 0; j < outImage.total(); j++) {
+        cv::Mat contour = cv::Mat(outImage.at<std::vector<cv::Point>>(j));
+        if (contour.empty()) continue;
+        [foundContours addObject:[[Contour alloc] initWithCVMat:contour.clone()]];
+    }
+    return foundContours;
+}
+
+- (cv::Mat)grayScaleMat:(UIImage *)image {
+    cv::Mat inputImage = [image mat];
+    cv::Mat outImage;
+    cv::cvtColor(inputImage, outImage, cv::COLOR_RGBA2GRAY);
+
+    return outImage;
 }
 
 - (cv::Scalar)scalarColorFrom:(UIColor *)color {

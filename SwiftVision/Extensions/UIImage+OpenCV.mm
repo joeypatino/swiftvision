@@ -31,11 +31,11 @@
     return [[UIImage alloc] initWithCVMat: page];
 }
 
-#define PAGE_MARGIN_X 0
-#define PAGE_MARGIN_Y 0
-
 - (CGRectOutline)outline {
     CGSize size = self.size;
+
+    #define PAGE_MARGIN_X 0
+    #define PAGE_MARGIN_Y 0
 
     int xmin = PAGE_MARGIN_X;
     int ymin = PAGE_MARGIN_Y;
@@ -101,6 +101,8 @@
 
     return [[UIImage alloc] initWithCVMat:outImage];
 }
+
+// MARK: -
 
 - (UIImageContours *)contours {
     return [[UIImageContours alloc] initWithImage:self];

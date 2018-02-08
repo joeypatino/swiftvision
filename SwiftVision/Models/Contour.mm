@@ -8,6 +8,7 @@
 #define ContourBasicDebugInfo
 //#define ContourDetailedDebugInfo
 
+// MARK: -
 @implementation Contour
 - (instancetype)initWithCVMat:(cv::Mat)cvMat {
     self = [super init];
@@ -42,6 +43,12 @@
     return formatedDesc;
 }
 
+- (void)dealloc {
+    free(self.points);
+}
+
+// MARK: -
+
 - (NSString *)longDescription {
     NSMutableString *description = [NSMutableString string];
     for (int idx = 0; idx < self.size; idx++) {
@@ -53,10 +60,6 @@
 
 - (NSString *)shortDescription {
     return [NSString stringWithFormat:@"%@", NSStringFromCGRect(self.bounds)];
-}
-
-- (void)dealloc {
-    free(self.points);
 }
 
 @end

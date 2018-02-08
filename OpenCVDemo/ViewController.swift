@@ -19,11 +19,25 @@ class ViewController: UIViewController {
 
     @IBAction func runAction(_ sender: Any) {
         let image = UIImage(named: "input_image.jpeg")!
-        let contours = image.contours()
-//        for idx in 0..<contours.count() {
-//            print(contours[idx])
-//        }
-        imageView.image = contours.renderedContours
+        guard let resized = image.resize(to: CGSize(width: 1280, height: 700))
+            else { return }
+
+        guard let contours = resized.threshold(55.0, constant: 25.0)?
+            .dilate(CGSize(width: 1, height: 14))?
+            .erode(CGSize(width: 5, height: 0))?
+            .elementwiseMinimum(resized.rectangle()!)?
+            .contours() else {
+                return
+        }
+
+        imageView.image = contours.renderedContours { contour in
+            let size = contour.bounds.size
+            if contour.aspect > 1.25 { return false }
+            if size.width < 6 { return false }
+            if size.height < 2 { return false }
+            if size.height > 32 { return false }
+            return true
+        }
     }
 
     private func resize(img: UIImage) -> UIImage? {

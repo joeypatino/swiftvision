@@ -22,10 +22,10 @@ CGRectOutlineMake(CGPoint topLeft, CGPoint botLeft, CGPoint botRight, CGPoint to
 
 @class Contour;
 @interface UIImageContours : NSObject
-- (instancetype)init NS_UNAVAILABLE;
+@property (nonatomic, strong, readonly) UIImage * _Nullable renderedContours;
+- (instancetype _Nonnull)init NS_UNAVAILABLE;
 - (instancetype _Nonnull)initWithImage:(UIImage * _Nonnull)image NS_DESIGNATED_INITIALIZER;
+- (UIImage * _Nullable)renderedContours:(nullable BOOL (^)(Contour * _Nonnull contour))filtered;
 - (Contour * _Nullable)objectAtIndexedSubscript:(NSInteger)idx;
 - (NSInteger)count;
-
-@property (nonatomic, strong, readonly) UIImage *_Nullable renderedContours;
 @end

@@ -19,13 +19,13 @@
 
 - (UIImage *)rectangle {
     CGSize size = self.size;
-    cv::Mat img = [self mat];
+
     CGRectOutline outline = [self outline];
     cv::Point p1 = cv::Point(outline.topLeft.x, outline.topLeft.y);
     cv::Point p2 = cv::Point(outline.botRight.x, outline.botRight.y);
 
-    cv::Mat page = cv::Mat(int(size.height), int(size.width), CV_8UC4, 0.0);
-    cv::rectangle(page, p1, p2, cv::Scalar(255.0, 0.0, 0.0), -1);
+    cv::Mat page = cv::Mat(int(size.height), int(size.width), CV_8UC1);
+    cv::rectangle(page, p1, p2, cv::Scalar(255.0, 255.0, 255.0), -1);
 
     return [[UIImage alloc] initWithCVMat: page];
 }
@@ -75,7 +75,7 @@
     cv::Mat inImage = [self mat];
     cv::Mat outImage;
 
-    cv::Mat dilateKernel = cv::getStructuringElement(cv::MORPH_CROSS, cv::Size(kernelSize.width, kernelSize.height));
+    cv::Mat dilateKernel = cv::Mat::ones(kernelSize.width, kernelSize.height, CV_8UC1);
     cv::dilate(inImage, outImage, dilateKernel);
 
     return [[UIImage alloc] initWithCVMat:outImage];
@@ -85,7 +85,7 @@
     cv::Mat inImage = [self mat];
     cv::Mat outImage;
 
-    cv::Mat erodeKernel = cv::getStructuringElement(cv::MORPH_CROSS, cv::Size(kernelSize.width, kernelSize.height));
+    cv::Mat erodeKernel = cv::Mat::ones(kernelSize.width, kernelSize.height, CV_8UC1);
     cv::erode(inImage, outImage, erodeKernel);
 
     return [[UIImage alloc] initWithCVMat:outImage];

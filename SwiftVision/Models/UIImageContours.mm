@@ -7,6 +7,7 @@
 @property (nonatomic, assign) cv::Mat mat;
 - (instancetype _Nonnull)init NS_UNAVAILABLE;
 - (instancetype _Nonnull)initWithCVMat:(cv::Mat)cvMat NS_DESIGNATED_INITIALIZER;
+- (void)vertices:(cv::Point *)pts;
 @end
 
 @interface UIImageContours ()
@@ -14,6 +15,9 @@
 @property (nonatomic, strong) NSArray<Contour *> *contours;
 @property (nonatomic, assign) cv::Mat inputImage;
 @end
+
+using namespace std;
+using namespace cv;
 
 @implementation UIImageContours
 // MARK: -
@@ -43,25 +47,65 @@
 }
 
 - (UIImage *)render:(UIColor *)color mode:(ContourRenderingMode)mode filtered:(BOOL (^)(Contour *c))filter {
-    cv::Mat outImage = cv::Mat::zeros(self.image.size.height, self.image.size.width, CV_8UC4);
-
+    NSLog(@"%s", __PRETTY_FUNCTION__);
+    BOOL fillConvexPolys = true;
     cv::Scalar contourColor = [self scalarColorFrom:color];
+
+    cv::Mat outImage = cv::Mat::zeros(self.image.size.height, self.image.size.width, CV_8UC3);
+    cv::Mat hull = cv::Mat::zeros(self.image.size.height, self.image.size.width, CV_8UC1);
     std::vector<std::vector<cv::Point> > contours;
 
     for (int i = 0; i < self.contours.count; i++){
         Contour *contour = self.contours[i];
-        if (filter) if (!filter(contour)) continue;
+        if (filter)
+            if (!filter(contour))
+                continue;
+
+        if (fillConvexPolys) {
+            cv::Point vertices[4];
+            [contour vertices:vertices];
+            cv::fillConvexPoly(outImage, vertices, 4, [self scalarColorFrom:[UIColor whiteColor]]);
+        }
+
+        cv::Point p;
+        for (int i = 0; i < contour.mat.rows; ++i) {
+            cv::Point *ps = contour.mat.ptr<cv::Point>(i);
+            for (int j = 0; j < contour.mat.cols; ++j) {
+                p = ps[j];
+                hull.at<cv::Point>(p.y, p.x) = {1, 1};
+            }
+        }
+
         contours.push_back(contour.mat);
     }
 
-    switch (mode) {
-        case ContourRenderingModeOutline:
-            cv::drawContours(outImage, contours, -1, contourColor, 1);
-            break;
-        case ContourRenderingModeFill:
-            cv::drawContours(outImage, contours, -1, contourColor, -1);
-            break;
-    }
+//    NSLog(@"hull.rows: %i", hull.rows);
+//    NSLog(@"hull.cols: %i", hull.cols);
+//    NSLog(@"hull.channels: %i", hull.channels());
+//
+//    for (int i = 0; i < hull.rows; ++i) {
+//        if (i % 2 == 0) {
+//
+//            cv::Point2f *ps = hull.ptr<cv::Point2f>(i);
+//            for (int j = 0; j < hull.cols; ++j) {
+//                if (j % 2 == 0)  {
+//                    cv::Point2f p = ps[j];
+//                    if (p.x == 0) { p.x = 0; }
+//                    else { p.x = 1; }
+//                    if (p.y == 0) { p.y = 0; }
+//                    else { p.y = 1; }
+//
+//                    if (p.x == 0) { printf(" "); }
+//                    else { printf("."); }
+//                }
+//            }
+//            printf("\n");
+//        }
+//    }
+
+
+    BOOL filled = (mode == ContourRenderingModeFill) ? ContourRenderingModeFill : ContourRenderingModeOutline;
+    cv::drawContours(outImage, contours, -1, contourColor, filled ? -1 : 1);
 
     return [[UIImage alloc] initWithCVMat:outImage];
 }
@@ -102,9 +146,3 @@
 }
 
 @end
-/**
- CGRect bounds = contour.bounds;
- cv::Point p1 = cv::Point(bounds.origin.x, contour.bounds.origin.y);
- cv::Point p2 = cv::Point(p1.x + contour.bounds.size.width, p1.y + contour.bounds.size.height);
- cv::rectangle(outImage, p1, p2, color);
-*/

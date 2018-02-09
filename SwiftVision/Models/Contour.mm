@@ -48,6 +48,17 @@
 }
 
 // MARK: -
+- (void)vertices:(cv::Point *)vertices {
+    cv::RotatedRect rect = cv::minAreaRect(self.mat);
+    cv::Point2f pts[4];
+    rect.points(pts);
+
+    // Convert them to cv::Point type
+    for(int i = 0; i < 4; ++i)
+        vertices[i] = pts[i];
+}
+
+// MARK: -
 
 - (NSString *)longDescription {
     NSMutableString *description = [NSMutableString string];

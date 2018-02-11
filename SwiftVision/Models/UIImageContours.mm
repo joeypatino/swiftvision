@@ -8,6 +8,7 @@
 - (instancetype _Nonnull)init NS_UNAVAILABLE;
 - (instancetype _Nonnull)initWithCVMat:(cv::Mat)cvMat NS_DESIGNATED_INITIALIZER;
 - (void)vertices:(cv::Point *)pts;
+- (cv::Mat)tightMask;
 @end
 
 @interface UIImageContours ()
@@ -42,13 +43,16 @@ using namespace cv;
 
 // MARK: -
 
+- (UIImage *)render {
+    return [[UIImage alloc] initWithCVMat:[self.contours[0] tightMask]];
+}
+
 - (UIImage *)render:(BOOL (^)(Contour *c))filter {
     return [self render:[UIColor whiteColor] mode:ContourRenderingModeOutline filtered:filter];
 }
 
 - (UIImage *)render:(UIColor *)color mode:(ContourRenderingMode)mode filtered:(BOOL (^)(Contour *c))filter {
-    NSLog(@"%s", __PRETTY_FUNCTION__);
-    BOOL fillConvexPolys = true;
+    BOOL fillConvexPolys = false;
     cv::Scalar contourColor = [self scalarColorFrom:color];
 
     cv::Mat outImage = cv::Mat::zeros(self.image.size.height, self.image.size.width, CV_8UC3);
@@ -66,43 +70,8 @@ using namespace cv;
             [contour vertices:vertices];
             cv::fillConvexPoly(outImage, vertices, 4, [self scalarColorFrom:[UIColor whiteColor]]);
         }
-
-        cv::Point p;
-        for (int i = 0; i < contour.mat.rows; ++i) {
-            cv::Point *ps = contour.mat.ptr<cv::Point>(i);
-            for (int j = 0; j < contour.mat.cols; ++j) {
-                p = ps[j];
-                hull.at<cv::Point>(p.y, p.x) = {1, 1};
-            }
-        }
-
         contours.push_back(contour.mat);
     }
-
-//    NSLog(@"hull.rows: %i", hull.rows);
-//    NSLog(@"hull.cols: %i", hull.cols);
-//    NSLog(@"hull.channels: %i", hull.channels());
-//
-//    for (int i = 0; i < hull.rows; ++i) {
-//        if (i % 2 == 0) {
-//
-//            cv::Point2f *ps = hull.ptr<cv::Point2f>(i);
-//            for (int j = 0; j < hull.cols; ++j) {
-//                if (j % 2 == 0)  {
-//                    cv::Point2f p = ps[j];
-//                    if (p.x == 0) { p.x = 0; }
-//                    else { p.x = 1; }
-//                    if (p.y == 0) { p.y = 0; }
-//                    else { p.y = 1; }
-//
-//                    if (p.x == 0) { printf(" "); }
-//                    else { printf("."); }
-//                }
-//            }
-//            printf("\n");
-//        }
-//    }
-
 
     BOOL filled = (mode == ContourRenderingModeFill) ? ContourRenderingModeFill : ContourRenderingModeOutline;
     cv::drawContours(outImage, contours, -1, contourColor, filled ? -1 : 1);

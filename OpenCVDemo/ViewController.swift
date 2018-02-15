@@ -28,7 +28,8 @@ class ViewController: UIViewController {
 
         let contours = masked.contours()
 
-        let intermediateImage = contours.render()
+        imageView.image = contours.renderMasks()
+
 //        (filteredBy: { contour in
 //                let size = contour.bounds.size
 //                if contour.aspect > 1.25 { return false }
@@ -39,7 +40,7 @@ class ViewController: UIViewController {
 //                return true
 //            })
 
-        imageView.image = intermediateImage
+//        imageView.image = intermediateImage
 //            ?
 //            .dilate(CGSize(width: 24, height: 14))?
 //            .erode(CGSize(width: 5, height: 7))

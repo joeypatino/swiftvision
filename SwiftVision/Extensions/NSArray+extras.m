@@ -1,6 +1,6 @@
-#import "NSArray+flatten.h"
+#import "NSArray+extras.h"
 
-@implementation NSArray (flatten)
+@implementation NSArray (extras)
 - (void)flatten:(NSMutableArray *)original inArray:(NSMutableArray *)result {
     for(id element in original) {
         if([element isKindOfClass:[NSNumber class]])

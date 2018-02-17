@@ -11,13 +11,13 @@
 @property (nonatomic, assign, readonly) CGPoint center;
 @property (nonatomic, assign, readonly) CGPoint tangent;
 @property (nonatomic, assign, readonly) double angle;
-@property (nonatomic, strong, readonly) NSArray <NSNumber *> *_Nonnull clx;
 
+@property (nonatomic, assign, readonly) CGFloat localxMin;
+@property (nonatomic, assign, readonly) CGFloat localxMax;
 @property (nonatomic, assign, readonly) CGPoint clxMin;
 @property (nonatomic, assign, readonly) CGPoint clxMax;
 
 @property (nonatomic, strong) Contour *_Nullable previous;
 @property (nonatomic, strong) Contour *_Nullable next;
-
-- (ContourEdge * _Nullable)generateEdge:(Contour * _Nonnull)adjacentContour;
+- (instancetype _Nonnull)init NS_UNAVAILABLE;
 @end

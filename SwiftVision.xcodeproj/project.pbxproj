@@ -20,6 +20,8 @@
 		D40B286720288EE100CA8559 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D40B286620288EE100CA8559 /* CoreGraphics.framework */; };
 		D40B286920288EEA00CA8559 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D40B286820288EEA00CA8559 /* UIKit.framework */; };
 		D40B2889202891D800CA8559 /* PrefixHeader.pch in Headers */ = {isa = PBXBuildFile; fileRef = D40B2888202891D800CA8559 /* PrefixHeader.pch */; };
+		D439947120388BA800D9B783 /* functions.h in Headers */ = {isa = PBXBuildFile; fileRef = D439946F20388BA800D9B783 /* functions.h */; };
+		D439947220388BA800D9B783 /* functions.mm in Sources */ = {isa = PBXBuildFile; fileRef = D439947020388BA800D9B783 /* functions.mm */; };
 		D442BE582033A1BD00213DF0 /* ContourSpan.h in Headers */ = {isa = PBXBuildFile; fileRef = D442BE562033A1BD00213DF0 /* ContourSpan.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		D442BE592033A1BD00213DF0 /* ContourSpan.m in Sources */ = {isa = PBXBuildFile; fileRef = D442BE572033A1BD00213DF0 /* ContourSpan.m */; };
 		D442BE5C2033A66200213DF0 /* ContourEdge.h in Headers */ = {isa = PBXBuildFile; fileRef = D442BE5A2033A66200213DF0 /* ContourEdge.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -34,8 +36,8 @@
 		D4A572CC202A1E2800D8F4B0 /* UIImage+Mat.mm in Sources */ = {isa = PBXBuildFile; fileRef = D4A572C8202A1E2800D8F4B0 /* UIImage+Mat.mm */; };
 		D4A572CF202A348800D8F4B0 /* Contour.h in Headers */ = {isa = PBXBuildFile; fileRef = D4A572CD202A348800D8F4B0 /* Contour.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		D4A572D0202A348800D8F4B0 /* Contour.mm in Sources */ = {isa = PBXBuildFile; fileRef = D4A572CE202A348800D8F4B0 /* Contour.mm */; };
-		D4BAD1C52034DBB200F4A32C /* NSArray+flatten.h in Headers */ = {isa = PBXBuildFile; fileRef = D4BAD1C32034DBB200F4A32C /* NSArray+flatten.h */; };
-		D4BAD1C62034DBB200F4A32C /* NSArray+flatten.m in Sources */ = {isa = PBXBuildFile; fileRef = D4BAD1C42034DBB200F4A32C /* NSArray+flatten.m */; };
+		D4BAD1C52034DBB200F4A32C /* NSArray+extras.h in Headers */ = {isa = PBXBuildFile; fileRef = D4BAD1C32034DBB200F4A32C /* NSArray+extras.h */; };
+		D4BAD1C62034DBB200F4A32C /* NSArray+extras.m in Sources */ = {isa = PBXBuildFile; fileRef = D4BAD1C42034DBB200F4A32C /* NSArray+extras.m */; };
 		D4E89963202C9DA600D76FAF /* Contour.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4E89962202C9DA600D76FAF /* Contour.swift */; };
 		D4E89966202CA40B00D76FAF /* CGRectOutline.h in Headers */ = {isa = PBXBuildFile; fileRef = D4E89964202CA40B00D76FAF /* CGRectOutline.h */; settings = {ATTRIBUTES = (Public, ); }; };
 /* End PBXBuildFile section */
@@ -57,6 +59,8 @@
 		D40B286620288EE100CA8559 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
 		D40B286820288EEA00CA8559 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		D40B2888202891D800CA8559 /* PrefixHeader.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PrefixHeader.pch; sourceTree = "<group>"; };
+		D439946F20388BA800D9B783 /* functions.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = functions.h; sourceTree = "<group>"; };
+		D439947020388BA800D9B783 /* functions.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = functions.mm; sourceTree = "<group>"; };
 		D442BE562033A1BD00213DF0 /* ContourSpan.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ContourSpan.h; sourceTree = "<group>"; };
 		D442BE572033A1BD00213DF0 /* ContourSpan.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ContourSpan.m; sourceTree = "<group>"; };
 		D442BE5A2033A66200213DF0 /* ContourEdge.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ContourEdge.h; sourceTree = "<group>"; };
@@ -71,8 +75,8 @@
 		D4A572C8202A1E2800D8F4B0 /* UIImage+Mat.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = "UIImage+Mat.mm"; sourceTree = "<group>"; };
 		D4A572CD202A348800D8F4B0 /* Contour.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Contour.h; sourceTree = "<group>"; };
 		D4A572CE202A348800D8F4B0 /* Contour.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = Contour.mm; sourceTree = "<group>"; };
-		D4BAD1C32034DBB200F4A32C /* NSArray+flatten.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "NSArray+flatten.h"; sourceTree = "<group>"; };
-		D4BAD1C42034DBB200F4A32C /* NSArray+flatten.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "NSArray+flatten.m"; sourceTree = "<group>"; };
+		D4BAD1C32034DBB200F4A32C /* NSArray+extras.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "NSArray+extras.h"; sourceTree = "<group>"; };
+		D4BAD1C42034DBB200F4A32C /* NSArray+extras.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "NSArray+extras.m"; sourceTree = "<group>"; };
 		D4E89962202C9DA600D76FAF /* Contour.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Contour.swift; sourceTree = "<group>"; };
 		D4E89964202CA40B00D76FAF /* CGRectOutline.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CGRectOutline.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -125,6 +129,7 @@
 				D40B283D2028856300CA8559 /* Info.plist */,
 				D40B2847202885AA00CA8559 /* OpenCV.h */,
 				D40B2848202885AA00CA8559 /* OpenCV.mm */,
+				D439946E20388B9700D9B783 /* src */,
 				D4A572C4202A1E2800D8F4B0 /* Extensions */,
 				D4A572BF202A1E1500D8F4B0 /* Models */,
 				D40B2888202891D800CA8559 /* PrefixHeader.pch */,
@@ -157,6 +162,15 @@
 			path = OpenCVDemo;
 			sourceTree = "<group>";
 		};
+		D439946E20388B9700D9B783 /* src */ = {
+			isa = PBXGroup;
+			children = (
+				D439946F20388BA800D9B783 /* functions.h */,
+				D439947020388BA800D9B783 /* functions.mm */,
+			);
+			path = src;
+			sourceTree = "<group>";
+		};
 		D4A572BF202A1E1500D8F4B0 /* Models */ = {
 			isa = PBXGroup;
 			children = (
@@ -181,8 +195,8 @@
 				D4A572C6202A1E2800D8F4B0 /* UIImage+Mat.h */,
 				D4A572C8202A1E2800D8F4B0 /* UIImage+Mat.mm */,
 				D4E89962202C9DA600D76FAF /* Contour.swift */,
-				D4BAD1C32034DBB200F4A32C /* NSArray+flatten.h */,
-				D4BAD1C42034DBB200F4A32C /* NSArray+flatten.m */,
+				D4BAD1C32034DBB200F4A32C /* NSArray+extras.h */,
+				D4BAD1C42034DBB200F4A32C /* NSArray+extras.m */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -198,12 +212,13 @@
 				D40B2889202891D800CA8559 /* PrefixHeader.pch in Headers */,
 				D4A572CF202A348800D8F4B0 /* Contour.h in Headers */,
 				D442BE582033A1BD00213DF0 /* ContourSpan.h in Headers */,
-				D4BAD1C52034DBB200F4A32C /* NSArray+flatten.h in Headers */,
+				D4BAD1C52034DBB200F4A32C /* NSArray+extras.h in Headers */,
 				D442BE5C2033A66200213DF0 /* ContourEdge.h in Headers */,
 				D4A572C9202A1E2800D8F4B0 /* UIImage+OpenCV.h in Headers */,
 				D4E89966202CA40B00D76FAF /* CGRectOutline.h in Headers */,
 				D40B283E2028856300CA8559 /* SwiftVision.h in Headers */,
 				D40B2849202885AA00CA8559 /* OpenCV.h in Headers */,
+				D439947120388BA800D9B783 /* functions.h in Headers */,
 				D4A572CA202A1E2800D8F4B0 /* UIImage+Mat.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -319,7 +334,8 @@
 				D4E89963202C9DA600D76FAF /* Contour.swift in Sources */,
 				D4A572D0202A348800D8F4B0 /* Contour.mm in Sources */,
 				D4A572C3202A1E1500D8F4B0 /* UIImageContours.mm in Sources */,
-				D4BAD1C62034DBB200F4A32C /* NSArray+flatten.m in Sources */,
+				D4BAD1C62034DBB200F4A32C /* NSArray+extras.m in Sources */,
+				D439947220388BA800D9B783 /* functions.mm in Sources */,
 				D4A572CB202A1E2800D8F4B0 /* UIImage+OpenCV.mm in Sources */,
 				D442BE5D2033A66200213DF0 /* ContourEdge.m in Sources */,
 			);

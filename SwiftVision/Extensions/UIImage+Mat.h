@@ -4,5 +4,5 @@
 @interface UIImage (Mat)
 - (instancetype _Nullable)initWithCVMat:(cv::Mat)cvMat;
 - (cv::Mat)mat;
-- (cv::Mat)matGray;
+- (cv::Mat)grayScaleMat;
 @end

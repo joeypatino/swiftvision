@@ -23,32 +23,18 @@ class ViewController: UIViewController {
             else { return }
 
         guard let masked = resized.threshold(55.0, constant: 25.0)?
-            .dilate(CGSize(width: 1, height: 14))?
-            .erode(CGSize(width: 5, height: 0)) else { return }
+            .dilate(CGSize(width: 14, height: 1))?
+            .erode(CGSize(width: 0, height: 5)) else { return }
 
-        let contours = masked.contours()
+        imageView.image = masked.contours(filteredBy: { contour in
+            let size = contour.bounds.size
+            if contour.aspect > 1.25 { return false }
+            if size.width < 6 { return false }
+            if size.height < 2 { return false }
+            if size.height > 32 { return false }
 
-        imageView.image = contours.renderMasks()
-
-//        (filteredBy: { contour in
-//                let size = contour.bounds.size
-//                if contour.aspect > 1.25 { return false }
-//                if size.width < 6 { return false }
-//                if size.height < 2 { return false }
-//                if size.height > 32 { return false }
-//
-//                return true
-//            })
-
-//        imageView.image = intermediateImage
-//            ?
-//            .dilate(CGSize(width: 24, height: 14))?
-//            .erode(CGSize(width: 5, height: 7))
-//
-//        imageView.image = intermediateImage?.contours()
-//            .render(inColor: .green, mode: .fill) { contour in
-//                return contour.area > 3000
-//        }
+            return true
+        }).render()
     }
 
     private func resize(img: UIImage) -> UIImage? {

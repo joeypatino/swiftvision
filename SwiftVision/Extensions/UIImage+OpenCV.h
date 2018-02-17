@@ -1,6 +1,7 @@
 #import <UIKit/UIKit.h>
 
 @class UIImageContours;
+@class Contour;
 @interface UIImage (OpenCV)
 - (UIImage *_Nullable)elementwiseMinimum:(UIImage * _Nonnull)img;
 - (UIImage *_Nullable)resizeTo:(CGSize)minSize;
@@ -10,6 +11,6 @@
 - (UIImage *_Nullable)dilate:(CGSize)kernelSize;
 - (UIImage *_Nullable)erode:(CGSize)kernelSize;
 
-- (UIImageContours *_Nonnull)contours;
+- (UIImageContours *_Nonnull)contoursFilteredBy:(nullable BOOL (^)(Contour * _Nonnull c))filter NS_SWIFT_NAME(contours(filteredBy:));
 
 @end

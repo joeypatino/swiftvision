@@ -60,26 +60,12 @@
     return cvMat;
 }
 
-- (cv::Mat)matGray {
-    CGColorSpaceRef colorSpace = CGImageGetColorSpace(self.CGImage);
-    CGFloat cols = self.size.width;
-    CGFloat rows = self.size.height;
+- (cv::Mat)grayScaleMat {
+    cv::Mat inputImage = [self mat];
+    cv::Mat outImage;
+    cv::cvtColor(inputImage, outImage, cv::COLOR_RGB2GRAY);
 
-    cv::Mat cvMat(rows, cols, CV_8UC1); // 8 bits per component, 1 channels
-
-    CGContextRef contextRef = CGBitmapContextCreate(cvMat.data,                 // Pointer to data
-                                                    cols,                       // Width of bitmap
-                                                    rows,                       // Height of bitmap
-                                                    8,                          // Bits per component
-                                                    cvMat.step[0],              // Bytes per row
-                                                    colorSpace,                 // Colorspace
-                                                    kCGImageAlphaNoneSkipLast |
-                                                    kCGBitmapByteOrderDefault); // Bitmap info flags
-
-    CGContextDrawImage(contextRef, CGRectMake(0, 0, cols, rows), self.CGImage);
-    CGContextRelease(contextRef);
-
-    return cvMat;
+    return outImage;
 }
 
 @end

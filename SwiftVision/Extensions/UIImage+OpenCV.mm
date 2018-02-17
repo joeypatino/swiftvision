@@ -3,6 +3,16 @@
 #import "UIImageContours.h"
 #import "UIImage+Mat.h"
 
+@interface Contour ()
+- (instancetype _Nonnull)init NS_UNAVAILABLE;
+- (instancetype)initWithCVMat:(cv::Mat)cvMat;
+@end
+
+@interface UIImageContours ()
+- (instancetype _Nonnull)init NS_UNAVAILABLE;
+- (instancetype _Nonnull)initWithContours:(NSArray <Contour *> * _Nonnull)contours inImage:(UIImage *)image NS_DESIGNATED_INITIALIZER;
+@end
+
 @implementation UIImage (OpenCV)
 - (UIImage *)resizeTo:(CGSize)size {
     cv::Mat inImage = [self mat];
@@ -76,7 +86,7 @@
     cv::Mat inImage = [self mat];
     cv::Mat outImage;
 
-    cv::Mat dilateKernel = cv::Mat::ones(kernelSize.width, kernelSize.height, CV_8UC1);
+    cv::Mat dilateKernel = cv::Mat::ones(kernelSize.height, kernelSize.width, CV_8UC1);
     cv::dilate(inImage, outImage, dilateKernel);
 
     return [[UIImage alloc] initWithCVMat:outImage];
@@ -86,7 +96,7 @@
     cv::Mat inImage = [self mat];
     cv::Mat outImage;
 
-    cv::Mat erodeKernel = cv::Mat::ones(kernelSize.width, kernelSize.height, CV_8UC1);
+    cv::Mat erodeKernel = cv::Mat::ones(kernelSize.height, kernelSize.width, CV_8UC1);
     cv::erode(inImage, outImage, erodeKernel);
 
     return [[UIImage alloc] initWithCVMat:outImage];
@@ -104,8 +114,31 @@
 
 // MARK: -
 
-- (UIImageContours *)contours {
-    return [[UIImageContours alloc] initWithImage:self];
+- (UIImageContours *)contoursFilteredBy:(BOOL (^)(Contour * c))filter {
+    NSArray <Contour *> *contours = [self generateContoursFilteredBy:filter];
+    return [[UIImageContours alloc] initWithContours:contours inImage:self];
+}
+
+- (NSArray<Contour *> *)generateContoursFilteredBy:(BOOL (^)(Contour *c))filter {
+    cv::Mat cvMat = [self grayScaleMat];
+    NSMutableArray <Contour *> *foundContours = @[].mutableCopy;
+    std::vector<std::vector<cv::Point> > contours;
+    cv::findContours(cvMat, contours, cv::RETR_EXTERNAL, cv::CHAIN_APPROX_NONE);
+
+    for (int j = 0; j < contours.size(); j++) {
+        std::vector<cv::Point> points = contours.at(j);
+        cv::Mat contourMat = cv::Mat(points);
+        if (cv::contourArea(contourMat) == 0) continue;
+
+        Contour *contour = [[Contour alloc] initWithCVMat:contourMat];
+        if (filter)
+            if (!filter(contour))
+                continue;
+
+        [foundContours addObject:contour];
+    }
+
+    return foundContours;
 }
 
 @end

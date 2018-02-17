@@ -7,30 +7,38 @@
 
 @interface Contour ()
 @property (nonatomic, assign) cv::Mat mat;
-- (instancetype _Nonnull)init NS_UNAVAILABLE;
 - (instancetype _Nonnull)initWithCVMat:(cv::Mat)cvMat NS_DESIGNATED_INITIALIZER;
-- (void)vertices:(cv::Point *)pts;
-- (cv::Mat)tightMask;
+- (ContourEdge * _Nullable)contourEdgeWithAdjacentContour:(Contour * _Nonnull)adjacentContour;
+
+// returns the minimum bounding box vertices of the contour
+- (void)getBoundingVertices:(cv::Point *)pts;
+
+// a bounding box mask of the contour (non minimum)
+- (cv::Mat)mask;
 @end
 
-@interface UIImageContours ()
-@property (nonatomic, retain) UIImage *image;
-@property (nonatomic, strong) NSArray<Contour *> *contours;
-@property (nonatomic, strong) NSArray<ContourSpan *> *spans;
-@property (nonatomic, assign) cv::Mat inputImage;
-@end
 
 using namespace std;
 using namespace cv;
 
+@interface UIImageContours ()
+@property (nonatomic, retain) UIImage *inputImage;
+@property (nonatomic, strong) NSArray<Contour *> *contours;
+@property (nonatomic, strong) NSArray<ContourSpan *> *spans;
+@end
+
 @implementation UIImageContours
 // MARK: -
-- (instancetype)initWithImage:(UIImage *)image {
+
+- (instancetype)initWithImage:(UIImage *)image filteredBy:(nullable BOOL (^)(Contour * _Nonnull c))filter {
+    return [image contoursFilteredBy:filter];
+}
+
+- (instancetype)initWithContours:(NSArray <Contour *> *)contours inImage:(UIImage *)image {
     self = [super init];
-    self.image = image;
-    self.inputImage = [self grayScaleMat:image];
-    self.contours = [self processContours:self.inputImage];
-    self.spans = [self assembleSpansFrom:self.contours];
+    self.inputImage = image;
+    self.contours = contours;
+    self.spans = [self spansFrom:self.contours];
 
     return self;
 }
@@ -47,11 +55,11 @@ using namespace cv;
 
 // MARK: -
 
-- (UIImage *)renderMasks:(BOOL (^)(Contour *c))filter {
-    cv::Mat outImage = cv::Mat::zeros(self.image.size.height, self.image.size.width, CV_8UC1);
+- (UIImage *)renderMasks {
+    cv::Mat outImage = cv::Mat::zeros(self.inputImage.size.height, self.inputImage.size.width, CV_8UC1);
     for (int i = 0; i < self.contours.count; i++){
         Contour *contour = self.contours[i];
-        cv::Mat mask = contour.tightMask;
+        cv::Mat mask = contour.mask;
         cv::Rect rect = cv::Rect(contour.bounds.origin.x, contour.bounds.origin.y, contour.bounds.size.width, contour.bounds.size.height);
         cv::rectangle(outImage, rect, cv::Scalar(255, 255, 255), -1);
     }
@@ -61,29 +69,28 @@ using namespace cv;
     return [[UIImage alloc] initWithCVMat:outImage];
 }
 
-- (UIImage *)render:(BOOL (^)(Contour *c))filter {
-    return [self render:[UIColor whiteColor] mode:ContourRenderingModeOutline filtered:filter];
+- (UIImage *)render {
+    return [self render:[UIColor whiteColor] mode:ContourRenderingModeOutline];
 }
 
-- (UIImage *)render:(UIColor *)color mode:(ContourRenderingMode)mode filtered:(BOOL (^)(Contour *c))filter {
+- (UIImage *)render:(UIColor *)color mode:(ContourRenderingMode)mode {
     BOOL fillConvexPolys = false;
     cv::Scalar contourColor = [self scalarColorFrom:color];
 
-    cv::Mat outImage = cv::Mat::zeros(self.image.size.height, self.image.size.width, CV_8UC3);
-    cv::Mat hull = cv::Mat::zeros(self.image.size.height, self.image.size.width, CV_8UC1);
+    cv::Mat outImage = cv::Mat::zeros(self.inputImage.size.height, self.inputImage.size.width, CV_8UC3);
     std::vector<std::vector<cv::Point> > contours;
 
     for (int i = 0; i < self.contours.count; i++){
         Contour *contour = self.contours[i];
-        if (filter)
-            if (!filter(contour))
-                continue;
 
+        // start - debugging
         if (fillConvexPolys) {
             cv::Point vertices[4];
-            [contour vertices:vertices];
+            [contour getBoundingVertices:vertices];
             cv::fillConvexPoly(outImage, vertices, 4, [self scalarColorFrom:[UIColor whiteColor]]);
         }
+        // end - debugging
+
         contours.push_back(contour.mat);
     }
 
@@ -95,23 +102,8 @@ using namespace cv;
 
 // MARK: -
 
-- (NSArray<Contour *> *)processContours:(cv::Mat)cvMat {
-    NSMutableArray <Contour *> *foundContours = @[].mutableCopy;
-    std::vector<std::vector<cv::Point> > contours;
-    cv::findContours(cvMat, contours, cv::RETR_EXTERNAL, cv::CHAIN_APPROX_NONE);
-
-    for (int j = 0; j < contours.size(); j++) {
-        std::vector<cv::Point> contour = contours.at(j);
-        if (contour.empty()) continue;
-        [foundContours addObject:[[Contour alloc] initWithCVMat:cv::Mat(contour)]];
-    }
-
-    return foundContours;
-}
-
-- (NSArray<ContourSpan *> *)assembleSpansFrom:(NSArray<Contour *> *)contours {
-    /// def assemble_spans(name, small, pagemask, cinfo_list)
-
+- (NSArray<ContourSpan *> *)spansFrom:(NSArray<Contour *> *)contours {
+    CGFloat SPAN_MIN_WIDTH = 16;
     NSArray *sortedContours = [contours sortedArrayUsingComparator:^NSComparisonResult(Contour *obj1, Contour *obj2){
         if (CGRectGetMinY(obj1.bounds) < CGRectGetMinY(obj2.bounds))
             return NSOrderedAscending;
@@ -127,33 +119,65 @@ using namespace cv;
     NSInteger contourCount = sortedContours.count;
     for (int i = 0; i < contourCount; i++) {
         Contour *currentContour = sortedContours[i];
-
         for (int j = 0; j < i; j++) {
             Contour *adjacentContour = sortedContours[j];
-
-            // note e is of the form (score, left_cinfo, right_cinfo)
-            ContourEdge *edge = [currentContour generateEdge:adjacentContour];
+            ContourEdge *edge = [currentContour contourEdgeWithAdjacentContour:adjacentContour];
             if (edge)
                 [candidateEdges addObject:edge];
         }
     }
 
-    NSLog(@"%@", candidateEdges);
+    [candidateEdges sortUsingComparator:^NSComparisonResult(ContourEdge *edge1, ContourEdge *edge2){
+        if (edge1.score < edge2.score) return NSOrderedAscending;
+        else if (edge1.score > edge2.score) return NSOrderedDescending;
+
+        return NSOrderedSame;
+    }];
+
     for (ContourEdge *edge in candidateEdges) {
-        NSLog(@"%f", edge.score);
+        // if left and right are unassigned, join them
+        if (!edge.contourA.next && !edge.contourB.previous) {
+            edge.contourA.next = edge.contourB;
+            edge.contourB.previous = edge.contourA;
+        }
     }
-    // sort candidate edges by score (lower is better)
-    // candidateEdges.sort()
 
-    return @[];
-}
+    // generate list of spans as output
+    NSMutableArray <ContourSpan *> *spans = @[].mutableCopy;
 
-- (cv::Mat)grayScaleMat:(UIImage *)image {
-    cv::Mat inputImage = [image mat];
-    cv::Mat outImage;
-    cv::cvtColor(inputImage, outImage, cv::COLOR_RGB2GRAY);
+    NSMutableArray *mutableContours = sortedContours.mutableCopy;
+    // until we have removed everything from the list
+    while (mutableContours.count > 0) {
+        // get the first on the list
+        Contour *contour = mutableContours[0];
 
-    return outImage;
+        // keep following predecessors until none exists
+        while (contour.previous)
+            contour = contour.previous;
+
+        // start a new span
+        ContourSpan *curSpan = [[ContourSpan alloc] init];
+        CGFloat width = 0;
+
+        // follow successors til end of span
+        while (contour) {
+            // remove from list (sadly making this loop *also* O(n^2)
+            [mutableContours removeObject:contour];
+            // add to span
+            [curSpan addContour:contour];
+
+            width += contour.localxMax - contour.localxMin;
+
+            // set successor
+            contour = contour.next;
+        }
+
+        // add if long enough
+        if (width > SPAN_MIN_WIDTH)
+            [spans addObject:curSpan];
+    }
+
+    return spans;
 }
 
 - (cv::Scalar)scalarColorFrom:(UIColor *)color {
@@ -167,10 +191,3 @@ using namespace cv;
 }
 
 @end
-
-
-
-
-
-
-

@@ -22,6 +22,8 @@
 		D40B2889202891D800CA8559 /* PrefixHeader.pch in Headers */ = {isa = PBXBuildFile; fileRef = D40B2888202891D800CA8559 /* PrefixHeader.pch */; };
 		D439947120388BA800D9B783 /* functions.h in Headers */ = {isa = PBXBuildFile; fileRef = D439946F20388BA800D9B783 /* functions.h */; };
 		D439947220388BA800D9B783 /* functions.mm in Sources */ = {isa = PBXBuildFile; fileRef = D439947020388BA800D9B783 /* functions.mm */; };
+		D43994742038EAFD00D9B783 /* Contour+internal.h in Headers */ = {isa = PBXBuildFile; fileRef = D43994732038EAFD00D9B783 /* Contour+internal.h */; };
+		D43994762038EB7200D9B783 /* ContourEdge+internal.h in Headers */ = {isa = PBXBuildFile; fileRef = D43994752038EB7200D9B783 /* ContourEdge+internal.h */; };
 		D442BE582033A1BD00213DF0 /* ContourSpan.h in Headers */ = {isa = PBXBuildFile; fileRef = D442BE562033A1BD00213DF0 /* ContourSpan.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		D442BE592033A1BD00213DF0 /* ContourSpan.m in Sources */ = {isa = PBXBuildFile; fileRef = D442BE572033A1BD00213DF0 /* ContourSpan.m */; };
 		D442BE5C2033A66200213DF0 /* ContourEdge.h in Headers */ = {isa = PBXBuildFile; fileRef = D442BE5A2033A66200213DF0 /* ContourEdge.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -60,6 +62,8 @@
 		D40B2888202891D800CA8559 /* PrefixHeader.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PrefixHeader.pch; sourceTree = "<group>"; };
 		D439946F20388BA800D9B783 /* functions.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = functions.h; sourceTree = "<group>"; };
 		D439947020388BA800D9B783 /* functions.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = functions.mm; sourceTree = "<group>"; };
+		D43994732038EAFD00D9B783 /* Contour+internal.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Contour+internal.h"; sourceTree = "<group>"; };
+		D43994752038EB7200D9B783 /* ContourEdge+internal.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "ContourEdge+internal.h"; sourceTree = "<group>"; };
 		D442BE562033A1BD00213DF0 /* ContourSpan.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ContourSpan.h; sourceTree = "<group>"; };
 		D442BE572033A1BD00213DF0 /* ContourSpan.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ContourSpan.m; sourceTree = "<group>"; };
 		D442BE5A2033A66200213DF0 /* ContourEdge.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ContourEdge.h; sourceTree = "<group>"; };
@@ -181,6 +185,8 @@
 				D442BE572033A1BD00213DF0 /* ContourSpan.m */,
 				D442BE5A2033A66200213DF0 /* ContourEdge.h */,
 				D442BE5B2033A66200213DF0 /* ContourEdge.m */,
+				D43994732038EAFD00D9B783 /* Contour+internal.h */,
+				D43994752038EB7200D9B783 /* ContourEdge+internal.h */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -209,6 +215,7 @@
 				D40B2889202891D800CA8559 /* PrefixHeader.pch in Headers */,
 				D4A572CF202A348800D8F4B0 /* Contour.h in Headers */,
 				D442BE582033A1BD00213DF0 /* ContourSpan.h in Headers */,
+				D43994742038EAFD00D9B783 /* Contour+internal.h in Headers */,
 				D4BAD1C52034DBB200F4A32C /* NSArray+extras.h in Headers */,
 				D442BE5C2033A66200213DF0 /* ContourEdge.h in Headers */,
 				D4A572C9202A1E2800D8F4B0 /* UIImage+OpenCV.h in Headers */,
@@ -216,6 +223,7 @@
 				D40B283E2028856300CA8559 /* SwiftVision.h in Headers */,
 				D40B2849202885AA00CA8559 /* OpenCV.h in Headers */,
 				D439947120388BA800D9B783 /* functions.h in Headers */,
+				D43994762038EB7200D9B783 /* ContourEdge+internal.h in Headers */,
 				D4A572CA202A1E2800D8F4B0 /* UIImage+Mat.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

@@ -1,7 +1,7 @@
 #import <opencv2/opencv.hpp>
 #import "UIImage+OpenCV.h"
-#import "UIImageContours.h"
 #import "UIImage+Mat.h"
+#import "UIImageContours.h"
 
 @interface Contour ()
 - (instancetype _Nonnull)init NS_UNAVAILABLE;
@@ -112,7 +112,6 @@
 }
 
 // MARK: -
-
 - (UIImageContours *)contoursFilteredBy:(BOOL (^)(Contour * c))filter {
     NSArray <Contour *> *contours = [self generateContoursFilteredBy:filter];
     return [[UIImageContours alloc] initWithContours:contours inImage:self];

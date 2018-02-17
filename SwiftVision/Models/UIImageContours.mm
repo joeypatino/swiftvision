@@ -1,22 +1,8 @@
 #import <opencv2/opencv.hpp>
 #import "UIImageContours.h"
-#import "ContourSpan.h"
-#import "ContourEdge.h"
 #import "UIImage+Mat.h"
 #import "UIImage+OpenCV.h"
-
-@interface Contour ()
-@property (nonatomic, assign) cv::Mat mat;
-- (instancetype _Nonnull)initWithCVMat:(cv::Mat)cvMat NS_DESIGNATED_INITIALIZER;
-- (ContourEdge * _Nullable)contourEdgeWithAdjacentContour:(Contour * _Nonnull)adjacentContour;
-
-// returns the minimum bounding box vertices of the contour
-- (void)getBoundingVertices:(cv::Point *)pts;
-
-// a bounding box mask of the contour (non minimum)
-- (cv::Mat)mask;
-@end
-
+#import "Contour+internal.h"
 
 using namespace std;
 using namespace cv;
@@ -27,9 +13,8 @@ using namespace cv;
 @property (nonatomic, strong) NSArray<ContourSpan *> *spans;
 @end
 
-@implementation UIImageContours
 // MARK: -
-
+@implementation UIImageContours
 - (instancetype)initWithImage:(UIImage *)image filteredBy:(nullable BOOL (^)(Contour * _Nonnull c))filter {
     return [image contoursFilteredBy:filter];
 }
@@ -44,7 +29,6 @@ using namespace cv;
 }
 
 // MARK: -
-
 - (NSInteger)count {
     return self.contours.count;
 }
@@ -54,17 +38,16 @@ using namespace cv;
 }
 
 // MARK: -
-
 - (UIImage *)renderMasks {
-    cv::Mat outImage = cv::Mat::zeros(self.inputImage.size.height, self.inputImage.size.width, CV_8UC1);
+    Mat outImage = Mat::zeros(self.inputImage.size.height, self.inputImage.size.width, CV_8UC1);
     for (int i = 0; i < self.contours.count; i++){
         Contour *contour = self.contours[i];
-        cv::Mat mask = contour.mask;
+        Mat mask = contour.mask;
         cv::Rect rect = cv::Rect(contour.bounds.origin.x, contour.bounds.origin.y, contour.bounds.size.width, contour.bounds.size.height);
-        cv::rectangle(outImage, rect, cv::Scalar(255, 255, 255), -1);
+        rectangle(outImage, rect, Scalar(255, 255, 255), -1);
     }
 
-    cv::bitwise_not(outImage, outImage);
+    bitwise_not(outImage, outImage);
 
     return [[UIImage alloc] initWithCVMat:outImage];
 }
@@ -75,9 +58,9 @@ using namespace cv;
 
 - (UIImage *)render:(UIColor *)color mode:(ContourRenderingMode)mode {
     BOOL fillConvexPolys = false;
-    cv::Scalar contourColor = [self scalarColorFrom:color];
+    Scalar contourColor = [self scalarColorFrom:color];
 
-    cv::Mat outImage = cv::Mat::zeros(self.inputImage.size.height, self.inputImage.size.width, CV_8UC3);
+    Mat outImage = Mat::zeros(self.inputImage.size.height, self.inputImage.size.width, CV_8UC3);
     std::vector<std::vector<cv::Point> > contours;
 
     for (int i = 0; i < self.contours.count; i++){
@@ -87,7 +70,7 @@ using namespace cv;
         if (fillConvexPolys) {
             cv::Point vertices[4];
             [contour getBoundingVertices:vertices];
-            cv::fillConvexPoly(outImage, vertices, 4, [self scalarColorFrom:[UIColor whiteColor]]);
+            fillConvexPoly(outImage, vertices, 4, [self scalarColorFrom:[UIColor whiteColor]]);
         }
         // end - debugging
 
@@ -95,13 +78,12 @@ using namespace cv;
     }
 
     BOOL filled = (mode == ContourRenderingModeFill) ? ContourRenderingModeFill : ContourRenderingModeOutline;
-    cv::drawContours(outImage, contours, -1, contourColor, filled ? -1 : 1);
+    drawContours(outImage, contours, -1, contourColor, filled ? -1 : 1);
 
     return [[UIImage alloc] initWithCVMat:outImage];
 }
 
 // MARK: -
-
 - (NSArray<ContourSpan *> *)spansFrom:(NSArray<Contour *> *)contours {
     CGFloat SPAN_MIN_WIDTH = 16;
     NSArray *sortedContours = [contours sortedArrayUsingComparator:^NSComparisonResult(Contour *obj1, Contour *obj2){
@@ -180,14 +162,13 @@ using namespace cv;
     return spans;
 }
 
-- (cv::Scalar)scalarColorFrom:(UIColor *)color {
+- (Scalar)scalarColorFrom:(UIColor *)color {
     CGFloat red;
     CGFloat green;
     CGFloat blue;
     CGFloat alpha;
     [color getRed:&red green:&green blue:&blue alpha:&alpha];
 
-    return cv::Scalar(red * 255.0, green * 255.0, blue * 255.0, alpha * 255.0);
+    return Scalar(red * 255.0, green * 255.0, blue * 255.0, alpha * 255.0);
 }
-
 @end

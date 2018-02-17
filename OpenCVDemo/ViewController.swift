@@ -26,13 +26,16 @@ class ViewController: UIViewController {
             .dilate(CGSize(width: 14, height: 1))?
             .erode(CGSize(width: 0, height: 5)) else { return }
 
-        imageView.image = masked.contours(filteredBy: { contour in
-            let size = contour.bounds.size
-            if contour.aspect > 1.25 { return false }
-            if size.width < 6 { return false }
-            if size.height < 2 { return false }
-            if size.height > 32 { return false }
-            return true
-        }).render()
+//        imageView.image = masked.contours(filteredBy: contourFilter).renderMasks()
+        imageView.image = masked.contours(filteredBy: contourFilter).render()
+    }
+
+    private func contourFilter(contour: Contour) -> Bool {
+        let size = contour.bounds.size
+        if contour.aspect > 1.25 { return false }
+        if size.width < 6 { return false }
+        if size.height < 2 { return false }
+        if size.height > 32 { return false }
+        return true
     }
 }

@@ -1,12 +1,10 @@
 #import "ContourSpan.h"
-#import "Contour.h"
 
 @interface ContourSpan ()
 @property (nonatomic, strong) NSMutableArray <Contour *> *contoursInSpan;
 @end
 
 @implementation ContourSpan
-
 - (instancetype)init {
     self = [super init];
     self.contoursInSpan = @[].mutableCopy;
@@ -24,5 +22,4 @@
 - (NSArray <Contour *> *)contours {
     return self.contoursInSpan;
 }
-
 @end

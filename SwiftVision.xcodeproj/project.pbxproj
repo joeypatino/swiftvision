@@ -38,7 +38,6 @@
 		D4A572D0202A348800D8F4B0 /* Contour.mm in Sources */ = {isa = PBXBuildFile; fileRef = D4A572CE202A348800D8F4B0 /* Contour.mm */; };
 		D4BAD1C52034DBB200F4A32C /* NSArray+extras.h in Headers */ = {isa = PBXBuildFile; fileRef = D4BAD1C32034DBB200F4A32C /* NSArray+extras.h */; };
 		D4BAD1C62034DBB200F4A32C /* NSArray+extras.m in Sources */ = {isa = PBXBuildFile; fileRef = D4BAD1C42034DBB200F4A32C /* NSArray+extras.m */; };
-		D4E89963202C9DA600D76FAF /* Contour.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4E89962202C9DA600D76FAF /* Contour.swift */; };
 		D4E89966202CA40B00D76FAF /* CGRectOutline.h in Headers */ = {isa = PBXBuildFile; fileRef = D4E89964202CA40B00D76FAF /* CGRectOutline.h */; settings = {ATTRIBUTES = (Public, ); }; };
 /* End PBXBuildFile section */
 
@@ -77,7 +76,6 @@
 		D4A572CE202A348800D8F4B0 /* Contour.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = Contour.mm; sourceTree = "<group>"; };
 		D4BAD1C32034DBB200F4A32C /* NSArray+extras.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "NSArray+extras.h"; sourceTree = "<group>"; };
 		D4BAD1C42034DBB200F4A32C /* NSArray+extras.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "NSArray+extras.m"; sourceTree = "<group>"; };
-		D4E89962202C9DA600D76FAF /* Contour.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Contour.swift; sourceTree = "<group>"; };
 		D4E89964202CA40B00D76FAF /* CGRectOutline.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CGRectOutline.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -194,7 +192,6 @@
 				D4A572C7202A1E2800D8F4B0 /* UIImage+OpenCV.mm */,
 				D4A572C6202A1E2800D8F4B0 /* UIImage+Mat.h */,
 				D4A572C8202A1E2800D8F4B0 /* UIImage+Mat.mm */,
-				D4E89962202C9DA600D76FAF /* Contour.swift */,
 				D4BAD1C32034DBB200F4A32C /* NSArray+extras.h */,
 				D4BAD1C42034DBB200F4A32C /* NSArray+extras.m */,
 			);
@@ -331,7 +328,6 @@
 				D40B284A202885AA00CA8559 /* OpenCV.mm in Sources */,
 				D4A572CC202A1E2800D8F4B0 /* UIImage+Mat.mm in Sources */,
 				D442BE592033A1BD00213DF0 /* ContourSpan.m in Sources */,
-				D4E89963202C9DA600D76FAF /* Contour.swift in Sources */,
 				D4A572D0202A348800D8F4B0 /* Contour.mm in Sources */,
 				D4A572C3202A1E1500D8F4B0 /* UIImageContours.mm in Sources */,
 				D4BAD1C62034DBB200F4A32C /* NSArray+extras.m in Sources */,

@@ -9,8 +9,7 @@
 @end
 
 @interface UIImageContours ()
-- (instancetype _Nonnull)init NS_UNAVAILABLE;
-- (instancetype _Nonnull)initWithContours:(NSArray <Contour *> * _Nonnull)contours inImage:(UIImage *)image NS_DESIGNATED_INITIALIZER;
+- (instancetype _Nonnull)initWithContours:(NSArray <Contour *> *_Nonnull)contours inImage:(UIImage *_Nonnull)image NS_DESIGNATED_INITIALIZER;
 @end
 
 @implementation UIImage (OpenCV)

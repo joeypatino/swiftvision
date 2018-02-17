@@ -1,16 +1,7 @@
 #import "NSArray+extras.h"
 
 @implementation NSArray (extras)
-- (void)flatten:(NSMutableArray *)original inArray:(NSMutableArray *)result {
-    for(id element in original) {
-        if([element isKindOfClass:[NSNumber class]])
-            [result addObject:element];
-        else
-            [self flatten:element inArray:result];
-    }
-}
-
-- (NSNumber * _Nullable)min {
+- (NSNumber *)min {
     float xmin = MAXFLOAT;
     for (NSNumber *num in self) {
         float x = num.floatValue;
@@ -19,7 +10,7 @@
     return [NSNumber numberWithFloat:xmin];
 }
 
-- (NSNumber * _Nullable)max {
+- (NSNumber *)max {
     float xmax = -MAXFLOAT;
     for (NSNumber *num in self) {
         float x = num.floatValue;
@@ -27,5 +18,4 @@
     }
     return [NSNumber numberWithFloat:xmax];
 }
-
 @end

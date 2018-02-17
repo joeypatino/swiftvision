@@ -1,5 +1,21 @@
 #include "functions.h"
 
+double angleDistance(double angle_b, double angle_a) {
+    double diff = angle_b - angle_a;
+
+    while (diff > M_PI) {
+        diff -= 2 * M_PI;
+    }
+    while (diff < -M_PI) {
+        diff += 2 * M_PI;
+    }
+    return abs(diff);
+}
+
+double intervalOverlap(CGPoint int_a, CGPoint int_b) {
+    return MIN(int_a.y, int_b.y) - MAX(int_a.x, int_b.x);
+}
+
 void describe_vector(std::vector<double> vector, char const *name ) {
     printf("\n############ %s ############\n", name);
     printf("size: {%zul}\n", vector.size());

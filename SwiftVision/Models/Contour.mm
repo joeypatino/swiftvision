@@ -5,7 +5,10 @@
 #import "ContourEdge.h"
 
 @interface Contour ()
+@property (nonatomic, assign, readonly) CGPoint clxMin;
+@property (nonatomic, assign, readonly) CGPoint clxMax;
 @property (nonatomic, strong, readonly) NSArray <NSNumber *> *_Nonnull clx;
+@property (nonatomic, assign, readonly) CGPoint *_Nonnull points;
 @property (nonatomic, assign) cv::Mat mat;
 @property (nonatomic, assign) cv::Moments moments;
 @end
@@ -17,22 +20,6 @@
                                  contourA:(Contour *_Nonnull)contourA
                                  contourB:(Contour *_Nonnull)contourB NS_DESIGNATED_INITIALIZER;
 @end
-
-double angleDistance(double angle_b, double angle_a) {
-    double diff = angle_b - angle_a;
-
-    while (diff > M_PI) {
-        diff -= 2 * M_PI;
-    }
-    while (diff < -M_PI) {
-        diff += 2 * M_PI;
-    }
-    return abs(diff);
-}
-
-double intervalOverlap(CGPoint int_a, CGPoint int_b) {
-    return MIN(int_a.y, int_b.y) - MAX(int_a.x, int_b.x);
-}
 
 // MARK: -
 @implementation Contour
@@ -172,6 +159,10 @@ double intervalOverlap(CGPoint int_a, CGPoint int_b) {
     double EDGE_MAX_OVERLAP = 1.0;   // max px horiz. overlap of contours in span
     double EDGE_MAX_LENGTH = 100.0;  // max px length of edge connecting contours
     double EDGE_MAX_ANGLE = 25.0;    // maximum change in angle allowed between contours
+
+    //cv::reshape(?, ?);
+    //cv::reduce(self.mat, self.mat, 0, 0);
+    //cv::transform(self.mat, self.mat, cv::Matx13f(1,1,1))
 
     if (dist > EDGE_MAX_LENGTH || xOverlap > EDGE_MAX_OVERLAP || deltaAngle > EDGE_MAX_ANGLE) {
         return nil;

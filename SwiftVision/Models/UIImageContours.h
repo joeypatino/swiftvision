@@ -12,10 +12,16 @@ typedef NS_ENUM(NSUInteger, ContourRenderingMode) {
 @interface UIImageContours : NSObject
 - (instancetype _Nonnull)init NS_UNAVAILABLE;
 - (instancetype _Nonnull)initWithImage:(UIImage * _Nonnull)image filteredBy:(nullable BOOL (^)(Contour * _Nonnull c))filter;
+/// returns an image containing all the contours, rendered in a default color and mode.
 - (UIImage * _Nullable)render NS_SWIFT_NAME(render());
-- (UIImage * _Nullable)render:(UIColor * _Nonnull)color mode:(ContourRenderingMode)mode NS_SWIFT_NAME(render(inColor:mode:));
+/// returns an image containing all the contours, rendered in `color` and using the mode `mode`.
+- (UIImage * _Nullable)render:(UIColor * _Nonnull)color mode:(ContourRenderingMode)mode NS_SWIFT_NAME(render(inColor:using:));
+/// returns an image containing all the contours masks.
 - (UIImage * _Nullable)renderMasks NS_SWIFT_NAME(renderMasks());
-- (Contour * _Nullable)objectAtIndexedSubscript:(NSInteger)idx;
-- (NSInteger)count;
 @end
 
+/// subscript support
+@interface UIImageContours (SubscriptSupport)
+- (Contour * _Nullable)objectAtIndexedSubscript:(NSInteger)idx;
+@property (nonatomic, assign, readonly) NSInteger count;
+@end

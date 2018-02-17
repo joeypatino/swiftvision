@@ -4,5 +4,4 @@
 
 @interface OpenCV : NSObject
 + (NSString *)version;
-
 @end

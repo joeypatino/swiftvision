@@ -1,5 +1,5 @@
 #import <opencv2/opencv.hpp>
-#include <valarray>
+#import "NSArray+flatten.h"
 #import "Contour.h"
 #import "ContourEdge.h"
 
@@ -99,64 +99,118 @@ void describe_vectord(std::vector<std::vector<double>> vector, char const *name 
     printf("\n");
 }
 
+double angleDistance(double angle_b, double angle_a) {
+    double diff = angle_b - angle_a;
+
+    while (diff > M_PI) {
+        diff -= 2 * M_PI;
+    }
+    while (diff < -M_PI) {
+        diff += 2 * M_PI;
+    }
+    return abs(diff);
+}
+
+double intervalOverlap(CGPoint int_a, CGPoint int_b) {
+    return MIN(int_a.y, int_b.y) - MAX(int_a.x, int_b.x);
+}
+
 // MARK: -
 @implementation Contour
 - (instancetype)initWithCVMat:(cv::Mat)cvMat {
     self = [super init];
     self.mat = cvMat.clone();
     cv::Rect boundingRect = cv::boundingRect(self.mat);
-
     _size = self.mat.total();
     _bounds = CGRectMake(boundingRect.x, boundingRect.y, boundingRect.width, boundingRect.height);
-    _points = (CGPoint *)malloc(sizeof(CGPoint) * _size);
     _aspect = boundingRect.height / boundingRect.width;
+
     _area = cv::contourArea(self.mat);
-
+    _points = [self pointsFrom:self.mat];
     _tangent = [self calculateTangent:self.mat];
+    _center = [self calculateCenter:self.mat];
+    _clx = [self projectPoints:self.points];
 
-    for (int i = 0; i < self.mat.total(); i++) {
-        cv::Point p = self.mat.at<cv::Point>(i);
-        _points[i] = CGPointMake(p.x, p.y);
-    }
+    double min = [[self.clx min] floatValue];
+    double max = [[self.clx max] floatValue];
+    _clxMin = CGPointMake(self.center.x + self.tangent.x * min, self.center.y + self.tangent.y * min);
+    _clxMax = CGPointMake(self.center.x + self.tangent.x * max, self.center.y + self.tangent.y * max);
 
     return self;
 }
 
-- (double)calculateTangent:(cv::Mat)mat {
+// MARK: -
+- (CGPoint*)pointsFrom:(cv::Mat)mat {
+    CGPoint *points = (CGPoint *)malloc(sizeof(CGPoint) * mat.total());
+    for (int i = 0; i < mat.total(); i++) {
+        cv::Point p = mat.at<cv::Point>(i);
+        points[i] = CGPointMake(p.x, p.y);
+    }
+    return points;
+}
+
+// MARK: - Contour projection
+- (NSArray<NSNumber *> *)projectPoints:(CGPoint *)points {
+    NSMutableArray *dots = @[].mutableCopy;
+
+    for (int i = 0; i < self.size; i++) {
+        CGPoint p = points[i];
+        double projected = [self project:p];
+        [dots addObject:[NSNumber numberWithDouble:projected]];
+    }
+    return dots;
+}
+
+- (double)project:(CGPoint)point {
+    cv::Point2d t = cv::Point2d(self.tangent.x, self.tangent.y);
+    cv::Point2d c = cv::Point2d(self.center.x, self.center.y);
+    cv::Point2d d = cv::Point2d(point.x, point.y) - c;
+    return t.ddot(d);
+}
+
+- (CGPoint)calculateCenter:(cv::Mat)mat {
     cv::Moments moments = cv::moments(mat);
 
-    double area = 26.5; //moments.m00;
-    printf("area:: %f\n", area);
-    double m10 = 11493.8333333; //moments.m10
-    double m01 = 17255.3333333; //moments.m01
-    double mu20 = 1080.81184486; //moments.mu20
-    double mu11 = -67.9216457019; //moments.mu11
-    double mu02 = 14.1954926644; //moments.mu02
-
+    double area = moments.m00;
+    double m10 = moments.m10;
+    double m01 = moments.m01;
     double meanX = m10 / area;
     double meanY = m01 / area;
-    printf("meanX:: %f\n", meanX);
-    printf("meanY:: %f\n", meanY);
+
+    double centerPoints[2] = {meanX, meanY};
+    cv::Mat center = cv::Mat(2, 1, CV_64FC1, &centerPoints);
+
+    double x = center.at<double>(0, 0);
+    double y = center.at<double>(1, 0);
+    return CGPointMake(x, y);
+}
+
+- (double)angle {
+    return atan2(self.tangent.y, self.tangent.x);
+}
+
+- (CGPoint)calculateTangent:(cv::Mat)mat {
+    cv::Moments moments = cv::moments(mat);
+
+    double area = moments.m00;
+    double mu20 = moments.mu20;
+    double mu11 = moments.mu11;
+    double mu02 = moments.mu02;
 
     double data[4] = {mu20, mu11, mu11, mu02};
     cv::Mat momentsMatrix = cv::Mat(2, 2, CV_64FC1, &data);
     momentsMatrix /= area;
-    describe_vector(momentsMatrix, "momentsMatrix");
 
     cv::Mat svdW;
     cv::Mat svdU;
     cv::Mat svdVT;
     cv::SVDecomp(momentsMatrix, svdW, svdU, svdVT);
-    describe_vector(svdU, "svdU");
-
-    double centerPoints[2] = {meanX, meanY};
-    cv::Mat center = cv::Mat(2, 1, CV_64FC1, &centerPoints);
-    describe_vector(center, "center");
 
     cv::Mat tangent = svdU.col(0).clone();
-    describe_vector(tangent, "tangent");
 
-    return 0;
+    double x = tangent.at<double>(0, 0);
+    double y = tangent.at<double>(1, 0);
+    return CGPointMake(x, y);
 }
 
 - (NSString *)description {
@@ -179,39 +233,52 @@ void describe_vectord(std::vector<std::vector<double>> vector, char const *name 
 
 // MARK: -
 - (ContourEdge *)generateEdge:(Contour *)adjacentContour {
-    /*
-     # we want a left of b (so a's successor will be b and b's
-     # predecessor will be a) make sure right endpoint of b is to the
-     # right of left endpoint of a.
-    if cinfo_a.point0[0] > cinfo_b.point1[0]:
-        tmp = cinfo_a
-        cinfo_a = cinfo_b
-        cinfo_b = tmp
+    Contour *contourA = self;
+    Contour *contourB = adjacentContour;
+    if (contourA.clxMin.x > contourB.clxMax.x) {
+        contourA = adjacentContour;
+        contourB = self;
+    }
 
-        x_overlap_a = cinfo_a.local_overlap(cinfo_b)
-        x_overlap_b = cinfo_b.local_overlap(cinfo_a)
+    double xOverlapA = [contourA local_overlap:contourB];
+    double xOverlapB = [contourB local_overlap:contourA];   // why NaN !?
 
-        overall_tangent = cinfo_b.center - cinfo_a.center
-        overall_angle = np.arctan2(overall_tangent[1], overall_tangent[0])
+//    NSLog(@"xOverlapA:: %f", xOverlapA);
+//    NSLog(@"xOverlapB:: %f", xOverlapB);
 
-        delta_angle = max(angle_dist(cinfo_a.angle, overall_angle),
-                          angle_dist(cinfo_b.angle, overall_angle)) * 180/np.pi
+    CGPoint overallTangent = CGPointMake(contourB.center.x - contourA.center.x, contourB.center.y - contourA.center.y);
+    double overallAngle = atan2(overallTangent.y, overallTangent.x);
 
-        # we want the largest overlap in x to be small
-        x_overlap = max(x_overlap_a, x_overlap_b)
+    double deltaAngle = MAX(angleDistance(contourA.angle, overallAngle), angleDistance(contourB.angle, overallAngle)) * 180 / M_PI;
 
-        dist = np.linalg.norm(cinfo_b.point0 - cinfo_a.point1)
+    double xOverlap = MAX(xOverlapA, xOverlapB);
 
-        if (dist > EDGE_MAX_LENGTH or
-            x_overlap > EDGE_MAX_OVERLAP or
-            delta_angle > EDGE_MAX_ANGLE):
-            return None
-            else:
-                score = dist + delta_angle*EDGE_ANGLE_COST
-                return (score, cinfo_a, cinfo_b)
-*/
+    double dist = cv::norm(cv::Mat(cv::Point2d(contourB.clxMin.x - contourA.clxMin.x, contourB.clxMin.y - contourA.clxMin.y)));
 
-    return nil;
+    double EDGE_MAX_OVERLAP = 1.0;   // max reduced px horiz. overlap of contours in span
+    double EDGE_MAX_LENGTH = 100.0;  // max reduced px length of edge connecting contours
+    double EDGE_ANGLE_COST = 10.0;   // cost of angles in edges (tradeoff vs. length)
+    double EDGE_MAX_ANGLE = 15.0;      // maximum change in angle allowed between contours
+
+    if (dist > EDGE_MAX_OVERLAP || xOverlap > EDGE_MAX_LENGTH || deltaAngle > EDGE_MAX_ANGLE) {
+        return nil;
+    } else {
+        double score = dist + deltaAngle * EDGE_ANGLE_COST;
+        NSLog(@"score:: %f", score);
+        return [[ContourEdge alloc] initWithScore:score contourA:contourA contourB:contourB];
+    }
+}
+
+- (double)local_overlap:(Contour *)other {
+    double xmin = [self project:other.clxMin];
+    double xmax = [self project:other.clxMax];
+    double clxMin = [[self.clx min] doubleValue];
+    double clxMax = [[self.clx max] doubleValue];
+    CGPoint localRng = CGPointMake(clxMin, clxMax);
+    CGPoint projectedRng = CGPointMake(xmin, xmax);
+    printf("intervalOverlap:: %f\n", intervalOverlap(localRng, projectedRng));
+
+    return intervalOverlap(localRng, projectedRng);
 }
 
 // MARK: -
@@ -233,21 +300,14 @@ void describe_vectord(std::vector<std::vector<double>> vector, char const *name 
     const int w = int(b.size.width);
     const int h = int(b.size.height);
     cv::Mat cvMat = cv::Mat(self.mat);
-//    describe_vector(cvMat.t(), "contour");
     cv::Mat tight_mask = cv::Mat::zeros(w, h, CV_8UC3);
-//    describe_vector(tight_mask.t(), "tight_mask");
     cv::Mat arr = cv::Mat({x, y});
-//    describe_vector(arr.t(), "arr");
     cv::Mat reshapedArr = arr.reshape(0, 1);
-//    describe_vector(reshapedArr.t(), "reshapedArr");
     cv::Mat convertedArr;
     reshapedArr.convertTo(convertedArr, CV_64F);
-//    describe_vector(convertedArr.t(), "convertedArr");
 
     cv::Mat tight_contour = cvMat - convertedArr;
-//    describe_vector(tight_contour, "tight_contour");
     cv::drawContours(tight_mask, {tight_contour}, 0, cv::Scalar(255, 255, 255), -1);
-//    describe_vector(tight_mask.t(), "tight_mask");
 
     return tight_mask;
 }

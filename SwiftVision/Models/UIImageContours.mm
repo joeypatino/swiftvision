@@ -16,6 +16,7 @@
 @interface UIImageContours ()
 @property (nonatomic, retain) UIImage *image;
 @property (nonatomic, strong) NSArray<Contour *> *contours;
+@property (nonatomic, strong) NSArray<ContourSpan *> *spans;
 @property (nonatomic, assign) cv::Mat inputImage;
 @end
 
@@ -28,7 +29,8 @@ using namespace cv;
     self = [super init];
     self.image = image;
     self.inputImage = [self grayScaleMat:image];
-    self.contours = [self processContours: self.inputImage];
+    self.contours = [self processContours:self.inputImage];
+    self.spans = [self assembleSpansFrom:self.contours];
 
     return self;
 }
@@ -107,14 +109,13 @@ using namespace cv;
     return foundContours;
 }
 
-- (NSArray<ContourSpan *> *)assembleSpans {
+- (NSArray<ContourSpan *> *)assembleSpansFrom:(NSArray<Contour *> *)contours {
     /// def assemble_spans(name, small, pagemask, cinfo_list)
 
-    NSArray *sortedContours = [self.contours sortedArrayUsingComparator:^NSComparisonResult(Contour *obj1, Contour *obj2){
-
+    NSArray *sortedContours = [contours sortedArrayUsingComparator:^NSComparisonResult(Contour *obj1, Contour *obj2){
         if (CGRectGetMinY(obj1.bounds) < CGRectGetMinY(obj2.bounds))
             return NSOrderedAscending;
-        else if (CGRectGetMinY(obj2.bounds) < CGRectGetMinY(obj1.bounds))
+        else if (CGRectGetMinY(obj1.bounds) > CGRectGetMinY(obj2.bounds))
             return NSOrderedDescending;
 
         return NSOrderedSame;
@@ -127,7 +128,7 @@ using namespace cv;
     for (int i = 0; i < contourCount; i++) {
         Contour *currentContour = sortedContours[i];
 
-        for (int j = 0; j < contourCount; j++) {
+        for (int j = 0; j < i; j++) {
             Contour *adjacentContour = sortedContours[j];
 
             // note e is of the form (score, left_cinfo, right_cinfo)
@@ -137,6 +138,10 @@ using namespace cv;
         }
     }
 
+    NSLog(@"%@", candidateEdges);
+    for (ContourEdge *edge in candidateEdges) {
+        NSLog(@"%f", edge.score);
+    }
     // sort candidate edges by score (lower is better)
     // candidateEdges.sort()
 

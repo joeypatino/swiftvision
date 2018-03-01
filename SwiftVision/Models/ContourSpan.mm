@@ -23,7 +23,6 @@ using namespace cv;
 using namespace std;
 
 @interface ContourSpan ()
-@property (nonatomic, strong) NSArray <NSArray <NSValue *> *> *spanPoints;
 @property (nonatomic, assign) EigenVector eigenVector;
 @end
 

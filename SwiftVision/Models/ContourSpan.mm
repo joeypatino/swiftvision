@@ -6,14 +6,14 @@
 #import "ContourSpanKeyPoints.h"
 #import "NSArray+extras.h"
 
-struct EigenDirection {
+struct EigenVector {
     cv::Point2f x;
     cv::Point2f y;
 };
 
-static inline struct EigenDirection
-EigenDirectionMake(cv::Point2f x, cv::Point2f y) {
-    struct EigenDirection eigen;
+static inline struct EigenVector
+EigenVectorMake(cv::Point2f x, cv::Point2f y) {
+    struct EigenVector eigen;
     eigen.x = x;
     eigen.y = y;
     return eigen;
@@ -23,6 +23,8 @@ using namespace cv;
 using namespace std;
 
 @interface ContourSpan ()
+@property (nonatomic, strong) NSArray <NSArray <NSValue *> *> *spanPoints;
+@property (nonatomic, assign) EigenVector eigenVector;
 @end
 
 @implementation ContourSpan
@@ -30,14 +32,17 @@ using namespace std;
     self = [super init];
     _image = image;
     _contours = contours;
-    _keyPoints = [self sampleSpan:self];
+    _spanPoints = [self sampleSpanPointsFrom:self.contours];
+    _eigenVector = [self eigenVectorsFromSamples:self.spanPoints];
+    _keyPoints = [self keyPointsFromSamples:self.spanPoints eigenVector:self.eigenVector];
+
     return self;
 }
 
-- (ContourSpanKeyPoints *)sampleSpan:(ContourSpan *)span {
+- (NSArray <NSArray <NSValue *> *> *)sampleSpanPointsFrom:(NSArray <Contour *> *)contours {
     NSMutableArray <NSValue *> *contourPoints = @[].mutableCopy;
     NSMutableArray <NSArray <NSValue *> *> *spanPoints = @[].mutableCopy;
-    for (Contour *contour in span.contours) {
+    for (Contour *contour in contours) {
         Mat maskContour;
         contour.mask.clone().convertTo(maskContour, CV_32F);
 
@@ -69,10 +74,10 @@ using namespace std;
         NSArray <NSValue *> *normalizedPoints = nsarray::pix2norm(self.image.size, contourPoints);
         [spanPoints addObject:normalizedPoints];
     }
-    return [self keypointsFromSpanSamples:[NSArray arrayWithArray:spanPoints]];
+    return [NSArray arrayWithArray:spanPoints];
 }
 
-- (EigenDirection)computeEigenVectorsFrom:(NSArray <NSArray <NSValue *> *> *)samples {
+- (EigenVector)eigenVectorsFromSamples:(NSArray <NSArray <NSValue *> *> *)samples {
     float eigenInit[] = {0, 0};
     Mat allEigenVectors = Mat(1, 2, CV_32F, eigenInit);
     float allWeights = 0.0;
@@ -103,12 +108,10 @@ using namespace std;
     Point2f xDir = Point2f(eigenX, eigenY);
     Point2f yDir = Point2f(-eigenY, eigenX);
 
-    return EigenDirectionMake(xDir, yDir);
+    return EigenVectorMake(xDir, yDir);
 }
 
-- (ContourSpanKeyPoints *)keypointsFromSpanSamples:(NSArray <NSArray <NSValue *> *> *)samples {
-    EigenDirection dir = [self computeEigenVectorsFrom:samples];
-
+- (ContourSpanKeyPoints *)keyPointsFromSamples:(NSArray <NSArray <NSValue *> *> *)samples eigenVector:(EigenVector)eigenVector {
     CGSize sz = self.image.size;
     CGRectOutline rectOutline = geom::outlineWithSize(self.image.size);
     NSArray <NSValue *> *pts = @[[NSValue valueWithCGPoint:rectOutline.botRight],
@@ -116,18 +119,18 @@ using namespace std;
                                  [NSValue valueWithCGPoint:rectOutline.topLeft],
                                  [NSValue valueWithCGPoint:rectOutline.topRight]];
     NSArray <NSValue *> *normalizedPts = nsarray::pix2norm(sz, pts);
-    NSArray <NSNumber *> *pxCoords = nsarray::dotProduct(normalizedPts, dir.x);
-    NSArray <NSNumber *> *pyCoords = nsarray::dotProduct(normalizedPts, dir.y);
+    NSArray <NSNumber *> *pxCoords = nsarray::dotProduct(normalizedPts, eigenVector.x);
+    NSArray <NSNumber *> *pyCoords = nsarray::dotProduct(normalizedPts, eigenVector.y);
 
     float px0 = [pxCoords min].floatValue;
     float px1 = [pxCoords max].floatValue;
     float py0 = [pyCoords min].floatValue;
     float py1 = [pyCoords max].floatValue;
 
-    Point2f p00 = px0 * dir.x + py0 * dir.y;
-    Point2f p10 = px1 * dir.x + py0 * dir.y;
-    Point2f p11 = px1 * dir.x + py1 * dir.y;
-    Point2f p01 = px0 * dir.x + py1 * dir.y;
+    Point2f p00 = px0 * eigenVector.x + py0 * eigenVector.y;
+    Point2f p10 = px1 * eigenVector.x + py0 * eigenVector.y;
+    Point2f p11 = px1 * eigenVector.x + py1 * eigenVector.y;
+    Point2f p01 = px0 * eigenVector.x + py1 * eigenVector.y;
 
     // tl, tr, br, bl
     CGRectOutline corners = CGRectOutlineMake(geom::pointFrom(p00),
@@ -138,8 +141,8 @@ using namespace std;
     NSMutableArray <NSNumber *> *ycoords = @[].mutableCopy;
     NSMutableArray <NSArray <NSNumber *> *> *xcoords = @[].mutableCopy;
     for (NSArray <NSValue *> *points in samples) {
-        NSArray <NSNumber *> *pxCoords = nsarray::dotProduct(points, dir.x);
-        NSArray <NSNumber *> *pyCoords = nsarray::dotProduct(points, dir.y);
+        NSArray <NSNumber *> *pxCoords = nsarray::dotProduct(points, eigenVector.x);
+        NSArray <NSNumber *> *pyCoords = nsarray::dotProduct(points, eigenVector.y);
 
         float meany = [pyCoords median].floatValue;
         [ycoords addObject:[NSNumber numberWithFloat:meany - py0]];

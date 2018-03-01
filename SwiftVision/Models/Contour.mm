@@ -143,7 +143,7 @@ using namespace cv;
     CGPoint localRng = CGPointMake(clxMin, clxMax);
     CGPoint projectedRng = CGPointMake(xmin, xmax);
 
-    return intervalOverlap(localRng, projectedRng);
+    return geom::intervalOverlap(localRng, projectedRng);
 }
 
 // MARK: -
@@ -168,7 +168,8 @@ using namespace cv;
 
     CGPoint overallTangent = CGPointMake(contourB.center.x - contourA.center.x, contourB.center.y - contourA.center.y);
     double overallAngle = atan2(overallTangent.y, overallTangent.x);
-    double deltaAngle = MAX(angleDistance(contourA.angle, overallAngle), angleDistance(contourB.angle, overallAngle)) * 180 / M_PI;
+    double deltaAngle = MAX(geom::angleDistance(contourA.angle, overallAngle),
+                            geom::angleDistance(contourB.angle, overallAngle)) * 180 / M_PI;
 
     double xOverlapA = [contourA contourOverlap:contourB];
     double xOverlapB = [contourB contourOverlap:contourA];
@@ -197,32 +198,20 @@ using namespace cv;
 }
 
 - (Mat)generateMaskFromContour:(cv::Mat)mat {
-//    NSLog(@"bounds:: %@", NSStringFromCGRect(self.bounds));
     int originx = int(self.bounds.origin.x);
     int originy = int(self.bounds.origin.y);
     int width = int(self.bounds.size.width);
     int height = int(self.bounds.size.height);
 
     Mat tight_mask = Mat::zeros(height, width, CV_32S);
-//    describe_vector(tight_mask, "tight_mask");
-
     Mat tight_contour = Mat(mat);
-//    describe_vector(tight_contour, "tight_contour");
 
-//    printf("[");
     int rowCnt = tight_contour.rows;
     for (int h = 0; h < rowCnt; h++) {
         int tightX = tight_contour.at<int>(h, 0);
         int tightY = tight_contour.at<int>(h, 1);
         tight_mask.at<int>(tightY - originy, tightX - originx) = 1;
-//        printf("[%i] {%i %i}", h, tightX, tightY);
-//        if (h < tight_contour.rows - 1)
-//            printf("\n");
-//        else
-//            printf("]\n");
     }
-
-//    describe_vector(tight_mask, "tight_mask");
 
     return tight_mask;
 }

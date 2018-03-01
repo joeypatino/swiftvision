@@ -98,7 +98,6 @@
         std::vector<cv::Point> points = contours.at(j);
         int pointCnt = int(points.size());
         cv::Mat contourMat = cv::Mat(points).reshape(2, pointCnt);
-//        describe_vector(contourMat, "contourMat");
 
         if (cv::contourArea(contourMat) == 0) continue;
 

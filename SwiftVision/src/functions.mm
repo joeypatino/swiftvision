@@ -2,148 +2,156 @@
 #import "CGRectOutline.h"
 
 // MARK: - Geometry
-double angleDistance(double angle_b, double angle_a) {
-    double diff = angle_b - angle_a;
+namespace geom {
+    double angleDistance(double angle_b, double angle_a) {
+        double diff = angle_b - angle_a;
 
-    while (diff > M_PI) {
-        diff -= 2 * M_PI;
-    }
-    while (diff < -M_PI) {
-        diff += 2 * M_PI;
-    }
-    return abs(diff);
-}
-
-double intervalOverlap(CGPoint int_a, CGPoint int_b) {
-    return MIN(int_a.y, int_b.y) - MAX(int_a.x, int_b.x);
-}
-
-// MARK: - Loggging
-void describe_vector(std::vector<double> vector, char const *name ) {
-    printf("\n############ %s ############\n", name);
-    printf("size: {%zul}\n", vector.size());
-    printf("----------------------------\n");
-
-    std::vector<double>::iterator it = vector.begin();
-    std::vector<double>::iterator const end = vector.end();
-
-    for (; it != end; it++) {
-        double p = *it;
-        printf("{%f}", p);
+        while (diff > M_PI) {
+            diff -= 2 * M_PI;
+        }
+        while (diff < -M_PI) {
+            diff += 2 * M_PI;
+        }
+        return abs(diff);
     }
 
-    printf("\n############ %s ############\n", name);
-    printf("\n");
-}
-
-void describe_vector(std::vector<cv::Point> vector, char const *name ) {
-    printf("\n############ cv::Point %s ############\n", name);
-    printf("size: {%zul}\n", vector.size());
-    printf("----------------------------\n");
-
-    std::vector<cv::Point>::iterator it = vector.begin();
-    std::vector<cv::Point>::iterator const end = vector.end();
-
-    printf("[");
-    for (; it != end; it++) {
-        cv::Point p = *it;
-        printf("[%i %i]", p.x, p.y);
-        if (it + 1 != end) printf("\n");
+    double intervalOverlap(CGPoint int_a, CGPoint int_b) {
+        return MIN(int_a.y, int_b.y) - MAX(int_a.x, int_b.x);
     }
-    printf("]\n");
-
-    printf("\n############ %s ############\n", name);
-    printf("\n");
 }
 
-void describe_vector(std::vector<cv::Point2f> vector, char const *name ) {
-    printf("\n############ cv::Point2f %s ############\n", name);
-    printf("size: {%zul}\n", vector.size());
-    printf("----------------------------\n");
-
-    std::vector<cv::Point2f>::iterator it = vector.begin();
-    std::vector<cv::Point2f>::iterator const end = vector.end();
-
-    printf("[");
-    for (; it != end; it++) {
-        cv::Point2f p = *it;
-        printf("[%f %f]", p.x, p.y);
-        if (it + 1 != end) printf("\n");
-    }
-    printf("]\n");
-
-    printf("\n############ %s ############\n", name);
-    printf("\n");
-}
-
-void describe_vector( cv::Mat mat, char const *name ) {
-    printf("\n############ cv::Mat::%s ############\n", name);
-    printf("type: %i\n", mat.type());
-    printf("depth: %i\n", mat.depth());
-    printf("dims: %i\n", mat.dims);
-    printf("channels: %i\n", mat.channels());
-    printf("size: {%i, %i}\n", mat.size().height, mat.size().width);
-    printf("shape: {");
-    for (int i = 0; i < mat.dims; ++i) {
-        printf("%i", mat.size[i]);
-        if (i < mat.dims - 1){ printf(", "); }
-    }
-    printf(", %i", mat.cols);
-    printf("}\n");
-    printf("total: %zul\n", mat.total());
-    printf("----------------------------\n");
-
-    std::cout << mat << std::endl;
-
-    printf("\n############ %s ############\n", name);
-    printf("\n");
-}
-
-void describe_points(NSArray <NSValue *> *pts, char const *name) {
-    printf("\n############ Points::%s ############\n", name);
-    for (NSValue *ptValue in pts) {
-        printf("%s\n", [NSStringFromCGPoint(ptValue.CGPointValue) UTF8String]);
+namespace geom {
+    CGPoint pointFrom(cv::Point2f point) {
+        return CGPointMake(point.x, point.y);
     }
 
-    printf("\n############ Points::%s ############\n", name);
-}
-
-void describe_values(NSArray <NSNumber *> *pts, char const *name) {
-    printf("\n############ values::%s ############\n", name);
-    for (NSNumber *ptNumber in pts) {
-        printf("%f\n", ptNumber.floatValue);
-    }
-
-    printf("\n############ values::%s ############\n", name);
-}
-
-// MARK: - Mat Mask
-cv::Mat maskWithOutline(CGRectOutline outline) {
-    cv::Point p1 = cv::Point(outline.topLeft.x, outline.topLeft.y);
-    cv::Point p2 = cv::Point(outline.botRight.x, outline.botRight.y);
-
-    cv::Mat page = cv::Mat(int(outline.botLeft.y - outline.topLeft.y), int(outline.topRight.x - outline.topLeft.x), CV_32S);
-    cv::rectangle(page, p1, p2, cv::Scalar(255.0, 255.0, 255.0), -1);
-    return page;
-}
-
-CGRectOutline outlineWithSize(CGSize size) {
+    CGRectOutline outlineWithSize(CGSize size) {
 
 #define PAGE_MARGIN_X 0
 #define PAGE_MARGIN_Y 0
 
-    int xmin = PAGE_MARGIN_X;
-    int ymin = PAGE_MARGIN_Y;
-    int xmax = int(size.width) - PAGE_MARGIN_X;
-    int ymax = int(size.height) - PAGE_MARGIN_Y;
+        int xmin = PAGE_MARGIN_X;
+        int ymin = PAGE_MARGIN_Y;
+        int xmax = int(size.width) - PAGE_MARGIN_X;
+        int ymax = int(size.height) - PAGE_MARGIN_Y;
 
-    return CGRectOutlineMake(CGPointMake(xmin, ymin),
-                             CGPointMake(xmin, ymax),
-                             CGPointMake(xmax, ymax),
-                             CGPointMake(xmax, ymin));
+        return CGRectOutlineMake(CGPointMake(xmin, ymin),
+                                 CGPointMake(xmin, ymax),
+                                 CGPointMake(xmax, ymax),
+                                 CGPointMake(xmax, ymin));
+    }
+
+    cv::Point2f pointFrom(CGPoint point) {
+        return cv::Point2f(point.x, point.y);
+    }
+
+    CGPoint subtract(CGPoint p1, CGPoint p2) {
+        return CGPointMake(p1.x - p2.x, p1.y - p2.y);
+    }
 }
 
-namespace ArrayOps {
+// MARK: - Loggging
+namespace logs {
+    void describe_vector(std::vector<double> vector, char const *name ) {
+        printf("\n############ %s ############\n", name);
+        printf("size: {%zul}\n", vector.size());
+        printf("----------------------------\n");
+
+        std::vector<double>::iterator it = vector.begin();
+        std::vector<double>::iterator const end = vector.end();
+
+        for (; it != end; it++) {
+            double p = *it;
+            printf("{%f}", p);
+        }
+
+        printf("\n############ %s ############\n", name);
+        printf("\n");
+    }
+
+    void describe_vector(std::vector<cv::Point> vector, char const *name ) {
+        printf("\n############ cv::Point %s ############\n", name);
+        printf("size: {%zul}\n", vector.size());
+        printf("----------------------------\n");
+
+        std::vector<cv::Point>::iterator it = vector.begin();
+        std::vector<cv::Point>::iterator const end = vector.end();
+
+        printf("[");
+        for (; it != end; it++) {
+            cv::Point p = *it;
+            printf("[%i %i]", p.x, p.y);
+            if (it + 1 != end) printf("\n");
+        }
+        printf("]\n");
+
+        printf("\n############ %s ############\n", name);
+        printf("\n");
+    }
+
+    void describe_vector(std::vector<cv::Point2f> vector, char const *name ) {
+        printf("\n############ cv::Point2f %s ############\n", name);
+        printf("size: {%zul}\n", vector.size());
+        printf("----------------------------\n");
+
+        std::vector<cv::Point2f>::iterator it = vector.begin();
+        std::vector<cv::Point2f>::iterator const end = vector.end();
+
+        printf("[");
+        for (; it != end; it++) {
+            cv::Point2f p = *it;
+            printf("[%f %f]", p.x, p.y);
+            if (it + 1 != end) printf("\n");
+        }
+        printf("]\n");
+
+        printf("\n############ %s ############\n", name);
+        printf("\n");
+    }
+
+    void describe_vector( cv::Mat mat, char const *name ) {
+        printf("\n############ cv::Mat::%s ############\n", name);
+        printf("type: %i\n", mat.type());
+        printf("depth: %i\n", mat.depth());
+        printf("dims: %i\n", mat.dims);
+        printf("channels: %i\n", mat.channels());
+        printf("size: {%i, %i}\n", mat.size().height, mat.size().width);
+        printf("shape: {");
+        for (int i = 0; i < mat.dims; ++i) {
+            printf("%i", mat.size[i]);
+            if (i < mat.dims - 1){ printf(", "); }
+        }
+        printf(", %i", mat.cols);
+        printf("}\n");
+        printf("total: %zul\n", mat.total());
+        printf("----------------------------\n");
+
+        std::cout << mat << std::endl;
+
+        printf("\n############ %s ############\n", name);
+        printf("\n");
+    }
+
+    void describe_points(NSArray <NSValue *> *pts, char const *name) {
+        printf("\n############ Points::%s ############\n", name);
+        for (NSValue *ptValue in pts) {
+            printf("%s\n", [NSStringFromCGPoint(ptValue.CGPointValue) UTF8String]);
+        }
+
+        printf("\n############ Points::%s ############\n", name);
+    }
+
+    void describe_values(NSArray <NSNumber *> *pts, char const *name) {
+        printf("\n############ values::%s ############\n", name);
+        for (NSNumber *ptNumber in pts) {
+            printf("%f\n", ptNumber.floatValue);
+        }
+
+        printf("\n############ values::%s ############\n", name);
+    }
+}
+
+namespace nsarray {
     NSArray <NSNumber *> * subtract(NSArray <NSNumber *> *values, float value) {
         NSMutableArray <NSNumber *> *mutatedValues = @[].mutableCopy;
         for (NSNumber *number in values) {
@@ -180,4 +188,14 @@ namespace ArrayOps {
         }
         return [NSArray arrayWithArray:multipliedPts];
     }
+}
+
+// MARK: - Mat Mask
+cv::Mat maskWithOutline(CGRectOutline outline) {
+    cv::Point p1 = cv::Point(outline.topLeft.x, outline.topLeft.y);
+    cv::Point p2 = cv::Point(outline.botRight.x, outline.botRight.y);
+
+    cv::Mat page = cv::Mat(int(outline.botLeft.y - outline.topLeft.y), int(outline.topRight.x - outline.topLeft.x), CV_32S);
+    cv::rectangle(page, p1, p2, cv::Scalar(255.0, 255.0, 255.0), -1);
+    return page;
 }

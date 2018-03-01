@@ -18,4 +18,8 @@
     }
     return [NSNumber numberWithFloat:xmax];
 }
+
+- (NSNumber *)median {
+    return [[self sortedArrayUsingSelector:@selector(compare:)] objectAtIndex:[self count] / 2];
+}
 @end

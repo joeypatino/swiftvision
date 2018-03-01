@@ -4,6 +4,7 @@
 #import "Contour.h"
 #import "ContourEdge.h"
 #import "ContourEdge+internal.h"
+#import "Contour+internal.h"
 
 using namespace std;
 using namespace cv;
@@ -12,29 +13,30 @@ using namespace cv;
 @property (nonatomic, assign, readonly) CGPoint clxMin;
 @property (nonatomic, assign, readonly) CGPoint clxMax;
 @property (nonatomic, strong, readonly) NSArray <NSNumber *> *_Nonnull clx;
-@property (nonatomic, assign, readonly) CGPoint *_Nonnull points;
-@property (nonatomic, assign) Mat mat;
+@property (nonatomic, assign, readonly) NSArray <NSValue *> *_Nonnull points;
 @property (nonatomic, assign) Moments moments;
+
+@property (nonatomic, assign, readonly) uchar *maskData;
 @end
 
 // MARK: -
 @implementation Contour
 - (instancetype)initWithCVMat:(Mat)cvMat {
     self = [super init];
-    self.mat = cvMat.clone();
-    self.mat.push_back(self.mat.at<cv::Point>(0, 0));
+    self.opencvContour = cvMat.clone();
 
-    cv::Rect boundingRect = cv::boundingRect(self.mat);
-    _size = self.mat.total();
+    cv::Rect boundingRect = cv::boundingRect(self.opencvContour);
+    _size = self.opencvContour.total();
     _bounds = CGRectMake(boundingRect.x, boundingRect.y, boundingRect.width, boundingRect.height);
     _aspect = boundingRect.height / boundingRect.width;
+    _mask = [self generateMaskFromContour: self.opencvContour];
 
-    _area = contourArea(self.mat);
-    _moments = moments(self.mat);
+    _area = contourArea(self.opencvContour);
+    _moments = moments(self.opencvContour);
 
-    _points = [self cgPointsFromMat:self.mat];
-    _tangent = [self calculateTangent:self.mat];
-    _center = [self calculateCenter:self.mat];
+    _points = [self getPointsFromMat:self.opencvContour];
+    _tangent = [self calculateTangent:self.opencvContour];
+    _center = [self calculateCenter:self.opencvContour];
     _clx = [self projectContourPoints:self.points];
     _angle = atan2(self.tangent.y, self.tangent.x);
 
@@ -63,24 +65,24 @@ using namespace cv;
 }
 
 - (void)dealloc {
-    free(self.points);
+    free(self.maskData);
 }
 
 // MARK: -
-- (CGPoint*)cgPointsFromMat:(Mat)mat {
-    CGPoint *points = (CGPoint *)malloc(sizeof(CGPoint) * mat.total());
-    for (int i = 0; i < mat.total(); i++) {
+- (NSMutableArray <NSValue *> *)getPointsFromMat:(Mat)mat {
+    NSMutableArray <NSValue *> *points = @[].mutableCopy;
+    for (int i = 0; i < mat.total() / 2; i++) {
         cv::Point p = mat.at<cv::Point>(i);
-        points[i] = CGPointMake(p.x, p.y);
+        [points addObject:[NSValue valueWithCGPoint:CGPointMake(p.x, p.y)]];
     }
     return points;
 }
 
 // MARK: - Contour projection
-- (NSArray<NSNumber *> *)projectContourPoints:(CGPoint *)points {
+- (NSArray<NSNumber *> *)projectContourPoints:(NSArray<NSValue *> *)points {
     NSMutableArray *dots = @[].mutableCopy;
-    for (int i = 0; i < self.size; i++) {
-        CGPoint p = points[i];
+    for (int i = 0; i < self.size / 2; i++) {
+        CGPoint p = [points[i] CGPointValue];
         double projected = [self projectPoint:p];
         [dots addObject:[NSNumber numberWithDouble:projected]];
     }
@@ -146,7 +148,7 @@ using namespace cv;
 
 // MARK: -
 - (void)getBoundingVertices:(cv::Point *)vertices {
-    RotatedRect rect = minAreaRect(self.mat);
+    RotatedRect rect = minAreaRect(self.opencvContour);
     Point2f pts[4];
     rect.points(pts);
 
@@ -183,6 +185,10 @@ using namespace cv;
     //reduce(self.mat, self.mat, 0, 0);
     //transform(self.mat, self.mat, Matx13f(1,1,1))
 
+//    NSLog(@"dist: %f", dist);
+//    NSLog(@"deltaAngle: %f", deltaAngle);
+//    NSLog(@"xOverlap: %f", xOverlap);
+
     if (dist > EDGE_MAX_LENGTH || xOverlap > EDGE_MAX_OVERLAP || deltaAngle > EDGE_MAX_ANGLE) {
         return nil;
     } else {
@@ -190,22 +196,33 @@ using namespace cv;
     }
 }
 
-- (Mat)mask {
-    CGRect b = self.bounds;
+- (Mat)generateMaskFromContour:(cv::Mat)mat {
+//    NSLog(@"bounds:: %@", NSStringFromCGRect(self.bounds));
+    int originx = int(self.bounds.origin.x);
+    int originy = int(self.bounds.origin.y);
+    int width = int(self.bounds.size.width);
+    int height = int(self.bounds.size.height);
 
-    const int x = int(b.origin.x);
-    const int y = int(b.origin.y);
-    const int w = int(b.size.width);
-    const int h = int(b.size.height);
-    Mat cvMat = Mat(self.mat);
-    Mat tight_mask = Mat::zeros(w, h, CV_8UC3);
-    Mat arr = Mat({x, y});
-    Mat reshapedArr = arr.reshape(0, 1);
-    Mat convertedArr;
-    reshapedArr.convertTo(convertedArr, CV_64F);
+    Mat tight_mask = Mat::zeros(height, width, CV_32S);
+//    describe_vector(tight_mask, "tight_mask");
 
-    Mat tight_contour = cvMat - convertedArr;
-    drawContours(tight_mask, {tight_contour}, 0, Scalar(255, 255, 255), -1);
+    Mat tight_contour = Mat(mat);
+//    describe_vector(tight_contour, "tight_contour");
+
+//    printf("[");
+    int rowCnt = tight_contour.rows;
+    for (int h = 0; h < rowCnt; h++) {
+        int tightX = tight_contour.at<int>(h, 0);
+        int tightY = tight_contour.at<int>(h, 1);
+        tight_mask.at<int>(tightY - originy, tightX - originx) = 1;
+//        printf("[%i] {%i %i}", h, tightX, tightY);
+//        if (h < tight_contour.rows - 1)
+//            printf("\n");
+//        else
+//            printf("]\n");
+    }
+
+//    describe_vector(tight_mask, "tight_mask");
 
     return tight_mask;
 }

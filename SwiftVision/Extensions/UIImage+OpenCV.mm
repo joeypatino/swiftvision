@@ -1,5 +1,6 @@
 #import <opencv2/opencv.hpp>
 #import "UIImage+OpenCV.h"
+#import "functions.h"
 #import "UIImage+Mat.h"
 #import "UIImageContours.h"
 
@@ -25,36 +26,6 @@
     cv::resize(inImage, outImage, axis, scl, scl, cv::INTER_AREA);
 
     return [[UIImage alloc] initWithCVMat: outImage];
-}
-
-- (UIImage *)rectangle {
-    CGSize size = self.size;
-
-    CGRectOutline outline = [self outline];
-    cv::Point p1 = cv::Point(outline.topLeft.x, outline.topLeft.y);
-    cv::Point p2 = cv::Point(outline.botRight.x, outline.botRight.y);
-
-    cv::Mat page = cv::Mat(int(size.height), int(size.width), CV_8UC1);
-    cv::rectangle(page, p1, p2, cv::Scalar(255.0, 255.0, 255.0), -1);
-
-    return [[UIImage alloc] initWithCVMat: page];
-}
-
-- (CGRectOutline)outline {
-    CGSize size = self.size;
-
-    #define PAGE_MARGIN_X 0
-    #define PAGE_MARGIN_Y 0
-
-    int xmin = PAGE_MARGIN_X;
-    int ymin = PAGE_MARGIN_Y;
-    int xmax = int(size.width) - PAGE_MARGIN_X;
-    int ymax = int(size.height) - PAGE_MARGIN_Y;
-
-    return CGRectOutlineMake(CGPointMake(xmin, ymin),
-                             CGPointMake(xmin, ymax),
-                             CGPointMake(xmax, ymax),
-                             CGPointMake(xmax, ymin));
 }
 
 /**
@@ -125,7 +96,10 @@
 
     for (int j = 0; j < contours.size(); j++) {
         std::vector<cv::Point> points = contours.at(j);
-        cv::Mat contourMat = cv::Mat(points);
+        int pointCnt = int(points.size());
+        cv::Mat contourMat = cv::Mat(points).reshape(2, pointCnt);
+//        describe_vector(contourMat, "contourMat");
+
         if (cv::contourArea(contourMat) == 0) continue;
 
         Contour *contour = [[Contour alloc] initWithCVMat:contourMat];

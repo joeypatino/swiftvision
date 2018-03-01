@@ -27,7 +27,8 @@ class ViewController: UIViewController {
             .erode(CGSize(width: 0, height: 5)) else { return }
 
 //        imageView.image = masked.contours(filteredBy: contourFilter).renderMasks()
-        imageView.image = masked.contours(filteredBy: contourFilter).render()
+//        imageView.image = masked.contours(filteredBy: contourFilter).render()
+        imageView.image = masked.contours(filteredBy: contourFilter).renderKeyPoints()
     }
 
     private func contourFilter(contour: Contour) -> Bool {

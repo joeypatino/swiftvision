@@ -3,6 +3,7 @@
 #import "ContourSpan.h"
 #import "ContourEdge.h"
 #import "CGRectOutline.h"
+#import "ContourSpanKeyPoints.h"
 
 typedef NS_ENUM(NSUInteger, ContourRenderingMode) {
     ContourRenderingModeOutline,
@@ -18,6 +19,8 @@ typedef NS_ENUM(NSUInteger, ContourRenderingMode) {
 - (UIImage * _Nullable)render:(UIColor * _Nonnull)color mode:(ContourRenderingMode)mode NS_SWIFT_NAME(render(inColor:using:));
 /// returns an image containing all the contours masks.
 - (UIImage * _Nullable)renderMasks NS_SWIFT_NAME(renderMasks());
+/// returns an image containing all the contours span keypoints.
+- (UIImage * _Nullable)renderKeyPoints NS_SWIFT_NAME(renderKeyPoints());
 @end
 
 /// subscript support

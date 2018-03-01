@@ -17,21 +17,6 @@ using namespace cv;
 @end
 
 
-NSArray<NSValue *> * pix2norm(CGSize size, NSArray<NSValue *> *pts) {
-    float height = size.height;
-    float width = size.width;
-    float scale = 2.0 / MAX(height, width);
-    CGSize offset = CGSizeMake(width * 0.5, height * 0.5);
-
-    NSMutableArray<NSValue *> *mutatedPts = @[].mutableCopy;
-    for (NSValue *pt in pts) {
-        CGPoint point = [pt CGPointValue];
-        CGPoint mutatedPoint = CGPointMake((point.x - offset.width) * scale, (point.y - offset.height) * scale);
-        [mutatedPts addObject:[NSValue valueWithCGPoint:mutatedPoint]];
-    }
-    return mutatedPts;
-}
-
 // MARK: -
 @implementation UIImageContours
 - (instancetype)initWithImage:(UIImage *)image filteredBy:(nullable BOOL (^)(Contour * _Nonnull c))filter {
@@ -214,7 +199,7 @@ NSArray<NSValue *> * pix2norm(CGSize size, NSArray<NSValue *> *pts) {
                 [contourPoints addObject:pointValue];
             }
 
-            NSArray <NSValue *> *normalizedPoints = pix2norm(self.inputImage.size, contourPoints);
+            NSArray <NSValue *> *normalizedPoints = nsarray::pix2norm(self.inputImage.size, contourPoints);
             [spanPoints addObject:normalizedPoints];
         }
     }
@@ -262,7 +247,7 @@ NSArray<NSValue *> * pix2norm(CGSize size, NSArray<NSValue *> *pts) {
                                  [NSValue valueWithCGPoint:rectOutline.botLeft],
                                  [NSValue valueWithCGPoint:rectOutline.topLeft],
                                  [NSValue valueWithCGPoint:rectOutline.topRight]];
-    NSArray <NSValue *> *normalizedPts = pix2norm(sz, pts);
+    NSArray <NSValue *> *normalizedPts = nsarray::pix2norm(sz, pts);
     NSArray <NSNumber *> *pxCoords = nsarray::dotProduct(normalizedPts, xDir);
     NSArray <NSNumber *> *pyCoords = nsarray::dotProduct(normalizedPts, yDir);
 

@@ -188,6 +188,21 @@ namespace nsarray {
         }
         return [NSArray arrayWithArray:multipliedPts];
     }
+
+    NSArray<NSValue *> * pix2norm(CGSize size, NSArray<NSValue *> *pts) {
+        float height = size.height;
+        float width = size.width;
+        float scale = 2.0 / MAX(height, width);
+        CGSize offset = CGSizeMake(width * 0.5, height * 0.5);
+
+        NSMutableArray<NSValue *> *mutatedPts = @[].mutableCopy;
+        for (NSValue *pt in pts) {
+            CGPoint point = [pt CGPointValue];
+            CGPoint mutatedPoint = CGPointMake((point.x - offset.width) * scale, (point.y - offset.height) * scale);
+            [mutatedPts addObject:[NSValue valueWithCGPoint:mutatedPoint]];
+        }
+        return mutatedPts;
+    }
 }
 
 // MARK: - Mat Mask

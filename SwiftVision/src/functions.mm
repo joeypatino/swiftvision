@@ -203,6 +203,14 @@ namespace nsarray {
         }
         return mutatedPts;
     }
+
+    std::vector<cv::Point2f> convertToVector(NSArray <NSValue *> *points) {
+        std::vector<cv::Point2f> vectorPoints = std::vector<cv::Point2f>();
+        for (NSValue *point in points) {
+            vectorPoints.push_back(geom::pointFrom(point.CGPointValue));
+        }
+        return vectorPoints;
+    }
 }
 
 // MARK: - Mat Mask

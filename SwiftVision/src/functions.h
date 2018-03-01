@@ -35,6 +35,8 @@ namespace nsarray {
     NSArray <NSNumber *> * dotProduct(NSArray <NSValue *> *pts, cv::Point2f pt);
     NSArray <NSValue *> * multiplyPointsBy(NSArray <NSValue *> *pts, cv::Point2f pt);
     NSArray <NSValue *> * pix2norm(CGSize size, NSArray <NSValue *> *pts);
+
+    std::vector<cv::Point2f> convertToVector(NSArray <NSValue *> *points);
 }
 
 cv::Mat maskWithOutline(CGRectOutline outline);

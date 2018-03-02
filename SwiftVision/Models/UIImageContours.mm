@@ -41,13 +41,7 @@ using namespace cv;
 
 // MARK: -
 - (UIImage *)renderMasks {
-    Mat outImage = Mat::zeros(self.inputImage.size.height, self.inputImage.size.width, CV_8UC1);
-    for (int i = 0; i < self.contours.count; i++){
-        Contour *contour = self.contours[i];
-        Mat mask = contour.mask;
-    }
-
-    return [[UIImage alloc] initWithCVMat:outImage];
+   return [self render:[UIColor whiteColor] mode:ContourRenderingModeFill];
 }
 
 - (UIImage *)renderKeyPoints {
@@ -121,7 +115,7 @@ using namespace cv;
         if (fillConvexPolys) {
             cv::Point vertices[4];
             [contour getBoundingVertices:vertices];
-            fillConvexPoly(outImage, vertices, 4, [self scalarColorFrom:[UIColor whiteColor]]);
+            fillConvexPoly(outImage, vertices, 4, [self scalarColorFrom:color]);
         }
         // end - debugging
 

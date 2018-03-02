@@ -4,6 +4,7 @@
 #import "UIImage+Mat.h"
 #import "UIImage+OpenCV.h"
 #import "Contour+internal.h"
+#import "NSArray+extras.h"
 
 using namespace std;
 using namespace cv;
@@ -50,10 +51,50 @@ using namespace cv;
 }
 
 - (UIImage *)renderKeyPoints {
+    return [self renderKeyPoints:[UIColor redColor] mode:ContourRenderingModeFill];
+}
+
+- (UIImage *)renderKeyPoints:(UIColor *)color mode:(ContourRenderingMode)mode {
+    UIImage *renderedContours = [self render];
+    cv::Mat display = [renderedContours mat];
+
     for (ContourSpan *span in self.spans) {
-        NSLog(@"%@", span);
+        for (NSArray <NSValue *> *spanPoints in span.spanPoints) {
+            CGSize sz = self.inputImage.size;
+            NSArray <NSValue *> *points = nsarray::norm2pix(sz, spanPoints, NO);
+            Mat mean = Mat();
+            Mat eigen = Mat();
+            vector<Point2f> vectorPoints = nsarray::convertToVector(points);
+            Mat computePoints = Mat(vectorPoints).reshape(1);
+            PCACompute(computePoints, mean, eigen, 1);
+
+            //logs::describe_vector(mean, "mean");
+            //logs::describe_vector(eigen, "eigen");
+
+            float x = eigen.at<float>(0, 0);
+            float y = eigen.at<float>(0, 1);
+            NSArray <NSNumber *> *dps = nsarray::dotProduct(points, Point2f(x, y));
+            //logs::describe_values(dps, "dps");
+
+            Point2f meanf = mean.at<Point2f>(0, 0);
+            Point2f eigenf = eigen.at<Point2f>(0, 0);
+
+            Point2f dpm = geom::multi(meanf, eigenf);
+
+            float dpsMin = [dps min].floatValue;
+            float dpsMax = [dps max].floatValue;
+
+            Point2f point0 = meanf + geom::multi(eigenf, dpsMin - geom::sum(dpm));
+            Point2f point1 = meanf + geom::multi(eigenf, dpsMax - geom::sum(dpm));
+
+            BOOL filled = (mode == ContourRenderingModeFill) ? ContourRenderingModeFill : ContourRenderingModeOutline;
+            for (NSValue *point in points) {
+                circle(display, geom::pointFrom(point.CGPointValue), 2, [self scalarColorFrom:color], filled ? -1 : 1, LINE_AA);
+            }
+            line(display, point0, point1, [self scalarColorFrom:color], 1, LINE_AA);
+        }
     }
-    return [self render:[UIColor whiteColor] mode:ContourRenderingModeOutline];
+    return [[UIImage alloc] initWithCVMat:display];
 }
 
 - (UIImage *)render {
@@ -64,7 +105,7 @@ using namespace cv;
     BOOL fillConvexPolys = false;
     Scalar contourColor = [self scalarColorFrom:color];
 
-    Mat outImage = Mat::zeros(self.inputImage.size.height, self.inputImage.size.width, CV_8UC1);
+    Mat outImage = Mat::zeros(self.inputImage.size.height, self.inputImage.size.width, CV_8UC3);
     vector<vector<cv::Point> > contours;
 
     for (int i = 0; i < self.contours.count; i++){

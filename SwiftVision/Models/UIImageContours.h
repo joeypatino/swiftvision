@@ -21,6 +21,8 @@ typedef NS_ENUM(NSUInteger, ContourRenderingMode) {
 - (UIImage * _Nullable)renderMasks NS_SWIFT_NAME(renderMasks());
 /// returns an image containing all the contours span keypoints.
 - (UIImage * _Nullable)renderKeyPoints NS_SWIFT_NAME(renderKeyPoints());
+/// returns an image containing all the contours span keypoints, rendered in `color` and using the mode `mode`.
+- (UIImage * _Nullable)renderKeyPoints:(UIColor * _Nonnull)color mode:(ContourRenderingMode)mode NS_SWIFT_NAME(renderKeyPoints(inColor:using:));
 @end
 
 /// subscript support

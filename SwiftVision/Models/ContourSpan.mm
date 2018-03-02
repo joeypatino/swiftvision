@@ -23,12 +23,15 @@ using namespace cv;
 using namespace std;
 
 @interface ContourSpan ()
+@property (nonatomic, strong) NSArray <NSArray <NSValue *> *> *spanPoints;
 @property (nonatomic, assign) EigenVector eigenVector;
+@property (nonatomic, assign) int samplingStep;
 @end
 
 @implementation ContourSpan
 - (instancetype _Nonnull)initWithImage:(UIImage *_Nonnull)image contours:(NSArray <Contour *> *)contours {
     self = [super init];
+    _samplingStep = 20;
     _image = image;
     _contours = contours;
     _spanPoints = [self sampleSpanPointsFrom:self.contours];
@@ -60,7 +63,7 @@ using namespace std;
         reduce(maskContour, masksum, 0, CV_REDUCE_SUM);
         Mat means = totals / masksum;
 
-        int step = 14;
+        int step = self.samplingStep;
         int start = ((means.total() - 1) % step) / 2;
 
         for (int x = start; x <= means.total(); x += step) {

@@ -5,6 +5,7 @@
 #import "Contour+internal.h"
 #import "ContourSpanKeyPoints.h"
 #import "NSArray+extras.h"
+#import "UIColor+extras.h"
 
 struct EigenVector {
     cv::Point2f x;
@@ -32,6 +33,7 @@ using namespace std;
 - (instancetype _Nonnull)initWithImage:(UIImage *_Nonnull)image contours:(NSArray <Contour *> *)contours {
     self = [super init];
     _samplingStep = 20;
+    _color = [UIColor randomColor];
     _image = image;
     _contours = contours;
     _spanPoints = [self sampleSpanPointsFrom:self.contours];

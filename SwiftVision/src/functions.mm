@@ -228,6 +228,13 @@ namespace nsarray {
         return mutatedPts;
     }
 
+    NSArray <NSValue *> * norm2pix(CGSize size, NSArray <NSValue *> *points) {
+        float scale = MAX(size.height, size.width) * 0.5;
+        cv::Point2f offset = cv::Point2f(0.5 * size.width, 0.5 * size.height);
+        NSArray <NSValue *> *rval = nsarray::add(nsarray::multi(points, scale), offset);
+        return rval;
+    }
+
     std::vector<cv::Point2f> convertToVector(NSArray <NSValue *> *points) {
         std::vector<cv::Point2f> vectorPoints = std::vector<cv::Point2f>();
         for (NSValue *point in points) {
@@ -236,19 +243,11 @@ namespace nsarray {
         return vectorPoints;
     }
 
-    NSArray <NSValue *> * norm2pix(CGSize size, NSArray <NSValue *> *points, BOOL isInt) {
-        NSLog(@"size: %@", NSStringFromCGSize(size));
-        logs::describe_points(points, "points");
-
-        float scale = MAX(size.height, size.width) * 0.5;
-        cv::Point2f offset = cv::Point2f(0.5 * size.width, 0.5 * size.height);
-        printf("offset: ");
-        std::cout << offset << std::endl;
-
-        NSArray <NSValue *> *rval = nsarray::add(nsarray::multi(points, scale), offset);
-        logs::describe_points(rval, "rval");
-
-        return rval;
+    NSArray <NSValue *> * pointsFrom(CGRectOutline cornerOutline) {
+        return @[[NSValue valueWithCGPoint:cornerOutline.topLeft],
+                 [NSValue valueWithCGPoint:cornerOutline.botLeft],
+                 [NSValue valueWithCGPoint:cornerOutline.botRight],
+                 [NSValue valueWithCGPoint:cornerOutline.topRight]];
     }
 }
 

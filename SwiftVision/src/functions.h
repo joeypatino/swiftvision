@@ -41,8 +41,9 @@ namespace nsarray {
     NSArray <NSValue *> * add(NSArray <NSValue *> *values, cv::Point2f pt);
     NSArray <NSValue *> * multi(NSArray <NSValue *> *pts, float scale);
     NSArray <NSValue *> * pix2norm(CGSize size, NSArray <NSValue *> *pts);
-    NSArray <NSValue *> * norm2pix(CGSize size, NSArray <NSValue *> *points, BOOL isInt);
+    NSArray <NSValue *> * norm2pix(CGSize size, NSArray <NSValue *> *points);
 
+    NSArray <NSValue *> * pointsFrom(CGRectOutline cornerOutline);
     std::vector<cv::Point2f> convertToVector(NSArray <NSValue *> *points);
 }
 

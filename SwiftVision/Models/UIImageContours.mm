@@ -17,7 +17,7 @@ using namespace cv;
 
 // MARK: -
 @implementation UIImageContours
-- (instancetype)initWithImage:(UIImage *)image filteredBy:(nullable BOOL (^)(Contour * _Nonnull c))filter {
+- (instancetype)initWithImage:(UIImage *)image filteredBy:(BOOL (^)(Contour *c))filter {
     return [image contoursFilteredBy:filter];
 }
 
@@ -60,7 +60,7 @@ using namespace cv;
             NSArray <NSValue *> *points = nsarray::norm2pix(sz, spanPoints);
             Mat mean = Mat();
             Mat eigen = Mat();
-            vector<Point2f> vectorPoints = nsarray::convertToVector(points);
+            vector<Point2f> vectorPoints = nsarray::convertTo(points);
             Mat computePoints = Mat(vectorPoints).reshape(1);
             PCACompute(computePoints, mean, eigen, 1);
 
@@ -72,30 +72,18 @@ using namespace cv;
             Point2f eigenf = eigen.at<Point2f>(0, 0);
             Point2f dpm = geom::multi(meanf, eigenf);
 
-            float dpsMin = [dps min].floatValue;
-            float dpsMax = [dps max].floatValue;
-            Point2f point0 = meanf + geom::multi(eigenf, dpsMin - geom::sum(dpm));
-            Point2f point1 = meanf + geom::multi(eigenf, dpsMax - geom::sum(dpm));
+
+            Point2f point0 = meanf + geom::multi(eigenf, dps.min.floatValue - geom::sum(dpm));
+            Point2f point1 = meanf + geom::multi(eigenf, dps.max.floatValue - geom::sum(dpm));
 
             BOOL filled = (mode == ContourRenderingModeFill) ? ContourRenderingModeFill : ContourRenderingModeOutline;
             for (NSValue *point in points) {
-                circle(display, geom::pointFrom(point.CGPointValue), 3, [self scalarColorFrom:color], filled ? -1 : 1, LINE_AA);
+                circle(display, geom::convertTo(point.CGPointValue), 3, [self scalarColorFrom:color], filled ? -1 : 1, LINE_AA);
             }
             line(display, point0, point1, [self scalarColorFrom:spanColor], 1, LINE_AA);
         }
-        //[self renderCorners:span.keyPoints.corners using:spanColor in:display];
     }
     return [[UIImage alloc] initWithCVMat:display];
-}
-
-- (void)renderCorners:(CGRectOutline)cornerOutline using:(UIColor *)color in:(cv::Mat)display {
-    NSArray <NSValue *> *corners = nsarray::pointsFrom(cornerOutline);
-    NSArray <NSValue *> *normalizedCornerPoints = nsarray::norm2pix(self.inputImage.size, corners);
-    std::vector<cv::Point> vectorPoints = std::vector<cv::Point>();
-    for (NSValue *point in normalizedCornerPoints) {
-        vectorPoints.push_back(geom::pointFrom(point.CGPointValue));
-    }
-    polylines(display, vectorPoints, YES, [self scalarColorFrom:color]);
 }
 
 - (UIImage *)render {

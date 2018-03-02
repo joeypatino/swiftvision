@@ -2,7 +2,7 @@
 #import "ContourSpanKeyPoints.h"
 
 @implementation ContourSpanKeyPoints
-- (instancetype _Nonnull)initWithCorners:(CGRectOutline)corners
+- (instancetype)initWithCorners:(CGRectOutline)corners
                             xCoordinates:(NSArray <NSArray <NSNumber *> *> *)xCoordinates
                             yCoordinates:(NSArray <NSNumber *> *)yCoordinates {
     self = [super init];

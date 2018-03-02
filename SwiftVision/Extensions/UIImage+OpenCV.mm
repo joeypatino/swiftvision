@@ -6,12 +6,15 @@
 #import "Contour+internal.h"
 
 @interface Contour ()
-- (instancetype _Nonnull)init NS_UNAVAILABLE;
 - (instancetype)initWithCVMat:(cv::Mat)cvMat;
 @end
 
 @interface UIImageContours ()
 - (instancetype _Nonnull)initWithContours:(NSArray <Contour *> *_Nonnull)contours spans:(NSArray <ContourSpan *> *)spans inImage:(UIImage *_Nonnull)image NS_DESIGNATED_INITIALIZER;
+@end
+
+@interface ContourSpan ()
+- (instancetype _Nonnull)initWithImage:(UIImage *_Nonnull)image contours:(NSArray <Contour *> *_Nonnull)contours NS_DESIGNATED_INITIALIZER;
 @end
 
 @implementation UIImage (OpenCV)

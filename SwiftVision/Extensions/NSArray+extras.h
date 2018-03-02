@@ -1,7 +1,7 @@
 #import <Foundation/Foundation.h>
 
 @interface NSArray (extras)
-- (NSNumber *_Nullable)min;
-- (NSNumber *_Nullable)max;
-- (NSNumber *_Nullable)median;
+@property (nonatomic, assign, readonly) NSNumber *_Nullable min;
+@property (nonatomic, assign, readonly) NSNumber *_Nullable max;
+@property (nonatomic, assign, readonly) NSNumber *_Nullable median;
 @end

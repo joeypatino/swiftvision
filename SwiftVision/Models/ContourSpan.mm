@@ -23,6 +23,12 @@ EigenVectorMake(cv::Point2f x, cv::Point2f y) {
 using namespace cv;
 using namespace std;
 
+@interface ContourSpanKeyPoints()
+- (instancetype _Nonnull)initWithCorners:(CGRectOutline)corners
+                            xCoordinates:(NSArray <NSArray <NSNumber *> *> *_Nonnull)xCoordinates
+                            yCoordinates:(NSArray <NSNumber *> *_Nonnull)yCoordinates;
+@end
+
 @interface ContourSpan ()
 @property (nonatomic, strong) NSArray <NSArray <NSValue *> *> *spanPoints;
 @property (nonatomic, assign) EigenVector eigenVector;
@@ -30,7 +36,7 @@ using namespace std;
 @end
 
 @implementation ContourSpan
-- (instancetype _Nonnull)initWithImage:(UIImage *_Nonnull)image contours:(NSArray <Contour *> *)contours {
+- (instancetype)initWithImage:(UIImage *)image contours:(NSArray <Contour *> *)contours {
     self = [super init];
     _samplingStep = 20;
     _color = [UIColor randomColor];
@@ -89,11 +95,11 @@ using namespace std;
     for (NSArray <NSValue *> *pointValues in samples) {
         Mat mean = Mat();
         Mat eigen = Mat();
-        vector<Point2f> vectorPoints = nsarray::convertToVector(pointValues);
+        vector<Point2f> vectorPoints = nsarray::convertTo(pointValues);
         Mat computePoints = Mat(vectorPoints).reshape(1);
         PCACompute(computePoints, mean, eigen, 1);
 
-        Point2f point = geom::pointFrom(geom::subtract(pointValues.lastObject.CGPointValue, pointValues.firstObject.CGPointValue));
+        Point2f point = geom::convertTo(geom::subtract(pointValues.lastObject.CGPointValue, pointValues.firstObject.CGPointValue));
         double weight = norm(point);
 
         Mat eigenMul = eigen.mul(weight);
@@ -126,10 +132,10 @@ using namespace std;
     NSArray <NSNumber *> *pxCoords = nsarray::dotProduct(normalizedPts, eigenVector.x);
     NSArray <NSNumber *> *pyCoords = nsarray::dotProduct(normalizedPts, eigenVector.y);
 
-    float px0 = [pxCoords min].floatValue;
-    float px1 = [pxCoords max].floatValue;
-    float py0 = [pyCoords min].floatValue;
-    float py1 = [pyCoords max].floatValue;
+    float px0 = pxCoords.min.floatValue;
+    float px1 = pxCoords.max.floatValue;
+    float py0 = pyCoords.min.floatValue;
+    float py1 = pyCoords.max.floatValue;
 
     Point2f p00 = px0 * eigenVector.x + py0 * eigenVector.y;
     Point2f p10 = px1 * eigenVector.x + py0 * eigenVector.y;
@@ -137,10 +143,10 @@ using namespace std;
     Point2f p01 = px0 * eigenVector.x + py1 * eigenVector.y;
 
     // tl, tr, br, bl
-    CGRectOutline corners = CGRectOutlineMake(geom::pointFrom(p00),
-                                              geom::pointFrom(p10),
-                                              geom::pointFrom(p11),
-                                              geom::pointFrom(p01));
+    CGRectOutline corners = CGRectOutlineMake(geom::convertTo(p00),
+                                              geom::convertTo(p10),
+                                              geom::convertTo(p11),
+                                              geom::convertTo(p01));
 
     NSMutableArray <NSNumber *> *ycoords = @[].mutableCopy;
     NSMutableArray <NSArray <NSNumber *> *> *xcoords = @[].mutableCopy;
@@ -148,7 +154,7 @@ using namespace std;
         NSArray <NSNumber *> *pxCoords = nsarray::dotProduct(points, eigenVector.x);
         NSArray <NSNumber *> *pyCoords = nsarray::dotProduct(points, eigenVector.y);
 
-        float meany = [pyCoords median].floatValue;
+        float meany = pyCoords.median.floatValue;
         [ycoords addObject:[NSNumber numberWithFloat:meany - py0]];
         [xcoords addObject:nsarray::subtract(pxCoords, px0)];
     }

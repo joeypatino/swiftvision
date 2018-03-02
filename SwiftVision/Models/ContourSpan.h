@@ -10,9 +10,8 @@
 /// the sampled points in the span
 @property (nonatomic, strong, readonly) NSArray <NSArray <NSValue *> *> *_Nonnull spanPoints;
 /// keypoint information for the span
-@property (nonatomic, strong, readonly) ContourSpanKeyPoints * _Nullable keyPoints;
+@property (nonatomic, strong, readonly) ContourSpanKeyPoints *_Nullable keyPoints;
 /// The color to render this Span
 @property (nonatomic, strong, readonly) UIColor *_Nonnull color;
 - (instancetype _Nonnull)init NS_UNAVAILABLE;
-- (instancetype _Nonnull)initWithImage:(UIImage *_Nonnull)image contours:(NSArray <Contour *> *_Nonnull)contours NS_DESIGNATED_INITIALIZER;
 @end

@@ -17,12 +17,37 @@ namespace geom {
     double intervalOverlap(CGPoint int_a, CGPoint int_b) {
         return MIN(int_a.y, int_b.y) - MAX(int_a.x, int_b.x);
     }
-}
 
-namespace geom {
-    CGPoint pointFrom(cv::Point2f point) {
+
+    CGPoint subtract(CGPoint p1, CGPoint p2) {
+        return CGPointMake(p1.x - p2.x, p1.y - p2.y);
+    }
+
+    cv::Point2f subtract(CGPoint p, float d) {
+        return cv::Point2f(p.x - d, p.y - d);
+    }
+
+    float sum(cv::Point2f p) {
+        return p.x + p.y;
+    }
+
+    cv::Point2f multi(cv::Point2f p1, cv::Point2f p2) {
+        return cv::Point2f(p1.x * p2.x, p1.y * p2.y);
+    }
+
+    cv::Point2f multi(cv::Point2f p, float x) {
+        return cv::Point2f(p.x * x, p.y * x);
+    }
+
+
+    CGPoint convertTo(cv::Point2f point) {
         return CGPointMake(point.x, point.y);
     }
+
+    cv::Point2f convertTo(CGPoint point) {
+        return cv::Point2f(point.x, point.y);
+    }
+
 
     CGRectOutline outlineWithSize(CGSize size) {
 
@@ -39,29 +64,72 @@ namespace geom {
                                  CGPointMake(xmax, ymax),
                                  CGPointMake(xmax, ymin));
     }
+}
 
-    cv::Point2f pointFrom(CGPoint point) {
-        return cv::Point2f(point.x, point.y);
+namespace nsarray {
+    NSArray <NSValue *> * add(NSArray <NSValue *> *points, cv::Point2f pt) {
+        NSMutableArray *multipliedPts = @[].mutableCopy;
+        for (NSValue *point in points) {
+            CGPoint multipliedPt = CGPointMake(point.CGPointValue.x + pt.x, point.CGPointValue.y + pt.y);
+            [multipliedPts addObject:[NSValue valueWithCGPoint:multipliedPt]];
+        }
+        return [NSArray arrayWithArray:multipliedPts];
     }
 
-    CGPoint subtract(CGPoint p1, CGPoint p2) {
-        return CGPointMake(p1.x - p2.x, p1.y - p2.y);
+    NSArray <NSNumber *> * subtract(NSArray <NSNumber *> *values, float value) {
+        NSMutableArray <NSNumber *> *mutatedValues = @[].mutableCopy;
+        for (NSNumber *number in values) {
+            [mutatedValues addObject:[NSNumber numberWithFloat:number.floatValue - value]];
+        }
+        return [NSArray arrayWithArray:mutatedValues];
     }
 
-    cv::Point2f multi(cv::Point2f p1, cv::Point2f p2) {
-        return cv::Point2f(p1.x * p2.x, p1.y * p2.y);
+    NSArray <NSValue *> * multi(NSArray <NSValue *> *points, float scale) {
+        NSMutableArray *multipliedPts = @[].mutableCopy;
+        for (NSValue *point in points) {
+            CGPoint multipliedPt = CGPointMake(point.CGPointValue.x * scale, point.CGPointValue.y * scale);
+            [multipliedPts addObject:[NSValue valueWithCGPoint:multipliedPt]];
+        }
+        return [NSArray arrayWithArray:multipliedPts];
+    }
+    
+    NSArray <NSNumber *> * dotProduct(NSArray <NSValue *> *points, cv::Point2f pt) {
+        NSMutableArray *multipliedPts = @[].mutableCopy;
+        for (NSValue *point in points) {
+            [multipliedPts addObject:[NSNumber numberWithFloat:point.CGPointValue.x * pt.x + point.CGPointValue.y * pt.y]];
+        }
+        return [NSArray arrayWithArray:multipliedPts];
     }
 
-    cv::Point2f multi(cv::Point2f p1, float v) {
-        return cv::Point2f(p1.x * v, p1.y * v);
+
+    NSArray<NSValue *> * pix2norm(CGSize size, NSArray<NSValue *> *points) {
+        float height = size.height;
+        float width = size.width;
+        float scale = 2.0 / MAX(height, width);
+        CGSize offset = CGSizeMake(width * 0.5, height * 0.5);
+
+        NSMutableArray<NSValue *> *mutatedPts = @[].mutableCopy;
+        for (NSValue *point in points) {
+            CGPoint mutatedPoint = CGPointMake((point.CGPointValue.x - offset.width) * scale, (point.CGPointValue.y - offset.height) * scale);
+            [mutatedPts addObject:[NSValue valueWithCGPoint:mutatedPoint]];
+        }
+        return mutatedPts;
     }
 
-    float sum(cv::Point2f p1) {
-        return p1.x + p1.y;
+    NSArray <NSValue *> * norm2pix(CGSize size, NSArray <NSValue *> *points) {
+        float scale = MAX(size.height, size.width) * 0.5;
+        cv::Point2f offset = cv::Point2f(0.5 * size.width, 0.5 * size.height);
+        NSArray <NSValue *> *rval = nsarray::add(nsarray::multi(points, scale), offset);
+        return rval;
     }
 
-    cv::Point2f subtract(CGPoint p, float d) {
-        return cv::Point2f(p.x - d, p.y - d);
+
+    std::vector<cv::Point2f> convertTo(NSArray <NSValue *> *points) {
+        std::vector<cv::Point2f> vectorPoints = std::vector<cv::Point2f>();
+        for (NSValue *point in points) {
+            vectorPoints.push_back(geom::convertTo(point.CGPointValue));
+        }
+        return vectorPoints;
     }
 }
 
@@ -147,15 +215,6 @@ namespace logs {
         printf("\n");
     }
 
-    void describe_points(NSArray <NSValue *> *pts, char const *name) {
-        printf("\n############ Points::%s ############\n", name);
-        for (NSValue *ptValue in pts) {
-            printf("%s\n", [NSStringFromCGPoint(ptValue.CGPointValue) UTF8String]);
-        }
-
-        printf("\n############ Points::%s ############\n", name);
-    }
-
     void describe_values(NSArray <NSNumber *> *pts, char const *name) {
         printf("\n############ values::%s ############\n", name);
         for (NSNumber *ptNumber in pts) {
@@ -164,99 +223,13 @@ namespace logs {
 
         printf("\n############ values::%s ############\n", name);
     }
-}
 
-namespace nsarray {
-    NSArray <NSNumber *> * subtract(NSArray <NSNumber *> *values, float value) {
-        NSMutableArray <NSNumber *> *mutatedValues = @[].mutableCopy;
-        for (NSNumber *number in values) {
-            [mutatedValues addObject:[NSNumber numberWithFloat:number.floatValue - value]];
-        }
-        return [NSArray arrayWithArray:mutatedValues];
-    }
-
-    NSArray <NSValue *> * add(NSArray <NSValue *> *pts, cv::Point2f pt) {
-        NSMutableArray *multipliedPts = @[].mutableCopy;
+    void describe_points(NSArray <NSValue *> *pts, char const *name) {
+        printf("\n############ Points::%s ############\n", name);
         for (NSValue *ptValue in pts) {
-            CGPoint preMultipliedPt = ptValue.CGPointValue;
-            CGPoint multipliedPt = CGPointMake(preMultipliedPt.x + pt.x, preMultipliedPt.y + pt.y);
-            [multipliedPts addObject:[NSValue valueWithCGPoint:multipliedPt]];
+            printf("%s\n", [NSStringFromCGPoint(ptValue.CGPointValue) UTF8String]);
         }
-        return [NSArray arrayWithArray:multipliedPts];
+
+        printf("\n############ Points::%s ############\n", name);
     }
-
-    NSArray <NSValue *> * multi(NSArray <NSValue *> *pts, float scale) {
-        NSMutableArray *multipliedPts = @[].mutableCopy;
-        for (NSValue *ptValue in pts) {
-            CGPoint preMultipliedPt = ptValue.CGPointValue;
-            CGPoint multipliedPt = CGPointMake(preMultipliedPt.x * scale, preMultipliedPt.y * scale);
-            [multipliedPts addObject:[NSValue valueWithCGPoint:multipliedPt]];
-        }
-        return [NSArray arrayWithArray:multipliedPts];
-    }
-    /**
-     * Calculates the dot proudct of an array of points and a single point,
-     * mimics the numpy method shown below:
-     *
-     # c = np.dot(a, b)
-     #
-     # a[0][0] * b[0][0]
-     # +
-     # a[0]1] * b[0][1]
-     */
-    NSArray <NSNumber *> * dotProduct(NSArray <NSValue *> *pts, cv::Point2f pt) {
-        NSMutableArray *multipliedPts = @[].mutableCopy;
-        for (NSValue *ptValue in pts) {
-            CGPoint preMultipliedPt = ptValue.CGPointValue;
-            [multipliedPts addObject:[NSNumber numberWithFloat:preMultipliedPt.x * pt.x + preMultipliedPt.y * pt.y]];
-        }
-        return [NSArray arrayWithArray:multipliedPts];
-    }
-
-    NSArray<NSValue *> * pix2norm(CGSize size, NSArray<NSValue *> *pts) {
-        float height = size.height;
-        float width = size.width;
-        float scale = 2.0 / MAX(height, width);
-        CGSize offset = CGSizeMake(width * 0.5, height * 0.5);
-
-        NSMutableArray<NSValue *> *mutatedPts = @[].mutableCopy;
-        for (NSValue *pt in pts) {
-            CGPoint point = [pt CGPointValue];
-            CGPoint mutatedPoint = CGPointMake((point.x - offset.width) * scale, (point.y - offset.height) * scale);
-            [mutatedPts addObject:[NSValue valueWithCGPoint:mutatedPoint]];
-        }
-        return mutatedPts;
-    }
-
-    NSArray <NSValue *> * norm2pix(CGSize size, NSArray <NSValue *> *points) {
-        float scale = MAX(size.height, size.width) * 0.5;
-        cv::Point2f offset = cv::Point2f(0.5 * size.width, 0.5 * size.height);
-        NSArray <NSValue *> *rval = nsarray::add(nsarray::multi(points, scale), offset);
-        return rval;
-    }
-
-    std::vector<cv::Point2f> convertToVector(NSArray <NSValue *> *points) {
-        std::vector<cv::Point2f> vectorPoints = std::vector<cv::Point2f>();
-        for (NSValue *point in points) {
-            vectorPoints.push_back(geom::pointFrom(point.CGPointValue));
-        }
-        return vectorPoints;
-    }
-
-    NSArray <NSValue *> * pointsFrom(CGRectOutline cornerOutline) {
-        return @[[NSValue valueWithCGPoint:cornerOutline.topLeft],
-                 [NSValue valueWithCGPoint:cornerOutline.botLeft],
-                 [NSValue valueWithCGPoint:cornerOutline.botRight],
-                 [NSValue valueWithCGPoint:cornerOutline.topRight]];
-    }
-}
-
-// MARK: - Mat Mask
-cv::Mat maskWithOutline(CGRectOutline outline) {
-    cv::Point p1 = cv::Point(outline.topLeft.x, outline.topLeft.y);
-    cv::Point p2 = cv::Point(outline.botRight.x, outline.botRight.y);
-
-    cv::Mat page = cv::Mat(int(outline.botLeft.y - outline.topLeft.y), int(outline.topRight.x - outline.topLeft.x), CV_32S);
-    cv::rectangle(page, p1, p2, cv::Scalar(255.0, 255.0, 255.0), -1);
-    return page;
 }

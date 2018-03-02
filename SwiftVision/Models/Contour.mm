@@ -40,8 +40,8 @@ using namespace cv;
     _clx = [self projectContourPoints:self.points];
     _angle = atan2(self.tangent.y, self.tangent.x);
 
-    double min = [[self.clx min] floatValue];
-    double max = [[self.clx max] floatValue];
+    double min = self.clx.min.floatValue;
+    double max = self.clx.max.floatValue;
     _clxMin = CGPointMake(self.center.x + self.tangent.x * min, self.center.y + self.tangent.y * min);
     _clxMax = CGPointMake(self.center.x + self.tangent.x * max, self.center.y + self.tangent.y * max);
     _localxMin = min;
@@ -138,8 +138,8 @@ using namespace cv;
 - (double)contourOverlap:(Contour *)otherContour {
     double xmin = [self projectPoint:otherContour.clxMin];
     double xmax = [self projectPoint:otherContour.clxMax];
-    double clxMin = [[self.clx min] doubleValue];
-    double clxMax = [[self.clx max] doubleValue];
+    double clxMin = self.clx.min.doubleValue;
+    double clxMax = self.clx.max.doubleValue;
     CGPoint localRng = CGPointMake(clxMin, clxMax);
     CGPoint projectedRng = CGPointMake(xmin, xmax);
 
@@ -181,14 +181,6 @@ using namespace cv;
     double EDGE_MAX_OVERLAP = 1.0;   // max px horiz. overlap of contours in span
     double EDGE_MAX_LENGTH = 100.0;  // max px length of edge connecting contours
     double EDGE_MAX_ANGLE = 25.0;    // maximum change in angle allowed between contours
-
-    //reshape(?, ?);
-    //reduce(self.mat, self.mat, 0, 0);
-    //transform(self.mat, self.mat, Matx13f(1,1,1))
-
-//    NSLog(@"dist: %f", dist);
-//    NSLog(@"deltaAngle: %f", deltaAngle);
-//    NSLog(@"xOverlap: %f", xOverlap);
 
     if (dist > EDGE_MAX_LENGTH || xOverlap > EDGE_MAX_OVERLAP || deltaAngle > EDGE_MAX_ANGLE) {
         return nil;

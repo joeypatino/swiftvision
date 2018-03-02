@@ -1,7 +1,7 @@
 #import "ContourEdge.h"
 
 @implementation ContourEdge
-- (instancetype _Nonnull)initWithDistance:(double)distance angle:(double)angle overlap:(double)overlap contourA:(Contour *_Nonnull)contourA contourB:(Contour *_Nonnull)contourB {
+- (instancetype)initWithDistance:(double)distance angle:(double)angle overlap:(double)overlap contourA:(Contour *)contourA contourB:(Contour *)contourB {
     self = [super init];
     _distance = distance;
     _angle = angle;

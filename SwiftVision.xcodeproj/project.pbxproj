@@ -30,8 +30,11 @@
 		D442BE592033A1BD00213DF0 /* ContourSpan.mm in Sources */ = {isa = PBXBuildFile; fileRef = D442BE572033A1BD00213DF0 /* ContourSpan.mm */; };
 		D442BE5C2033A66200213DF0 /* ContourEdge.h in Headers */ = {isa = PBXBuildFile; fileRef = D442BE5A2033A66200213DF0 /* ContourEdge.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		D442BE5D2033A66200213DF0 /* ContourEdge.m in Sources */ = {isa = PBXBuildFile; fileRef = D442BE5B2033A66200213DF0 /* ContourEdge.m */; };
-		D44B96AA20488C8B006EC7AA /* ContourSpanKeyPoints.h in Headers */ = {isa = PBXBuildFile; fileRef = D44B96A820488C8B006EC7AA /* ContourSpanKeyPoints.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		D44B96AB20488C8B006EC7AA /* ContourSpanKeyPoints.mm in Sources */ = {isa = PBXBuildFile; fileRef = D44B96A920488C8B006EC7AA /* ContourSpanKeyPoints.mm */; };
+		D44756AD204AD7DB00798461 /* EigenVector.h in Headers */ = {isa = PBXBuildFile; fileRef = D44756AC204AD7DB00798461 /* EigenVector.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		D44756AF204ADB2900798461 /* ContourSpan+internal.h in Headers */ = {isa = PBXBuildFile; fileRef = D44756AE204ADB2900798461 /* ContourSpan+internal.h */; };
+		D44756B1204AE46300798461 /* LineInfo.h in Headers */ = {isa = PBXBuildFile; fileRef = D44756B0204AE46300798461 /* LineInfo.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		D44B96AA20488C8B006EC7AA /* ContourSpanInfo.h in Headers */ = {isa = PBXBuildFile; fileRef = D44B96A820488C8B006EC7AA /* ContourSpanInfo.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		D44B96AB20488C8B006EC7AA /* ContourSpanInfo.mm in Sources */ = {isa = PBXBuildFile; fileRef = D44B96A920488C8B006EC7AA /* ContourSpanInfo.mm */; };
 		D48B4B712028AC0600DFA7AC /* input_image.jpeg in Resources */ = {isa = PBXBuildFile; fileRef = D48B4B702028AC0600DFA7AC /* input_image.jpeg */; };
 		D48B4B732028B6DC00DFA7AC /* 90550036_edit.jpg in Resources */ = {isa = PBXBuildFile; fileRef = D48B4B722028B6DC00DFA7AC /* 90550036_edit.jpg */; };
 		D4A572C2202A1E1500D8F4B0 /* UIImageContours.h in Headers */ = {isa = PBXBuildFile; fileRef = D4A572C0202A1E1500D8F4B0 /* UIImageContours.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -74,8 +77,11 @@
 		D442BE572033A1BD00213DF0 /* ContourSpan.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = ContourSpan.mm; sourceTree = "<group>"; };
 		D442BE5A2033A66200213DF0 /* ContourEdge.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ContourEdge.h; sourceTree = "<group>"; };
 		D442BE5B2033A66200213DF0 /* ContourEdge.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ContourEdge.m; sourceTree = "<group>"; };
-		D44B96A820488C8B006EC7AA /* ContourSpanKeyPoints.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ContourSpanKeyPoints.h; sourceTree = "<group>"; };
-		D44B96A920488C8B006EC7AA /* ContourSpanKeyPoints.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = ContourSpanKeyPoints.mm; sourceTree = "<group>"; };
+		D44756AC204AD7DB00798461 /* EigenVector.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = EigenVector.h; sourceTree = "<group>"; };
+		D44756AE204ADB2900798461 /* ContourSpan+internal.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "ContourSpan+internal.h"; sourceTree = "<group>"; };
+		D44756B0204AE46300798461 /* LineInfo.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LineInfo.h; sourceTree = "<group>"; };
+		D44B96A820488C8B006EC7AA /* ContourSpanInfo.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ContourSpanInfo.h; sourceTree = "<group>"; };
+		D44B96A920488C8B006EC7AA /* ContourSpanInfo.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = ContourSpanInfo.mm; sourceTree = "<group>"; };
 		D48B4B702028AC0600DFA7AC /* input_image.jpeg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = input_image.jpeg; sourceTree = "<group>"; };
 		D48B4B722028B6DC00DFA7AC /* 90550036_edit.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = 90550036_edit.jpg; sourceTree = "<group>"; };
 		D4A572C0202A1E1500D8F4B0 /* UIImageContours.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UIImageContours.h; sourceTree = "<group>"; };
@@ -185,6 +191,8 @@
 			isa = PBXGroup;
 			children = (
 				D4E89964202CA40B00D76FAF /* CGRectOutline.h */,
+				D44756AC204AD7DB00798461 /* EigenVector.h */,
+				D44756B0204AE46300798461 /* LineInfo.h */,
 				D4A572C0202A1E1500D8F4B0 /* UIImageContours.h */,
 				D4A572C1202A1E1500D8F4B0 /* UIImageContours.mm */,
 				D4A572CD202A348800D8F4B0 /* Contour.h */,
@@ -193,10 +201,11 @@
 				D442BE572033A1BD00213DF0 /* ContourSpan.mm */,
 				D442BE5A2033A66200213DF0 /* ContourEdge.h */,
 				D442BE5B2033A66200213DF0 /* ContourEdge.m */,
+				D44B96A820488C8B006EC7AA /* ContourSpanInfo.h */,
+				D44B96A920488C8B006EC7AA /* ContourSpanInfo.mm */,
 				D43994732038EAFD00D9B783 /* Contour+internal.h */,
 				D43994752038EB7200D9B783 /* ContourEdge+internal.h */,
-				D44B96A820488C8B006EC7AA /* ContourSpanKeyPoints.h */,
-				D44B96A920488C8B006EC7AA /* ContourSpanKeyPoints.mm */,
+				D44756AE204ADB2900798461 /* ContourSpan+internal.h */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -228,14 +237,17 @@
 				D4A572CF202A348800D8F4B0 /* Contour.h in Headers */,
 				D442BE582033A1BD00213DF0 /* ContourSpan.h in Headers */,
 				D43994742038EAFD00D9B783 /* Contour+internal.h in Headers */,
+				D44756AD204AD7DB00798461 /* EigenVector.h in Headers */,
 				D428ED32204987D6002A7322 /* UIColor+extras.h in Headers */,
 				D4E89966202CA40B00D76FAF /* CGRectOutline.h in Headers */,
+				D44756B1204AE46300798461 /* LineInfo.h in Headers */,
 				D4BAD1C52034DBB200F4A32C /* NSArray+extras.h in Headers */,
-				D44B96AA20488C8B006EC7AA /* ContourSpanKeyPoints.h in Headers */,
+				D44B96AA20488C8B006EC7AA /* ContourSpanInfo.h in Headers */,
 				D442BE5C2033A66200213DF0 /* ContourEdge.h in Headers */,
 				D4A572C9202A1E2800D8F4B0 /* UIImage+OpenCV.h in Headers */,
 				D40B283E2028856300CA8559 /* SwiftVision.h in Headers */,
 				D40B2849202885AA00CA8559 /* OpenCV.h in Headers */,
+				D44756AF204ADB2900798461 /* ContourSpan+internal.h in Headers */,
 				D439947120388BA800D9B783 /* functions.h in Headers */,
 				D43994762038EB7200D9B783 /* ContourEdge+internal.h in Headers */,
 				D4A572CA202A1E2800D8F4B0 /* UIImage+Mat.h in Headers */,
@@ -347,7 +359,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				D44B96AB20488C8B006EC7AA /* ContourSpanKeyPoints.mm in Sources */,
+				D44B96AB20488C8B006EC7AA /* ContourSpanInfo.mm in Sources */,
 				D40B284A202885AA00CA8559 /* OpenCV.mm in Sources */,
 				D4A572CC202A1E2800D8F4B0 /* UIImage+Mat.mm in Sources */,
 				D442BE592033A1BD00213DF0 /* ContourSpan.mm in Sources */,

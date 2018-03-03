@@ -26,9 +26,11 @@ class ViewController: UIViewController {
             .dilate(CGSize(width: 14, height: 1))?
             .erode(CGSize(width: 0, height: 5)) else { return }
 
-//        imageView.image = masked.contours(filteredBy: contourFilter).renderMasks()
-//        imageView.image = masked.contours(filteredBy: contourFilter).render()
-        imageView.image = masked.contours(filteredBy: contourFilter).renderKeyPoints()
+        let imageContours = UIImageContours(image: masked, filteredBy: contourFilter)
+        imageView.image = imageContours.renderKeyPoints()
+//        imageView.image = imageContours.renderMasks()
+//        imageView.image = imageContours.render()
+//        imageView.image = imageContours.renderDewarped()
     }
 
     private func contourFilter(contour: Contour) -> Bool {

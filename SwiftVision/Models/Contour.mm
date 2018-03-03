@@ -1,10 +1,13 @@
 #import <opencv2/opencv.hpp>
-#import "functions.h"
-#import "NSArray+extras.h"
 #import "Contour.h"
+// models
 #import "ContourEdge.h"
+// private
 #import "ContourEdge+internal.h"
 #import "Contour+internal.h"
+// extras
+#import "functions.h"
+#import "NSArray+extras.h"
 
 using namespace std;
 using namespace cv;

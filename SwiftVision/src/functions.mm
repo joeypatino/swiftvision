@@ -131,6 +131,13 @@ namespace nsarray {
         }
         return vectorPoints;
     }
+
+    NSArray <NSValue *> * pointsFrom(CGRectOutline cornerOutline) {
+        return @[[NSValue valueWithCGPoint:cornerOutline.topLeft],
+                 [NSValue valueWithCGPoint:cornerOutline.botLeft],
+                 [NSValue valueWithCGPoint:cornerOutline.botRight],
+                 [NSValue valueWithCGPoint:cornerOutline.topRight]];
+    }
 }
 
 // MARK: - Loggging

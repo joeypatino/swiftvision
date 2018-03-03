@@ -1,7 +1,7 @@
 #import <UIKit/UIKit.h>
 
-@class UIImageContours;
 @class Contour;
+@class ContourSpan;
 @interface UIImage (OpenCV)
 - (UIImage *_Nullable)threshold:(float)blockSize constant:(float)constant;
 - (UIImage *_Nullable)dilate:(CGSize)kernelSize;
@@ -9,5 +9,6 @@
 - (UIImage *_Nullable)elementwiseMinimum:(UIImage *_Nonnull)img;
 - (UIImage *_Nullable)resizeTo:(CGSize)minSize;
 
-- (UIImageContours *_Nonnull)contoursFilteredBy:(nullable BOOL (^)(Contour *_Nonnull contour))filter NS_SWIFT_NAME(contours(filteredBy:));
+- (NSArray<Contour *> *_Nonnull)contoursFilteredBy:(nullable BOOL (^)(Contour *_Nonnull contour))filter NS_SWIFT_NAME(contours(filteredBy:));
+- (NSArray<ContourSpan *> *_Nonnull)spansFromContours:(NSArray<Contour *> *_Nonnull)contours NS_SWIFT_NAME(spans(from:));
 @end

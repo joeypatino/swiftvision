@@ -49,6 +49,7 @@ namespace nsarray {
     NSArray <NSValue *> * norm2pix(CGSize size, NSArray <NSValue *> *points);
 
     std::vector<cv::Point2f> convertTo(NSArray <NSValue *> *points);
+    NSArray <NSValue *> * pointsFrom(CGRectOutline cornerOutline);
 }
 
 namespace logs {

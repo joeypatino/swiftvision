@@ -1,21 +1,21 @@
 #import <opencv2/opencv.hpp>
 #import "UIImage+OpenCV.h"
+// models
+#import "UIImageContours.h"
+// private
+#import "Contour+internal.h"
+#import "ContourSpan+internal.h"
+// extras
 #import "functions.h"
 #import "UIImage+Mat.h"
-#import "UIImageContours.h"
-#import "Contour+internal.h"
 
 @interface Contour ()
 - (instancetype)initWithCVMat:(cv::Mat)cvMat;
 @end
 
-@interface UIImageContours ()
-- (instancetype _Nonnull)initWithContours:(NSArray <Contour *> *_Nonnull)contours spans:(NSArray <ContourSpan *> *)spans inImage:(UIImage *_Nonnull)image NS_DESIGNATED_INITIALIZER;
-@end
-
-@interface ContourSpan ()
-- (instancetype _Nonnull)initWithImage:(UIImage *_Nonnull)image contours:(NSArray <Contour *> *_Nonnull)contours NS_DESIGNATED_INITIALIZER;
-@end
+//@interface UIImageContours ()
+//- (instancetype _Nonnull)initWithContours:(NSArray <Contour *> *_Nonnull)contours spans:(NSArray <ContourSpan *> *)spans inImage:(UIImage *_Nonnull)image NS_DESIGNATED_INITIALIZER;
+//@end
 
 @implementation UIImage (OpenCV)
 - (UIImage *)resizeTo:(CGSize)size {
@@ -33,10 +33,8 @@
 }
 
 /**
- @param blockSize Size of a pixel neighborhood that is used to calculate a threshold value for the
- pixel: 3, 5, 7, and so on.
- @param constant Constant subtracted from the mean or weighted mean (see the details below). Normally, it
- is positive but may be zero or negative as well.
+ @param blockSize Size of a pixel neighborhood that is used to calculate a threshold value for the pixel: 3, 5, 7, and so on.
+ @param constant Constant subtracted from the mean or weighted mean. Normally, it is positive but may be zero or negative as well.
  */
 - (UIImage *)threshold:(float)blockSize constant:(float)constant {
     cv::Mat inImage = [self mat];
@@ -87,13 +85,7 @@
 }
 
 // MARK: -
-- (UIImageContours *)contoursFilteredBy:(BOOL (^)(Contour * c))filter {
-    NSArray <Contour *> *contours = [self generateContoursFilteredBy:filter];
-    NSArray <ContourSpan *> *spans = [self generateSpansFrom:contours];
-    return [[UIImageContours alloc] initWithContours:contours spans:spans inImage:self];
-}
-
-- (NSArray<Contour *> *)generateContoursFilteredBy:(BOOL (^)(Contour *c))filter {
+- (NSArray<Contour *> *)contoursFilteredBy:(BOOL (^)(Contour *contour))filter {
     cv::Mat cvMat = [self grayScaleMat];
     NSMutableArray <Contour *> *foundContours = @[].mutableCopy;
     std::vector<std::vector<cv::Point> > contours;
@@ -117,39 +109,14 @@
     return foundContours;
 }
 
-- (NSArray<ContourSpan *> *)generateSpansFrom:(NSArray<Contour *> *)contours {
+- (NSArray<ContourSpan *> *)spansFromContours:(NSArray<Contour *> *)contours {
     CGFloat SPAN_MIN_WIDTH = 16;
-    NSArray *sortedContours = [contours sortedArrayUsingComparator:^NSComparisonResult(Contour *obj1, Contour *obj2){
-        if (CGRectGetMinY(obj1.bounds) < CGRectGetMinY(obj2.bounds))
-            return NSOrderedAscending;
-        else if (CGRectGetMinY(obj1.bounds) > CGRectGetMinY(obj2.bounds))
-            return NSOrderedDescending;
 
-        return NSOrderedSame;
-    }];
+    NSArray <Contour *> *sortedContours = [self sortContoursByBounds:contours];
+    NSArray <ContourEdge *> *edges = [self generateContourEdgesFromContours:sortedContours];
+    NSArray <ContourEdge *> *sortedEdges = [self sortedEdgesByScore:edges];
 
-    // generate all candidate edges
-    NSMutableArray <ContourEdge *> *candidateEdges = @[].mutableCopy;
-
-    NSInteger contourCount = sortedContours.count;
-    for (int i = 0; i < contourCount; i++) {
-        Contour *currentContour = sortedContours[i];
-        for (int j = 0; j < i; j++) {
-            Contour *adjacentContour = sortedContours[j];
-            ContourEdge *edge = [currentContour contourEdgeWithAdjacentContour:adjacentContour];
-            if (edge)
-                [candidateEdges addObject:edge];
-        }
-    }
-
-    [candidateEdges sortUsingComparator:^NSComparisonResult(ContourEdge *edge1, ContourEdge *edge2){
-        if (edge1.score < edge2.score) return NSOrderedAscending;
-        else if (edge1.score > edge2.score) return NSOrderedDescending;
-
-        return NSOrderedSame;
-    }];
-
-    for (ContourEdge *edge in candidateEdges) {
+    for (ContourEdge *edge in sortedEdges) {
         // if left and right are unassigned, join them
         if (!edge.contourA.next && !edge.contourB.previous) {
             edge.contourA.next = edge.contourB;
@@ -198,5 +165,40 @@
     return spans;
 }
 
+// MARK: -
+- (NSArray <ContourEdge *> *)generateContourEdgesFromContours:(NSArray <Contour *> *)contours {
+    NSMutableArray <ContourEdge *> *edges = @[].mutableCopy;
+    NSInteger contourCount = contours.count;
+    for (int i = 0; i < contourCount; i++) {
+        Contour *currentContour = contours[i];
+        for (int j = 0; j < i; j++) {
+            Contour *adjacentContour = contours[j];
+            ContourEdge *edge = [currentContour contourEdgeWithAdjacentContour:adjacentContour];
+            if (edge)
+                [edges addObject:edge];
+        }
+    }
+    return edges;
+}
+
+- (NSArray <Contour *> *)sortContoursByBounds:(NSArray <Contour *> *)contours {
+    return [contours sortedArrayUsingComparator:^NSComparisonResult(Contour *obj1, Contour *obj2){
+        if (CGRectGetMinY(obj1.bounds) < CGRectGetMinY(obj2.bounds))
+            return NSOrderedAscending;
+        else if (CGRectGetMinY(obj1.bounds) > CGRectGetMinY(obj2.bounds))
+            return NSOrderedDescending;
+
+        return NSOrderedSame;
+    }];
+}
+
+- (NSArray <ContourEdge *> *)sortedEdgesByScore:(NSArray <ContourEdge *> *)edges {
+    return [edges sortedArrayUsingComparator:^NSComparisonResult(ContourEdge *edge1, ContourEdge *edge2){
+        if (edge1.score < edge2.score) return NSOrderedAscending;
+        else if (edge1.score > edge2.score) return NSOrderedDescending;
+
+        return NSOrderedSame;
+    }];
+}
 @end
 

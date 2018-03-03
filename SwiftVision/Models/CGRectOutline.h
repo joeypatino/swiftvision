@@ -1,5 +1,3 @@
-#import <UIKit/UIKit.h>
-
 struct
 CGRectOutline {
     CGPoint topLeft;

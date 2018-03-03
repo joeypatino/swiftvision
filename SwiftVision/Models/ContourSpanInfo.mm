@@ -1,7 +1,8 @@
 #import <opencv2/opencv.hpp>
-#import "ContourSpanKeyPoints.h"
+#import "ContourSpanInfo.h"
+#import "CGRectOutline.h"
 
-@implementation ContourSpanKeyPoints
+@implementation ContourSpanInfo
 - (instancetype)initWithCorners:(CGRectOutline)corners
                             xCoordinates:(NSArray <NSArray <NSNumber *> *> *)xCoordinates
                             yCoordinates:(NSArray <NSNumber *> *)yCoordinates {

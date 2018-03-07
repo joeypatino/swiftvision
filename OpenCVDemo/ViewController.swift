@@ -26,9 +26,9 @@ class ViewController: UIViewController {
             .erode(CGSize(width: 0, height: 5)) else { return }
 
         let imageContours = PageDewarp(image: masked, filteredBy: contourFilter)
-        imageView.image = imageContours.renderKeyPoints()
-//        imageView.image = imageContours.renderMasks()
 //        imageView.image = imageContours.render()
+//        imageView.image = imageContours.renderMasks()
+//        imageView.image = imageContours.renderKeyPoints()
 //        imageView.image = imageContours.renderDewarped()
     }
 

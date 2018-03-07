@@ -22,6 +22,8 @@
 		D428ED33204987D6002A7322 /* UIColor+extras.m in Sources */ = {isa = PBXBuildFile; fileRef = D428ED31204987D6002A7322 /* UIColor+extras.m */; };
 		D439947120388BA800D9B783 /* functions.h in Headers */ = {isa = PBXBuildFile; fileRef = D439946F20388BA800D9B783 /* functions.h */; };
 		D439947220388BA800D9B783 /* functions.mm in Sources */ = {isa = PBXBuildFile; fileRef = D439947020388BA800D9B783 /* functions.mm */; };
+		D47109BA2050282600F38C26 /* DLibWrapper.mm in Sources */ = {isa = PBXBuildFile; fileRef = D47109B42050271600F38C26 /* DLibWrapper.mm */; };
+		D4711A0F20502DA800F38C26 /* DLibWrapper.h in Headers */ = {isa = PBXBuildFile; fileRef = D47109B32050271600F38C26 /* DLibWrapper.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		D471D7D620500C4A00F38C26 /* LineInfo.h in Headers */ = {isa = PBXBuildFile; fileRef = D471D7D320500C4A00F38C26 /* LineInfo.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		D471D7D720500C4A00F38C26 /* CGRectOutline.h in Headers */ = {isa = PBXBuildFile; fileRef = D471D7D420500C4A00F38C26 /* CGRectOutline.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		D471D7D820500C4A00F38C26 /* EigenVector.h in Headers */ = {isa = PBXBuildFile; fileRef = D471D7D520500C4A00F38C26 /* EigenVector.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -41,8 +43,11 @@
 		D471D7F620500EE300F38C26 /* UIImage+OpenCV.h in Headers */ = {isa = PBXBuildFile; fileRef = D471D7F420500EE300F38C26 /* UIImage+OpenCV.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		D471D7FA20500F2200F38C26 /* UIImage+Contour.mm in Sources */ = {isa = PBXBuildFile; fileRef = D471D7F820500F2200F38C26 /* UIImage+Contour.mm */; };
 		D471D7FB20500F2200F38C26 /* UIImage+Contour.h in Headers */ = {isa = PBXBuildFile; fileRef = D471D7F920500F2200F38C26 /* UIImage+Contour.h */; };
+		D471E46E20501DDC00F38C26 /* DLib.h in Headers */ = {isa = PBXBuildFile; fileRef = D471E46C20501DDC00F38C26 /* DLib.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		D471F0DC20501E5400F38C26 /* DLib.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D471E46A20501DDC00F38C26 /* DLib.framework */; };
 		D48B4B712028AC0600DFA7AC /* input_image.jpeg in Resources */ = {isa = PBXBuildFile; fileRef = D48B4B702028AC0600DFA7AC /* input_image.jpeg */; };
 		D48B4B732028B6DC00DFA7AC /* 90550036_edit.jpg in Resources */ = {isa = PBXBuildFile; fileRef = D48B4B722028B6DC00DFA7AC /* 90550036_edit.jpg */; };
+		D4A3AE1D20502FB20075C45B /* libdlib.a in Frameworks */ = {isa = PBXBuildFile; fileRef = D4A3AE1C20502FB20075C45B /* libdlib.a */; };
 		D4A572C2202A1E1500D8F4B0 /* PageDewarp.h in Headers */ = {isa = PBXBuildFile; fileRef = D4A572C0202A1E1500D8F4B0 /* PageDewarp.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		D4A572C3202A1E1500D8F4B0 /* PageDewarp.mm in Sources */ = {isa = PBXBuildFile; fileRef = D4A572C1202A1E1500D8F4B0 /* PageDewarp.mm */; };
 		D4A572CA202A1E2800D8F4B0 /* UIImage+Mat.h in Headers */ = {isa = PBXBuildFile; fileRef = D4A572C6202A1E2800D8F4B0 /* UIImage+Mat.h */; };
@@ -50,6 +55,16 @@
 		D4BAD1C52034DBB200F4A32C /* NSArray+extras.h in Headers */ = {isa = PBXBuildFile; fileRef = D4BAD1C32034DBB200F4A32C /* NSArray+extras.h */; };
 		D4BAD1C62034DBB200F4A32C /* NSArray+extras.m in Sources */ = {isa = PBXBuildFile; fileRef = D4BAD1C42034DBB200F4A32C /* NSArray+extras.m */; };
 /* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		D47109B0205025E500F38C26 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = D40B28302028856300CA8559 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = D471E46920501DDC00F38C26;
+			remoteInfo = DLib;
+		};
+/* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
 		D40B28392028856300CA8559 /* SwiftVision.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = SwiftVision.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -70,6 +85,11 @@
 		D428ED31204987D6002A7322 /* UIColor+extras.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "UIColor+extras.m"; sourceTree = "<group>"; };
 		D439946F20388BA800D9B783 /* functions.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = functions.h; sourceTree = "<group>"; };
 		D439947020388BA800D9B783 /* functions.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = functions.mm; sourceTree = "<group>"; };
+		D47109B32050271600F38C26 /* DLibWrapper.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DLibWrapper.h; sourceTree = "<group>"; };
+		D47109B42050271600F38C26 /* DLibWrapper.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = DLibWrapper.mm; sourceTree = "<group>"; };
+		D4711A0820502C1200F38C26 /* Accelerate.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Accelerate.framework; path = System/Library/Frameworks/Accelerate.framework; sourceTree = SDKROOT; };
+		D4711A0A20502C7500F38C26 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
+		D4711A0C20502C8300F38C26 /* CoreFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreFoundation.framework; path = System/Library/Frameworks/CoreFoundation.framework; sourceTree = SDKROOT; };
 		D471D7D320500C4A00F38C26 /* LineInfo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LineInfo.h; sourceTree = "<group>"; };
 		D471D7D420500C4A00F38C26 /* CGRectOutline.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CGRectOutline.h; sourceTree = "<group>"; };
 		D471D7D520500C4A00F38C26 /* EigenVector.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EigenVector.h; sourceTree = "<group>"; };
@@ -89,8 +109,12 @@
 		D471D7F420500EE300F38C26 /* UIImage+OpenCV.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImage+OpenCV.h"; sourceTree = "<group>"; };
 		D471D7F820500F2200F38C26 /* UIImage+Contour.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = "UIImage+Contour.mm"; sourceTree = "<group>"; };
 		D471D7F920500F2200F38C26 /* UIImage+Contour.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImage+Contour.h"; sourceTree = "<group>"; };
+		D471E46A20501DDC00F38C26 /* DLib.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = DLib.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		D471E46C20501DDC00F38C26 /* DLib.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DLib.h; sourceTree = "<group>"; };
+		D471E46D20501DDC00F38C26 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		D48B4B702028AC0600DFA7AC /* input_image.jpeg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = input_image.jpeg; sourceTree = "<group>"; };
 		D48B4B722028B6DC00DFA7AC /* 90550036_edit.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = 90550036_edit.jpg; sourceTree = "<group>"; };
+		D4A3AE1C20502FB20075C45B /* libdlib.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libdlib.a; sourceTree = "<group>"; };
 		D4A572C0202A1E1500D8F4B0 /* PageDewarp.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PageDewarp.h; sourceTree = "<group>"; };
 		D4A572C1202A1E1500D8F4B0 /* PageDewarp.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = PageDewarp.mm; sourceTree = "<group>"; };
 		D4A572C6202A1E2800D8F4B0 /* UIImage+Mat.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImage+Mat.h"; sourceTree = "<group>"; };
@@ -104,6 +128,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D471F0DC20501E5400F38C26 /* DLib.framework in Frameworks */,
 				D40B286920288EEA00CA8559 /* UIKit.framework in Frameworks */,
 				D40B286720288EE100CA8559 /* CoreGraphics.framework in Frameworks */,
 				D40B28462028858A00CA8559 /* opencv2.framework in Frameworks */,
@@ -118,6 +143,14 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		D471E46620501DDC00F38C26 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				D4A3AE1D20502FB20075C45B /* libdlib.a in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
@@ -125,6 +158,7 @@
 			isa = PBXGroup;
 			children = (
 				D40B283B2028856300CA8559 /* SwiftVision */,
+				D471E46B20501DDC00F38C26 /* DLib */,
 				D40B28502028860D00CA8559 /* OpenCVDemo */,
 				D40B283A2028856300CA8559 /* Products */,
 				D40B28442028858A00CA8559 /* Frameworks */,
@@ -136,6 +170,7 @@
 			children = (
 				D40B28392028856300CA8559 /* SwiftVision.framework */,
 				D40B284F2028860D00CA8559 /* OpenCVDemo.app */,
+				D471E46A20501DDC00F38C26 /* DLib.framework */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -159,6 +194,9 @@
 		D40B28442028858A00CA8559 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				D4711A0C20502C8300F38C26 /* CoreFoundation.framework */,
+				D4711A0A20502C7500F38C26 /* Foundation.framework */,
+				D4711A0820502C1200F38C26 /* Accelerate.framework */,
 				D40B286820288EEA00CA8559 /* UIKit.framework */,
 				D40B286620288EE100CA8559 /* CoreGraphics.framework */,
 				D40B28452028858A00CA8559 /* opencv2.framework */,
@@ -235,6 +273,18 @@
 			path = "extensions+internal";
 			sourceTree = "<group>";
 		};
+		D471E46B20501DDC00F38C26 /* DLib */ = {
+			isa = PBXGroup;
+			children = (
+				D4A3AE1C20502FB20075C45B /* libdlib.a */,
+				D471E46C20501DDC00F38C26 /* DLib.h */,
+				D471E46D20501DDC00F38C26 /* Info.plist */,
+				D47109B32050271600F38C26 /* DLibWrapper.h */,
+				D47109B42050271600F38C26 /* DLibWrapper.mm */,
+			);
+			path = DLib;
+			sourceTree = "<group>";
+		};
 		D4A572BF202A1E1500D8F4B0 /* PageDewarp */ = {
 			isa = PBXGroup;
 			children = (
@@ -290,6 +340,15 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		D471E46720501DDC00F38C26 /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				D4711A0F20502DA800F38C26 /* DLibWrapper.h in Headers */,
+				D471E46E20501DDC00F38C26 /* DLib.h in Headers */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXHeadersBuildPhase section */
 
 /* Begin PBXNativeTarget section */
@@ -305,6 +364,7 @@
 			buildRules = (
 			);
 			dependencies = (
+				D47109B1205025E500F38C26 /* PBXTargetDependency */,
 			);
 			name = SwiftVision;
 			productName = SwiftVision;
@@ -328,6 +388,24 @@
 			productReference = D40B284F2028860D00CA8559 /* OpenCVDemo.app */;
 			productType = "com.apple.product-type.application";
 		};
+		D471E46920501DDC00F38C26 /* DLib */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = D471E46F20501DDC00F38C26 /* Build configuration list for PBXNativeTarget "DLib" */;
+			buildPhases = (
+				D47109B92050281F00F38C26 /* Sources */,
+				D471E46620501DDC00F38C26 /* Frameworks */,
+				D471E46720501DDC00F38C26 /* Headers */,
+				D471E46820501DDC00F38C26 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = DLib;
+			productName = DLib;
+			productReference = D471E46A20501DDC00F38C26 /* DLib.framework */;
+			productType = "com.apple.product-type.framework";
+		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -344,6 +422,10 @@
 						ProvisioningStyle = Automatic;
 					};
 					D40B284E2028860D00CA8559 = {
+						CreatedOnToolsVersion = 9.2;
+						ProvisioningStyle = Automatic;
+					};
+					D471E46920501DDC00F38C26 = {
 						CreatedOnToolsVersion = 9.2;
 						ProvisioningStyle = Automatic;
 					};
@@ -364,6 +446,7 @@
 			targets = (
 				D40B28382028856300CA8559 /* SwiftVision */,
 				D40B284E2028860D00CA8559 /* OpenCVDemo */,
+				D471E46920501DDC00F38C26 /* DLib */,
 			);
 		};
 /* End PBXProject section */
@@ -385,6 +468,13 @@
 				D48B4B712028AC0600DFA7AC /* input_image.jpeg in Resources */,
 				D48B4B732028B6DC00DFA7AC /* 90550036_edit.jpg in Resources */,
 				D40B28572028860D00CA8559 /* Main.storyboard in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		D471E46820501DDC00F38C26 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -418,7 +508,23 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		D47109B92050281F00F38C26 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				D47109BA2050282600F38C26 /* DLibWrapper.mm in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		D47109B1205025E500F38C26 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = D471E46920501DDC00F38C26 /* DLib */;
+			targetProxy = D47109B0205025E500F38C26 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
 		D40B28552028860D00CA8559 /* Main.storyboard */ = {
@@ -554,6 +660,8 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CLANG_ALLOW_NON_MODULAR_INCLUDES_IN_FRAMEWORK_MODULES = NO;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
 				CLANG_WARN_DOCUMENTATION_COMMENTS = NO;
@@ -565,7 +673,13 @@
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
 				FRAMEWORK_SEARCH_PATHS = "$(PROJECT_DIR)/SwiftVision";
+				GCC_C_LANGUAGE_STANDARD = c11;
+				GCC_INPUT_FILETYPE = automatic;
 				GCC_PREFIX_HEADER = "$(PROJECT_DIR)/SwiftVision/PrefixHeader.pch";
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
 				GCC_STRICT_ALIASING = YES;
 				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
 				GENERATE_MASTER_OBJECT_FILE = NO;
@@ -579,7 +693,7 @@
 				SEPARATE_SYMBOL_EDIT = NO;
 				SKIP_INSTALL = YES;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
-				SWIFT_VERSION = 3.0;
+				SWIFT_VERSION = 4.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Debug;
@@ -588,6 +702,8 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CLANG_ALLOW_NON_MODULAR_INCLUDES_IN_FRAMEWORK_MODULES = NO;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
 				CLANG_WARN_DOCUMENTATION_COMMENTS = NO;
@@ -599,7 +715,10 @@
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
 				FRAMEWORK_SEARCH_PATHS = "$(PROJECT_DIR)/SwiftVision";
+				GCC_C_LANGUAGE_STANDARD = c11;
+				GCC_INPUT_FILETYPE = automatic;
 				GCC_PREFIX_HEADER = "$(PROJECT_DIR)/SwiftVision/PrefixHeader.pch";
+				GCC_PREPROCESSOR_DEFINITIONS = "";
 				GCC_STRICT_ALIASING = YES;
 				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
 				GENERATE_MASTER_OBJECT_FILE = NO;
@@ -612,7 +731,7 @@
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
 				SEPARATE_SYMBOL_EDIT = NO;
 				SKIP_INSTALL = YES;
-				SWIFT_VERSION = 3.0;
+				SWIFT_VERSION = 4.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Release;
@@ -650,6 +769,76 @@
 			};
 			name = Release;
 		};
+		D471E47020501DDC00F38C26 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_WARN_CXX0X_EXTENSIONS = NO;
+				CODE_SIGN_IDENTITY = "";
+				CODE_SIGN_STYLE = Automatic;
+				DEFINES_MODULE = YES;
+				DEVELOPMENT_TEAM = 6C6HU52U6Y;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					DLIB_JPEG_SUPPORT,
+					DLIB_NO_GUI_SUPPORT,
+					NDEBUG,
+					DLIB_USE_BLAS,
+					DLIB_USE_LAPACK,
+				);
+				HEADER_SEARCH_PATHS = "$(SRCROOT)/DLib";
+				INFOPLIST_FILE = DLib/Info.plist;
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/DLib",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.onitaps.DLib;
+				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
+				SKIP_INSTALL = YES;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		D471E47120501DDC00F38C26 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_WARN_CXX0X_EXTENSIONS = NO;
+				CODE_SIGN_IDENTITY = "";
+				CODE_SIGN_STYLE = Automatic;
+				DEFINES_MODULE = YES;
+				DEVELOPMENT_TEAM = 6C6HU52U6Y;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					DLIB_JPEG_SUPPORT,
+					DLIB_NO_GUI_SUPPORT,
+					NDEBUG,
+					DLIB_USE_BLAS,
+					DLIB_USE_LAPACK,
+				);
+				HEADER_SEARCH_PATHS = "$(SRCROOT)/DLib";
+				INFOPLIST_FILE = DLib/Info.plist;
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/DLib",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.onitaps.DLib;
+				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
+				SKIP_INSTALL = YES;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -676,6 +865,15 @@
 			buildConfigurations = (
 				D40B285F2028860D00CA8559 /* Debug */,
 				D40B28602028860D00CA8559 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		D471E46F20501DDC00F38C26 /* Build configuration list for PBXNativeTarget "DLib" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				D471E47020501DDC00F38C26 /* Debug */,
+				D471E47120501DDC00F38C26 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

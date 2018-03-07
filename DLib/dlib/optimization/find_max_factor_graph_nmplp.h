@@ -9,6 +9,8 @@
 #include "../matrix.h"
 #include "../hash.h"
 
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wshorten-64-to-32"
 
 namespace dlib
 {
@@ -332,6 +334,8 @@ namespace dlib
 // ----------------------------------------------------------------------------------------
 
 }
+
+#pragma clang diagnostic pop
 
 #endif // DLIB_FIND_MAX_FACTOR_GRAPH_nMPLP_Hh_
 

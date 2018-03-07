@@ -6,6 +6,9 @@
 #include "fortran_id.h"
 #include "../matrix.h"
 
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wshorten-64-to-32"
+
 namespace dlib
 {
     namespace lapack
@@ -318,6 +321,8 @@ namespace dlib
 }
 
 // ----------------------------------------------------------------------------------------
+
+#pragma clang diagnostic pop
 
 #endif // DLIB_LAPACk_SVD_Hh_
 

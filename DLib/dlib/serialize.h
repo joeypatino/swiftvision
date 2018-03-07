@@ -162,6 +162,9 @@
 #include "byte_orderer.h"
 #include "float_details.h"
 
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wshorten-64-to-32"
+
 namespace dlib
 {
 
@@ -1676,6 +1679,8 @@ namespace dlib
 // ----------------------------------------------------------------------------------------
 
 }
+
+#pragma clang diagnostic pop
 
 #endif // DLIB_SERIALIZe_
 

@@ -9,6 +9,9 @@
 #include <queue>
 #include "../geometry.h"
 
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wshorten-64-to-32"
+
 namespace dlib
 {
     namespace impl
@@ -280,6 +283,8 @@ namespace dlib
 // ----------------------------------------------------------------------------------------
 
 }
+
+#pragma clang diagnostic pop
 
 #endif // DLIB_MAX_SUM_SUBMaTRIX_Hh_
 

@@ -24,6 +24,9 @@
 #include "optimization_bobyqa_abstract.h"
 #include "optimization.h"
 
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wcomma"
+
 // ----------------------------------------------------------------------------------------
 
 namespace dlib
@@ -3419,5 +3422,6 @@ L210:
 
 }
 
-#endif // DLIB_OPTIMIZATIOn_BOBYQA_Hh_
+#pragma clang diagnostic pop
 
+#endif // DLIB_OPTIMIZATIOn_BOBYQA_Hh_

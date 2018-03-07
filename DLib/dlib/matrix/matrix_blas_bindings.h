@@ -14,6 +14,9 @@
 //#include <iostream>
 //using namespace std;
 
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wshorten-64-to-32"
+
 namespace dlib
 {
 
@@ -1632,6 +1635,8 @@ namespace dlib
 // ----------------------------------------------------------------------------------------
 
 }
+
+#pragma clang diagnostic pop
 
 #endif // DLIB_MATRIx_BLAS_BINDINGS_
 

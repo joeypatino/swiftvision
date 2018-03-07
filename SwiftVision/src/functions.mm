@@ -143,7 +143,7 @@ namespace nsarray {
 // MARK: - Loggging
 namespace logs {
     void describe_vector(std::vector<double> vector, char const *name ) {
-        printf("\n############ %s ############\n", name);
+        printf("\n############ double %s ############\n", name);
         printf("size: {%zul}\n", vector.size());
         printf("----------------------------\n");
 
@@ -164,16 +164,7 @@ namespace logs {
         printf("size: {%zul}\n", vector.size());
         printf("----------------------------\n");
 
-        std::vector<cv::Point>::iterator it = vector.begin();
-        std::vector<cv::Point>::iterator const end = vector.end();
-
-        printf("[");
-        for (; it != end; it++) {
-            cv::Point p = *it;
-            printf("[%i %i]", p.x, p.y);
-            if (it + 1 != end) printf("\n");
-        }
-        printf("]\n");
+        std::cout << vector << std::endl;
 
         printf("\n############ %s ############\n", name);
         printf("\n");
@@ -184,16 +175,18 @@ namespace logs {
         printf("size: {%zul}\n", vector.size());
         printf("----------------------------\n");
 
-        std::vector<cv::Point2f>::iterator it = vector.begin();
-        std::vector<cv::Point2f>::iterator const end = vector.end();
+        std::cout << vector << std::endl;
 
-        printf("[");
-        for (; it != end; it++) {
-            cv::Point2f p = *it;
-            printf("[%f %f]", p.x, p.y);
-            if (it + 1 != end) printf("\n");
-        }
-        printf("]\n");
+        printf("\n############ %s ############\n", name);
+        printf("\n");
+    }
+
+    void describe_vector(std::vector<cv::Point3f> vector, char const *name) {
+        printf("\n############ cv::Point3f %s ############\n", name);
+        printf("size: {%zul}\n", vector.size());
+        printf("----------------------------\n");
+
+        std::cout << vector << std::endl;
 
         printf("\n############ %s ############\n", name);
         printf("\n");
@@ -233,8 +226,15 @@ namespace logs {
 
     void describe_points(NSArray <NSValue *> *pts, char const *name) {
         printf("\n############ Points::%s ############\n", name);
+
+        printf("[");
         for (NSValue *ptValue in pts) {
-            printf("%s\n", [NSStringFromCGPoint(ptValue.CGPointValue) UTF8String]);
+            printf("[%f, %f]", ptValue.CGPointValue.x, ptValue.CGPointValue.y);
+            if (pts.lastObject == ptValue) {
+                printf("]\n");
+            } else {
+                printf("\n");
+            }
         }
 
         printf("\n############ Points::%s ############\n", name);

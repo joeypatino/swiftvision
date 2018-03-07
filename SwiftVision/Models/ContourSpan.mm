@@ -2,7 +2,6 @@
 #import "ContourSpan.h"
 // models
 #import "Contour.h"
-#import "ContourSpanInfo.h"
 // private
 #import "ContourSpan+internal.h"
 #import "Contour+internal.h"
@@ -24,12 +23,6 @@ ContourSpanLineInfoMake(cv::Point2f p1, cv::Point2f p2) {
 
 using namespace cv;
 using namespace std;
-
-@interface ContourSpanInfo()
-- (instancetype _Nonnull)initWithCorners:(CGRectOutline)corners
-                            xCoordinates:(NSArray <NSArray <NSNumber *> *> *_Nonnull)xCoordinates
-                            yCoordinates:(NSArray <NSNumber *> *_Nonnull)yCoordinates;
-@end
 
 @implementation ContourSpan
 - (instancetype)initWithImage:(UIImage *)image contours:(NSArray <Contour *> *)contours {
@@ -80,50 +73,6 @@ using namespace std;
         [spanPoints addObject:normalizedPoints];
     }
     return [NSArray arrayWithArray:spanPoints];
-}
-
-- (ContourSpanInfo *)keyPointsUsingEigenVector:(EigenVector)eigenVector {
-    CGSize sz = self.image.size;
-    cv::Point2f eigenVectorx = geom::convertTo(eigenVector.x);
-    cv::Point2f eigenVectory = geom::convertTo(eigenVector.y);
-    CGRectOutline rectOutline = geom::outlineWithSize(self.image.size);
-
-    NSArray <NSValue *> *pts = @[[NSValue valueWithCGPoint:rectOutline.botRight],
-                                 [NSValue valueWithCGPoint:rectOutline.botLeft],
-                                 [NSValue valueWithCGPoint:rectOutline.topLeft],
-                                 [NSValue valueWithCGPoint:rectOutline.topRight]];
-    NSArray <NSValue *> *normalizedPts = nsarray::pix2norm(sz, pts);
-    NSArray <NSNumber *> *pxCoords = nsarray::dotProduct(normalizedPts, eigenVectorx);
-    NSArray <NSNumber *> *pyCoords = nsarray::dotProduct(normalizedPts, eigenVectory);
-
-    float px0 = pxCoords.min.floatValue;
-    float px1 = pxCoords.max.floatValue;
-    float py0 = pyCoords.min.floatValue;
-    float py1 = pyCoords.max.floatValue;
-
-    Point2f p00 = px0 * eigenVectorx + py0 * eigenVectory;
-    Point2f p10 = px1 * eigenVectorx + py0 * eigenVectory;
-    Point2f p11 = px1 * eigenVectorx + py1 * eigenVectory;
-    Point2f p01 = px0 * eigenVectorx + py1 * eigenVectory;
-
-    // tl, tr, br, bl
-    CGRectOutline corners = CGRectOutlineMake(geom::convertTo(p00),
-                                              geom::convertTo(p10),
-                                              geom::convertTo(p11),
-                                              geom::convertTo(p01));
-
-    NSMutableArray <NSNumber *> *ycoords = @[].mutableCopy;
-    NSMutableArray <NSArray <NSNumber *> *> *xcoords = @[].mutableCopy;
-    for (NSArray <NSValue *> *points in self.spanPoints) {
-        NSArray <NSNumber *> *pxCoords = nsarray::dotProduct(points, eigenVectorx);
-        NSArray <NSNumber *> *pyCoords = nsarray::dotProduct(points, eigenVectory);
-
-        float meany = pyCoords.median.floatValue;
-        [ycoords addObject:[NSNumber numberWithFloat:meany - py0]];
-        [xcoords addObject:nsarray::subtract(pxCoords, px0)];
-    }
-
-    return [[ContourSpanInfo alloc] initWithCorners:corners xCoordinates:xcoords yCoordinates:ycoords];
 }
 
 - (NSArray <NSValue *> *)keyPoints {

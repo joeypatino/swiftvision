@@ -3,6 +3,7 @@
 // models
 #import "Contour+internal.h"
 #import "ContourSpan+internal.h"
+#import "ContourSpanInfo.h"
 // extras
 #import "functions.h"
 #import "NSArray+extras.h"
@@ -11,6 +12,7 @@
 // structs
 #import "EigenVector.h"
 #import "LineInfo.h"
+#import "CGRectOutline.h"
 
 static inline struct EigenVector
 EigenVectorMake(cv::Point2f x, cv::Point2f y) {
@@ -22,6 +24,12 @@ EigenVectorMake(cv::Point2f x, cv::Point2f y) {
 
 using namespace std;
 using namespace cv;
+
+@interface ContourSpanInfo()
+- (instancetype _Nonnull)initWithCorners:(CGRectOutline)corners
+                            xCoordinates:(NSArray <NSArray <NSNumber *> *> *_Nonnull)xCoordinates
+                            yCoordinates:(NSArray <NSNumber *> *_Nonnull)yCoordinates;
+@end
 
 @interface UIImageContours ()
 @property (nonatomic, strong) UIImage *inputImage;
@@ -75,10 +83,16 @@ using namespace cv;
             BOOL filled = (mode == ContourRenderingModeFill) ? ContourRenderingModeFill : ContourRenderingModeOutline;
             circle(display, geom::convertTo(keyPoint.CGPointValue), 3, [self scalarColorFrom:color], filled ? -1 : 1, LINE_AA);
         }
-
-        //ContourSpanInfo *spanPoints = [span keyPointsUsingEigenVector:self.eigenVector];
-        //[self renderCorners:spanPoints.corners using:[UIColor redColor] in:display];
     }
+
+    NSArray <NSArray <NSValue *> *> *allSpanPoints = [self allSamplePointsFromSpans:self.spans];
+    ContourSpanInfo *spanInfo = [self generateSpanInfoWithSpanPoints:allSpanPoints andEigenVector:self.eigenVector];
+    [self renderCorners:spanInfo.corners using:[UIColor greenColor] in:display];
+    [spanInfo defaultParmeters];
+
+    NSMutableArray <NSValue *> *destinationPoints = @[].mutableCopy;
+    [destinationPoints addObject:[NSValue valueWithCGPoint:spanInfo.corners.topLeft]];
+    [destinationPoints addObjectsFromArray:[allSpanPoints valueForKeyPath: @"@unionOfArrays.self"]];
 
     return [[UIImage alloc] initWithCVMat:display];
 }
@@ -114,19 +128,19 @@ using namespace cv;
 }
 
 - (UIImage *)renderDewarped {
-    NSMutableArray *allXCoords = @[].mutableCopy;
-    NSMutableArray *allYCoords = @[].mutableCopy;
-    for (ContourSpan *span in self.spans) {
-        ContourSpanInfo *spanPoints = [span keyPointsUsingEigenVector:self.eigenVector];
-        printf("[%s, %s, %s, %s]\n",
-               [NSStringFromCGPoint(spanPoints.corners.topLeft) UTF8String],
-               [NSStringFromCGPoint(spanPoints.corners.topRight) UTF8String],
-               [NSStringFromCGPoint(spanPoints.corners.botRight) UTF8String],
-               [NSStringFromCGPoint(spanPoints.corners.botLeft) UTF8String]);
-
-        [allXCoords addObjectsFromArray:spanPoints.xCoordinates];
-        [allYCoords addObjectsFromArray:spanPoints.yCoordinates];
-    }
+//    NSMutableArray *allXCoords = @[].mutableCopy;
+//    NSMutableArray *allYCoords = @[].mutableCopy;
+//    for (ContourSpan *span in self.spans) {
+//        ContourSpanInfo *spanPoints = [span keyPointsUsingEigenVector:self.eigenVector];
+//        printf("[%s, %s, %s, %s]\n",
+//               [NSStringFromCGPoint(spanPoints.corners.topLeft) UTF8String],
+//               [NSStringFromCGPoint(spanPoints.corners.topRight) UTF8String],
+//               [NSStringFromCGPoint(spanPoints.corners.botRight) UTF8String],
+//               [NSStringFromCGPoint(spanPoints.corners.botLeft) UTF8String]);
+//
+//        [allXCoords addObjectsFromArray:spanPoints.xCoordinates];
+//        [allYCoords addObjectsFromArray:spanPoints.yCoordinates];
+//    }
 
     return [[UIImage alloc] init];
 }
@@ -187,6 +201,53 @@ using namespace cv;
     Point2f yDir = Point2f(-eigenY, eigenX);
 
     return EigenVectorMake(xDir, yDir);
+}
+
+- (ContourSpanInfo *)generateSpanInfoWithSpanPoints:(NSArray <NSArray <NSValue *> *> *)spanPoints andEigenVector:(EigenVector)eigenVector {
+    CGSize sz = self.inputImage.size;
+    cv::Point2f eigenVectorx = geom::convertTo(eigenVector.x);
+    cv::Point2f eigenVectory = geom::convertTo(eigenVector.y);
+    CGRectOutline rectOutline = geom::outlineWithSize(sz);
+
+    NSArray <NSValue *> *pts = @[[NSValue valueWithCGPoint:rectOutline.topLeft],
+                                 [NSValue valueWithCGPoint:rectOutline.topRight],
+                                 [NSValue valueWithCGPoint:rectOutline.botRight],
+                                 [NSValue valueWithCGPoint:rectOutline.botLeft]];
+    NSArray <NSValue *> *normalizedPts = nsarray::pix2norm(sz, pts);
+    NSArray <NSNumber *> *pxCoords = nsarray::dotProduct(normalizedPts, eigenVectorx);
+    NSArray <NSNumber *> *pyCoords = nsarray::dotProduct(normalizedPts, eigenVectory);
+
+    float px0 = pxCoords.min.floatValue;
+    float px1 = pxCoords.max.floatValue;
+    float py0 = pyCoords.min.floatValue;
+    float py1 = pyCoords.max.floatValue;
+
+    // tl
+    Point2f p00 = px0 * eigenVectorx + py0 * eigenVectory;
+    // tr
+    Point2f p01 = px1 * eigenVectorx + py0 * eigenVectory;
+    // br
+    Point2f p11 = px1 * eigenVectorx + py1 * eigenVectory;
+    // bl
+    Point2f p10 = px0 * eigenVectorx + py1 * eigenVectory;
+
+    CGRectOutline corners = CGRectOutlineMake(geom::convertTo(p00),
+                                              geom::convertTo(p01),
+                                              geom::convertTo(p11),
+                                              geom::convertTo(p10));
+
+    NSMutableArray <NSNumber *> *ycoords = @[].mutableCopy;
+    NSMutableArray <NSArray <NSNumber *> *> *xcoords = @[].mutableCopy;
+    for (NSArray <NSValue *> *points in spanPoints) {
+        NSArray <NSNumber *> *pxCoords = nsarray::dotProduct(points, eigenVectorx);
+        NSArray <NSNumber *> *pyCoords = nsarray::dotProduct(points, eigenVectory);
+
+        float meany = pyCoords.median.floatValue;
+        [ycoords addObject:[NSNumber numberWithFloat:meany - py0]];
+        [xcoords addObject:nsarray::subtract(pxCoords, px0)];
+    }
+
+    return [[ContourSpanInfo alloc] initWithCorners:corners xCoordinates:xcoords yCoordinates:ycoords];
 }
 
 - (NSArray <NSArray <NSValue *> *> *)allSamplePointsFromSpans:(NSArray <ContourSpan *> *)spans {

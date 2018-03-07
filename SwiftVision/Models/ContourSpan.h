@@ -11,8 +11,6 @@
 @property (nonatomic, assign, readonly) struct LineInfo line;
 /// the keypoints sampled along this span
 @property (nonatomic, strong, readonly) NSArray <NSValue *> *_Nonnull keyPoints;
-/// keypoint information for the span
-- (ContourSpanInfo *_Nonnull)keyPointsUsingEigenVector:(struct EigenVector)eigenVector;
 /// The color to render this Span
 @property (nonatomic, strong, readonly) UIColor *_Nonnull color;
 - (instancetype _Nonnull)init NS_UNAVAILABLE;

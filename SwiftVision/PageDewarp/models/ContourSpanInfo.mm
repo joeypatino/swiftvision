@@ -5,6 +5,9 @@
 // extras
 #import "functions.h"
 
+using namespace std;
+using namespace cv;
+
 @implementation ContourSpanInfo
 - (instancetype)initWithCorners:(CGRectOutline)corners
                             xCoordinates:(NSArray <NSArray <NSNumber *> *> *)xCoordinates
@@ -32,8 +35,8 @@
     NSLog(@"%s - %@", __PRETTY_FUNCTION__, self);
     CGPoint w = geom::subtract(self.corners.topRight, self.corners.topLeft);
     CGPoint h = geom::subtract(self.corners.botLeft, self.corners.topLeft);
-    double pageWidth = norm(cv::Mat(geom::convertTo(w)));
-    double pageHeight = norm(cv::Mat(geom::convertTo(h)));
+    double pageWidth = norm(Mat(geom::convertTo(w)));
+    double pageHeight = norm(Mat(geom::convertTo(h)));
     return CGSizeMake(pageHeight, pageWidth);
 }
 
@@ -41,41 +44,41 @@
     CGSize dimensions = self.roughDimensions;
 
     // Array of object points in the object coordinate space
-    std::vector<cv::Point3f> cornersObject3d = {
-        cv::Point3f(0, 0, 0),
-        cv::Point3f(dimensions.width, 0, 0),
-        cv::Point3f(dimensions.width, dimensions.height, 0),
-        cv::Point3f(0, dimensions.height, 0)};
+    vector<Point3f> cornersObject3d = {
+        Point3f(0, 0, 0),
+        Point3f(dimensions.width, 0, 0),
+        Point3f(dimensions.width, dimensions.height, 0),
+        Point3f(0, dimensions.height, 0)};
     logs::describe_vector(cornersObject3d, "cornersObject3d");
 
     // Array of corresponding image points
-    std::vector<cv::Point2f> imagePoints = nsarray::convertTo(nsarray::pointsFrom(self.corners));
+    vector<Point2f> imagePoints = nsarray::convertTo(nsarray::pointsFrom(self.corners));
     logs::describe_vector(imagePoints, "imagePoints");
 
     // Input camera matrix
     float FOCAL_LENGTH = 1.8;
-    std::vector<cv::Point3f> camera = { cv::Point3f(FOCAL_LENGTH, 0, 0),
-        cv::Point3f(0, FOCAL_LENGTH, 0),
-        cv::Point3f(0, 0, 1) };
+    vector<Point3f> camera = { Point3f(FOCAL_LENGTH, 0, 0),
+        Point3f(0, FOCAL_LENGTH, 0),
+        Point3f(0, 0, 1) };
     logs::describe_vector(camera, "camera");
 
     // Input vector of distortion coefficients
-    std::vector<float> distanceCoeffs = {0.0, 0.0, 0.0, 0.0, 0.0};
+    vector<float> distanceCoeffs = {0.0, 0.0, 0.0, 0.0, 0.0};
 
     // output rotation vectors
-    cv::Mat rvec;
+    Mat rvec;
     // output translation vectors
-    cv::Mat tvec;
+    Mat tvec;
     // estimate rotation and translation from four 2D-to-3D point correspondences
-    cv::solvePnP(cornersObject3d, imagePoints, cv::Mat(3, 3, CV_32F, &camera), cv::Mat(5, 1, CV_32F, &distanceCoeffs), rvec, tvec);
+    solvePnP(cornersObject3d, imagePoints, Mat(3, 3, CV_32F, &camera), Mat(5, 1, CV_32F, &distanceCoeffs), rvec, tvec);
 
     logs::describe_vector(rvec, "rvec");
     logs::describe_vector(tvec, "tvec");
 
     // our initial guess for the cubic has no slope
-    std::vector<float> cubicSlope = std::vector<float>({0.0, 0.0});
+    vector<float> cubicSlope = vector<float>({0.0, 0.0});
 
-    cv::Mat params = cv::Mat();
+    Mat params = Mat();
     params.push_back(rvec);
     params.push_back(tvec);
     params.push_back(cubicSlope);

@@ -2,7 +2,7 @@
 
 @class Contour;
 @class ContourSpanInfo;
-@interface ContourSpan : NSObject
+@interface ContourSpan: NSObject
 /// the image that this span belongs to
 @property (nonatomic, strong, readonly) UIImage *_Nonnull image;
 /// the contours in this span.

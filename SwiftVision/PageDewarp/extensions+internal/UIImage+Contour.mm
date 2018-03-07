@@ -1,102 +1,30 @@
 #import <opencv2/opencv.hpp>
-#import "UIImage+OpenCV.h"
-// models
-#import "UIImageContours.h"
-// private
+#import "UIImage+Contour.h"
+// model
+#import "Contour.h"
+#import "ContourSpan.h"
+#import "ContourEdge.h"
 #import "Contour+internal.h"
 #import "ContourSpan+internal.h"
-// extras
-#import "functions.h"
 #import "UIImage+Mat.h"
 
-@interface Contour ()
-- (instancetype)initWithCVMat:(cv::Mat)cvMat;
-@end
+using namespace std;
+using namespace cv;
 
-//@interface UIImageContours ()
-//- (instancetype _Nonnull)initWithContours:(NSArray <Contour *> *_Nonnull)contours spans:(NSArray <ContourSpan *> *)spans inImage:(UIImage *_Nonnull)image NS_DESIGNATED_INITIALIZER;
-//@end
-
-@implementation UIImage (OpenCV)
-- (UIImage *)resizeTo:(CGSize)size {
-    cv::Mat inImage = [self mat];
-    cv::Mat outImage;
-    cv::Size axis = cv::Size(0, 0);
-
-    float scl_x = float(self.size.width) / size.width;
-    float scl_y = float(self.size.height) / size.height;
-    float scl = 1.0 / fmaxf(scl_x, scl_y);
-
-    cv::resize(inImage, outImage, axis, scl, scl, cv::INTER_AREA);
-
-    return [[UIImage alloc] initWithCVMat: outImage];
-}
-
-/**
- @param blockSize Size of a pixel neighborhood that is used to calculate a threshold value for the pixel: 3, 5, 7, and so on.
- @param constant Constant subtracted from the mean or weighted mean. Normally, it is positive but may be zero or negative as well.
- */
-- (UIImage *)threshold:(float)blockSize constant:(float)constant {
-    cv::Mat inImage = [self mat];
-    cv::Mat grayImage;
-    cv::Mat outImage;
-
-    // convert to GRAYSCALE
-    cv::cvtColor(inImage, grayImage, cv::COLOR_RGBA2GRAY);
-    cv::adaptiveThreshold(grayImage, outImage,
-                          255.0,
-                          cv::ADAPTIVE_THRESH_MEAN_C,
-                          cv::THRESH_BINARY_INV, blockSize, constant);
-
-    // revert to RGBA
-    cv::cvtColor(outImage, outImage, cv::COLOR_GRAY2RGBA);
-
-    return [[UIImage alloc] initWithCVMat:outImage];
-}
-
-- (UIImage *)dilate:(CGSize)kernelSize {
-    cv::Mat inImage = [self mat];
-    cv::Mat outImage;
-
-    cv::Mat dilateKernel = cv::Mat::ones(kernelSize.height, kernelSize.width, CV_8UC1);
-    cv::dilate(inImage, outImage, dilateKernel);
-
-    return [[UIImage alloc] initWithCVMat:outImage];
-}
-
-- (UIImage *)erode:(CGSize)kernelSize {
-    cv::Mat inImage = [self mat];
-    cv::Mat outImage;
-
-    cv::Mat erodeKernel = cv::Mat::ones(kernelSize.height, kernelSize.width, CV_8UC1);
-    cv::erode(inImage, outImage, erodeKernel);
-
-    return [[UIImage alloc] initWithCVMat:outImage];
-}
-
-- (UIImage *)elementwiseMinimum:(UIImage *)img {
-    cv::Mat inImage = [self mat];
-    cv::Mat compImage = [img mat];
-
-    cv::MatExpr expr = cv::min(inImage, compImage);
-    cv::Mat outImage = cv::Mat(expr);
-
-    return [[UIImage alloc] initWithCVMat:outImage];
-}
-
+@implementation UIImage (Contour)
 // MARK: -
 - (NSArray<Contour *> *)contoursFilteredBy:(BOOL (^)(Contour *contour))filter {
-    cv::Mat cvMat = [self grayScaleMat];
+    Mat cvMat = [self grayScaleMat];
     NSMutableArray <Contour *> *foundContours = @[].mutableCopy;
-    std::vector<std::vector<cv::Point> > contours;
-    cv::findContours(cvMat, contours, cv::RETR_EXTERNAL, cv::CHAIN_APPROX_NONE);
+    vector<vector<cv::Point> > contours;
+    findContours(cvMat, contours, RETR_EXTERNAL, CHAIN_APPROX_NONE);
 
     for (int j = 0; j < contours.size(); j++) {
-        std::vector<cv::Point> points = contours.at(j);
+        vector<cv::Point> points = contours.at(j);
         int pointCnt = int(points.size());
-        cv::Mat contourMat = cv::Mat(points).reshape(2, pointCnt);
+        Mat contourMat = Mat(points).reshape(2, pointCnt);
 
-        if (cv::contourArea(contourMat) == 0) continue;
+        if (contourArea(contourMat) == 0) continue;
 
         Contour *contour = [[Contour alloc] initWithCVMat:contourMat];
         if (filter)
@@ -201,4 +129,3 @@
     }];
 }
 @end
-

@@ -12,16 +12,6 @@
 using namespace std;
 using namespace cv;
 
-@interface Contour ()
-@property (nonatomic, assign, readonly) CGPoint clxMin;
-@property (nonatomic, assign, readonly) CGPoint clxMax;
-@property (nonatomic, strong, readonly) NSArray <NSNumber *> *_Nonnull clx;
-@property (nonatomic, assign, readonly) NSArray <NSValue *> *_Nonnull points;
-@property (nonatomic, assign) Moments moments;
-
-@property (nonatomic, assign, readonly) uchar *maskData;
-@end
-
 // MARK: -
 @implementation Contour
 - (instancetype)initWithCVMat:(Mat)cvMat {
@@ -68,7 +58,6 @@ using namespace cv;
 }
 
 - (void)dealloc {
-    free(self.maskData);
 }
 
 // MARK: -

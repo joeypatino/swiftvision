@@ -10,7 +10,6 @@
 #import "NSArray+extras.h"
 #import "UIColor+extras.h"
 // structs
-#import "EigenVector.h"
 #import "LineInfo.h"
 
 static inline struct LineInfo

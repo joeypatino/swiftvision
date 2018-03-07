@@ -1,7 +1,7 @@
 #import <Foundation/Foundation.h>
 
 @class Contour;
-@interface ContourEdge : NSObject
+@interface ContourEdge: NSObject
 /// a computed score
 @property (nonatomic, assign, readonly) double score;
 /// the distance along the x axis between contourA and contourB

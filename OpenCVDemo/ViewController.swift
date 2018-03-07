@@ -14,7 +14,6 @@ class ViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        print(OpenCV.version())
     }
 
     @IBAction func runAction(_ sender: Any) {
@@ -26,7 +25,7 @@ class ViewController: UIViewController {
             .dilate(CGSize(width: 14, height: 1))?
             .erode(CGSize(width: 0, height: 5)) else { return }
 
-        let imageContours = UIImageContours(image: masked, filteredBy: contourFilter)
+        let imageContours = PageDewarp(image: masked, filteredBy: contourFilter)
         imageView.image = imageContours.renderKeyPoints()
 //        imageView.image = imageContours.renderMasks()
 //        imageView.image = imageContours.render()

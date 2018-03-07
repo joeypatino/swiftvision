@@ -1,14 +1,17 @@
 #import <opencv2/opencv.hpp>
-#import "UIImageContours.h"
+#import "PageDewarp.h"
 // models
+#import "ContourSpanInfo.h"
+// private
 #import "Contour+internal.h"
 #import "ContourSpan+internal.h"
-#import "ContourSpanInfo.h"
+#import "ContourSpanInfo+internal.h"
 // extras
 #import "functions.h"
 #import "NSArray+extras.h"
 #import "UIImage+Mat.h"
 #import "UIImage+OpenCV.h"
+#import "UIImage+Contour.h"
 // structs
 #import "EigenVector.h"
 #import "LineInfo.h"
@@ -25,13 +28,7 @@ EigenVectorMake(cv::Point2f x, cv::Point2f y) {
 using namespace std;
 using namespace cv;
 
-@interface ContourSpanInfo()
-- (instancetype _Nonnull)initWithCorners:(CGRectOutline)corners
-                            xCoordinates:(NSArray <NSArray <NSNumber *> *> *_Nonnull)xCoordinates
-                            yCoordinates:(NSArray <NSNumber *> *_Nonnull)yCoordinates;
-@end
-
-@interface UIImageContours ()
+@interface PageDewarp ()
 @property (nonatomic, strong) UIImage *inputImage;
 @property (nonatomic, strong) NSArray<Contour *> *contours;
 @property (nonatomic, strong) NSArray<ContourSpan *> *spans;
@@ -39,7 +36,7 @@ using namespace cv;
 @end
 
 // MARK: -
-@implementation UIImageContours
+@implementation PageDewarp
 - (instancetype)initWithImage:(UIImage *)image filteredBy:(BOOL (^)(Contour *c))filter {
     self = [super init];
     NSArray <Contour *> *contours = [image contoursFilteredBy:filter];
@@ -85,15 +82,6 @@ using namespace cv;
         }
     }
 
-    NSArray <NSArray <NSValue *> *> *allSpanPoints = [self allSamplePointsFromSpans:self.spans];
-    ContourSpanInfo *spanInfo = [self generateSpanInfoWithSpanPoints:allSpanPoints andEigenVector:self.eigenVector];
-    [self renderCorners:spanInfo.corners using:[UIColor greenColor] in:display];
-    [spanInfo defaultParmeters];
-
-    NSMutableArray <NSValue *> *destinationPoints = @[].mutableCopy;
-    [destinationPoints addObject:[NSValue valueWithCGPoint:spanInfo.corners.topLeft]];
-    [destinationPoints addObjectsFromArray:[allSpanPoints valueForKeyPath: @"@unionOfArrays.self"]];
-
     return [[UIImage alloc] initWithCVMat:display];
 }
 
@@ -128,21 +116,19 @@ using namespace cv;
 }
 
 - (UIImage *)renderDewarped {
-//    NSMutableArray *allXCoords = @[].mutableCopy;
-//    NSMutableArray *allYCoords = @[].mutableCopy;
-//    for (ContourSpan *span in self.spans) {
-//        ContourSpanInfo *spanPoints = [span keyPointsUsingEigenVector:self.eigenVector];
-//        printf("[%s, %s, %s, %s]\n",
-//               [NSStringFromCGPoint(spanPoints.corners.topLeft) UTF8String],
-//               [NSStringFromCGPoint(spanPoints.corners.topRight) UTF8String],
-//               [NSStringFromCGPoint(spanPoints.corners.botRight) UTF8String],
-//               [NSStringFromCGPoint(spanPoints.corners.botLeft) UTF8String]);
-//
-//        [allXCoords addObjectsFromArray:spanPoints.xCoordinates];
-//        [allYCoords addObjectsFromArray:spanPoints.yCoordinates];
-//    }
+    UIImage *renderedContours = [self render];
+    cv::Mat display = [renderedContours mat];
 
-    return [[UIImage alloc] init];
+    NSArray <NSArray <NSValue *> *> *allSpanPoints = [self allSamplePointsFromSpans:self.spans];
+    ContourSpanInfo *spanInfo = [self generateSpanInfoWithSpanPoints:allSpanPoints andEigenVector:self.eigenVector];
+    [self renderCorners:spanInfo.corners using:[UIColor greenColor] in:display];
+    [spanInfo defaultParmeters];
+
+    NSMutableArray <NSValue *> *destinationPoints = @[].mutableCopy;
+    [destinationPoints addObject:[NSValue valueWithCGPoint:spanInfo.corners.topLeft]];
+    [destinationPoints addObjectsFromArray:[allSpanPoints valueForKeyPath: @"@unionOfArrays.self"]];
+
+    return [[UIImage alloc] initWithCVMat:display];
 }
 
 // MARK: - Render helpers
@@ -205,8 +191,8 @@ using namespace cv;
 
 - (ContourSpanInfo *)generateSpanInfoWithSpanPoints:(NSArray <NSArray <NSValue *> *> *)spanPoints andEigenVector:(EigenVector)eigenVector {
     CGSize sz = self.inputImage.size;
-    cv::Point2f eigenVectorx = geom::convertTo(eigenVector.x);
-    cv::Point2f eigenVectory = geom::convertTo(eigenVector.y);
+    Point2f eigenVectorx = geom::convertTo(eigenVector.x);
+    Point2f eigenVectory = geom::convertTo(eigenVector.y);
     CGRectOutline rectOutline = geom::outlineWithSize(sz);
 
     NSArray <NSValue *> *pts = @[[NSValue valueWithCGPoint:rectOutline.topLeft],

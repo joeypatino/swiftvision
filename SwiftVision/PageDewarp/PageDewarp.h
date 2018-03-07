@@ -14,7 +14,7 @@ typedef NS_ENUM(NSUInteger, ContourRenderingMode) {
     ContourRenderingModeFill
 };
 
-@interface UIImageContours : NSObject
+@interface PageDewarp: NSObject
 - (instancetype _Nonnull)init NS_UNAVAILABLE;
 - (instancetype _Nonnull)initWithImage:(UIImage * _Nonnull)image filteredBy:(nullable BOOL (^)(Contour *_Nonnull contour))filter;
 /// returns an image containing all the contours, rendered in a default color and mode.
@@ -32,7 +32,7 @@ typedef NS_ENUM(NSUInteger, ContourRenderingMode) {
 @end
 
 /// subscript support
-@interface UIImageContours (SubscriptSupport)
+@interface PageDewarp (SubscriptSupport)
 - (Contour *_Nullable)objectAtIndexedSubscript:(NSInteger)idx;
 @property (nonatomic, assign, readonly) NSInteger count;
 @end

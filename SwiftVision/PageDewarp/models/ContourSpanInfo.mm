@@ -32,7 +32,6 @@ using namespace cv;
 }
 
 - (CGSize)roughDimensions {
-    NSLog(@"%s - %@", __PRETTY_FUNCTION__, self);
     CGPoint w = geom::subtract(self.corners.topRight, self.corners.topLeft);
     CGPoint h = geom::subtract(self.corners.botLeft, self.corners.topLeft);
     double pageWidth = norm(Mat(geom::convertTo(w)));
@@ -40,7 +39,7 @@ using namespace cv;
     return CGSizeMake(pageHeight, pageWidth);
 }
 
-- (void)defaultParmeters {
+- (NSArray <NSNumber *> *)defaultParmeters {
     CGSize dimensions = self.roughDimensions;
 
     // Array of object points in the object coordinate space
@@ -49,18 +48,18 @@ using namespace cv;
         Point3f(dimensions.width, 0, 0),
         Point3f(dimensions.width, dimensions.height, 0),
         Point3f(0, dimensions.height, 0)};
-    logs::describe_vector(cornersObject3d, "cornersObject3d");
+    //logs::describe_vector(cornersObject3d, "cornersObject3d");
 
     // Array of corresponding image points
     vector<Point2f> imagePoints = nsarray::convertTo(nsarray::pointsFrom(self.corners));
-    logs::describe_vector(imagePoints, "imagePoints");
+    //logs::describe_vector(imagePoints, "imagePoints");
 
     // Input camera matrix
     float FOCAL_LENGTH = 1.8;
     vector<Point3f> camera = { Point3f(FOCAL_LENGTH, 0, 0),
         Point3f(0, FOCAL_LENGTH, 0),
         Point3f(0, 0, 1) };
-    logs::describe_vector(camera, "camera");
+    //logs::describe_vector(camera, "camera");
 
     // Input vector of distortion coefficients
     vector<float> distanceCoeffs = {0.0, 0.0, 0.0, 0.0, 0.0};
@@ -72,8 +71,8 @@ using namespace cv;
     // estimate rotation and translation from four 2D-to-3D point correspondences
     solvePnP(cornersObject3d, imagePoints, Mat(3, 3, CV_32F, &camera), Mat(5, 1, CV_32F, &distanceCoeffs), rvec, tvec);
 
-    logs::describe_vector(rvec, "rvec");
-    logs::describe_vector(tvec, "tvec");
+    //logs::describe_vector(rvec, "rvec");
+    //logs::describe_vector(tvec, "tvec");
 
     // our initial guess for the cubic has no slope
     vector<float> cubicSlope = vector<float>({0.0, 0.0});
@@ -93,10 +92,87 @@ using namespace cv;
         }
     }
 
-    logs::describe_vector(params, "params");
+    //logs::describe_vector(params, "params");
+    NSMutableArray <NSNumber *> *outputParams = @[].mutableCopy;
+    for (int i = 0; i < params.total(); i++) {
+        NSNumber *value = [NSNumber numberWithFloat:params.at<float>(i, 0)];
+        [outputParams addObject:value];
+    }
+
+    return outputParams;
 }
 
-- (void)destinationPoints {
-
+- (NSArray <NSNumber *> *)spanCounts {
+    NSMutableArray *counts = @[].mutableCopy;
+    for (NSArray <NSNumber *> *xPoints in self.xCoordinates) {
+        [counts addObject:[NSNumber numberWithInteger:xPoints.count]];
+    }
+    return [NSArray arrayWithArray:counts];
 }
+
+- (NSArray <NSValue *> *)keyPointIndexes:(NSArray <NSNumber *> *)_spanCounts {
+
+    int vals[] = {7, 2, 13, 27, 26, 27, 27, 27, 27, 28, 27, 27, 11, 16, 26, 27, 25, 2, 26, 28, 6, 22, 24, 2, 24, 3, 27, 25, 25, 26, 2, 27};
+    int vals_sz = sizeof(vals) / sizeof(int);
+    NSMutableArray <NSNumber *> *spanCounts = @[].mutableCopy;
+    for (int i = 0; i < vals_sz; i++) {
+        [spanCounts addObject:[NSNumber numberWithInt:vals[i]]];
+    }
+
+    NSNumber *nptsNum = [spanCounts valueForKeyPath:@"@sum.self"];
+    int npts = nptsNum.intValue;
+
+    vector<vector<int>> keyPointIdx = vector<vector<int>>(2, vector<int>(npts+1, 0));
+//    vector<vector<int>> keyPointIdx(2, vector<int>(npts+1, 0));
+//    std::vector<int> keyPointsX = std::vector<int>(npts+1);
+//    std::vector<int> keyPointsY = std::vector<int>(npts+1);
+    int start = 1;
+    for (int i = 0; i < spanCounts.count; i++) {
+        int count = spanCounts[i].intValue;
+        int end = start + count;
+        for (int r = start; r < end; r++) {
+//            keyPointsY[r] = 8+i;
+            keyPointIdx[1][r] = 8+i;
+        }
+        start = end;
+    }
+//    Mat keyPointIndex;
+//    Mat input[] = {Mat(keyPointsX), Mat(keyPointsY)};
+//    hconcat(input, 2, keyPointIndex);
+//    logs::describe_vector(keyPointIndex, "keyPointIndex");
+//    logs::describe_vector(Mat(keyPointIdx), "keyPointIndex");
+
+//    printf("[");
+//    for (int c = 0; c < keyPointIdx.size(); c++) {
+//        vector<int> col = keyPointIdx[c];
+//
+//        printf("[");
+//        for (int r = 0; r < col.size(); r++) {
+//            int value = col[r];
+//            printf("%i ", value);
+//        }
+//        printf("]\n");
+//    }
+//    printf("]");
+//
+
+    int numCols = int(keyPointIdx.size());
+    int numRows = int(keyPointIdx[0].size());
+
+    printf("[");
+    for (int y = 0; y < numRows; y++) {
+        printf("[");
+        for (int x = 0; x < numCols; x++) {
+            int z = keyPointIdx[x][y];
+            printf("%i", z);
+            if (x < numCols-1) { printf(", "); }
+        }
+        if (y < numRows-1) { printf("]\n"); }
+        else { printf("]"); }
+    }
+    printf("]\n");
+
+    return @[];
+}
+
 @end

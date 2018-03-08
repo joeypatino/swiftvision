@@ -29,7 +29,7 @@ class ViewController: UIViewController {
 //        imageView.image = imageContours.render()
 //        imageView.image = imageContours.renderMasks()
 //        imageView.image = imageContours.renderKeyPoints()
-//        imageView.image = imageContours.renderDewarped()
+        imageView.image = imageContours.renderDewarped()
     }
 
     private func contourFilter(contour: Contour) -> Bool {

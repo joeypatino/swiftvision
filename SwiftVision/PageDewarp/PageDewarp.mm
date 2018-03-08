@@ -17,6 +17,8 @@
 #import "LineInfo.h"
 #import "CGRectOutline.h"
 
+#import "DLib.h"
+
 static inline struct EigenVector
 EigenVectorMake(cv::Point2f x, cv::Point2f y) {
     struct EigenVector eigen;
@@ -119,16 +121,24 @@ using namespace cv;
     UIImage *renderedContours = [self render];
     cv::Mat display = [renderedContours mat];
 
+
     NSArray <NSArray <NSValue *> *> *allSpanPoints = [self allSamplePointsFromSpans:self.spans];
     ContourSpanInfo *spanInfo = [self generateSpanInfoWithSpanPoints:allSpanPoints andEigenVector:self.eigenVector];
-    [self renderCorners:spanInfo.corners using:[UIColor greenColor] in:display];
-    [spanInfo defaultParmeters];
 
+    DLibWrapper *dlib = [[DLibWrapper alloc] init];
+    NSArray <NSNumber *> *params = [spanInfo defaultParmeters];
+    NSArray <NSValue *> *keyPointIndexes = [spanInfo keyPointIndexes:spanInfo.spanCounts];
+    NSArray <NSValue *> *destinationPoints = [self keyPointIndexesFromPoints:allSpanPoints info:spanInfo];
+
+    [dlib optimize:params to:destinationPoints keyPointIdx:keyPointIndexes];
+    return [[UIImage alloc] initWithCVMat:display];
+}
+
+- (NSArray <NSValue *> *)keyPointIndexesFromPoints:(NSArray <NSArray <NSValue *> *> *)spanPoints info:(ContourSpanInfo *)spanInfo {
     NSMutableArray <NSValue *> *destinationPoints = @[].mutableCopy;
     [destinationPoints addObject:[NSValue valueWithCGPoint:spanInfo.corners.topLeft]];
-    [destinationPoints addObjectsFromArray:[allSpanPoints valueForKeyPath: @"@unionOfArrays.self"]];
-
-    return [[UIImage alloc] initWithCVMat:display];
+    [destinationPoints addObjectsFromArray:[spanPoints valueForKeyPath: @"@unionOfArrays.self"]];
+    return [NSArray arrayWithArray:destinationPoints];
 }
 
 // MARK: - Render helpers

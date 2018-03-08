@@ -57,6 +57,7 @@ namespace logs {
     void describe_vector(std::vector<cv::Point> vector, char const *name);
     void describe_vector(std::vector<cv::Point2f> vector, char const *name);
     void describe_vector(std::vector<cv::Point3f> vector, char const *name);
+    void describe_vector(std::vector<std::vector<int>> vector, char const *name);
     void describe_vector(cv::Mat mat, char const *name);
 
     void describe_values(NSArray <NSNumber *> *pts, char const *name);

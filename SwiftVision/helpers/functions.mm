@@ -192,6 +192,30 @@ namespace logs {
         printf("\n");
     }
 
+    void describe_vector(std::vector<std::vector<int>> vector, char const *name) {
+        printf("\n############ cv::Mat::%s ############\n", name);
+        printf("----------------------------\n");
+
+        int numCols = int(vector.size());
+        int numRows = int(vector[0].size());
+
+        printf("[");
+        for (int y = 0; y < numRows; y++) {
+            printf("[");
+            for (int x = 0; x < numCols; x++) {
+                int z = vector[x][y];
+                printf("%i", z);
+                if (x < numCols-1) { printf(", "); }
+            }
+            if (y < numRows-1) { printf("]\n"); }
+            else { printf("]"); }
+        }
+        printf("]\n");
+
+        printf("\n############ %s ############\n", name);
+        printf("\n");
+    }
+
     void describe_vector( cv::Mat mat, char const *name ) {
         printf("\n############ cv::Mat::%s ############\n", name);
         printf("type: %i\n", mat.type());

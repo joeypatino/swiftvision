@@ -48,6 +48,8 @@
 		D48B4B712028AC0600DFA7AC /* input_image.jpeg in Resources */ = {isa = PBXBuildFile; fileRef = D48B4B702028AC0600DFA7AC /* input_image.jpeg */; };
 		D48B4B732028B6DC00DFA7AC /* 90550036_edit.jpg in Resources */ = {isa = PBXBuildFile; fileRef = D48B4B722028B6DC00DFA7AC /* 90550036_edit.jpg */; };
 		D4A3AE1D20502FB20075C45B /* libdlib.a in Frameworks */ = {isa = PBXBuildFile; fileRef = D4A3AE1C20502FB20075C45B /* libdlib.a */; };
+		D4A3AE202050601E0075C45B /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D40B286620288EE100CA8559 /* CoreGraphics.framework */; };
+		D4A3AE21205060220075C45B /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D40B286820288EEA00CA8559 /* UIKit.framework */; };
 		D4A572C2202A1E1500D8F4B0 /* PageDewarp.h in Headers */ = {isa = PBXBuildFile; fileRef = D4A572C0202A1E1500D8F4B0 /* PageDewarp.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		D4A572C3202A1E1500D8F4B0 /* PageDewarp.mm in Sources */ = {isa = PBXBuildFile; fileRef = D4A572C1202A1E1500D8F4B0 /* PageDewarp.mm */; };
 		D4A572CA202A1E2800D8F4B0 /* UIImage+Mat.h in Headers */ = {isa = PBXBuildFile; fileRef = D4A572C6202A1E2800D8F4B0 /* UIImage+Mat.h */; };
@@ -147,6 +149,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D4A3AE21205060220075C45B /* UIKit.framework in Frameworks */,
+				D4A3AE202050601E0075C45B /* CoreGraphics.framework in Frameworks */,
 				D4A3AE1D20502FB20075C45B /* libdlib.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -786,7 +790,7 @@
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					DLIB_JPEG_SUPPORT,
 					DLIB_NO_GUI_SUPPORT,
-					NDEBUG,
+					__NDEBUG,
 					DLIB_USE_BLAS,
 					DLIB_USE_LAPACK,
 				);
@@ -823,7 +827,7 @@
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					DLIB_JPEG_SUPPORT,
 					DLIB_NO_GUI_SUPPORT,
-					NDEBUG,
+					__NDEBUG,
 					DLIB_USE_BLAS,
 					DLIB_USE_LAPACK,
 				);

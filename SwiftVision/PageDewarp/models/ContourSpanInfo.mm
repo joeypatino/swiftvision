@@ -2,6 +2,8 @@
 #import "ContourSpanInfo.h"
 // structs
 #import "CGRectOutline.h"
+// private
+#import "ContourSpanInfo+internal.h"
 // extras
 #import "functions.h"
 
@@ -39,7 +41,7 @@ using namespace cv;
     return CGSizeMake(pageHeight, pageWidth);
 }
 
-- (NSArray <NSNumber *> *)defaultParmeters {
+- (NSArray <NSNumber *> *)defaultParameters {
     CGSize dimensions = self.roughDimensions;
 
     // Array of object points in the object coordinate space
@@ -51,7 +53,7 @@ using namespace cv;
     //logs::describe_vector(cornersObject3d, "cornersObject3d");
 
     // Array of corresponding image points
-    vector<Point2f> imagePoints = nsarray::convertTo(nsarray::pointsFrom(self.corners));
+    vector<Point2f> imagePoints = nsarray::convertTo2f(nsarray::pointsFrom(self.corners));
     //logs::describe_vector(imagePoints, "imagePoints");
 
     // Input camera matrix
@@ -110,7 +112,7 @@ using namespace cv;
     return [NSArray arrayWithArray:counts];
 }
 
-- (NSArray <NSValue *> *)keyPointIndexes:(NSArray <NSNumber *> *)_spanCounts {
+- (NSArray <NSValue *> *)keyPointIndexesForSpanCounts:(NSArray <NSNumber *> *)_spanCounts {
 
     int vals[] = {7, 2, 13, 27, 26, 27, 27, 27, 27, 28, 27, 27, 11, 16, 26, 27, 25, 2, 26, 28, 6, 22, 24, 2, 24, 3, 27, 25, 25, 26, 2, 27};
     int vals_sz = sizeof(vals) / sizeof(int);
@@ -123,56 +125,28 @@ using namespace cv;
     int npts = nptsNum.intValue;
 
     vector<vector<int>> keyPointIdx = vector<vector<int>>(2, vector<int>(npts+1, 0));
-//    vector<vector<int>> keyPointIdx(2, vector<int>(npts+1, 0));
-//    std::vector<int> keyPointsX = std::vector<int>(npts+1);
-//    std::vector<int> keyPointsY = std::vector<int>(npts+1);
     int start = 1;
     for (int i = 0; i < spanCounts.count; i++) {
         int count = spanCounts[i].intValue;
         int end = start + count;
         for (int r = start; r < end; r++) {
-//            keyPointsY[r] = 8+i;
             keyPointIdx[1][r] = 8+i;
         }
         start = end;
     }
-//    Mat keyPointIndex;
-//    Mat input[] = {Mat(keyPointsX), Mat(keyPointsY)};
-//    hconcat(input, 2, keyPointIndex);
-//    logs::describe_vector(keyPointIndex, "keyPointIndex");
-//    logs::describe_vector(Mat(keyPointIdx), "keyPointIndex");
-
-//    printf("[");
-//    for (int c = 0; c < keyPointIdx.size(); c++) {
-//        vector<int> col = keyPointIdx[c];
-//
-//        printf("[");
-//        for (int r = 0; r < col.size(); r++) {
-//            int value = col[r];
-//            printf("%i ", value);
-//        }
-//        printf("]\n");
-//    }
-//    printf("]");
-//
-
-    int numCols = int(keyPointIdx.size());
-    int numRows = int(keyPointIdx[0].size());
-
-    printf("[");
-    for (int y = 0; y < numRows; y++) {
-        printf("[");
-        for (int x = 0; x < numCols; x++) {
-            int z = keyPointIdx[x][y];
-            printf("%i", z);
-            if (x < numCols-1) { printf(", "); }
-        }
-        if (y < numRows-1) { printf("]\n"); }
-        else { printf("]"); }
+    for (int i = 0; i < npts; i++) {
+        keyPointIdx[0][i+1] = i + 8 + int(spanCounts.count);
     }
-    printf("]\n");
+    //logs::describe_vector(keyPointIdx, "keyPointIdx");
 
-    return @[];
+    return vectors::convertTo(keyPointIdx);
+}
+
+- (NSArray <NSValue *> *)destinationPoints:(NSArray <NSArray <NSValue *> *> *)spanPoints {
+    NSMutableArray <NSValue *> *destinationPoints = @[].mutableCopy;
+    [destinationPoints addObject:[NSValue valueWithCGPoint:self.corners.topLeft]];
+    [destinationPoints addObjectsFromArray:[spanPoints valueForKeyPath: @"@unionOfArrays.self"]];
+    return [NSArray arrayWithArray:destinationPoints];
 }
 
 @end

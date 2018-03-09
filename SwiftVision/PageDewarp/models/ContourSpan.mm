@@ -86,7 +86,7 @@ using namespace std;
 - (LineInfo)spanLineInfoFromKeyPoints:(NSArray <NSValue *> *)keyPoints {
     Mat mean = Mat();
     Mat eigen = Mat();
-    vector<Point2f> vectorPoints = nsarray::convertTo(keyPoints);
+    vector<Point2f> vectorPoints = nsarray::convertTo2f(keyPoints);
     Mat computePoints = Mat(vectorPoints).reshape(1);
     PCACompute(computePoints, mean, eigen, 1);
 

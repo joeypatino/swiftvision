@@ -20,10 +20,16 @@
 		D40B2889202891D800CA8559 /* PrefixHeader.pch in Headers */ = {isa = PBXBuildFile; fileRef = D40B2888202891D800CA8559 /* PrefixHeader.pch */; };
 		D428ED32204987D6002A7322 /* UIColor+extras.h in Headers */ = {isa = PBXBuildFile; fileRef = D428ED30204987D6002A7322 /* UIColor+extras.h */; };
 		D428ED33204987D6002A7322 /* UIColor+extras.m in Sources */ = {isa = PBXBuildFile; fileRef = D428ED31204987D6002A7322 /* UIColor+extras.m */; };
+		D42981762052AE0600A28DF5 /* KeyPointProjector.h in Headers */ = {isa = PBXBuildFile; fileRef = D42981742052AE0600A28DF5 /* KeyPointProjector.h */; };
+		D42981772052AE0600A28DF5 /* KeyPointProjector.mm in Sources */ = {isa = PBXBuildFile; fileRef = D42981752052AE0600A28DF5 /* KeyPointProjector.mm */; };
+		D429817F2052AF0300A28DF5 /* SwiftVisionTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = D429817E2052AF0300A28DF5 /* SwiftVisionTests.mm */; };
+		D42981812052AF0300A28DF5 /* SwiftVision.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D40B28392028856300CA8559 /* SwiftVision.framework */; };
+		D42981872052AF6B00A28DF5 /* opencv2.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D40B28452028858A00CA8559 /* opencv2.framework */; };
+		D42981882052AF7800A28DF5 /* functions.mm in Sources */ = {isa = PBXBuildFile; fileRef = D439947020388BA800D9B783 /* functions.mm */; };
 		D439947120388BA800D9B783 /* functions.h in Headers */ = {isa = PBXBuildFile; fileRef = D439946F20388BA800D9B783 /* functions.h */; };
 		D439947220388BA800D9B783 /* functions.mm in Sources */ = {isa = PBXBuildFile; fileRef = D439947020388BA800D9B783 /* functions.mm */; };
-		D47109BA2050282600F38C26 /* DLibWrapper.mm in Sources */ = {isa = PBXBuildFile; fileRef = D47109B42050271600F38C26 /* DLibWrapper.mm */; };
-		D4711A0F20502DA800F38C26 /* DLibWrapper.h in Headers */ = {isa = PBXBuildFile; fileRef = D47109B32050271600F38C26 /* DLibWrapper.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		D47109BA2050282600F38C26 /* KeyPointOptimizer.mm in Sources */ = {isa = PBXBuildFile; fileRef = D47109B42050271600F38C26 /* KeyPointOptimizer.mm */; };
+		D4711A0F20502DA800F38C26 /* KeyPointOptimizer.h in Headers */ = {isa = PBXBuildFile; fileRef = D47109B32050271600F38C26 /* KeyPointOptimizer.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		D471D7D620500C4A00F38C26 /* LineInfo.h in Headers */ = {isa = PBXBuildFile; fileRef = D471D7D320500C4A00F38C26 /* LineInfo.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		D471D7D720500C4A00F38C26 /* CGRectOutline.h in Headers */ = {isa = PBXBuildFile; fileRef = D471D7D420500C4A00F38C26 /* CGRectOutline.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		D471D7D820500C4A00F38C26 /* EigenVector.h in Headers */ = {isa = PBXBuildFile; fileRef = D471D7D520500C4A00F38C26 /* EigenVector.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -59,6 +65,13 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
+		D42981822052AF0300A28DF5 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = D40B28302028856300CA8559 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = D40B28382028856300CA8559;
+			remoteInfo = SwiftVision;
+		};
 		D47109B0205025E500F38C26 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = D40B28302028856300CA8559 /* Project object */;
@@ -85,10 +98,15 @@
 		D40B2888202891D800CA8559 /* PrefixHeader.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PrefixHeader.pch; sourceTree = "<group>"; };
 		D428ED30204987D6002A7322 /* UIColor+extras.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "UIColor+extras.h"; sourceTree = "<group>"; };
 		D428ED31204987D6002A7322 /* UIColor+extras.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "UIColor+extras.m"; sourceTree = "<group>"; };
+		D42981742052AE0600A28DF5 /* KeyPointProjector.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = KeyPointProjector.h; sourceTree = "<group>"; };
+		D42981752052AE0600A28DF5 /* KeyPointProjector.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = KeyPointProjector.mm; sourceTree = "<group>"; };
+		D429817C2052AF0300A28DF5 /* SwiftVisionTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = SwiftVisionTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		D429817E2052AF0300A28DF5 /* SwiftVisionTests.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = SwiftVisionTests.mm; sourceTree = "<group>"; };
+		D42981802052AF0300A28DF5 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		D439946F20388BA800D9B783 /* functions.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = functions.h; sourceTree = "<group>"; };
 		D439947020388BA800D9B783 /* functions.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = functions.mm; sourceTree = "<group>"; };
-		D47109B32050271600F38C26 /* DLibWrapper.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DLibWrapper.h; sourceTree = "<group>"; };
-		D47109B42050271600F38C26 /* DLibWrapper.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = DLibWrapper.mm; sourceTree = "<group>"; };
+		D47109B32050271600F38C26 /* KeyPointOptimizer.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = KeyPointOptimizer.h; sourceTree = "<group>"; };
+		D47109B42050271600F38C26 /* KeyPointOptimizer.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = KeyPointOptimizer.mm; sourceTree = "<group>"; };
 		D4711A0820502C1200F38C26 /* Accelerate.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Accelerate.framework; path = System/Library/Frameworks/Accelerate.framework; sourceTree = SDKROOT; };
 		D4711A0A20502C7500F38C26 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		D4711A0C20502C8300F38C26 /* CoreFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreFoundation.framework; path = System/Library/Frameworks/CoreFoundation.framework; sourceTree = SDKROOT; };
@@ -145,6 +163,15 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		D42981792052AF0300A28DF5 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				D42981812052AF0300A28DF5 /* SwiftVision.framework in Frameworks */,
+				D42981872052AF6B00A28DF5 /* opencv2.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		D471E46620501DDC00F38C26 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -164,6 +191,7 @@
 				D40B283B2028856300CA8559 /* SwiftVision */,
 				D471E46B20501DDC00F38C26 /* DLib */,
 				D40B28502028860D00CA8559 /* OpenCVDemo */,
+				D429817D2052AF0300A28DF5 /* SwiftVisionTests */,
 				D40B283A2028856300CA8559 /* Products */,
 				D40B28442028858A00CA8559 /* Frameworks */,
 			);
@@ -175,6 +203,7 @@
 				D40B28392028856300CA8559 /* SwiftVision.framework */,
 				D40B284F2028860D00CA8559 /* OpenCVDemo.app */,
 				D471E46A20501DDC00F38C26 /* DLib.framework */,
+				D429817C2052AF0300A28DF5 /* SwiftVisionTests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -221,6 +250,15 @@
 				D40B285D2028860D00CA8559 /* Info.plist */,
 			);
 			path = OpenCVDemo;
+			sourceTree = "<group>";
+		};
+		D429817D2052AF0300A28DF5 /* SwiftVisionTests */ = {
+			isa = PBXGroup;
+			children = (
+				D429817E2052AF0300A28DF5 /* SwiftVisionTests.mm */,
+				D42981802052AF0300A28DF5 /* Info.plist */,
+			);
+			path = SwiftVisionTests;
 			sourceTree = "<group>";
 		};
 		D439946E20388B9700D9B783 /* helpers */ = {
@@ -283,8 +321,8 @@
 				D4A3AE1C20502FB20075C45B /* libdlib.a */,
 				D471E46C20501DDC00F38C26 /* DLib.h */,
 				D471E46D20501DDC00F38C26 /* Info.plist */,
-				D47109B32050271600F38C26 /* DLibWrapper.h */,
-				D47109B42050271600F38C26 /* DLibWrapper.mm */,
+				D47109B32050271600F38C26 /* KeyPointOptimizer.h */,
+				D47109B42050271600F38C26 /* KeyPointOptimizer.mm */,
 			);
 			path = DLib;
 			sourceTree = "<group>";
@@ -297,6 +335,8 @@
 				D471D7D920500CE600F38C26 /* models */,
 				D471D7EA20500D0800F38C26 /* models+internal */,
 				D471D7F720500F2200F38C26 /* extensions+internal */,
+				D42981742052AE0600A28DF5 /* KeyPointProjector.h */,
+				D42981752052AE0600A28DF5 /* KeyPointProjector.mm */,
 			);
 			path = PageDewarp;
 			sourceTree = "<group>";
@@ -341,6 +381,7 @@
 				D471D7F120500D0800F38C26 /* Contour+internal.h in Headers */,
 				D4A572CA202A1E2800D8F4B0 /* UIImage+Mat.h in Headers */,
 				D471D7FB20500F2200F38C26 /* UIImage+Contour.h in Headers */,
+				D42981762052AE0600A28DF5 /* KeyPointProjector.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -348,7 +389,7 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				D4711A0F20502DA800F38C26 /* DLibWrapper.h in Headers */,
+				D4711A0F20502DA800F38C26 /* KeyPointOptimizer.h in Headers */,
 				D471E46E20501DDC00F38C26 /* DLib.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -392,6 +433,24 @@
 			productReference = D40B284F2028860D00CA8559 /* OpenCVDemo.app */;
 			productType = "com.apple.product-type.application";
 		};
+		D429817B2052AF0300A28DF5 /* SwiftVisionTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = D42981842052AF0300A28DF5 /* Build configuration list for PBXNativeTarget "SwiftVisionTests" */;
+			buildPhases = (
+				D42981782052AF0300A28DF5 /* Sources */,
+				D42981792052AF0300A28DF5 /* Frameworks */,
+				D429817A2052AF0300A28DF5 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				D42981832052AF0300A28DF5 /* PBXTargetDependency */,
+			);
+			name = SwiftVisionTests;
+			productName = SwiftVisionTests;
+			productReference = D429817C2052AF0300A28DF5 /* SwiftVisionTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
 		D471E46920501DDC00F38C26 /* DLib */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = D471E46F20501DDC00F38C26 /* Build configuration list for PBXNativeTarget "DLib" */;
@@ -429,6 +488,10 @@
 						CreatedOnToolsVersion = 9.2;
 						ProvisioningStyle = Automatic;
 					};
+					D429817B2052AF0300A28DF5 = {
+						CreatedOnToolsVersion = 9.2;
+						ProvisioningStyle = Automatic;
+					};
 					D471E46920501DDC00F38C26 = {
 						CreatedOnToolsVersion = 9.2;
 						ProvisioningStyle = Automatic;
@@ -451,6 +514,7 @@
 				D40B28382028856300CA8559 /* SwiftVision */,
 				D40B284E2028860D00CA8559 /* OpenCVDemo */,
 				D471E46920501DDC00F38C26 /* DLib */,
+				D429817B2052AF0300A28DF5 /* SwiftVisionTests */,
 			);
 		};
 /* End PBXProject section */
@@ -475,6 +539,13 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		D429817A2052AF0300A28DF5 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		D471E46820501DDC00F38C26 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -492,6 +563,7 @@
 				D4A572CC202A1E2800D8F4B0 /* UIImage+Mat.mm in Sources */,
 				D471D7E920500CE600F38C26 /* ContourSpanInfo.mm in Sources */,
 				D4A572C3202A1E1500D8F4B0 /* PageDewarp.mm in Sources */,
+				D42981772052AE0600A28DF5 /* KeyPointProjector.mm in Sources */,
 				D471D7FA20500F2200F38C26 /* UIImage+Contour.mm in Sources */,
 				D471D7F520500EE300F38C26 /* UIImage+OpenCV.mm in Sources */,
 				D428ED33204987D6002A7322 /* UIColor+extras.m in Sources */,
@@ -512,17 +584,31 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		D42981782052AF0300A28DF5 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				D429817F2052AF0300A28DF5 /* SwiftVisionTests.mm in Sources */,
+				D42981882052AF7800A28DF5 /* functions.mm in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		D47109B92050281F00F38C26 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				D47109BA2050282600F38C26 /* DLibWrapper.mm in Sources */,
+				D47109BA2050282600F38C26 /* KeyPointOptimizer.mm in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
+		D42981832052AF0300A28DF5 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = D40B28382028856300CA8559 /* SwiftVision */;
+			targetProxy = D42981822052AF0300A28DF5 /* PBXContainerItemProxy */;
+		};
 		D47109B1205025E500F38C26 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = D471E46920501DDC00F38C26 /* DLib */;
@@ -773,6 +859,40 @@
 			};
 			name = Release;
 		};
+		D42981852052AF0300A28DF5 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = 6C6HU52U6Y;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/SwiftVision",
+				);
+				INFOPLIST_FILE = SwiftVisionTests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = com.onitaps.SwiftVisionTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		D42981862052AF0300A28DF5 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = 6C6HU52U6Y;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/SwiftVision",
+				);
+				INFOPLIST_FILE = SwiftVisionTests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = com.onitaps.SwiftVisionTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
 		D471E47020501DDC00F38C26 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -873,6 +993,15 @@
 			buildConfigurations = (
 				D40B285F2028860D00CA8559 /* Debug */,
 				D40B28602028860D00CA8559 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		D42981842052AF0300A28DF5 /* Build configuration list for PBXNativeTarget "SwiftVisionTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				D42981852052AF0300A28DF5 /* Debug */,
+				D42981862052AF0300A28DF5 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

@@ -7,6 +7,7 @@
 #import "ContourSpan+internal.h"
 #import "ContourSpanInfo+internal.h"
 // extras
+#import "KeyPointProjector.h"
 #import "functions.h"
 #import "NSArray+extras.h"
 #import "UIImage+Mat.h"
@@ -19,6 +20,11 @@
 
 #import "DLib.h"
 
+/**
+RVEC_IDX = slice(0, 3)   # index of rvec in params vector
+TVEC_IDX = slice(3, 6)   # index of tvec in params vector
+CUBIC_IDX = slice(6, 8)  # index of cubic slopes in params vector
+*/
 static inline struct EigenVector
 EigenVectorMake(cv::Point2f x, cv::Point2f y) {
     struct EigenVector eigen;
@@ -35,6 +41,7 @@ using namespace cv;
 @property (nonatomic, strong) NSArray<Contour *> *contours;
 @property (nonatomic, strong) NSArray<ContourSpan *> *spans;
 @property (nonatomic, assign) EigenVector eigenVector;
+@property (nonatomic, strong) KeyPointProjector *projector;
 @end
 
 // MARK: -
@@ -47,6 +54,7 @@ using namespace cv;
     self.contours = contours;
     self.spans = spans;
     self.eigenVector = [self generateEigenVectorFromSpans:self.spans];
+    self.projector = [[KeyPointProjector alloc] init];
 
     return self;
 }
@@ -121,16 +129,22 @@ using namespace cv;
     UIImage *renderedContours = [self render];
     cv::Mat display = [renderedContours mat];
 
-
     NSArray <NSArray <NSValue *> *> *allSpanPoints = [self allSamplePointsFromSpans:self.spans];
     ContourSpanInfo *spanInfo = [self generateSpanInfoWithSpanPoints:allSpanPoints andEigenVector:self.eigenVector];
 
-    DLibWrapper *dlib = [[DLibWrapper alloc] init];
-    NSArray <NSNumber *> *params = [spanInfo defaultParmeters];
-    NSArray <NSValue *> *keyPointIndexes = [spanInfo keyPointIndexes:spanInfo.spanCounts];
-    NSArray <NSValue *> *destinationPoints = [self keyPointIndexesFromPoints:allSpanPoints info:spanInfo];
+    NSArray <NSNumber *> *parameters = [spanInfo defaultParameters];
+    NSArray <NSValue *> *keyPointIndexes = [spanInfo keyPointIndexesForSpanCounts:spanInfo.spanCounts];
+    NSArray <NSValue *> *destinationPoints = [spanInfo destinationPoints:allSpanPoints];
 
-    [dlib optimize:params to:destinationPoints keyPointIdx:keyPointIndexes];
+    KeyPointOptimizer *dlib = [[KeyPointOptimizer alloc] initWithBaseParameters:parameters
+                                                              destinationPoints:destinationPoints
+                                                                keyPointIndexes:keyPointIndexes];
+    [dlib optimizeWithObjective:^(std::vector<double> vector){
+        NSArray <NSValue *> *ppts = [self.projector projectKeypoints:keyPointIndexes of:vector];
+        // sum((dstpoints - ppts)**2)
+        return 0.0;
+    }];
+
     return [[UIImage alloc] initWithCVMat:display];
 }
 
@@ -173,7 +187,7 @@ using namespace cv;
     for (NSArray <NSValue *> *pointValues in samples) {
         Mat mean = Mat();
         Mat eigen = Mat();
-        std::vector<Point2f> vectorPoints = nsarray::convertTo(pointValues);
+        std::vector<Point2f> vectorPoints = nsarray::convertTo2f(pointValues);
         Mat computePoints = Mat(vectorPoints).reshape(1);
         PCACompute(computePoints, mean, eigen, 1);
 

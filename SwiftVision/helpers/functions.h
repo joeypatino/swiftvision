@@ -2,6 +2,7 @@
 #define functions_h
 
 #include <stdio.h>
+#include <string>
 #import <opencv2/opencv.hpp>
 #import <UIKit/UIKit.h>
 #import "CGRectOutline.h"
@@ -32,6 +33,11 @@ namespace geom {
     CGRectOutline outlineWithSize(CGSize size);
 }
 
+namespace math {
+    double polyval(std::vector<double> p, double x);
+    std::vector<double> polyval(std::vector<double> p, std::vector<double> x);
+}
+
 namespace nsarray {
     /// Adds pt to each point in points and returns the modified points
     NSArray <NSValue *> * add(NSArray <NSValue *> *points, cv::Point2f pt);
@@ -48,16 +54,26 @@ namespace nsarray {
     NSArray <NSValue *> * pix2norm(CGSize size, NSArray <NSValue *> *points);
     NSArray <NSValue *> * norm2pix(CGSize size, NSArray <NSValue *> *points);
 
-    std::vector<cv::Point2f> convertTo(NSArray <NSValue *> *points);
+    std::vector<cv::Point2f> convertTo2f(NSArray <NSValue *> *points);
+    std::vector<double> convertTo(NSArray <NSValue *> *values);
+    std::vector<double> convertTo(NSArray <NSNumber *> *numbers);
+
     NSArray <NSValue *> * pointsFrom(CGRectOutline cornerOutline);
+    NSArray <NSNumber *> * numbersAlongAxis(int axis, NSArray <NSValue *> *values);
+}
+
+namespace vectors {
+    std::vector<std::vector<double>> hstack(std::vector<std::vector<double>> mat1, std::vector<std::vector<double>> mat2);
+    std::vector<std::vector<double>> reshape(std::vector<double> p, int rows, int cols);
+    NSArray <NSValue *> * convertTo(std::vector<std::vector<int>> vector);
 }
 
 namespace logs {
+    void describe_vector(std::vector<std::vector<double>> vector, char const *name);
     void describe_vector(std::vector<double> vector, char const *name);
     void describe_vector(std::vector<cv::Point> vector, char const *name);
     void describe_vector(std::vector<cv::Point2f> vector, char const *name);
     void describe_vector(std::vector<cv::Point3f> vector, char const *name);
-    void describe_vector(std::vector<std::vector<int>> vector, char const *name);
     void describe_vector(cv::Mat mat, char const *name);
 
     void describe_values(NSArray <NSNumber *> *pts, char const *name);

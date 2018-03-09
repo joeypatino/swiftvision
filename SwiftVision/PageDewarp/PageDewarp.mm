@@ -2,12 +2,12 @@
 #import "PageDewarp.h"
 // models
 #import "ContourSpanInfo.h"
+#import "KeyPointProjector.h"
 // private
 #import "Contour+internal.h"
 #import "ContourSpan+internal.h"
 #import "ContourSpanInfo+internal.h"
 // extras
-#import "KeyPointProjector.h"
 #import "functions.h"
 #import "NSArray+extras.h"
 #import "UIImage+Mat.h"
@@ -20,11 +20,6 @@
 
 #import "DLib.h"
 
-/**
-RVEC_IDX = slice(0, 3)   # index of rvec in params vector
-TVEC_IDX = slice(3, 6)   # index of tvec in params vector
-CUBIC_IDX = slice(6, 8)  # index of cubic slopes in params vector
-*/
 static inline struct EigenVector
 EigenVectorMake(cv::Point2f x, cv::Point2f y) {
     struct EigenVector eigen;
@@ -133,26 +128,17 @@ using namespace cv;
     ContourSpanInfo *spanInfo = [self generateSpanInfoWithSpanPoints:allSpanPoints andEigenVector:self.eigenVector];
 
     NSArray <NSNumber *> *parameters = [spanInfo defaultParameters];
-    NSArray <NSValue *> *keyPointIndexes = [spanInfo keyPointIndexesForSpanCounts:spanInfo.spanCounts];
+    std::vector<cv::Point2f> keyPointIndexes = nsarray::convertTo2f([spanInfo keyPointIndexesForSpanCounts:spanInfo.spanCounts]);
     NSArray <NSValue *> *destinationPoints = [spanInfo destinationPoints:allSpanPoints];
 
-    KeyPointOptimizer *dlib = [[KeyPointOptimizer alloc] initWithBaseParameters:parameters
-                                                              destinationPoints:destinationPoints
-                                                                keyPointIndexes:keyPointIndexes];
+    KeyPointOptimizer *dlib = [[KeyPointOptimizer alloc] initWithBaseParameters:parameters destinationPoints:destinationPoints];
     [dlib optimizeWithObjective:^(std::vector<double> vector){
-        NSArray <NSValue *> *ppts = [self.projector projectKeypoints:keyPointIndexes of:vector];
+        std::vector<cv::Point2f> ppts = [self.projector projectKeypoints:keyPointIndexes of:vector];
         // sum((dstpoints - ppts)**2)
         return 0.0;
     }];
 
     return [[UIImage alloc] initWithCVMat:display];
-}
-
-- (NSArray <NSValue *> *)keyPointIndexesFromPoints:(NSArray <NSArray <NSValue *> *> *)spanPoints info:(ContourSpanInfo *)spanInfo {
-    NSMutableArray <NSValue *> *destinationPoints = @[].mutableCopy;
-    [destinationPoints addObject:[NSValue valueWithCGPoint:spanInfo.corners.topLeft]];
-    [destinationPoints addObjectsFromArray:[spanPoints valueForKeyPath: @"@unionOfArrays.self"]];
-    return [NSArray arrayWithArray:destinationPoints];
 }
 
 // MARK: - Render helpers

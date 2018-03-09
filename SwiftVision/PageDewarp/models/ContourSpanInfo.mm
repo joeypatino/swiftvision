@@ -112,15 +112,7 @@ using namespace cv;
     return [NSArray arrayWithArray:counts];
 }
 
-- (NSArray <NSValue *> *)keyPointIndexesForSpanCounts:(NSArray <NSNumber *> *)_spanCounts {
-
-    int vals[] = {7, 2, 13, 27, 26, 27, 27, 27, 27, 28, 27, 27, 11, 16, 26, 27, 25, 2, 26, 28, 6, 22, 24, 2, 24, 3, 27, 25, 25, 26, 2, 27};
-    int vals_sz = sizeof(vals) / sizeof(int);
-    NSMutableArray <NSNumber *> *spanCounts = @[].mutableCopy;
-    for (int i = 0; i < vals_sz; i++) {
-        [spanCounts addObject:[NSNumber numberWithInt:vals[i]]];
-    }
-
+- (NSArray <NSValue *> *)keyPointIndexesForSpanCounts:(NSArray <NSNumber *> *)spanCounts {
     NSNumber *nptsNum = [spanCounts valueForKeyPath:@"@sum.self"];
     int npts = nptsNum.intValue;
 

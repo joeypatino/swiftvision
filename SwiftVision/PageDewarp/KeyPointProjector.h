@@ -1,6 +1,6 @@
+#import <opencv2/opencv.hpp>
 #import <UIKit/UIKit.h>
 
 @interface KeyPointProjector : NSObject
-- (NSArray <NSValue *> *)projectKeypoints:(NSArray <NSValue *> *)keyPoints of:(std::vector<double>)vectors;
-- (NSArray <NSValue *> *)projectXY:(NSArray <NSValue *> *)xyCoordsArr of:(std::vector<double>)vectors;
+- (std::vector<cv::Point2f>)projectKeypoints:(std::vector<cv::Point2f>)keyPoints of:(std::vector<double>)vectors;
 @end

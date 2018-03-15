@@ -26,6 +26,7 @@
 		D42981812052AF0300A28DF5 /* SwiftVision.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D40B28392028856300CA8559 /* SwiftVision.framework */; };
 		D42981872052AF6B00A28DF5 /* opencv2.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D40B28452028858A00CA8559 /* opencv2.framework */; };
 		D42981882052AF7800A28DF5 /* functions.mm in Sources */ = {isa = PBXBuildFile; fileRef = D439947020388BA800D9B783 /* functions.mm */; };
+		D429818A2057EF4D00A28DF5 /* input_image_eroded.png in Resources */ = {isa = PBXBuildFile; fileRef = D42981892057EF4D00A28DF5 /* input_image_eroded.png */; };
 		D439947120388BA800D9B783 /* functions.h in Headers */ = {isa = PBXBuildFile; fileRef = D439946F20388BA800D9B783 /* functions.h */; };
 		D439947220388BA800D9B783 /* functions.mm in Sources */ = {isa = PBXBuildFile; fileRef = D439947020388BA800D9B783 /* functions.mm */; };
 		D47109BA2050282600F38C26 /* KeyPointOptimizer.mm in Sources */ = {isa = PBXBuildFile; fileRef = D47109B42050271600F38C26 /* KeyPointOptimizer.mm */; };
@@ -103,6 +104,7 @@
 		D429817C2052AF0300A28DF5 /* SwiftVisionTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = SwiftVisionTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		D429817E2052AF0300A28DF5 /* SwiftVisionTests.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = SwiftVisionTests.mm; sourceTree = "<group>"; };
 		D42981802052AF0300A28DF5 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		D42981892057EF4D00A28DF5 /* input_image_eroded.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = input_image_eroded.png; sourceTree = "<group>"; };
 		D439946F20388BA800D9B783 /* functions.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = functions.h; sourceTree = "<group>"; };
 		D439947020388BA800D9B783 /* functions.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = functions.mm; sourceTree = "<group>"; };
 		D47109B32050271600F38C26 /* KeyPointOptimizer.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = KeyPointOptimizer.h; sourceTree = "<group>"; };
@@ -241,6 +243,7 @@
 			isa = PBXGroup;
 			children = (
 				D48B4B702028AC0600DFA7AC /* input_image.jpeg */,
+				D42981892057EF4D00A28DF5 /* input_image_eroded.png */,
 				D48B4B722028B6DC00DFA7AC /* 90550036_edit.jpg */,
 				D40B28512028860D00CA8559 /* AppDelegate.swift */,
 				D40B28532028860D00CA8559 /* ViewController.swift */,
@@ -536,6 +539,7 @@
 				D48B4B712028AC0600DFA7AC /* input_image.jpeg in Resources */,
 				D48B4B732028B6DC00DFA7AC /* 90550036_edit.jpg in Resources */,
 				D40B28572028860D00CA8559 /* Main.storyboard in Resources */,
+				D429818A2057EF4D00A28DF5 /* input_image_eroded.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

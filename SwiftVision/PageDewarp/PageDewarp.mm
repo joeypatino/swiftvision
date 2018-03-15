@@ -13,6 +13,7 @@
 #import "UIImage+Mat.h"
 #import "UIImage+OpenCV.h"
 #import "UIImage+Contour.h"
+#import "UIColor+extras.h"
 // structs
 #import "EigenVector.h"
 #import "LineInfo.h"
@@ -31,8 +32,72 @@ EigenVectorMake(cv::Point2f x, cv::Point2f y) {
 using namespace std;
 using namespace cv;
 
+class CostFunction:public MinProblemSolver::Function {
+public:
+    CostFunction(std::vector<cv::Point2f> _destinationPoints, std::vector<cv::Point2f> _keyPointIndexes, KeyPointProjector *_projector){
+        destinationPoints = _destinationPoints;
+        keyPointIndexes = _keyPointIndexes;
+        projector = _projector;
+    }
+    double calc(const double* x)const {
+        std::vector<cv::Point2f> ppts = [projector projectKeypoints:keyPointIndexes of:(double *)x];
+        Mat diff = Mat(destinationPoints) - Mat(ppts);
+        Mat sqrd = diff.mul(diff);
+        Scalar sums = cv::sum(sqrd);
+        printf("%f\n", sums[0] + sums[1]);
+        return sums[0] + sums[1];
+    }
+    void setInput(std::vector<double> input) {
+        inputParams = input;
+    }
+    int getDims() const {
+        return int(inputParams.size());
+    }
+private:
+    std::vector<double> inputParams;
+    std::vector<cv::Point2f> destinationPoints;
+    std::vector<cv::Point2f> keyPointIndexes;
+    KeyPointProjector *projector;
+};
+
+struct OptimizerResult {
+    double fun;
+    double dur;
+    std::vector<double> x;
+};
+
+class Optimizer {
+public:
+    Optimizer(Ptr<CostFunction> fn, std::vector<double> x) {
+        params = x;
+        fn->setInput(params);
+        solver = DownhillSolver::create();
+        solver->setTermCriteria(TermCriteria(TermCriteria::MAX_ITER + TermCriteria::EPS, 500000, 0.0001));
+        solver->setInitStep(Mat_<double>(1, int(x.size()), 0.5));
+        solver->setFunction(fn);
+    }
+    OptimizerResult optimize() {
+        NSDate *start = [NSDate date];
+        NSTimeInterval interval = [start timeIntervalSinceNow];
+        OptimizerResult res;
+        res.fun = solver->minimize(params);
+        res.x = params;
+        res.dur = interval - [start timeIntervalSinceNow];
+        return res;
+    }
+    double optimizeOnce(std::vector<double> params) {
+        double x[params.size()];
+        for (int i = 0; i < int(params.size()); i++) {
+            x[i] = params[i];
+        }
+        return solver->getFunction()->calc(x);
+    }
+private:
+    Ptr<DownhillSolver> solver;
+    std::vector<double> params;
+};
+
 @interface PageDewarp ()
-@property (nonatomic, strong) UIImage *inputImage;
 @property (nonatomic, strong) NSArray<Contour *> *contours;
 @property (nonatomic, strong) NSArray<ContourSpan *> *spans;
 @property (nonatomic, assign) EigenVector eigenVector;
@@ -43,115 +108,109 @@ using namespace cv;
 @implementation PageDewarp
 - (instancetype)initWithImage:(UIImage *)image filteredBy:(BOOL (^)(Contour *c))filter {
     self = [super init];
-    NSArray <Contour *> *contours = [image contoursFilteredBy:filter];
-    NSArray <ContourSpan *> *spans = [image spansFromContours:contours];
+    UIImage *mask = [[[image threshold:55 constant:25] dilate:CGSizeMake(9, 1)] erode:CGSizeMake(1, 3)];
+
     self.inputImage = image;
-    self.contours = contours;
-    self.spans = spans;
+    self.contours = [mask contoursFilteredBy:filter];;
+    self.spans = [mask spansFromContours:self.contours];;
     self.eigenVector = [self generateEigenVectorFromSpans:self.spans];
     self.projector = [[KeyPointProjector alloc] init];
 
     return self;
 }
 
-// MARK: -
-- (NSInteger)count {
-    return self.contours.count;
-}
+// MARK: - render dewarped image
+- (UIImage *)render {
+    cv::Mat display = [self.inputImage mat];
 
-- (Contour *)objectAtIndexedSubscript:(NSInteger)idx {
-    return self.contours[idx];
-}
+    NSArray <NSArray <NSValue *> *> *allSpanPoints = [self allSamplePointsFromSpans:self.spans];
 
-// MARK: -
-- (UIImage *)renderMasks {
-   return [self render:[UIColor whiteColor] mode:ContourRenderingModeFill];
-}
+    ContourSpanInfo *spanInfo = [self generateSpanInfoWithSpanPoints:allSpanPoints andEigenVector:self.eigenVector];
+    std::vector<double> params = nsarray::convertTo([spanInfo defaultParameters]);
+    std::vector<cv::Point2f> keyPointIndexes = nsarray::convertTo2f([spanInfo keyPointIndexesForSpanCounts:spanInfo.spanCounts]);
+    std::vector<cv::Point2f> dstpoints = nsarray::convertTo2f([spanInfo destinationPoints:allSpanPoints]);
 
-- (UIImage *)renderKeyPoints {
-    return [self renderKeyPoints:[UIColor redColor] mode:ContourRenderingModeFill];
-}
+    Ptr<CostFunction> fn = Ptr<CostFunction>(new CostFunction(dstpoints, keyPointIndexes, self.projector));
+    Optimizer opt = Optimizer(fn, params);
+    printf("initial objective is %f\n",  opt.optimizeOnce(params));
 
-- (UIImage *)renderKeyPoints:(UIColor *)color mode:(ContourRenderingMode)mode {
-    UIImage *renderedContours = [self render];
-    cv::Mat display = [renderedContours mat];
-
-    for (ContourSpan *span in self.spans) {
-        Point2f start = geom::convertTo(span.line.p1);
-        Point2f end = geom::convertTo(span.line.p2);
-        line(display, start, end, [self scalarColorFrom:span.color], 1, LINE_AA);
-
-        for (NSValue *keyPoint in span.keyPoints) {
-            BOOL filled = (mode == ContourRenderingModeFill) ? ContourRenderingModeFill : ContourRenderingModeOutline;
-            circle(display, geom::convertTo(keyPoint.CGPointValue), 3, [self scalarColorFrom:color], filled ? -1 : 1, LINE_AA);
-        }
-    }
-
+    OptimizerResult res = opt.optimize();
+    printf("optimization took: %f\n", res.dur);
+    printf("final objective is %f\n", res.fun);
     return [[UIImage alloc] initWithCVMat:display];
 }
 
-- (UIImage *)render {
+// MARK: - Debug
+- (UIImage *)renderMasks {
+   return [self render:[UIColor blackColor] mode:ContourRenderingModeFill];
+}
+
+- (UIImage *)renderContours {
+    Mat display = [self.inputImage mat];
+    vector<vector<cv::Point>> contours;
+    for (int i = 0; i < self.contours.count; i++){
+        Contour *contour = self.contours[i];
+        contours.push_back(contour.opencvContour);
+    }
+    for (int i = 0; i < contours.size(); i++) {
+        Contour *contour = self.contours[i];
+        Scalar color = [self scalarColorFrom:contour.color];
+        cv::drawContours(display, contours, i, color, -1);
+    }
+
+    Mat output = [self.inputImage mat];
+    cv::addWeighted(display, 0.7, output, 0.3, 0, output);
+    for (Contour *contour in self.contours) {
+        Scalar color = [self scalarColorFrom:[UIColor whiteColor]];
+        circle(output, geom::convertTo(contour.center), 3, color, 1, LINE_AA);
+        cv::line(output, geom::convertTo(contour.clxMin), geom::convertTo(contour.clxMax), color, 1, LINE_AA);
+    }
+
+    return [[UIImage alloc] initWithCVMat:output];
+}
+
+- (UIImage *)renderOutlines {
     return [self render:[UIColor whiteColor] mode:ContourRenderingModeOutline];
 }
 
 - (UIImage *)render:(UIColor *)color mode:(ContourRenderingMode)mode {
-    BOOL fillConvexPolys = false;
-    Scalar contourColor = [self scalarColorFrom:color];
-
-    Mat outImage = Mat::zeros(self.inputImage.size.height, self.inputImage.size.width, CV_8UC3);
+    Mat outImage = [self.inputImage mat];
     vector<vector<cv::Point> > contours;
 
     for (int i = 0; i < self.contours.count; i++){
         Contour *contour = self.contours[i];
-        // start - debugging
-        if (fillConvexPolys) {
-            cv::Point vertices[4];
-            [contour getBoundingVertices:vertices];
-            fillConvexPoly(outImage, vertices, 4, [self scalarColorFrom:color]);
-        }
-        // end - debugging
-
         contours.push_back(contour.opencvContour);
     }
 
+    Scalar contourColor = [self scalarColorFrom:color];
     BOOL filled = (mode == ContourRenderingModeFill) ? ContourRenderingModeFill : ContourRenderingModeOutline;
     drawContours(outImage, contours, -1, contourColor, filled ? -1 : 1);
 
     return [[UIImage alloc] initWithCVMat:outImage];
 }
 
-- (UIImage *)renderDewarped {
-    UIImage *renderedContours = [self render];
-    cv::Mat display = [renderedContours mat];
+- (UIImage *)renderKeyPoints {
+    return [self renderKeyPoints:[UIColor whiteColor] mode:ContourRenderingModeFill];
+}
 
-    NSArray <NSArray <NSValue *> *> *allSpanPoints = [self allSamplePointsFromSpans:self.spans];
-    ContourSpanInfo *spanInfo = [self generateSpanInfoWithSpanPoints:allSpanPoints andEigenVector:self.eigenVector];
+- (UIImage *)renderKeyPoints:(UIColor *)color mode:(ContourRenderingMode)mode {
+    cv::Mat display = [self.inputImage mat];
 
-    NSArray <NSNumber *> *parameters = [spanInfo defaultParameters];
-    std::vector<cv::Point2f> keyPointIndexes = nsarray::convertTo2f([spanInfo keyPointIndexesForSpanCounts:spanInfo.spanCounts]);
-    NSArray <NSValue *> *destinationPoints = [spanInfo destinationPoints:allSpanPoints];
+    for (ContourSpan *span in self.spans) {
+        Point2f start = geom::convertTo(span.line.p1);
+        Point2f end = geom::convertTo(span.line.p2);
+        line(display, start, end, [self scalarColorFrom:color], 1, LINE_AA);
 
-    KeyPointOptimizer *dlib = [[KeyPointOptimizer alloc] initWithBaseParameters:parameters destinationPoints:destinationPoints];
-    [dlib optimizeWithObjective:^(std::vector<double> vector){
-        std::vector<cv::Point2f> ppts = [self.projector projectKeypoints:keyPointIndexes of:vector];
-        // sum((dstpoints - ppts)**2)
-        return 0.0;
-    }];
+        for (NSValue *keyPoint in span.keyPoints) {
+            BOOL filled = (mode == ContourRenderingModeFill) ? ContourRenderingModeFill : ContourRenderingModeOutline;
+            circle(display, geom::convertTo(keyPoint.CGPointValue), 3, [self scalarColorFrom:span.color], filled ? -1 : 1, LINE_AA);
+        }
+    }
 
     return [[UIImage alloc] initWithCVMat:display];
 }
 
 // MARK: - Render helpers
-- (void)renderCorners:(CGRectOutline)cornerOutline using:(UIColor *)color in:(cv::Mat)display {
-    NSArray <NSValue *> *corners = nsarray::pointsFrom(cornerOutline);
-    NSArray <NSValue *> *normalizedCornerPoints = nsarray::norm2pix(self.inputImage.size, corners);
-    std::vector<cv::Point> vectorPoints = std::vector<cv::Point>();
-    for (NSValue *point in normalizedCornerPoints) {
-        vectorPoints.push_back(geom::convertTo(point.CGPointValue));
-    }
-    polylines(display, vectorPoints, YES, [self scalarColorFrom:color]);
-}
-
 - (Scalar)scalarColorFrom:(UIColor *)color {
     CGFloat red;
     CGFloat green;
@@ -228,9 +287,9 @@ using namespace cv;
     Point2f p10 = px0 * eigenVectorx + py1 * eigenVectory;
 
     CGRectOutline corners = CGRectOutlineMake(geom::convertTo(p00),
-                                              geom::convertTo(p01),
+                                              geom::convertTo(p10),
                                               geom::convertTo(p11),
-                                              geom::convertTo(p10));
+                                              geom::convertTo(p01));
 
     NSMutableArray <NSNumber *> *ycoords = @[].mutableCopy;
     NSMutableArray <NSArray <NSNumber *> *> *xcoords = @[].mutableCopy;
@@ -249,7 +308,11 @@ using namespace cv;
 - (NSArray <NSArray <NSValue *> *> *)allSamplePointsFromSpans:(NSArray <ContourSpan *> *)spans {
     NSMutableArray <NSArray <NSValue *> *> *samplePoints = @[].mutableCopy;
     for (ContourSpan *span in spans) {
-        [samplePoints addObjectsFromArray:span.spanPoints];
+        NSMutableArray <NSValue *> *spanPoints = @[].mutableCopy;
+        for (NSArray <NSValue *> *points in span.spanPoints) {
+            [spanPoints addObjectsFromArray:points];
+        }
+        [samplePoints addObject:spanPoints];
     }
     return [NSArray arrayWithArray:samplePoints];
 }

@@ -38,7 +38,63 @@ using namespace cv;
     CGPoint h = geom::subtract(self.corners.botLeft, self.corners.topLeft);
     double pageWidth = norm(Mat(geom::convertTo(w)));
     double pageHeight = norm(Mat(geom::convertTo(h)));
-    return CGSizeMake(pageHeight, pageWidth);
+    return CGSizeMake(pageWidth, pageHeight);
+}
+
+- (std::vector<double>)testDefaultParameters {
+    cout << "OpenCV version : " << CV_VERSION << endl;
+    cout << "Major version : " << CV_MAJOR_VERSION << endl;
+    cout << "Minor version : " << CV_MINOR_VERSION << endl;
+    cout << "Subminor version : " << CV_SUBMINOR_VERSION << endl;
+
+    std::vector<cv::Point3d> corner_object3d = {
+        cv::Point3d(0.00000000,0.00000000,0.00000000),
+        cv::Point3d(1.52559066,0.00000000,0.00000000),
+        cv::Point3d(1.52559066,2.01848703,0.00000000),
+        cv::Point3d(0.00000000,2.01848703,0.00000000)
+    };
+    std::vector<cv::Point2d> corners = {
+        cv::Point2d(-0.74919273,-1.01938189),
+        cv::Point2d(0.77626074,-0.99892364),
+        cv::Point2d(0.74919273,1.01938189),
+        cv::Point2d(-0.77626074,0.99892364)
+    };
+    std::vector<cv::Point3d> camera = {
+        cv::Point3d(1.8,0.0,0.0),
+        cv::Point3d(0.0,1.8,0.0),
+        cv::Point3d(0.0,0.0,1.0)
+    };
+    Mat K = Mat(3, 3, cv::DataType<double>::type, &camera);
+    Mat rvec;
+    Mat tvec;
+
+    solvePnP(corner_object3d,
+             corners,
+             K,
+             vector<double>({0, 0, 0, 0, 0}),
+             rvec,
+             tvec, true, SOLVEPNP_DLS);
+
+    logs::describe_vector(corner_object3d, "corner_object3d");
+    logs::describe_vector(corners, "corners");
+    logs::describe_vector(camera, "K");
+    logs::describe_vector(rvec, "rvec");
+    logs::describe_vector(tvec, "tvec");
+
+    /**
+     expected rvec:
+     --------------
+     [-0.00000000]
+     [0.00000000]
+     [0.01341045]
+
+     expected tvec:
+     --------------
+     [-0.74919273]
+     [-1.01938189]
+     [1.79999995]
+     */
+    return {};
 }
 
 - (NSArray <NSNumber *> *)defaultParameters {
@@ -50,56 +106,73 @@ using namespace cv;
         Point3f(dimensions.width, 0, 0),
         Point3f(dimensions.width, dimensions.height, 0),
         Point3f(0, dimensions.height, 0)};
-    //logs::describe_vector(cornersObject3d, "cornersObject3d");
 
     // Array of corresponding image points
     vector<Point2f> imagePoints = nsarray::convertTo2f(nsarray::pointsFrom(self.corners));
-    //logs::describe_vector(imagePoints, "imagePoints");
 
-    // Input camera matrix
-    float FOCAL_LENGTH = 1.8;
-    vector<Point3f> camera = { Point3f(FOCAL_LENGTH, 0, 0),
-        Point3f(0, FOCAL_LENGTH, 0),
-        Point3f(0, 0, 1) };
-    //logs::describe_vector(camera, "camera");
-
-    // Input vector of distortion coefficients
-    vector<float> distanceCoeffs = {0.0, 0.0, 0.0, 0.0, 0.0};
+    std::vector<cv::Point3d> camera = {
+        cv::Point3d(1.8,0.0,0.0),
+        cv::Point3d(0.0,1.8,0.0),
+        cv::Point3d(0.0,0.0,1.0)
+    };
+    Mat K = Mat(3, 3, cv::DataType<double>::type, &camera);
 
     // output rotation vectors
-    Mat rvec;
+    vector<double> rvec;
     // output translation vectors
-    Mat tvec;
-    // estimate rotation and translation from four 2D-to-3D point correspondences
-    solvePnP(cornersObject3d, imagePoints, Mat(3, 3, CV_32F, &camera), Mat(5, 1, CV_32F, &distanceCoeffs), rvec, tvec);
+    vector<double> tvec;
 
-    //logs::describe_vector(rvec, "rvec");
-    //logs::describe_vector(tvec, "tvec");
+    // estimate rotation and translation from four 2D-to-3D point correspondences
+    solvePnP(cornersObject3d, imagePoints,
+             K,
+             Mat(5, 1, cv::DataType<double>::type, 0.0),
+             rvec,
+             tvec);
 
     // our initial guess for the cubic has no slope
-    vector<float> cubicSlope = vector<float>({0.0, 0.0});
+    vector<double> cubicSlope = vector<double>({0.0, 0.0});
 
-    Mat params = Mat();
-    params.push_back(rvec);
-    params.push_back(tvec);
-    params.push_back(cubicSlope);
+    rvec = {
+        -0.00000000,
+        0.00000000,
+        0.01341045
+    };
+    tvec = {
+        -0.74919273,
+        -1.01938189,
+        1.79999995
+    };
+    vector<double> params;
+    for (int i = 0; i < int(rvec.size()); i++) {
+        params.push_back(rvec[i]);
+    }
+    for (int i = 0; i < int(tvec.size()); i++) {
+        params.push_back(tvec[i]);
+    }
+    for (int i = 0; i < int(cubicSlope.size()); i++) {
+        params.push_back(cubicSlope[i]);
+    }
 
     for (NSNumber *number in self.yCoordinates) {
-        params.push_back(number.floatValue);
+        params.push_back(number.doubleValue);
     }
 
     for (NSArray <NSNumber *> *numbers in self.xCoordinates) {
         for (NSNumber *number in numbers) {
-            params.push_back(number.floatValue);
+            params.push_back(number.doubleValue);
         }
     }
 
-    //logs::describe_vector(params, "params");
     NSMutableArray <NSNumber *> *outputParams = @[].mutableCopy;
-    for (int i = 0; i < params.total(); i++) {
-        NSNumber *value = [NSNumber numberWithFloat:params.at<float>(i, 0)];
-        [outputParams addObject:value];
+    for (int i = 0; i < int(params.size()); i++) {
+        [outputParams addObject:@(params[i])];
     }
+
+    //logs::describe_vector(cornersObject3d, "cornersObject3d");
+    //logs::describe_vector(imagePoints, "corners");
+    //logs::describe_vector(camera, "K");
+    //logs::describe_vector(rvec, "rvec");
+    //logs::describe_vector(tvec, "tvec");
 
     return outputParams;
 }
@@ -115,7 +188,6 @@ using namespace cv;
 - (NSArray <NSValue *> *)keyPointIndexesForSpanCounts:(NSArray <NSNumber *> *)spanCounts {
     NSNumber *nptsNum = [spanCounts valueForKeyPath:@"@sum.self"];
     int npts = nptsNum.intValue;
-
     vector<vector<int>> keyPointIdx = vector<vector<int>>(2, vector<int>(npts+1, 0));
     int start = 1;
     for (int i = 0; i < spanCounts.count; i++) {
@@ -129,7 +201,7 @@ using namespace cv;
     for (int i = 0; i < npts; i++) {
         keyPointIdx[0][i+1] = i + 8 + int(spanCounts.count);
     }
-    //logs::describe_vector(keyPointIdx, "keyPointIdx");
+    //logs::describe_points(vectors::convertTo(keyPointIdx), "keyPointIdx");
 
     return vectors::convertTo(keyPointIdx);
 }

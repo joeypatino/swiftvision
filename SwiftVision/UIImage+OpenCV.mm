@@ -9,11 +9,20 @@
     cv::Mat outImage;
     cv::Size axis = cv::Size(0, 0);
 
-    float scl_x = float(self.size.width) / size.width;
-    float scl_y = float(self.size.height) / size.height;
-    float scl = 1.0 / fmaxf(scl_x, scl_y);
+    float height = self.size.height;
+    float width = self.size.width;
+    float scl_x = width / size.width;
+    float scl_y = height / size.height;
 
-    cv::resize(inImage, outImage, axis, scl, scl, cv::INTER_AREA);
+    int scl = int(ceil(MAX(scl_x, scl_y)));
+
+    float inv_scl = 1.0;
+    if (scl > 1.0) {
+        inv_scl = 1.0/scl;
+        cv::resize(inImage, outImage, axis, inv_scl, inv_scl, cv::INTER_AREA);
+    } else {
+        outImage = inImage;
+    }
 
     return [[UIImage alloc] initWithCVMat: outImage];
 }

@@ -176,9 +176,9 @@ namespace nsarray {
 
     NSArray <NSValue *> * pointsFrom(CGRectOutline cornerOutline) {
         return @[[NSValue valueWithCGPoint:cornerOutline.topLeft],
-                 [NSValue valueWithCGPoint:cornerOutline.botLeft],
+                 [NSValue valueWithCGPoint:cornerOutline.topRight],
                  [NSValue valueWithCGPoint:cornerOutline.botRight],
-                 [NSValue valueWithCGPoint:cornerOutline.topRight]];
+                 [NSValue valueWithCGPoint:cornerOutline.botLeft]];
     }
 
 
@@ -284,6 +284,22 @@ namespace logs {
         printf("\n");
     }
 
+    void describe_vector(std::vector<float> vector, char const *name) {
+        printf("\n# %s #\n", name);
+        printf("size: {%zul}\n", vector.size());
+        printf("----------------------------\n");
+        int numRows = int(vector.size());
+        printf("[");
+        for (int x = 0; x < numRows; x++) {
+            float z = vector[x];
+            printf("%f", z);
+            if (x < numRows-1) { printf(",\n"); }
+            else { printf("]\n"); }
+        }
+        printf("----------------------------\n");
+        printf("\n");
+    }
+
     void describe_vector(std::vector<cv::Point> vector, char const *name ) {
         printf("\n############ cv::Point %s ############\n", name);
         printf("size: {%zul}\n", vector.size());
@@ -295,8 +311,30 @@ namespace logs {
         printf("\n");
     }
 
+    void describe_vector(std::vector<cv::Point2d> vector, char const *name ) {
+        printf("\n############ cv::Point2d %s ############\n", name);
+        printf("size: {%zul}\n", vector.size());
+        printf("----------------------------\n");
+
+        std::cout << vector << std::endl;
+
+        printf("\n############ %s ############\n", name);
+        printf("\n");
+    }
+
     void describe_vector(std::vector<cv::Point2f> vector, char const *name ) {
         printf("\n############ cv::Point2f %s ############\n", name);
+        printf("size: {%zul}\n", vector.size());
+        printf("----------------------------\n");
+
+        std::cout << vector << std::endl;
+
+        printf("\n############ %s ############\n", name);
+        printf("\n");
+    }
+
+    void describe_vector(std::vector<cv::Point3d> vector, char const *name) {
+        printf("\n############ cv::Point3d %s ############\n", name);
         printf("size: {%zul}\n", vector.size());
         printf("----------------------------\n");
 

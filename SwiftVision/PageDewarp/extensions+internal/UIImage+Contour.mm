@@ -7,13 +7,21 @@
 #import "Contour+internal.h"
 #import "ContourSpan+internal.h"
 #import "UIImage+Mat.h"
+// extras
+#import "functions.h"
 
 using namespace std;
 using namespace cv;
 
+
 @implementation UIImage (Contour)
 // MARK: -
 - (NSArray<Contour *> *)contoursFilteredBy:(BOOL (^)(Contour *contour))filter {
+    int TEXT_MIN_WIDTH = 6;         //# min px width of detected text contour
+    int TEXT_MIN_HEIGHT = 2;        //# min px height of detected text contour
+    int TEXT_MIN_ASPECT = 1.5;      //# filter out text contours below this w/h ratio
+    int TEXT_MAX_THICKNESS = 24;    //# max px thickness of detected text contour
+
     Mat cvMat = [self grayScaleMat];
     NSMutableArray <Contour *> *foundContours = @[].mutableCopy;
     vector<vector<cv::Point> > contours;
@@ -21,15 +29,26 @@ using namespace cv;
 
     for (int j = 0; j < contours.size(); j++) {
         vector<cv::Point> points = contours.at(j);
-        int pointCnt = int(points.size());
-        Mat contourMat = Mat(points).reshape(2, pointCnt);
+        cv::Rect rect = cv::boundingRect(points);
+        if (rect.width < TEXT_MIN_WIDTH or
+            rect.height < TEXT_MIN_HEIGHT or
+            rect.width < TEXT_MIN_ASPECT * rect.height)
+            continue;
 
-        if (contourArea(contourMat) == 0) continue;
-
-        Contour *contour = [[Contour alloc] initWithCVMat:contourMat];
+        Contour *contour = [[Contour alloc] initWithCVMat:Mat(points)];
         if (filter)
             if (!filter(contour))
                 continue;
+
+        //logs::describe_vector(contour.mask, "contour.mask");
+        Mat summedMask = Mat::zeros(0, 0, CV_64FC1);
+        cv::reduce(contour.mask, summedMask, 0, CV_REDUCE_SUM, CV_64FC1);
+        //logs::describe_vector(summedMask, "summedMask");
+
+        double max;
+        cv::minMaxLoc(summedMask, NULL, &max);
+        if (max > TEXT_MAX_THICKNESS)
+           continue;
 
         [foundContours addObject:contour];
     }
@@ -122,8 +141,10 @@ using namespace cv;
 
 - (NSArray <ContourEdge *> *)sortedEdgesByScore:(NSArray <ContourEdge *> *)edges {
     return [edges sortedArrayUsingComparator:^NSComparisonResult(ContourEdge *edge1, ContourEdge *edge2){
-        if (edge1.score < edge2.score) return NSOrderedAscending;
-        else if (edge1.score > edge2.score) return NSOrderedDescending;
+        if (edge1.score < edge2.score)
+            return NSOrderedAscending;
+        else if (edge1.score > edge2.score)
+            return NSOrderedDescending;
 
         return NSOrderedSame;
     }];

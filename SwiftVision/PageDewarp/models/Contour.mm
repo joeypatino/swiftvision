@@ -8,6 +8,7 @@
 // extras
 #import "functions.h"
 #import "NSArray+extras.h"
+#import "UIColor+extras.h"
 
 using namespace std;
 using namespace cv;
@@ -40,6 +41,8 @@ using namespace cv;
     _localxMin = min;
     _localxMax = max;
 
+    _color = [UIColor randomColor];
+
     return self;
 }
 
@@ -63,7 +66,7 @@ using namespace cv;
 // MARK: -
 - (NSMutableArray <NSValue *> *)getPointsFromMat:(Mat)mat {
     NSMutableArray <NSValue *> *points = @[].mutableCopy;
-    for (int i = 0; i < mat.total() / 2; i++) {
+    for (int i = 0; i < mat.total(); i++) {
         cv::Point p = mat.at<cv::Point>(i);
         [points addObject:[NSValue valueWithCGPoint:CGPointMake(p.x, p.y)]];
     }
@@ -73,7 +76,7 @@ using namespace cv;
 // MARK: - Contour projection
 - (NSArray<NSNumber *> *)projectContourPoints:(NSArray<NSValue *> *)points {
     NSMutableArray *dots = @[].mutableCopy;
-    for (int i = 0; i < self.size / 2; i++) {
+    for (int i = 0; i < self.size; i++) {
         CGPoint p = [points[i] CGPointValue];
         double projected = [self projectPoint:p];
         [dots addObject:[NSNumber numberWithDouble:projected]];
@@ -151,6 +154,10 @@ using namespace cv;
 
 // MARK: -
 - (ContourEdge *)contourEdgeWithAdjacentContour:(Contour *)otherContour {
+    double EDGE_MAX_OVERLAP = 1.0;   // max px horiz. overlap of contours in span
+    double EDGE_MAX_LENGTH = 100.0;  // max px length of edge connecting contours
+    double EDGE_MAX_ANGLE = 15.0;    // maximum change in angle allowed between contours
+
     Contour *contourA = self;
     Contour *contourB = otherContour;
     if (contourA.clxMin.x > contourB.clxMax.x) {
@@ -158,7 +165,7 @@ using namespace cv;
         contourB = self;
     }
 
-    CGPoint overallTangent = CGPointMake(contourB.center.x - contourA.center.x, contourB.center.y - contourA.center.y);
+    Point2f overallTangent = geom::convertTo(contourB.center) - geom::convertTo(contourA.center);
     double overallAngle = atan2(overallTangent.y, overallTangent.x);
     double deltaAngle = MAX(geom::angleDistance(contourA.angle, overallAngle),
                             geom::angleDistance(contourB.angle, overallAngle)) * 180 / M_PI;
@@ -167,12 +174,8 @@ using namespace cv;
     double xOverlapB = [contourB contourOverlap:contourA];
     double xOverlap = MAX(xOverlapA, xOverlapB);
 
-    Point2d minMaxDiff = Point2d(contourB.clxMin.x - contourA.clxMax.x, contourB.clxMin.y - contourA.clxMax.y);
-    double dist = norm(Mat(minMaxDiff));
-
-    double EDGE_MAX_OVERLAP = 1.0;   // max px horiz. overlap of contours in span
-    double EDGE_MAX_LENGTH = 100.0;  // max px length of edge connecting contours
-    double EDGE_MAX_ANGLE = 25.0;    // maximum change in angle allowed between contours
+    Point2f minMaxDiff = geom::convertTo(contourB.clxMin) - geom::convertTo(contourA.clxMax);
+    double dist = norm(minMaxDiff);
 
     if (dist > EDGE_MAX_LENGTH || xOverlap > EDGE_MAX_OVERLAP || deltaAngle > EDGE_MAX_ANGLE) {
         return nil;
@@ -187,16 +190,15 @@ using namespace cv;
     int width = int(self.bounds.size.width);
     int height = int(self.bounds.size.height);
 
-    Mat tight_mask = Mat::zeros(height, width, CV_32S);
+    Mat tight_mask = Mat::zeros(height, width, CV_32FC1);
     Mat tight_contour = Mat(mat);
 
     int rowCnt = tight_contour.rows;
     for (int h = 0; h < rowCnt; h++) {
         int tightX = tight_contour.at<int>(h, 0);
         int tightY = tight_contour.at<int>(h, 1);
-        tight_mask.at<int>(tightY - originy, tightX - originx) = 1;
+        tight_mask.at<float>(tightY - originy, tightX - originx) = 1.0;
     }
-
     return tight_mask;
 }
 @end

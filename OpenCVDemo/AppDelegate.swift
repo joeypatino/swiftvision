@@ -1,11 +1,3 @@
-//
-//  AppDelegate.swift
-//  OpenCVDemo
-//
-//  Created by Joey Patino on 2/5/18.
-//  Copyright © 2018 Joseph Patino. All rights reserved.
-//
-
 import UIKit
 
 @UIApplicationMain

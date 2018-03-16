@@ -1,7 +1,7 @@
 #import <UIKit/UIKit.h>
 
 @class Contour;
-@class ContourSpanInfo;
+@class ImageRemapper;
 @interface ContourSpan: NSObject
 /// the image that this span belongs to
 @property (nonatomic, strong, readonly) UIImage *_Nonnull image;

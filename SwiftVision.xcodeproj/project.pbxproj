@@ -43,16 +43,16 @@
 		D471D7D820500C4A00F38C26 /* EigenVector.h in Headers */ = {isa = PBXBuildFile; fileRef = D471D7D520500C4A00F38C26 /* EigenVector.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		D471D7E220500CE600F38C26 /* ContourEdge.h in Headers */ = {isa = PBXBuildFile; fileRef = D471D7DA20500CE600F38C26 /* ContourEdge.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		D471D7E320500CE600F38C26 /* Contour.mm in Sources */ = {isa = PBXBuildFile; fileRef = D471D7DB20500CE600F38C26 /* Contour.mm */; };
-		D471D7E420500CE600F38C26 /* ContourSpanInfo.h in Headers */ = {isa = PBXBuildFile; fileRef = D471D7DC20500CE600F38C26 /* ContourSpanInfo.h */; };
+		D471D7E420500CE600F38C26 /* ImageRemapper.h in Headers */ = {isa = PBXBuildFile; fileRef = D471D7DC20500CE600F38C26 /* ImageRemapper.h */; };
 		D471D7E520500CE600F38C26 /* Contour.h in Headers */ = {isa = PBXBuildFile; fileRef = D471D7DD20500CE600F38C26 /* Contour.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		D471D7E620500CE600F38C26 /* ContourSpan.mm in Sources */ = {isa = PBXBuildFile; fileRef = D471D7DE20500CE600F38C26 /* ContourSpan.mm */; };
 		D471D7E720500CE600F38C26 /* ContourEdge.m in Sources */ = {isa = PBXBuildFile; fileRef = D471D7DF20500CE600F38C26 /* ContourEdge.m */; };
 		D471D7E820500CE600F38C26 /* ContourSpan.h in Headers */ = {isa = PBXBuildFile; fileRef = D471D7E020500CE600F38C26 /* ContourSpan.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		D471D7E920500CE600F38C26 /* ContourSpanInfo.mm in Sources */ = {isa = PBXBuildFile; fileRef = D471D7E120500CE600F38C26 /* ContourSpanInfo.mm */; };
+		D471D7E920500CE600F38C26 /* ImageRemapper.mm in Sources */ = {isa = PBXBuildFile; fileRef = D471D7E120500CE600F38C26 /* ImageRemapper.mm */; };
 		D471D7EF20500D0800F38C26 /* ContourEdge+internal.h in Headers */ = {isa = PBXBuildFile; fileRef = D471D7EB20500D0800F38C26 /* ContourEdge+internal.h */; };
 		D471D7F020500D0800F38C26 /* ContourSpan+internal.h in Headers */ = {isa = PBXBuildFile; fileRef = D471D7EC20500D0800F38C26 /* ContourSpan+internal.h */; };
 		D471D7F120500D0800F38C26 /* Contour+internal.h in Headers */ = {isa = PBXBuildFile; fileRef = D471D7ED20500D0800F38C26 /* Contour+internal.h */; };
-		D471D7F220500D0800F38C26 /* ContourSpanInfo+internal.h in Headers */ = {isa = PBXBuildFile; fileRef = D471D7EE20500D0800F38C26 /* ContourSpanInfo+internal.h */; };
+		D471D7F220500D0800F38C26 /* ImageRemapper+internal.h in Headers */ = {isa = PBXBuildFile; fileRef = D471D7EE20500D0800F38C26 /* ImageRemapper+internal.h */; };
 		D471D7F520500EE300F38C26 /* UIImage+OpenCV.mm in Sources */ = {isa = PBXBuildFile; fileRef = D471D7F320500EE300F38C26 /* UIImage+OpenCV.mm */; };
 		D471D7F620500EE300F38C26 /* UIImage+OpenCV.h in Headers */ = {isa = PBXBuildFile; fileRef = D471D7F420500EE300F38C26 /* UIImage+OpenCV.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		D471D7FA20500F2200F38C26 /* UIImage+Contour.mm in Sources */ = {isa = PBXBuildFile; fileRef = D471D7F820500F2200F38C26 /* UIImage+Contour.mm */; };
@@ -147,16 +147,16 @@
 		D471D7D520500C4A00F38C26 /* EigenVector.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EigenVector.h; sourceTree = "<group>"; };
 		D471D7DA20500CE600F38C26 /* ContourEdge.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ContourEdge.h; sourceTree = "<group>"; };
 		D471D7DB20500CE600F38C26 /* Contour.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = Contour.mm; sourceTree = "<group>"; };
-		D471D7DC20500CE600F38C26 /* ContourSpanInfo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ContourSpanInfo.h; sourceTree = "<group>"; };
+		D471D7DC20500CE600F38C26 /* ImageRemapper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ImageRemapper.h; sourceTree = "<group>"; };
 		D471D7DD20500CE600F38C26 /* Contour.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Contour.h; sourceTree = "<group>"; };
 		D471D7DE20500CE600F38C26 /* ContourSpan.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = ContourSpan.mm; sourceTree = "<group>"; };
 		D471D7DF20500CE600F38C26 /* ContourEdge.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ContourEdge.m; sourceTree = "<group>"; };
 		D471D7E020500CE600F38C26 /* ContourSpan.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ContourSpan.h; sourceTree = "<group>"; };
-		D471D7E120500CE600F38C26 /* ContourSpanInfo.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = ContourSpanInfo.mm; sourceTree = "<group>"; };
+		D471D7E120500CE600F38C26 /* ImageRemapper.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = ImageRemapper.mm; sourceTree = "<group>"; };
 		D471D7EB20500D0800F38C26 /* ContourEdge+internal.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "ContourEdge+internal.h"; sourceTree = "<group>"; };
 		D471D7EC20500D0800F38C26 /* ContourSpan+internal.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "ContourSpan+internal.h"; sourceTree = "<group>"; };
 		D471D7ED20500D0800F38C26 /* Contour+internal.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "Contour+internal.h"; sourceTree = "<group>"; };
-		D471D7EE20500D0800F38C26 /* ContourSpanInfo+internal.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "ContourSpanInfo+internal.h"; sourceTree = "<group>"; };
+		D471D7EE20500D0800F38C26 /* ImageRemapper+internal.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "ImageRemapper+internal.h"; sourceTree = "<group>"; };
 		D471D7F320500EE300F38C26 /* UIImage+OpenCV.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = "UIImage+OpenCV.mm"; sourceTree = "<group>"; };
 		D471D7F420500EE300F38C26 /* UIImage+OpenCV.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImage+OpenCV.h"; sourceTree = "<group>"; };
 		D471D7F820500F2200F38C26 /* UIImage+Contour.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = "UIImage+Contour.mm"; sourceTree = "<group>"; };
@@ -316,8 +316,8 @@
 				D471D7DE20500CE600F38C26 /* ContourSpan.mm */,
 				D471D7DA20500CE600F38C26 /* ContourEdge.h */,
 				D471D7DF20500CE600F38C26 /* ContourEdge.m */,
-				D471D7DC20500CE600F38C26 /* ContourSpanInfo.h */,
-				D471D7E120500CE600F38C26 /* ContourSpanInfo.mm */,
+				D471D7DC20500CE600F38C26 /* ImageRemapper.h */,
+				D471D7E120500CE600F38C26 /* ImageRemapper.mm */,
 			);
 			path = models;
 			sourceTree = "<group>";
@@ -328,7 +328,7 @@
 				D471D7ED20500D0800F38C26 /* Contour+internal.h */,
 				D471D7EC20500D0800F38C26 /* ContourSpan+internal.h */,
 				D471D7EB20500D0800F38C26 /* ContourEdge+internal.h */,
-				D471D7EE20500D0800F38C26 /* ContourSpanInfo+internal.h */,
+				D471D7EE20500D0800F38C26 /* ImageRemapper+internal.h */,
 			);
 			path = "models+internal";
 			sourceTree = "<group>";
@@ -402,13 +402,13 @@
 				D43C453A205B239C0072AF8F /* print+extras.hpp in Headers */,
 				D471D7E220500CE600F38C26 /* ContourEdge.h in Headers */,
 				D471D7E820500CE600F38C26 /* ContourSpan.h in Headers */,
-				D471D7E420500CE600F38C26 /* ContourSpanInfo.h in Headers */,
+				D471D7E420500CE600F38C26 /* ImageRemapper.h in Headers */,
 				D471D7D720500C4A00F38C26 /* CGRectOutline.h in Headers */,
 				D471D7D820500C4A00F38C26 /* EigenVector.h in Headers */,
 				D43C4543205C167D0072AF8F /* KeyPointCostFunction.hpp in Headers */,
 				D471D7D620500C4A00F38C26 /* LineInfo.h in Headers */,
 				D43C453F205C151E0072AF8F /* CostFunction.hpp in Headers */,
-				D471D7F220500D0800F38C26 /* ContourSpanInfo+internal.h in Headers */,
+				D471D7F220500D0800F38C26 /* ImageRemapper+internal.h in Headers */,
 				D471D7F020500D0800F38C26 /* ContourSpan+internal.h in Headers */,
 				D428ED32204987D6002A7322 /* UIColor+extras.h in Headers */,
 				D4BAD1C52034DBB200F4A32C /* NSArray+extras.h in Headers */,
@@ -561,7 +561,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				D4A572CC202A1E2800D8F4B0 /* UIImage+Mat.mm in Sources */,
-				D471D7E920500CE600F38C26 /* ContourSpanInfo.mm in Sources */,
+				D471D7E920500CE600F38C26 /* ImageRemapper.mm in Sources */,
 				D4A572C3202A1E1500D8F4B0 /* PageDewarp.mm in Sources */,
 				D43C4539205B239C0072AF8F /* print+extras.cpp in Sources */,
 				D471D7FA20500F2200F38C26 /* UIImage+Contour.mm in Sources */,

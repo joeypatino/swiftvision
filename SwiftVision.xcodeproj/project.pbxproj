@@ -19,7 +19,6 @@
 		D40B2889202891D800CA8559 /* PrefixHeader.pch in Headers */ = {isa = PBXBuildFile; fileRef = D40B2888202891D800CA8559 /* PrefixHeader.pch */; };
 		D428ED32204987D6002A7322 /* UIColor+extras.h in Headers */ = {isa = PBXBuildFile; fileRef = D428ED30204987D6002A7322 /* UIColor+extras.h */; };
 		D428ED33204987D6002A7322 /* UIColor+extras.m in Sources */ = {isa = PBXBuildFile; fileRef = D428ED31204987D6002A7322 /* UIColor+extras.m */; };
-		D42981762052AE0600A28DF5 /* KeyPointProjector.h in Headers */ = {isa = PBXBuildFile; fileRef = D42981742052AE0600A28DF5 /* KeyPointProjector.h */; };
 		D429817F2052AF0300A28DF5 /* SwiftVisionTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = D429817E2052AF0300A28DF5 /* SwiftVisionTests.mm */; };
 		D42981812052AF0300A28DF5 /* SwiftVision.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D40B28392028856300CA8559 /* SwiftVision.framework */; };
 		D42981872052AF6B00A28DF5 /* opencv2.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D40B28452028858A00CA8559 /* opencv2.framework */; };
@@ -33,13 +32,18 @@
 		D43C4536205B1ECB0072AF8F /* math+extras.hpp in Headers */ = {isa = PBXBuildFile; fileRef = D43C4534205B1ECB0072AF8F /* math+extras.hpp */; };
 		D43C4539205B239C0072AF8F /* print+extras.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D43C4537205B239C0072AF8F /* print+extras.cpp */; };
 		D43C453A205B239C0072AF8F /* print+extras.hpp in Headers */ = {isa = PBXBuildFile; fileRef = D43C4538205B239C0072AF8F /* print+extras.hpp */; };
-		D43C453B205BF9720072AF8F /* KeyPointProjector.mm in Sources */ = {isa = PBXBuildFile; fileRef = D42981752052AE0600A28DF5 /* KeyPointProjector.mm */; };
+		D43C453E205C151E0072AF8F /* CostFunction.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D43C453C205C151E0072AF8F /* CostFunction.cpp */; };
+		D43C453F205C151E0072AF8F /* CostFunction.hpp in Headers */ = {isa = PBXBuildFile; fileRef = D43C453D205C151E0072AF8F /* CostFunction.hpp */; };
+		D43C4542205C167D0072AF8F /* KeyPointCostFunction.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D43C4540205C167D0072AF8F /* KeyPointCostFunction.cpp */; };
+		D43C4543205C167D0072AF8F /* KeyPointCostFunction.hpp in Headers */ = {isa = PBXBuildFile; fileRef = D43C4541205C167D0072AF8F /* KeyPointCostFunction.hpp */; };
+		D43C4546205C19AA0072AF8F /* CornerPointCostFunction.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D43C4544205C19AA0072AF8F /* CornerPointCostFunction.cpp */; };
+		D43C4547205C19AA0072AF8F /* CornerPointCostFunction.hpp in Headers */ = {isa = PBXBuildFile; fileRef = D43C4545205C19AA0072AF8F /* CornerPointCostFunction.hpp */; };
 		D471D7D620500C4A00F38C26 /* LineInfo.h in Headers */ = {isa = PBXBuildFile; fileRef = D471D7D320500C4A00F38C26 /* LineInfo.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		D471D7D720500C4A00F38C26 /* CGRectOutline.h in Headers */ = {isa = PBXBuildFile; fileRef = D471D7D420500C4A00F38C26 /* CGRectOutline.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		D471D7D820500C4A00F38C26 /* EigenVector.h in Headers */ = {isa = PBXBuildFile; fileRef = D471D7D520500C4A00F38C26 /* EigenVector.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		D471D7E220500CE600F38C26 /* ContourEdge.h in Headers */ = {isa = PBXBuildFile; fileRef = D471D7DA20500CE600F38C26 /* ContourEdge.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		D471D7E320500CE600F38C26 /* Contour.mm in Sources */ = {isa = PBXBuildFile; fileRef = D471D7DB20500CE600F38C26 /* Contour.mm */; };
-		D471D7E420500CE600F38C26 /* ContourSpanInfo.h in Headers */ = {isa = PBXBuildFile; fileRef = D471D7DC20500CE600F38C26 /* ContourSpanInfo.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		D471D7E420500CE600F38C26 /* ContourSpanInfo.h in Headers */ = {isa = PBXBuildFile; fileRef = D471D7DC20500CE600F38C26 /* ContourSpanInfo.h */; };
 		D471D7E520500CE600F38C26 /* Contour.h in Headers */ = {isa = PBXBuildFile; fileRef = D471D7DD20500CE600F38C26 /* Contour.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		D471D7E620500CE600F38C26 /* ContourSpan.mm in Sources */ = {isa = PBXBuildFile; fileRef = D471D7DE20500CE600F38C26 /* ContourSpan.mm */; };
 		D471D7E720500CE600F38C26 /* ContourEdge.m in Sources */ = {isa = PBXBuildFile; fileRef = D471D7DF20500CE600F38C26 /* ContourEdge.m */; };
@@ -117,8 +121,6 @@
 		D40B2888202891D800CA8559 /* PrefixHeader.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PrefixHeader.pch; sourceTree = "<group>"; };
 		D428ED30204987D6002A7322 /* UIColor+extras.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "UIColor+extras.h"; sourceTree = "<group>"; };
 		D428ED31204987D6002A7322 /* UIColor+extras.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "UIColor+extras.m"; sourceTree = "<group>"; };
-		D42981742052AE0600A28DF5 /* KeyPointProjector.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = KeyPointProjector.h; sourceTree = "<group>"; };
-		D42981752052AE0600A28DF5 /* KeyPointProjector.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = KeyPointProjector.mm; sourceTree = "<group>"; };
 		D429817C2052AF0300A28DF5 /* SwiftVisionTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = SwiftVisionTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		D429817E2052AF0300A28DF5 /* SwiftVisionTests.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = SwiftVisionTests.mm; sourceTree = "<group>"; };
 		D42981802052AF0300A28DF5 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -131,6 +133,12 @@
 		D43C4534205B1ECB0072AF8F /* math+extras.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = "math+extras.hpp"; sourceTree = "<group>"; };
 		D43C4537205B239C0072AF8F /* print+extras.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = "print+extras.cpp"; sourceTree = "<group>"; };
 		D43C4538205B239C0072AF8F /* print+extras.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = "print+extras.hpp"; sourceTree = "<group>"; };
+		D43C453C205C151E0072AF8F /* CostFunction.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = CostFunction.cpp; sourceTree = "<group>"; };
+		D43C453D205C151E0072AF8F /* CostFunction.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = CostFunction.hpp; sourceTree = "<group>"; };
+		D43C4540205C167D0072AF8F /* KeyPointCostFunction.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = KeyPointCostFunction.cpp; sourceTree = "<group>"; };
+		D43C4541205C167D0072AF8F /* KeyPointCostFunction.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = KeyPointCostFunction.hpp; sourceTree = "<group>"; };
+		D43C4544205C19AA0072AF8F /* CornerPointCostFunction.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = CornerPointCostFunction.cpp; sourceTree = "<group>"; };
+		D43C4545205C19AA0072AF8F /* CornerPointCostFunction.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = CornerPointCostFunction.hpp; sourceTree = "<group>"; };
 		D4711A0820502C1200F38C26 /* Accelerate.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Accelerate.framework; path = System/Library/Frameworks/Accelerate.framework; sourceTree = SDKROOT; };
 		D4711A0A20502C7500F38C26 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		D4711A0C20502C8300F38C26 /* CoreFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreFoundation.framework; path = System/Library/Frameworks/CoreFoundation.framework; sourceTree = SDKROOT; };
@@ -341,6 +349,12 @@
 				D4792BA2205B0C1600F74B2E /* Optimizer.cpp */,
 				D4792BA7205B10E400F74B2E /* KeyPointProjector.hpp */,
 				D4792BA6205B10E400F74B2E /* KeyPointProjector.cpp */,
+				D43C453D205C151E0072AF8F /* CostFunction.hpp */,
+				D43C453C205C151E0072AF8F /* CostFunction.cpp */,
+				D43C4541205C167D0072AF8F /* KeyPointCostFunction.hpp */,
+				D43C4540205C167D0072AF8F /* KeyPointCostFunction.cpp */,
+				D43C4545205C19AA0072AF8F /* CornerPointCostFunction.hpp */,
+				D43C4544205C19AA0072AF8F /* CornerPointCostFunction.cpp */,
 			);
 			path = Optimizer;
 			sourceTree = "<group>";
@@ -353,8 +367,6 @@
 				D471D7D920500CE600F38C26 /* models */,
 				D471D7EA20500D0800F38C26 /* models+internal */,
 				D471D7F720500F2200F38C26 /* extensions+internal */,
-				D42981742052AE0600A28DF5 /* KeyPointProjector.h */,
-				D42981752052AE0600A28DF5 /* KeyPointProjector.mm */,
 			);
 			path = PageDewarp;
 			sourceTree = "<group>";
@@ -390,10 +402,12 @@
 				D43C453A205B239C0072AF8F /* print+extras.hpp in Headers */,
 				D471D7E220500CE600F38C26 /* ContourEdge.h in Headers */,
 				D471D7E820500CE600F38C26 /* ContourSpan.h in Headers */,
-				D471D7D720500C4A00F38C26 /* CGRectOutline.h in Headers */,
 				D471D7E420500CE600F38C26 /* ContourSpanInfo.h in Headers */,
+				D471D7D720500C4A00F38C26 /* CGRectOutline.h in Headers */,
 				D471D7D820500C4A00F38C26 /* EigenVector.h in Headers */,
+				D43C4543205C167D0072AF8F /* KeyPointCostFunction.hpp in Headers */,
 				D471D7D620500C4A00F38C26 /* LineInfo.h in Headers */,
+				D43C453F205C151E0072AF8F /* CostFunction.hpp in Headers */,
 				D471D7F220500D0800F38C26 /* ContourSpanInfo+internal.h in Headers */,
 				D471D7F020500D0800F38C26 /* ContourSpan+internal.h in Headers */,
 				D428ED32204987D6002A7322 /* UIColor+extras.h in Headers */,
@@ -404,7 +418,7 @@
 				D4A572CA202A1E2800D8F4B0 /* UIImage+Mat.h in Headers */,
 				D43C4536205B1ECB0072AF8F /* math+extras.hpp in Headers */,
 				D471D7FB20500F2200F38C26 /* UIImage+Contour.h in Headers */,
-				D42981762052AE0600A28DF5 /* KeyPointProjector.h in Headers */,
+				D43C4547205C19AA0072AF8F /* CornerPointCostFunction.hpp in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -551,11 +565,13 @@
 				D4A572C3202A1E1500D8F4B0 /* PageDewarp.mm in Sources */,
 				D43C4539205B239C0072AF8F /* print+extras.cpp in Sources */,
 				D471D7FA20500F2200F38C26 /* UIImage+Contour.mm in Sources */,
+				D43C4546205C19AA0072AF8F /* CornerPointCostFunction.cpp in Sources */,
 				D471D7F520500EE300F38C26 /* UIImage+OpenCV.mm in Sources */,
 				D43C4531205B1DFF0072AF8F /* vector+extras.cpp in Sources */,
+				D43C4542205C167D0072AF8F /* KeyPointCostFunction.cpp in Sources */,
 				D428ED33204987D6002A7322 /* UIColor+extras.m in Sources */,
 				D471D7E720500CE600F38C26 /* ContourEdge.m in Sources */,
-				D43C453B205BF9720072AF8F /* KeyPointProjector.mm in Sources */,
+				D43C453E205C151E0072AF8F /* CostFunction.cpp in Sources */,
 				D4BAD1C62034DBB200F4A32C /* NSArray+extras.m in Sources */,
 				D471D7E320500CE600F38C26 /* Contour.mm in Sources */,
 				D4792BA4205B0C1600F74B2E /* Optimizer.cpp in Sources */,

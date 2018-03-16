@@ -18,4 +18,10 @@ namespace math {
         }
         return output;
     }
+
+    double filterNanInf(double x) {
+        if (cvIsNaN(x) || cvIsInf(x))
+            return 0;
+        return x;
+    }
 }

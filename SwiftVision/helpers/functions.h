@@ -7,6 +7,7 @@
 #import <UIKit/UIKit.h>
 #import "CGRectOutline.h"
 #include "print+extras.hpp"
+#include "vector+extras.hpp"
 
 namespace geom {
     double angleDistance(double angle_b, double angle_a);

@@ -3,7 +3,6 @@
 #import "Contour.h"
 #import "ContourSpan.h"
 #import "ContourEdge.h"
-#import "ContourSpanInfo.h"
 // structs
 #import "CGRectOutline.h"
 #import "EigenVector.h"

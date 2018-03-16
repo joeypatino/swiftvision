@@ -1,8 +1,8 @@
 #import <opencv2/opencv.hpp>
+#include <numeric>
 #import "PageDewarp.h"
 // models
 #import "ContourSpanInfo.h"
-#import "KeyPointProjector.h"
 // private
 #import "Contour+internal.h"
 #import "ContourSpan+internal.h"
@@ -18,7 +18,10 @@
 #import "EigenVector.h"
 #import "LineInfo.h"
 #import "CGRectOutline.h"
+// optimization
 #import "Optimizer.hpp"
+#import "KeyPointCostFunction.hpp"
+#import "CornerPointCostFunction.hpp"
 
 static inline struct EigenVector
 EigenVectorMake(cv::Point2f x, cv::Point2f y) {
@@ -56,22 +59,38 @@ using namespace cv;
 - (UIImage *)render {
     cv::Mat display = [self.inputImage mat];
 
-    NSArray <NSArray <NSValue *> *> *allSpanPoints = [self allSamplePointsFromSpans:self.spans];
-
+    std::vector<std::vector<cv::Point2d>> allSpanPoints = [self allSamplePoints:self.spans];
     ContourSpanInfo *spanInfo = [self generateSpanInfoWithSpanPoints:allSpanPoints andEigenVector:self.eigenVector];
-    std::vector<double> params = nsarray::convertTo([spanInfo defaultParameters]);
-    std::vector<cv::Point2f> keyPointIndexes = nsarray::convertTo2f([spanInfo keyPointIndexesForSpanCounts:spanInfo.spanCounts]);
-    std::vector<cv::Point2f> dstpoints = nsarray::convertTo2f([spanInfo destinationPoints:allSpanPoints]);
+    std::vector<double> params = [spanInfo defaultParameters];
+    std::vector<cv::Point2d> keyPointIndexes = [spanInfo keyPointIndexesForSpanCounts:spanInfo.spanCounts];
+    std::vector<cv::Point2d> dstpoints = [spanInfo destinationPoints:allSpanPoints];
 
-    Ptr<CostFunction> fn = Ptr<CostFunction>(new CostFunction(dstpoints, keyPointIndexes));
+    Ptr<KeyPointCostFunction> fn = Ptr<KeyPointCostFunction>(new KeyPointCostFunction(dstpoints, keyPointIndexes));
     Optimizer opt = Optimizer(fn, params);
-    printf("initial objective is %f\n",  opt.optimizeOnce(params));
 
+    printf("initial objective is %f\n",  opt.initialOptimization().fun);
     OptimizerResult res = opt.optimize();
     printf("optimization took: %f\n", res.dur);
     printf("final objective is %f\n", res.fun);
 
+    [self optimizeCorner:spanInfo.corners.botRight dims:spanInfo.roughDimensions params: res.x];
+
     return [[UIImage alloc] initWithCVMat:display];
+}
+
+- (void)optimizeCorner:(CGPoint)p dims:(CGSize)roughDims params:(std::vector<double>)x {
+
+    vector<Point2d> dstpoints = {Point2d(p.x, p.y)};
+    vector<double> params = {roughDims.width, roughDims.height};
+
+    Ptr<CornerPointCostFunction> fn = Ptr<CornerPointCostFunction>(new CornerPointCostFunction(dstpoints));
+    Optimizer opt = Optimizer(fn, params);
+
+    printf("initial objective is %f\n",  opt.initialOptimization().fun);
+    OptimizerResult res = opt.optimize();
+    printf("optimization took: %f\n", res.dur);
+    printf("final objective is %f\n", res.fun);
+
 }
 
 // MARK: - Debug
@@ -157,21 +176,22 @@ using namespace cv;
 
 // MARK: -
 - (EigenVector)generateEigenVectorFromSpans:(NSArray <ContourSpan *> *)spans {
-    NSArray <NSArray <NSValue *> *> *samples = [self allSamplePointsFromSpans:spans];
+    std::vector<std::vector<cv::Point2d>> samples = [self allSamplePoints:spans];
+    double eigenInit[] = {0, 0};
+    double allWeights = 0.0;
+    Mat allEigenVectors = Mat(1, 2, cv::DataType<double>::type, eigenInit);
 
-    float eigenInit[] = {0, 0};
-    float allWeights = 0.0;
-    Mat allEigenVectors = Mat(1, 2, CV_32F, eigenInit);
+    for (int i = 0; i < samples.size(); i++) {
+        std::vector<cv::Point2d> vectorPoints = samples[i];
+        cv::Mat mean = cv::Mat();
+        cv::Mat eigen = cv::Mat();
+        cv::Mat computePoints = cv::Mat(vectorPoints).reshape(1);
+        cv::PCACompute(computePoints, mean, eigen, 1);
 
-    for (NSArray <NSValue *> *pointValues in samples) {
-        Mat mean = Mat();
-        Mat eigen = Mat();
-        std::vector<Point2f> vectorPoints = nsarray::convertTo2f(pointValues);
-        Mat computePoints = Mat(vectorPoints).reshape(1);
-        PCACompute(computePoints, mean, eigen, 1);
-
-        Point2f point = geom::convertTo(geom::subtract(pointValues.lastObject.CGPointValue, pointValues.firstObject.CGPointValue));
-        double weight = norm(point);
+        cv::Point2d firstP = vectorPoints[0];
+        cv::Point2d lastP = vectorPoints[vectorPoints.size() -1];
+        cv::Point2d point = lastP - firstP;
+        double weight = cv::norm(point);
 
         Mat eigenMul = eigen.mul(weight);
         allEigenVectors += eigenMul;
@@ -179,23 +199,23 @@ using namespace cv;
     }
 
     Mat outEigenVec = allEigenVectors / allWeights;
-    float eigenX = outEigenVec.at<float>(0, 0);
-    float eigenY = outEigenVec.at<float>(0, 1);
+    double eigenX = outEigenVec.at<double>(0, 0);
+    double eigenY = outEigenVec.at<double>(0, 1);
     if (eigenX < 0) {
         eigenX *= -1;
         eigenY *= -1;
     }
 
-    Point2f xDir = Point2f(eigenX, eigenY);
-    Point2f yDir = Point2f(-eigenY, eigenX);
+    Point2d xDir = Point2d(eigenX, eigenY);
+    Point2d yDir = Point2d(-eigenY, eigenX);
 
     return EigenVectorMake(xDir, yDir);
 }
 
-- (ContourSpanInfo *)generateSpanInfoWithSpanPoints:(NSArray <NSArray <NSValue *> *> *)spanPoints andEigenVector:(EigenVector)eigenVector {
+- (ContourSpanInfo *)generateSpanInfoWithSpanPoints:(std::vector<std::vector<cv::Point2d>>)allSpanPoints andEigenVector:(EigenVector)eigenVector {
     CGSize sz = self.inputImage.size;
-    Point2f eigenVectorx = geom::convertTo(eigenVector.x);
-    Point2f eigenVectory = geom::convertTo(eigenVector.y);
+    Point2d eigenVectorx = geom::convertTo(eigenVector.x);
+    Point2d eigenVectory = geom::convertTo(eigenVector.y);
     CGRectOutline rectOutline = geom::outlineWithSize(sz);
 
     NSArray <NSValue *> *pts = @[[NSValue valueWithCGPoint:rectOutline.topLeft],
@@ -206,48 +226,51 @@ using namespace cv;
     NSArray <NSNumber *> *pxCoords = nsarray::dotProduct(normalizedPts, eigenVectorx);
     NSArray <NSNumber *> *pyCoords = nsarray::dotProduct(normalizedPts, eigenVectory);
 
-    float px0 = pxCoords.min.floatValue;
-    float px1 = pxCoords.max.floatValue;
-    float py0 = pyCoords.min.floatValue;
-    float py1 = pyCoords.max.floatValue;
+    double px0 = pxCoords.min.doubleValue;
+    double px1 = pxCoords.max.doubleValue;
+    double py0 = pyCoords.min.doubleValue;
+    double py1 = pyCoords.max.doubleValue;
 
     // tl
-    Point2f p00 = px0 * eigenVectorx + py0 * eigenVectory;
+    Point2d p00 = px0 * eigenVectorx + py0 * eigenVectory;
     // tr
-    Point2f p01 = px1 * eigenVectorx + py0 * eigenVectory;
+    Point2d p01 = px1 * eigenVectorx + py0 * eigenVectory;
     // br
-    Point2f p11 = px1 * eigenVectorx + py1 * eigenVectory;
+    Point2d p11 = px1 * eigenVectorx + py1 * eigenVectory;
     // bl
-    Point2f p10 = px0 * eigenVectorx + py1 * eigenVectory;
+    Point2d p10 = px0 * eigenVectorx + py1 * eigenVectory;
 
     CGRectOutline corners = CGRectOutlineMake(geom::convertTo(p00),
                                               geom::convertTo(p10),
                                               geom::convertTo(p11),
                                               geom::convertTo(p01));
 
-    NSMutableArray <NSNumber *> *ycoords = @[].mutableCopy;
-    NSMutableArray <NSArray <NSNumber *> *> *xcoords = @[].mutableCopy;
-    for (NSArray <NSValue *> *points in spanPoints) {
-        NSArray <NSNumber *> *pxCoords = nsarray::dotProduct(points, eigenVectorx);
-        NSArray <NSNumber *> *pyCoords = nsarray::dotProduct(points, eigenVectory);
+    vector<double> ycoords;
+    vector<vector<double>> xcoords;
+    for (int i = 0; i < allSpanPoints.size(); i++) {
+        std::vector<cv::Point2d> spanPoints = allSpanPoints[i];
+        std::vector<double> pxCoords = vectors::dotProduct(spanPoints, eigenVectorx);
+        std::vector<double> pyCoords = vectors::dotProduct(spanPoints, eigenVectory);
+        double meany = 1.0 * std::accumulate(pyCoords.begin(), pyCoords.end(), 0LL) / pyCoords.size();
 
-        float meany = pyCoords.median.floatValue;
-        [ycoords addObject:[NSNumber numberWithFloat:meany - py0]];
-        [xcoords addObject:nsarray::subtract(pxCoords, px0)];
+        ycoords.push_back(meany - py0);
+        xcoords.push_back(vectors::subtract(pxCoords, px0));
     }
-
     return [[ContourSpanInfo alloc] initWithCorners:corners xCoordinates:xcoords yCoordinates:ycoords];
 }
 
-- (NSArray <NSArray <NSValue *> *> *)allSamplePointsFromSpans:(NSArray <ContourSpan *> *)spans {
-    NSMutableArray <NSArray <NSValue *> *> *samplePoints = @[].mutableCopy;
+- (vector<vector<Point2d>>)allSamplePoints:(NSArray <ContourSpan *> *)spans {
+    vector<vector<Point2d>> allPoints;
     for (ContourSpan *span in spans) {
-        NSMutableArray <NSValue *> *spanPoints = @[].mutableCopy;
+        vector<Point2d> samplePoints;
         for (NSArray <NSValue *> *points in span.spanPoints) {
-            [spanPoints addObjectsFromArray:points];
+            for (NSValue *p in points) {
+                samplePoints.push_back(cv::Point2f(p.CGPointValue.x, p.CGPointValue.y));
+            }
         }
-        [samplePoints addObject:spanPoints];
+        allPoints.push_back(samplePoints);
     }
-    return [NSArray arrayWithArray:samplePoints];
+
+    return allPoints;
 }
 @end

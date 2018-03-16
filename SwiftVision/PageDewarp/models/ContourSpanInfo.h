@@ -2,9 +2,9 @@
 
 @interface ContourSpanInfo: NSObject
 @property (nonatomic, assign, readonly) struct CGRectOutline corners;
-@property (nonatomic, strong, readonly) NSArray <NSNumber *> *_Nonnull spanCounts;
+@property (nonatomic, assign, readonly) std::vector<int> spanCounts;
 - (instancetype _Nonnull)init NS_UNAVAILABLE;
-- (NSArray <NSNumber *> *_Nonnull)defaultParameters;
-- (NSArray <NSValue *> *_Nonnull)keyPointIndexesForSpanCounts:(NSArray <NSNumber *> *_Nonnull)spanCounts;
-- (NSArray <NSValue *> *_Nonnull)destinationPoints:(NSArray <NSArray <NSValue *> *> *_Nonnull)spanPoints;
+- (std::vector<double>)defaultParameters;
+- (std::vector<cv::Point2d>)keyPointIndexesForSpanCounts:(std::vector<int>)spanCounts;
+- (std::vector<cv::Point2d>)destinationPoints:(std::vector<std::vector<cv::Point2d>>)spanPoints;
 @end

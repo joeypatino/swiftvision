@@ -3,28 +3,20 @@
 #include "math+extras.hpp"
 #include "print+extras.hpp"
 
-KeyPointProjector::KeyPointProjector() {
-    cout << "KeyPointProjector()" << endl;
-}
-
-KeyPointProjector::~KeyPointProjector() {
-    cout << "~KeyPointProjector()" << endl;
-}
-
-vector<Point2f> KeyPointProjector::projectKeypoints(vector<Point2f> keyPoints, double *vectors) const {
-    std::vector<Point2f> projectedPoints;
+vector<Point2d> KeyPointProjector::projectKeypoints(vector<Point2d> keyPoints, double *vectors) const {
+    std::vector<Point2d> projectedPoints;
     for (int i = 0; i < keyPoints.size(); i++) {
         Point2f p = keyPoints[i];
         float x = vectors[int(p.x)];
         float y = vectors[int(p.y)];
-        projectedPoints.push_back(Point2f(x, y));
+        projectedPoints.push_back(Point2d(x, y));
     }
-    projectedPoints[0] = Point2f(0, 0);
+    projectedPoints[0] = Point2d(0, 0);
     return projectXY(projectedPoints, vectors);
 }
 
-vector<Point2f> KeyPointProjector::projectXY(vector<Point2f> xyCoordsArr, double *vectors) const {
-    std::vector<cv::Point3f> objectPoints = objectPointsFrom(xyCoordsArr, vectors);
+vector<Point2d> KeyPointProjector::projectXY(vector<Point2d> xyCoordsArr, double *vectors) const {
+    std::vector<cv::Point3d> objectPoints = objectPointsFrom(xyCoordsArr, vectors);
     //logs::describe_vector(objectPoints, "objectPoints");
 
     // rotation vector
@@ -49,14 +41,14 @@ vector<Point2f> KeyPointProjector::projectXY(vector<Point2f> xyCoordsArr, double
     cv::Mat distanceCoeffs = cv::Mat::zeros(1, 5, CV_64FC1);
     //logs::describe_vector(distanceCoeffs, "distanceCoeffs");
 
-    std::vector<cv::Point2f> imagePoints;
+    std::vector<cv::Point2d> imagePoints;
     projectPoints(objectPoints, rvec, tvec, intrinsics, distanceCoeffs, imagePoints);
     //logs::describe_vector(imagePoints, "imagePoints");
 
     return imagePoints;
 }
 
-vector<Point3f> KeyPointProjector::objectPointsFrom(vector<Point2f> xyCoordsArr, double *vectors) const {
+vector<Point3d> KeyPointProjector::objectPointsFrom(vector<Point2d> xyCoordsArr, double *vectors) const {
     float alpha = vectors[6];
     float beta = vectors[7];
 
@@ -73,12 +65,12 @@ vector<Point3f> KeyPointProjector::objectPointsFrom(vector<Point2f> xyCoordsArr,
     std::vector<std::vector<double>> objPoints = vectors::hstack(xyCoords, zCoords);
     //logs::describe_vector(objPoints, "objPoints");
 
-    std::vector<cv::Point3f> objectPoints;
+    std::vector<cv::Point3d> objectPoints;
     for (int i = 0; i < objPoints.size(); i++) {
         double x = objPoints[i][0];
         double y = objPoints[i][1];
         double z = objPoints[i][2];
-        Point3f point = cv::Point3f(x, y, z);
+        Point3d point = cv::Point3d(x, y, z);
         objectPoints.push_back(point);
     }
 

@@ -33,10 +33,10 @@ namespace vectors {
         return output;
     }
 
-    vector<double> axis(int x, vector<Point2f> points) {
+    vector<double> axis(int x, vector<Point2d> points) {
         vector<double> v;
         for (int i = 0; i < points.size(); i++) {
-            Point2f p = points[i];
+            Point2d p = points[i];
             if (x == 0) {
                 v.push_back(p.x);
             } else if (x == 1) {
@@ -46,13 +46,30 @@ namespace vectors {
         return v;
     }
 
-    vector<vector<double>> convert_to_vector2d(vector<Point2f> points) {
+    vector<vector<double>> convert_to_vector2d(vector<Point2d> points) {
         vector<vector<double>> v(points.size(), vector<double>(2, 0));
         for (int i = 0; i < points.size(); i++) {
-            cv::Point2f point = points[i];
+            cv::Point2d point = points[i];
             v[i][0] = point.x;
             v[i][1] = point.y;
         }
         return v;
+    }
+
+    std::vector<double> dotProduct(std::vector<cv::Point2d> points, cv::Point2d x) {
+        std::vector<double> res;
+        for (int i = 0; i < points.size(); i++){
+            double p = points[i].x * x.x + points[i].y * x.y;
+            res.push_back(p);
+        }
+        return res;
+    }
+
+    std::vector<double> subtract(std::vector<double> b, double x) {
+        std::vector<double> res;
+        for (int i = 0; i < b.size(); i++) {
+            res.push_back(b[i] - x);
+        }
+        return res;
     }
 }

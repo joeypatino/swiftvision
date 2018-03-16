@@ -1,4 +1,5 @@
 #import <opencv2/opencv.hpp>
+#include <numeric>
 #import "ContourSpanInfo.h"
 // structs
 #import "CGRectOutline.h"
@@ -7,13 +8,10 @@
 // extras
 #import "functions.h"
 
-using namespace std;
-using namespace cv;
-
 @implementation ContourSpanInfo
 - (instancetype)initWithCorners:(CGRectOutline)corners
-                            xCoordinates:(NSArray <NSArray <NSNumber *> *> *)xCoordinates
-                            yCoordinates:(NSArray <NSNumber *> *)yCoordinates {
+                   xCoordinates:(std::vector<std::vector<double>>)xCoordinates
+                   yCoordinates:(std::vector<double>)yCoordinates {
     self = [super init];
     _corners = corners;
     _xCoordinates = xCoordinates;
@@ -42,11 +40,6 @@ using namespace cv;
 }
 
 - (std::vector<double>)testDefaultParameters {
-    cout << "OpenCV version : " << CV_VERSION << endl;
-    cout << "Major version : " << CV_MAJOR_VERSION << endl;
-    cout << "Minor version : " << CV_MINOR_VERSION << endl;
-    cout << "Subminor version : " << CV_SUBMINOR_VERSION << endl;
-
     std::vector<cv::Point3d> corner_object3d = {
         cv::Point3d(0.00000000,0.00000000,0.00000000),
         cv::Point3d(1.52559066,0.00000000,0.00000000),
@@ -64,11 +57,11 @@ using namespace cv;
         cv::Point3d(0.0,1.8,0.0),
         cv::Point3d(0.0,0.0,1.0)
     };
-    Mat K = Mat(3, 3, cv::DataType<double>::type, &camera);
-    Mat rvec;
-    Mat tvec;
+    cv::Mat K = Mat(3, 3, cv::DataType<double>::type, &camera);
+    cv::Mat rvec;
+    cv::Mat tvec;
 
-    Mat inliers;
+    cv::Mat inliers;
     cv::solvePnPRansac(corner_object3d,
                        corners,
                        K,
@@ -80,12 +73,6 @@ using namespace cv;
                        0.95,
                        inliers,
                        cv::SOLVEPNP_ITERATIVE);
-//    solvePnP(corner_object3d,
-//             corners,
-//             K,
-//             vector<double>({0, 0, 0, 0, 0}),
-//             rvec,
-//             tvec, true, SOLVEPNP_DLS);
 
     logs::describe_vector(corner_object3d, "corner_object3d");
     logs::describe_vector(corners, "corners");
@@ -109,40 +96,40 @@ using namespace cv;
     return {};
 }
 
-- (NSArray <NSNumber *> *)defaultParameters {
+- (std::vector<double>)defaultParameters {
     CGSize dimensions = self.roughDimensions;
 
     // Array of object points in the object coordinate space
-    vector<Point3d> cornersObject3d = {
-        Point3d(0, 0, 0),
-        Point3d(dimensions.width, 0, 0),
-        Point3d(dimensions.width, dimensions.height, 0),
-        Point3d(0, dimensions.height, 0)};
+    std::vector<cv::Point3d> cornersObject3d = {
+        cv::Point3d(0, 0, 0),
+        cv::Point3d(dimensions.width, 0, 0),
+        cv::Point3d(dimensions.width, dimensions.height, 0),
+        cv::Point3d(0, dimensions.height, 0)};
 
     // Array of corresponding image points
-    vector<Point2d> imagePoints = nsarray::convertTo2d(nsarray::pointsFrom(self.corners));
+    std::vector<cv::Point2d> imagePoints = nsarray::convertTo2d(nsarray::pointsFrom(self.corners));
 
     std::vector<cv::Point3d> camera = {
         cv::Point3d(1.8,0.0,0.0),
         cv::Point3d(0.0,1.8,0.0),
         cv::Point3d(0.0,0.0,1.0)
     };
-    Mat K = Mat(3, 3, cv::DataType<double>::type, &camera);
 
     // output rotation vectors
-    vector<double> rvec;
+    std::vector<double> rvec;
     // output translation vectors
-    vector<double> tvec;
+    std::vector<double> tvec;
 
     // estimate rotation and translation from four 2D-to-3D point correspondences
-    solvePnP(cornersObject3d, imagePoints,
-             K,
-             Mat::zeros(5, 1, cv::DataType<double>::type),
+    cv::solvePnP(cornersObject3d,
+             imagePoints,
+             cv::Mat(3, 3, cv::DataType<double>::type, &camera),
+             cv::Mat::zeros(5, 1, cv::DataType<double>::type),
              rvec,
              tvec);
 
     // our initial guess for the cubic has no slope
-    vector<double> cubicSlope = vector<double>({0.0, 0.0});
+    std::vector<double> cubicSlope = std::vector<double>({0.0, 0.0});
 
     rvec = {
         -0.00000000,
@@ -154,7 +141,7 @@ using namespace cv;
         -1.01938189,
         1.79999995
     };
-    vector<double> params;
+    std::vector<double> params;
     for (int i = 0; i < int(rvec.size()); i++) {
         params.push_back(rvec[i]);
     }
@@ -164,20 +151,14 @@ using namespace cv;
     for (int i = 0; i < int(cubicSlope.size()); i++) {
         params.push_back(cubicSlope[i]);
     }
-
-    for (NSNumber *number in self.yCoordinates) {
-        params.push_back(number.floatValue);
+    for (int i = 0; i < self.yCoordinates.size(); i++) {
+        params.push_back(self.yCoordinates[i]);
     }
-
-    for (NSArray <NSNumber *> *numbers in self.xCoordinates) {
-        for (NSNumber *number in numbers) {
-            params.push_back(number.floatValue);
+    for (int i = 0; i < self.xCoordinates.size(); i++) {
+        std::vector<double> values = self.xCoordinates[i];
+        for (int j = 0; j < values.size(); j++) {
+            params.push_back(values[j]);
         }
-    }
-
-    NSMutableArray <NSNumber *> *outputParams = @[].mutableCopy;
-    for (int i = 0; i < int(params.size()); i++) {
-        [outputParams addObject:@(params[i])];
     }
 
     //logs::describe_vector(cornersObject3d, "cornersObject3d");
@@ -186,43 +167,54 @@ using namespace cv;
     //logs::describe_vector(rvec, "rvec");
     //logs::describe_vector(tvec, "tvec");
 
-    return outputParams;
+    return params;
 }
 
-- (NSArray <NSNumber *> *)spanCounts {
-    NSMutableArray *counts = @[].mutableCopy;
-    for (NSArray <NSNumber *> *xPoints in self.xCoordinates) {
-        [counts addObject:[NSNumber numberWithInteger:xPoints.count]];
+- (std::vector<int>)spanCounts {
+    std::vector<int> counts;
+    for (int i = 0; i < self.xCoordinates.size(); i++) {
+        std::vector<double> values = self.xCoordinates[i];
+        counts.push_back(int(values.size()));
     }
-    return [NSArray arrayWithArray:counts];
+    return counts;
 }
 
-- (NSArray <NSValue *> *)keyPointIndexesForSpanCounts:(NSArray <NSNumber *> *)spanCounts {
-    NSNumber *nptsNum = [spanCounts valueForKeyPath:@"@sum.self"];
-    int npts = nptsNum.intValue;
-    vector<vector<int>> keyPointIdx = vector<vector<int>>(2, vector<int>(npts+1, 0));
+- (std::vector<cv::Point2d>)keyPointIndexesForSpanCounts:(std::vector<int>)spanCounts {
+    int npts = std::accumulate(spanCounts.begin(), spanCounts.end(), 0);
+    std::vector<std::vector<int>> keyPointIdx = std::vector<std::vector<int>>(2, std::vector<int>(npts+1, 0));
     int start = 1;
-    for (int i = 0; i < spanCounts.count; i++) {
-        int count = spanCounts[i].intValue;
+    for (int i = 0; i < spanCounts.size(); i++) {
+        int count = spanCounts[i];
         int end = start + count;
         for (int r = start; r < end; r++) {
             keyPointIdx[1][r] = 8+i;
         }
         start = end;
     }
-    for (int i = 0; i < npts; i++) {
-        keyPointIdx[0][i+1] = i + 8 + int(spanCounts.count);
-    }
-    //logs::describe_points(vectors::convertTo(keyPointIdx), "keyPointIdx");
 
-    return vectors::convertTo(keyPointIdx);
+    for (int i = 0; i < npts; i++) {
+        keyPointIdx[0][i+1] = i + 8 + int(spanCounts.size());
+    }
+    std::vector<cv::Point2d> keypoints;
+    keypoints.reserve(npts+1);
+    for (int i = 0; i < npts+1; i++) {
+        cv::Point2d kp = cv::Point2d(keyPointIdx[0][i], keyPointIdx[1][i]);
+        keypoints.push_back(kp);
+    }
+    return keypoints;
 }
 
-- (NSArray <NSValue *> *)destinationPoints:(NSArray <NSArray <NSValue *> *> *)spanPoints {
-    NSMutableArray <NSValue *> *destinationPoints = @[].mutableCopy;
-    [destinationPoints addObject:[NSValue valueWithCGPoint:self.corners.topLeft]];
-    [destinationPoints addObjectsFromArray:[spanPoints valueForKeyPath: @"@unionOfArrays.self"]];
-    return [NSArray arrayWithArray:destinationPoints];
+- (std::vector<cv::Point2d>)destinationPoints:(std::vector<std::vector<cv::Point2d>>)spanPoints {
+    std::vector<cv::Point2d> destinationPoints;
+    destinationPoints.push_back(cv::Point2d(self.corners.topLeft.x, self.corners.topLeft.y));
+
+    for (int i = 0; i < spanPoints.size(); i++) {
+        std::vector<cv::Point2d> points = spanPoints[i];
+        for (int j = 0; j < points.size(); j++) {
+            destinationPoints.push_back(points[j]);
+        }
+    }
+    return destinationPoints;
 }
 
 @end

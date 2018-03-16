@@ -2,12 +2,13 @@
 #define ContourSpanInfo_internal_h
 
 @interface ContourSpanInfo()
-@property (nonatomic, strong, readonly) NSArray <NSArray <NSNumber *> *> *_Nonnull xCoordinates;
-@property (nonatomic, strong, readonly) NSArray <NSNumber *> *_Nonnull yCoordinates;
+@property (nonatomic, assign, readonly) std::vector<std::vector<double>> xCoordinates;
+@property (nonatomic, assign, readonly) std::vector<double> yCoordinates;
 @property (nonatomic, assign, readonly) CGSize roughDimensions;
 - (instancetype _Nonnull)initWithCorners:(CGRectOutline)corners
-                            xCoordinates:(NSArray <NSArray <NSNumber *> *> *_Nonnull)xCoordinates
-                            yCoordinates:(NSArray <NSNumber *> *_Nonnull)yCoordinates;
+                            xCoordinates:(std::vector<std::vector<double>>)xCoordinates
+                            yCoordinates:(std::vector<double>)yCoordinates;
+
 @end
 
 #endif /* ContourSpanInfo_internal_h */

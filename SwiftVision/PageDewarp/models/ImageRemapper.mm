@@ -32,9 +32,11 @@ EigenVectorMake(cv::Point2f x, cv::Point2f y) {
     self = [super init];
     _inputImage = image;
     _allKeypoints = keyPoints;
-    _eigenVector = [self generateEigenVectorWithKeypoints:keyPoints];
+    _eigenVector = [self eigenVectorWithKeyPoints:keyPoints];
     _pxCoords = [self normalizedCoordsWithEigenVectorDir:self.eigenVector.x];
     _pyCoords = [self normalizedCoordsWithEigenVectorDir:self.eigenVector.y];
+    _corners = [self outlineWithEigenVector:self.eigenVector];
+
     _xCoordinates = [self generateCoordinatesX:keyPoints withEigenVector:self.eigenVector];
     _yCoordinates = [self generateCoordinatesY:keyPoints withEigenVector:self.eigenVector];
 
@@ -63,11 +65,11 @@ EigenVectorMake(cv::Point2f x, cv::Point2f y) {
     return res;
 }
 
-- (OptimizerResult)optimizeImageCornersWithOptimizedKeypoints:(std::vector<double>)keypoints {
+- (OptimizerResult)optimizeImageCornersWithOptimizedKeypoints:(std::vector<double>)keyPoints {
     vector<Point2d> dstpoints = {Point2d(self.corners.botRight.x, self.corners.botRight.y)};
-    vector<double> params = {self.dimensions.width, self.dimensions.height};
+    vector<double> params = {self.normalizedDimensions.width, self.normalizedDimensions.height};
 
-    Ptr<CornerPointCostFunction> fn = Ptr<CornerPointCostFunction>(new CornerPointCostFunction(dstpoints));
+    Ptr<CornerPointCostFunction> fn = Ptr<CornerPointCostFunction>(new CornerPointCostFunction(dstpoints, keyPoints));
     Optimizer opt = Optimizer(fn, params);
 
     printf("initial objective is %f\n",  opt.initialOptimization().fun);
@@ -90,7 +92,7 @@ EigenVectorMake(cv::Point2f x, cv::Point2f y) {
     return formatedDesc;
 }
 
-- (CGSize)dimensions {
+- (CGSize)normalizedDimensions {
     CGPoint w = geom::subtract(self.corners.topRight, self.corners.topLeft);
     CGPoint h = geom::subtract(self.corners.botLeft, self.corners.topLeft);
     double pageWidth = norm(Mat(geom::convertTo(w)));
@@ -99,7 +101,7 @@ EigenVectorMake(cv::Point2f x, cv::Point2f y) {
 }
 
 - (std::vector<double>)defaultParameters {
-    CGSize dimensions = self.dimensions;
+    CGSize dimensions = self.normalizedDimensions;
 
     // Array of object points in the object coordinate space
     std::vector<cv::Point3d> cornersObject3d = {
@@ -206,12 +208,12 @@ EigenVectorMake(cv::Point2f x, cv::Point2f y) {
     return keypoints;
 }
 
-- (std::vector<cv::Point2d>)destinationPoints:(std::vector<std::vector<cv::Point2d>>)spanPoints {
+- (std::vector<cv::Point2d>)destinationPoints:(std::vector<std::vector<cv::Point2d>>)keyPoints {
     std::vector<cv::Point2d> destinationPoints;
     destinationPoints.push_back(cv::Point2d(self.corners.topLeft.x, self.corners.topLeft.y));
 
-    for (int i = 0; i < spanPoints.size(); i++) {
-        std::vector<cv::Point2d> points = spanPoints[i];
+    for (int i = 0; i < keyPoints.size(); i++) {
+        std::vector<cv::Point2d> points = keyPoints[i];
         for (int j = 0; j < points.size(); j++) {
             destinationPoints.push_back(points[j]);
         }
@@ -220,7 +222,7 @@ EigenVectorMake(cv::Point2f x, cv::Point2f y) {
 }
 
 // MARK: -
-- (EigenVector)generateEigenVectorWithKeypoints:(std::vector<vector<cv::Point2d>>)keyPoints {
+- (EigenVector)eigenVectorWithKeyPoints:(std::vector<vector<cv::Point2d>>)keyPoints {
     double eigenInit[] = {0, 0};
     double allWeights = 0.0;
     cv::Mat allEigenVectors = cv::Mat(1, 2, cv::DataType<double>::type, eigenInit);
@@ -268,7 +270,7 @@ EigenVectorMake(cv::Point2f x, cv::Point2f y) {
     return nsarray::dotProduct(normalizedPts, eigenVec);
 }
 
-- (CGRectOutline)outlineWithSpanPoints:(std::vector<std::vector<cv::Point2d>>)allSpanPoints withEigenVector:(EigenVector)eigenVector {
+- (CGRectOutline)outlineWithEigenVector:(EigenVector)eigenVector {
     double px0 = self.pxCoords.min.doubleValue;
     double px1 = self.pxCoords.max.doubleValue;
     double py0 = self.pyCoords.min.doubleValue;

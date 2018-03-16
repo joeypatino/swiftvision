@@ -7,7 +7,7 @@
 @property (nonatomic, assign, readonly) std::vector<std::vector<cv::Point2d>> allKeypoints;
 @property (nonatomic, assign, readonly) std::vector<std::vector<double>> xCoordinates;
 @property (nonatomic, assign, readonly) std::vector<double> yCoordinates;
-@property (nonatomic, assign, readonly) CGSize dimensions;
+@property (nonatomic, assign, readonly) CGSize normalizedDimensions;
 @property (nonatomic, assign, readonly) EigenVector eigenVector;
 @property (nonatomic, strong, readonly) UIImage *inputImage;
 

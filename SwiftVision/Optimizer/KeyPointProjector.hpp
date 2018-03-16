@@ -10,9 +10,9 @@ using namespace cv;
 class KeyPointProjector {
 public:
     vector<Point2d> projectKeypoints(vector<Point2d> keyPoints, double *vectors) const;
+    vector<Point2d> projectXY(vector<Point2d> xyCoordsArr, double *vectors) const;
 private:
     Mat cameraIntrinsics() const;
-    vector<Point2d> projectXY(vector<Point2d> xyCoordsArr, double *vectors) const;
     vector<Point3d> objectPointsFrom(vector<Point2d> xyCoordsArr, double *vectors) const;
 };
 

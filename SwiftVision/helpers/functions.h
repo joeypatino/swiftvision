@@ -6,8 +6,7 @@
 #import <opencv2/opencv.hpp>
 #import <UIKit/UIKit.h>
 #import "CGRectOutline.h"
-
-#endif /* functions_h */
+#include "print+extras.hpp"
 
 namespace geom {
     double angleDistance(double angle_b, double angle_a);
@@ -31,11 +30,6 @@ namespace geom {
 
     // returns a CGRectOutline struct from size
     CGRectOutline outlineWithSize(CGSize size);
-}
-
-namespace math {
-    double polyval(std::vector<double> p, double x);
-    std::vector<double> polyval(std::vector<double> p, std::vector<double> x);
 }
 
 namespace nsarray {
@@ -63,22 +57,12 @@ namespace nsarray {
 }
 
 namespace vectors {
-    std::vector<std::vector<double>> hstack(std::vector<std::vector<double>> mat1, std::vector<std::vector<double>> mat2);
-    std::vector<std::vector<double>> reshape(std::vector<double> p, int rows, int cols);
     NSArray <NSValue *> * convertTo(std::vector<std::vector<int>> vector);
 }
 
 namespace logs {
-    void describe_vector(std::vector<std::vector<double>> vector, char const *name);
-    void describe_vector(std::vector<double> vector, char const *name);
-    void describe_vector(std::vector<float> vector, char const *name);
-    void describe_vector(std::vector<cv::Point> vector, char const *name);
-    void describe_vector(std::vector<cv::Point2d> vector, char const *name);
-    void describe_vector(std::vector<cv::Point2f> vector, char const *name);
-    void describe_vector(std::vector<cv::Point3d> vector, char const *name);
-    void describe_vector(std::vector<cv::Point3f> vector, char const *name);
-    void describe_vector(cv::Mat mat, char const *name);
-
     void describe_values(NSArray <NSNumber *> *pts, char const *name);
     void describe_points(NSArray <NSValue *> *pts, char const *name);
 }
+
+#endif /* functions_h */

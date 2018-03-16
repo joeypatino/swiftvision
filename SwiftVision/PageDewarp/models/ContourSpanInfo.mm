@@ -68,12 +68,24 @@ using namespace cv;
     Mat rvec;
     Mat tvec;
 
-    solvePnP(corner_object3d,
-             corners,
-             K,
-             vector<double>({0, 0, 0, 0, 0}),
-             rvec,
-             tvec, true, SOLVEPNP_DLS);
+    Mat inliers;
+    cv::solvePnPRansac(corner_object3d,
+                       corners,
+                       K,
+                       cv::Mat::zeros(5, 1, CV_64FC1),
+                       rvec, tvec,
+                       false,
+                       500,
+                       2.0,
+                       0.95,
+                       inliers,
+                       cv::SOLVEPNP_ITERATIVE);
+//    solvePnP(corner_object3d,
+//             corners,
+//             K,
+//             vector<double>({0, 0, 0, 0, 0}),
+//             rvec,
+//             tvec, true, SOLVEPNP_DLS);
 
     logs::describe_vector(corner_object3d, "corner_object3d");
     logs::describe_vector(corners, "corners");

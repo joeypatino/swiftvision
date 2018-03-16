@@ -23,6 +23,6 @@
 /// the next contour in the span of contours that this contour belongs to
 @property (nonatomic, strong) Contour *_Nullable next;
 /// the color of the contour.
-@property (nonatomic, strong, readonly) UIColor *_Nonnull color;
+@property (nonatomic, strong) UIColor *_Nonnull color;
 - (instancetype _Nonnull)init NS_UNAVAILABLE;
 @end

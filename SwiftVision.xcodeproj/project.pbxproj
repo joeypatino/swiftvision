@@ -14,14 +14,12 @@
 		D40B28572028860D00CA8559 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = D40B28552028860D00CA8559 /* Main.storyboard */; };
 		D40B28592028860D00CA8559 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D40B28582028860D00CA8559 /* Assets.xcassets */; };
 		D40B285C2028860D00CA8559 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = D40B285A2028860D00CA8559 /* LaunchScreen.storyboard */; };
-		D40B28632028874200CA8559 /* SwiftVision.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D40B28392028856300CA8559 /* SwiftVision.framework */; };
 		D40B286720288EE100CA8559 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D40B286620288EE100CA8559 /* CoreGraphics.framework */; };
 		D40B286920288EEA00CA8559 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D40B286820288EEA00CA8559 /* UIKit.framework */; };
 		D40B2889202891D800CA8559 /* PrefixHeader.pch in Headers */ = {isa = PBXBuildFile; fileRef = D40B2888202891D800CA8559 /* PrefixHeader.pch */; };
 		D428ED32204987D6002A7322 /* UIColor+extras.h in Headers */ = {isa = PBXBuildFile; fileRef = D428ED30204987D6002A7322 /* UIColor+extras.h */; };
 		D428ED33204987D6002A7322 /* UIColor+extras.m in Sources */ = {isa = PBXBuildFile; fileRef = D428ED31204987D6002A7322 /* UIColor+extras.m */; };
 		D42981762052AE0600A28DF5 /* KeyPointProjector.h in Headers */ = {isa = PBXBuildFile; fileRef = D42981742052AE0600A28DF5 /* KeyPointProjector.h */; };
-		D42981772052AE0600A28DF5 /* KeyPointProjector.mm in Sources */ = {isa = PBXBuildFile; fileRef = D42981752052AE0600A28DF5 /* KeyPointProjector.mm */; };
 		D429817F2052AF0300A28DF5 /* SwiftVisionTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = D429817E2052AF0300A28DF5 /* SwiftVisionTests.mm */; };
 		D42981812052AF0300A28DF5 /* SwiftVision.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D40B28392028856300CA8559 /* SwiftVision.framework */; };
 		D42981872052AF6B00A28DF5 /* opencv2.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D40B28452028858A00CA8559 /* opencv2.framework */; };
@@ -29,8 +27,13 @@
 		D429818A2057EF4D00A28DF5 /* input_image_eroded.png in Resources */ = {isa = PBXBuildFile; fileRef = D42981892057EF4D00A28DF5 /* input_image_eroded.png */; };
 		D439947120388BA800D9B783 /* functions.h in Headers */ = {isa = PBXBuildFile; fileRef = D439946F20388BA800D9B783 /* functions.h */; };
 		D439947220388BA800D9B783 /* functions.mm in Sources */ = {isa = PBXBuildFile; fileRef = D439947020388BA800D9B783 /* functions.mm */; };
-		D47109BA2050282600F38C26 /* KeyPointOptimizer.mm in Sources */ = {isa = PBXBuildFile; fileRef = D47109B42050271600F38C26 /* KeyPointOptimizer.mm */; };
-		D4711A0F20502DA800F38C26 /* KeyPointOptimizer.h in Headers */ = {isa = PBXBuildFile; fileRef = D47109B32050271600F38C26 /* KeyPointOptimizer.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		D43C4531205B1DFF0072AF8F /* vector+extras.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D43C452F205B1DFF0072AF8F /* vector+extras.cpp */; };
+		D43C4532205B1DFF0072AF8F /* vector+extras.hpp in Headers */ = {isa = PBXBuildFile; fileRef = D43C4530205B1DFF0072AF8F /* vector+extras.hpp */; };
+		D43C4535205B1ECB0072AF8F /* math+extras.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D43C4533205B1ECB0072AF8F /* math+extras.cpp */; };
+		D43C4536205B1ECB0072AF8F /* math+extras.hpp in Headers */ = {isa = PBXBuildFile; fileRef = D43C4534205B1ECB0072AF8F /* math+extras.hpp */; };
+		D43C4539205B239C0072AF8F /* print+extras.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D43C4537205B239C0072AF8F /* print+extras.cpp */; };
+		D43C453A205B239C0072AF8F /* print+extras.hpp in Headers */ = {isa = PBXBuildFile; fileRef = D43C4538205B239C0072AF8F /* print+extras.hpp */; };
+		D43C453B205BF9720072AF8F /* KeyPointProjector.mm in Sources */ = {isa = PBXBuildFile; fileRef = D42981752052AE0600A28DF5 /* KeyPointProjector.mm */; };
 		D471D7D620500C4A00F38C26 /* LineInfo.h in Headers */ = {isa = PBXBuildFile; fileRef = D471D7D320500C4A00F38C26 /* LineInfo.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		D471D7D720500C4A00F38C26 /* CGRectOutline.h in Headers */ = {isa = PBXBuildFile; fileRef = D471D7D420500C4A00F38C26 /* CGRectOutline.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		D471D7D820500C4A00F38C26 /* EigenVector.h in Headers */ = {isa = PBXBuildFile; fileRef = D471D7D520500C4A00F38C26 /* EigenVector.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -50,13 +53,14 @@
 		D471D7F620500EE300F38C26 /* UIImage+OpenCV.h in Headers */ = {isa = PBXBuildFile; fileRef = D471D7F420500EE300F38C26 /* UIImage+OpenCV.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		D471D7FA20500F2200F38C26 /* UIImage+Contour.mm in Sources */ = {isa = PBXBuildFile; fileRef = D471D7F820500F2200F38C26 /* UIImage+Contour.mm */; };
 		D471D7FB20500F2200F38C26 /* UIImage+Contour.h in Headers */ = {isa = PBXBuildFile; fileRef = D471D7F920500F2200F38C26 /* UIImage+Contour.h */; };
-		D471E46E20501DDC00F38C26 /* DLib.h in Headers */ = {isa = PBXBuildFile; fileRef = D471E46C20501DDC00F38C26 /* DLib.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		D471F0DC20501E5400F38C26 /* DLib.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D471E46A20501DDC00F38C26 /* DLib.framework */; };
+		D4792B9C205AF9E100F74B2E /* SwiftVision.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D40B28392028856300CA8559 /* SwiftVision.framework */; };
+		D4792B9D205AF9E100F74B2E /* SwiftVision.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = D40B28392028856300CA8559 /* SwiftVision.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		D4792BA4205B0C1600F74B2E /* Optimizer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D4792BA2205B0C1600F74B2E /* Optimizer.cpp */; };
+		D4792BA5205B0C1600F74B2E /* Optimizer.hpp in Headers */ = {isa = PBXBuildFile; fileRef = D4792BA3205B0C1600F74B2E /* Optimizer.hpp */; };
+		D4792BA8205B10E400F74B2E /* KeyPointProjector.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D4792BA6205B10E400F74B2E /* KeyPointProjector.cpp */; };
+		D4792BA9205B10E400F74B2E /* KeyPointProjector.hpp in Headers */ = {isa = PBXBuildFile; fileRef = D4792BA7205B10E400F74B2E /* KeyPointProjector.hpp */; };
 		D48B4B712028AC0600DFA7AC /* input_image.jpeg in Resources */ = {isa = PBXBuildFile; fileRef = D48B4B702028AC0600DFA7AC /* input_image.jpeg */; };
 		D48B4B732028B6DC00DFA7AC /* 90550036_edit.jpg in Resources */ = {isa = PBXBuildFile; fileRef = D48B4B722028B6DC00DFA7AC /* 90550036_edit.jpg */; };
-		D4A3AE1D20502FB20075C45B /* libdlib.a in Frameworks */ = {isa = PBXBuildFile; fileRef = D4A3AE1C20502FB20075C45B /* libdlib.a */; };
-		D4A3AE202050601E0075C45B /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D40B286620288EE100CA8559 /* CoreGraphics.framework */; };
-		D4A3AE21205060220075C45B /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D40B286820288EEA00CA8559 /* UIKit.framework */; };
 		D4A572C2202A1E1500D8F4B0 /* PageDewarp.h in Headers */ = {isa = PBXBuildFile; fileRef = D4A572C0202A1E1500D8F4B0 /* PageDewarp.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		D4A572C3202A1E1500D8F4B0 /* PageDewarp.mm in Sources */ = {isa = PBXBuildFile; fileRef = D4A572C1202A1E1500D8F4B0 /* PageDewarp.mm */; };
 		D4A572CA202A1E2800D8F4B0 /* UIImage+Mat.h in Headers */ = {isa = PBXBuildFile; fileRef = D4A572C6202A1E2800D8F4B0 /* UIImage+Mat.h */; };
@@ -73,14 +77,28 @@
 			remoteGlobalIDString = D40B28382028856300CA8559;
 			remoteInfo = SwiftVision;
 		};
-		D47109B0205025E500F38C26 /* PBXContainerItemProxy */ = {
+		D4792B9E205AF9E100F74B2E /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = D40B28302028856300CA8559 /* Project object */;
 			proxyType = 1;
-			remoteGlobalIDString = D471E46920501DDC00F38C26;
-			remoteInfo = DLib;
+			remoteGlobalIDString = D40B28382028856300CA8559;
+			remoteInfo = SwiftVision;
 		};
 /* End PBXContainerItemProxy section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		D4792BA0205AF9E200F74B2E /* Embed Frameworks */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				D4792B9D205AF9E100F74B2E /* SwiftVision.framework in Embed Frameworks */,
+			);
+			name = "Embed Frameworks";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
 		D40B28392028856300CA8559 /* SwiftVision.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = SwiftVision.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -107,8 +125,12 @@
 		D42981892057EF4D00A28DF5 /* input_image_eroded.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = input_image_eroded.png; sourceTree = "<group>"; };
 		D439946F20388BA800D9B783 /* functions.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = functions.h; sourceTree = "<group>"; };
 		D439947020388BA800D9B783 /* functions.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = functions.mm; sourceTree = "<group>"; };
-		D47109B32050271600F38C26 /* KeyPointOptimizer.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = KeyPointOptimizer.h; sourceTree = "<group>"; };
-		D47109B42050271600F38C26 /* KeyPointOptimizer.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = KeyPointOptimizer.mm; sourceTree = "<group>"; };
+		D43C452F205B1DFF0072AF8F /* vector+extras.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = "vector+extras.cpp"; sourceTree = "<group>"; };
+		D43C4530205B1DFF0072AF8F /* vector+extras.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = "vector+extras.hpp"; sourceTree = "<group>"; };
+		D43C4533205B1ECB0072AF8F /* math+extras.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = "math+extras.cpp"; sourceTree = "<group>"; };
+		D43C4534205B1ECB0072AF8F /* math+extras.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = "math+extras.hpp"; sourceTree = "<group>"; };
+		D43C4537205B239C0072AF8F /* print+extras.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = "print+extras.cpp"; sourceTree = "<group>"; };
+		D43C4538205B239C0072AF8F /* print+extras.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = "print+extras.hpp"; sourceTree = "<group>"; };
 		D4711A0820502C1200F38C26 /* Accelerate.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Accelerate.framework; path = System/Library/Frameworks/Accelerate.framework; sourceTree = SDKROOT; };
 		D4711A0A20502C7500F38C26 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		D4711A0C20502C8300F38C26 /* CoreFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreFoundation.framework; path = System/Library/Frameworks/CoreFoundation.framework; sourceTree = SDKROOT; };
@@ -131,12 +153,12 @@
 		D471D7F420500EE300F38C26 /* UIImage+OpenCV.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImage+OpenCV.h"; sourceTree = "<group>"; };
 		D471D7F820500F2200F38C26 /* UIImage+Contour.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = "UIImage+Contour.mm"; sourceTree = "<group>"; };
 		D471D7F920500F2200F38C26 /* UIImage+Contour.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImage+Contour.h"; sourceTree = "<group>"; };
-		D471E46A20501DDC00F38C26 /* DLib.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = DLib.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		D471E46C20501DDC00F38C26 /* DLib.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DLib.h; sourceTree = "<group>"; };
-		D471E46D20501DDC00F38C26 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		D4792BA2205B0C1600F74B2E /* Optimizer.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; path = Optimizer.cpp; sourceTree = "<group>"; };
+		D4792BA3205B0C1600F74B2E /* Optimizer.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = Optimizer.hpp; sourceTree = "<group>"; };
+		D4792BA6205B10E400F74B2E /* KeyPointProjector.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = KeyPointProjector.cpp; sourceTree = "<group>"; };
+		D4792BA7205B10E400F74B2E /* KeyPointProjector.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = KeyPointProjector.hpp; sourceTree = "<group>"; };
 		D48B4B702028AC0600DFA7AC /* input_image.jpeg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = input_image.jpeg; sourceTree = "<group>"; };
 		D48B4B722028B6DC00DFA7AC /* 90550036_edit.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = 90550036_edit.jpg; sourceTree = "<group>"; };
-		D4A3AE1C20502FB20075C45B /* libdlib.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libdlib.a; sourceTree = "<group>"; };
 		D4A572C0202A1E1500D8F4B0 /* PageDewarp.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PageDewarp.h; sourceTree = "<group>"; };
 		D4A572C1202A1E1500D8F4B0 /* PageDewarp.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = PageDewarp.mm; sourceTree = "<group>"; };
 		D4A572C6202A1E2800D8F4B0 /* UIImage+Mat.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImage+Mat.h"; sourceTree = "<group>"; };
@@ -150,7 +172,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				D471F0DC20501E5400F38C26 /* DLib.framework in Frameworks */,
 				D40B286920288EEA00CA8559 /* UIKit.framework in Frameworks */,
 				D40B286720288EE100CA8559 /* CoreGraphics.framework in Frameworks */,
 				D40B28462028858A00CA8559 /* opencv2.framework in Frameworks */,
@@ -161,7 +182,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				D40B28632028874200CA8559 /* SwiftVision.framework in Frameworks */,
+				D4792B9C205AF9E100F74B2E /* SwiftVision.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -174,16 +195,6 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		D471E46620501DDC00F38C26 /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				D4A3AE21205060220075C45B /* UIKit.framework in Frameworks */,
-				D4A3AE202050601E0075C45B /* CoreGraphics.framework in Frameworks */,
-				D4A3AE1D20502FB20075C45B /* libdlib.a in Frameworks */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
@@ -191,7 +202,6 @@
 			isa = PBXGroup;
 			children = (
 				D40B283B2028856300CA8559 /* SwiftVision */,
-				D471E46B20501DDC00F38C26 /* DLib */,
 				D40B28502028860D00CA8559 /* OpenCVDemo */,
 				D429817D2052AF0300A28DF5 /* SwiftVisionTests */,
 				D40B283A2028856300CA8559 /* Products */,
@@ -204,7 +214,6 @@
 			children = (
 				D40B28392028856300CA8559 /* SwiftVision.framework */,
 				D40B284F2028860D00CA8559 /* OpenCVDemo.app */,
-				D471E46A20501DDC00F38C26 /* DLib.framework */,
 				D429817C2052AF0300A28DF5 /* SwiftVisionTests.xctest */,
 			);
 			name = Products;
@@ -219,6 +228,7 @@
 				D4A572BF202A1E1500D8F4B0 /* PageDewarp */,
 				D40B283D2028856300CA8559 /* Info.plist */,
 				D40B2888202891D800CA8559 /* PrefixHeader.pch */,
+				D4792BA1205B0BFF00F74B2E /* Optimizer */,
 				D439946E20388B9700D9B783 /* helpers */,
 				D4A572C4202A1E2800D8F4B0 /* extensions */,
 				D471D7D220500C4A00F38C26 /* structs */,
@@ -269,6 +279,12 @@
 			children = (
 				D439946F20388BA800D9B783 /* functions.h */,
 				D439947020388BA800D9B783 /* functions.mm */,
+				D43C4530205B1DFF0072AF8F /* vector+extras.hpp */,
+				D43C452F205B1DFF0072AF8F /* vector+extras.cpp */,
+				D43C4534205B1ECB0072AF8F /* math+extras.hpp */,
+				D43C4533205B1ECB0072AF8F /* math+extras.cpp */,
+				D43C4538205B239C0072AF8F /* print+extras.hpp */,
+				D43C4537205B239C0072AF8F /* print+extras.cpp */,
 			);
 			path = helpers;
 			sourceTree = "<group>";
@@ -318,16 +334,15 @@
 			path = "extensions+internal";
 			sourceTree = "<group>";
 		};
-		D471E46B20501DDC00F38C26 /* DLib */ = {
+		D4792BA1205B0BFF00F74B2E /* Optimizer */ = {
 			isa = PBXGroup;
 			children = (
-				D4A3AE1C20502FB20075C45B /* libdlib.a */,
-				D471E46C20501DDC00F38C26 /* DLib.h */,
-				D471E46D20501DDC00F38C26 /* Info.plist */,
-				D47109B32050271600F38C26 /* KeyPointOptimizer.h */,
-				D47109B42050271600F38C26 /* KeyPointOptimizer.mm */,
+				D4792BA3205B0C1600F74B2E /* Optimizer.hpp */,
+				D4792BA2205B0C1600F74B2E /* Optimizer.cpp */,
+				D4792BA7205B10E400F74B2E /* KeyPointProjector.hpp */,
+				D4792BA6205B10E400F74B2E /* KeyPointProjector.cpp */,
 			);
-			path = DLib;
+			path = Optimizer;
 			sourceTree = "<group>";
 		};
 		D4A572BF202A1E1500D8F4B0 /* PageDewarp */ = {
@@ -364,11 +379,15 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D4792BA9205B10E400F74B2E /* KeyPointProjector.hpp in Headers */,
 				D40B283E2028856300CA8559 /* SwiftVision.h in Headers */,
 				D471D7F620500EE300F38C26 /* UIImage+OpenCV.h in Headers */,
+				D4792BA5205B0C1600F74B2E /* Optimizer.hpp in Headers */,
+				D43C4532205B1DFF0072AF8F /* vector+extras.hpp in Headers */,
 				D4A572C2202A1E1500D8F4B0 /* PageDewarp.h in Headers */,
 				D471D7E520500CE600F38C26 /* Contour.h in Headers */,
 				D40B2889202891D800CA8559 /* PrefixHeader.pch in Headers */,
+				D43C453A205B239C0072AF8F /* print+extras.hpp in Headers */,
 				D471D7E220500CE600F38C26 /* ContourEdge.h in Headers */,
 				D471D7E820500CE600F38C26 /* ContourSpan.h in Headers */,
 				D471D7D720500C4A00F38C26 /* CGRectOutline.h in Headers */,
@@ -383,17 +402,9 @@
 				D439947120388BA800D9B783 /* functions.h in Headers */,
 				D471D7F120500D0800F38C26 /* Contour+internal.h in Headers */,
 				D4A572CA202A1E2800D8F4B0 /* UIImage+Mat.h in Headers */,
+				D43C4536205B1ECB0072AF8F /* math+extras.hpp in Headers */,
 				D471D7FB20500F2200F38C26 /* UIImage+Contour.h in Headers */,
 				D42981762052AE0600A28DF5 /* KeyPointProjector.h in Headers */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		D471E46720501DDC00F38C26 /* Headers */ = {
-			isa = PBXHeadersBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				D4711A0F20502DA800F38C26 /* KeyPointOptimizer.h in Headers */,
-				D471E46E20501DDC00F38C26 /* DLib.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -412,7 +423,6 @@
 			buildRules = (
 			);
 			dependencies = (
-				D47109B1205025E500F38C26 /* PBXTargetDependency */,
 			);
 			name = SwiftVision;
 			productName = SwiftVision;
@@ -426,10 +436,12 @@
 				D40B284B2028860D00CA8559 /* Sources */,
 				D40B284C2028860D00CA8559 /* Frameworks */,
 				D40B284D2028860D00CA8559 /* Resources */,
+				D4792BA0205AF9E200F74B2E /* Embed Frameworks */,
 			);
 			buildRules = (
 			);
 			dependencies = (
+				D4792B9F205AF9E100F74B2E /* PBXTargetDependency */,
 			);
 			name = OpenCVDemo;
 			productName = OpenCVDemo;
@@ -454,24 +466,6 @@
 			productReference = D429817C2052AF0300A28DF5 /* SwiftVisionTests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
 		};
-		D471E46920501DDC00F38C26 /* DLib */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = D471E46F20501DDC00F38C26 /* Build configuration list for PBXNativeTarget "DLib" */;
-			buildPhases = (
-				D47109B92050281F00F38C26 /* Sources */,
-				D471E46620501DDC00F38C26 /* Frameworks */,
-				D471E46720501DDC00F38C26 /* Headers */,
-				D471E46820501DDC00F38C26 /* Resources */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-			);
-			name = DLib;
-			productName = DLib;
-			productReference = D471E46A20501DDC00F38C26 /* DLib.framework */;
-			productType = "com.apple.product-type.framework";
-		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -495,10 +489,6 @@
 						CreatedOnToolsVersion = 9.2;
 						ProvisioningStyle = Automatic;
 					};
-					D471E46920501DDC00F38C26 = {
-						CreatedOnToolsVersion = 9.2;
-						ProvisioningStyle = Automatic;
-					};
 				};
 			};
 			buildConfigurationList = D40B28332028856300CA8559 /* Build configuration list for PBXProject "SwiftVision" */;
@@ -516,7 +506,6 @@
 			targets = (
 				D40B28382028856300CA8559 /* SwiftVision */,
 				D40B284E2028860D00CA8559 /* OpenCVDemo */,
-				D471E46920501DDC00F38C26 /* DLib */,
 				D429817B2052AF0300A28DF5 /* SwiftVisionTests */,
 			);
 		};
@@ -550,13 +539,6 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		D471E46820501DDC00F38C26 /* Resources */ = {
-			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
@@ -567,15 +549,20 @@
 				D4A572CC202A1E2800D8F4B0 /* UIImage+Mat.mm in Sources */,
 				D471D7E920500CE600F38C26 /* ContourSpanInfo.mm in Sources */,
 				D4A572C3202A1E1500D8F4B0 /* PageDewarp.mm in Sources */,
-				D42981772052AE0600A28DF5 /* KeyPointProjector.mm in Sources */,
+				D43C4539205B239C0072AF8F /* print+extras.cpp in Sources */,
 				D471D7FA20500F2200F38C26 /* UIImage+Contour.mm in Sources */,
 				D471D7F520500EE300F38C26 /* UIImage+OpenCV.mm in Sources */,
+				D43C4531205B1DFF0072AF8F /* vector+extras.cpp in Sources */,
 				D428ED33204987D6002A7322 /* UIColor+extras.m in Sources */,
 				D471D7E720500CE600F38C26 /* ContourEdge.m in Sources */,
+				D43C453B205BF9720072AF8F /* KeyPointProjector.mm in Sources */,
 				D4BAD1C62034DBB200F4A32C /* NSArray+extras.m in Sources */,
 				D471D7E320500CE600F38C26 /* Contour.mm in Sources */,
+				D4792BA4205B0C1600F74B2E /* Optimizer.cpp in Sources */,
 				D439947220388BA800D9B783 /* functions.mm in Sources */,
+				D43C4535205B1ECB0072AF8F /* math+extras.cpp in Sources */,
 				D471D7E620500CE600F38C26 /* ContourSpan.mm in Sources */,
+				D4792BA8205B10E400F74B2E /* KeyPointProjector.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -597,14 +584,6 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		D47109B92050281F00F38C26 /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				D47109BA2050282600F38C26 /* KeyPointOptimizer.mm in Sources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
@@ -613,10 +592,10 @@
 			target = D40B28382028856300CA8559 /* SwiftVision */;
 			targetProxy = D42981822052AF0300A28DF5 /* PBXContainerItemProxy */;
 		};
-		D47109B1205025E500F38C26 /* PBXTargetDependency */ = {
+		D4792B9F205AF9E100F74B2E /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = D471E46920501DDC00F38C26 /* DLib */;
-			targetProxy = D47109B0205025E500F38C26 /* PBXContainerItemProxy */;
+			target = D40B28382028856300CA8559 /* SwiftVision */;
+			targetProxy = D4792B9E205AF9E100F74B2E /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
@@ -837,7 +816,9 @@
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 6C6HU52U6Y;
 				INFOPLIST_FILE = OpenCVDemo/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 11.1;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				ONLY_ACTIVE_ARCH = YES;
 				PRODUCT_BUNDLE_IDENTIFIER = com.onitaps.OpenCVDemo;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
@@ -854,6 +835,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 6C6HU52U6Y;
 				INFOPLIST_FILE = OpenCVDemo/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 11.1;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.onitaps.OpenCVDemo;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -897,80 +879,6 @@
 			};
 			name = Release;
 		};
-		D471E47020501DDC00F38C26 /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
-				CLANG_WARN_COMMA = NO;
-				CLANG_WARN_CXX0X_EXTENSIONS = NO;
-				CODE_SIGN_IDENTITY = "";
-				CODE_SIGN_STYLE = Automatic;
-				DEFINES_MODULE = YES;
-				DEVELOPMENT_TEAM = 6C6HU52U6Y;
-				DYLIB_COMPATIBILITY_VERSION = 1;
-				DYLIB_CURRENT_VERSION = 1;
-				DYLIB_INSTALL_NAME_BASE = "@rpath";
-				GCC_C_LANGUAGE_STANDARD = gnu99;
-				GCC_PREPROCESSOR_DEFINITIONS = (
-					DLIB_JPEG_SUPPORT,
-					DLIB_NO_GUI_SUPPORT,
-					__NDEBUG,
-					DLIB_USE_BLAS,
-					DLIB_USE_LAPACK,
-				);
-				GCC_SYMBOLS_PRIVATE_EXTERN = YES;
-				HEADER_SEARCH_PATHS = "$(SRCROOT)/DLib";
-				INFOPLIST_FILE = DLib/Info.plist;
-				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-				LIBRARY_SEARCH_PATHS = (
-					"$(inherited)",
-					"$(PROJECT_DIR)/DLib",
-				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.onitaps.DLib;
-				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
-				SKIP_INSTALL = YES;
-				TARGETED_DEVICE_FAMILY = "1,2";
-			};
-			name = Debug;
-		};
-		D471E47120501DDC00F38C26 /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
-				CLANG_WARN_COMMA = NO;
-				CLANG_WARN_CXX0X_EXTENSIONS = NO;
-				CODE_SIGN_IDENTITY = "";
-				CODE_SIGN_STYLE = Automatic;
-				DEFINES_MODULE = YES;
-				DEVELOPMENT_TEAM = 6C6HU52U6Y;
-				DYLIB_COMPATIBILITY_VERSION = 1;
-				DYLIB_CURRENT_VERSION = 1;
-				DYLIB_INSTALL_NAME_BASE = "@rpath";
-				GCC_C_LANGUAGE_STANDARD = gnu99;
-				GCC_PREPROCESSOR_DEFINITIONS = (
-					DLIB_JPEG_SUPPORT,
-					DLIB_NO_GUI_SUPPORT,
-					__NDEBUG,
-					DLIB_USE_BLAS,
-					DLIB_USE_LAPACK,
-				);
-				GCC_SYMBOLS_PRIVATE_EXTERN = YES;
-				HEADER_SEARCH_PATHS = "$(SRCROOT)/DLib";
-				INFOPLIST_FILE = DLib/Info.plist;
-				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-				LIBRARY_SEARCH_PATHS = (
-					"$(inherited)",
-					"$(PROJECT_DIR)/DLib",
-				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.onitaps.DLib;
-				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
-				SKIP_INSTALL = YES;
-				TARGETED_DEVICE_FAMILY = "1,2";
-			};
-			name = Release;
-		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -1006,15 +914,6 @@
 			buildConfigurations = (
 				D42981852052AF0300A28DF5 /* Debug */,
 				D42981862052AF0300A28DF5 /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
-		D471E46F20501DDC00F38C26 /* Build configuration list for PBXNativeTarget "DLib" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				D471E47020501DDC00F38C26 /* Debug */,
-				D471E47120501DDC00F38C26 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

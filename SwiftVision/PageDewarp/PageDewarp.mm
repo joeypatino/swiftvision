@@ -18,8 +18,7 @@
 #import "EigenVector.h"
 #import "LineInfo.h"
 #import "CGRectOutline.h"
-
-#import "DLib.h"
+#import "Optimizer.hpp"
 
 static inline struct EigenVector
 EigenVectorMake(cv::Point2f x, cv::Point2f y) {
@@ -32,76 +31,11 @@ EigenVectorMake(cv::Point2f x, cv::Point2f y) {
 using namespace std;
 using namespace cv;
 
-class CostFunction:public MinProblemSolver::Function {
-public:
-    CostFunction(std::vector<cv::Point2f> _destinationPoints, std::vector<cv::Point2f> _keyPointIndexes, KeyPointProjector *_projector){
-        destinationPoints = _destinationPoints;
-        keyPointIndexes = _keyPointIndexes;
-        projector = _projector;
-    }
-    double calc(const double* x)const {
-        std::vector<cv::Point2f> ppts = [projector projectKeypoints:keyPointIndexes of:(double *)x];
-        Mat diff = Mat(destinationPoints) - Mat(ppts);
-        Mat sqrd = diff.mul(diff);
-        Scalar sums = cv::sum(sqrd);
-        printf("%f\n", sums[0] + sums[1]);
-        return sums[0] + sums[1];
-    }
-    void setInput(std::vector<double> input) {
-        inputParams = input;
-    }
-    int getDims() const {
-        return int(inputParams.size());
-    }
-private:
-    std::vector<double> inputParams;
-    std::vector<cv::Point2f> destinationPoints;
-    std::vector<cv::Point2f> keyPointIndexes;
-    KeyPointProjector *projector;
-};
-
-struct OptimizerResult {
-    double fun;
-    double dur;
-    std::vector<double> x;
-};
-
-class Optimizer {
-public:
-    Optimizer(Ptr<CostFunction> fn, std::vector<double> x) {
-        params = x;
-        fn->setInput(params);
-        solver = DownhillSolver::create();
-        solver->setTermCriteria(TermCriteria(TermCriteria::MAX_ITER + TermCriteria::EPS, 500000, 0.0001));
-        solver->setInitStep(Mat_<double>(1, int(x.size()), 0.5));
-        solver->setFunction(fn);
-    }
-    OptimizerResult optimize() {
-        NSDate *start = [NSDate date];
-        NSTimeInterval interval = [start timeIntervalSinceNow];
-        OptimizerResult res;
-        res.fun = solver->minimize(params);
-        res.x = params;
-        res.dur = interval - [start timeIntervalSinceNow];
-        return res;
-    }
-    double optimizeOnce(std::vector<double> params) {
-        double x[params.size()];
-        for (int i = 0; i < int(params.size()); i++) {
-            x[i] = params[i];
-        }
-        return solver->getFunction()->calc(x);
-    }
-private:
-    Ptr<DownhillSolver> solver;
-    std::vector<double> params;
-};
-
 @interface PageDewarp ()
 @property (nonatomic, strong) NSArray<Contour *> *contours;
 @property (nonatomic, strong) NSArray<ContourSpan *> *spans;
 @property (nonatomic, assign) EigenVector eigenVector;
-@property (nonatomic, strong) KeyPointProjector *projector;
+
 @end
 
 // MARK: -
@@ -114,7 +48,6 @@ private:
     self.contours = [mask contoursFilteredBy:filter];;
     self.spans = [mask spansFromContours:self.contours];;
     self.eigenVector = [self generateEigenVectorFromSpans:self.spans];
-    self.projector = [[KeyPointProjector alloc] init];
 
     return self;
 }
@@ -130,13 +63,14 @@ private:
     std::vector<cv::Point2f> keyPointIndexes = nsarray::convertTo2f([spanInfo keyPointIndexesForSpanCounts:spanInfo.spanCounts]);
     std::vector<cv::Point2f> dstpoints = nsarray::convertTo2f([spanInfo destinationPoints:allSpanPoints]);
 
-    Ptr<CostFunction> fn = Ptr<CostFunction>(new CostFunction(dstpoints, keyPointIndexes, self.projector));
+    Ptr<CostFunction> fn = Ptr<CostFunction>(new CostFunction(dstpoints, keyPointIndexes));
     Optimizer opt = Optimizer(fn, params);
     printf("initial objective is %f\n",  opt.optimizeOnce(params));
 
     OptimizerResult res = opt.optimize();
     printf("optimization took: %f\n", res.dur);
     printf("final objective is %f\n", res.fun);
+
     return [[UIImage alloc] initWithCVMat:display];
 }
 

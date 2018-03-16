@@ -18,7 +18,7 @@ using namespace cv;
 // MARK: -
 - (NSArray<Contour *> *)contoursFilteredBy:(BOOL (^)(Contour *contour))filter {
     int TEXT_MIN_WIDTH = 6;         //# min px width of detected text contour
-    int TEXT_MIN_HEIGHT = 2;        //# min px height of detected text contour
+    int TEXT_MIN_HEIGHT = 4;        //# min px height of detected text contour
     int TEXT_MIN_ASPECT = 1.5;      //# filter out text contours below this w/h ratio
     int TEXT_MAX_THICKNESS = 24;    //# max px thickness of detected text contour
 
@@ -30,12 +30,18 @@ using namespace cv;
     for (int j = 0; j < contours.size(); j++) {
         vector<cv::Point> points = contours.at(j);
         cv::Rect rect = cv::boundingRect(points);
-        if (rect.width < TEXT_MIN_WIDTH or
-            rect.height < TEXT_MIN_HEIGHT or
+        if (rect.width < TEXT_MIN_WIDTH ||
+            rect.height < TEXT_MIN_HEIGHT ||
             rect.width < TEXT_MIN_ASPECT * rect.height)
             continue;
 
         Contour *contour = [[Contour alloc] initWithCVMat:Mat(points)];
+
+        // FIXME: Debug code
+        if (contour.bounds.origin.x <= 30 && contour.bounds.origin.y >= self.size.height / 2) {
+            continue;
+        }
+
         if (filter)
             if (!filter(contour))
                 continue;

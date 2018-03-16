@@ -30,7 +30,7 @@ using namespace std;
     _color = [UIColor randomColor];
     _image = image;
     _contours = contours;
-_spanPoints = [self sampleSpanPointsFrom:self.contours];
+    _spanPoints = [self sampleSpanPointsFrom:self.contours];
     _line = [self spanLineInfoFromKeyPoints:self.keyPoints];
 
     return self;

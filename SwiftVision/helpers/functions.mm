@@ -66,26 +66,6 @@ namespace geom {
     }
 }
 
-namespace math {
-    double polyval(std::vector<double> p, double x) {
-        double output = 0;
-        double polyCnt = p.size();
-        for (int i = 0; i < polyCnt; i++) {
-            output += p[i] * pow(x, (polyCnt-1)-i);
-        }
-        return output;
-    }
-
-    std::vector<double> polyval(std::vector<double> p, std::vector<double> x) {
-        long polyCnt = x.size();
-        std::vector<double> output = std::vector<double>(polyCnt, 1);
-        for (int i = 0; i < polyCnt; i++) {
-            output[i] = polyval(p, x[i]);
-        }
-        return output;
-    }
-}
-
 namespace nsarray {
     NSArray <NSValue *> * add(NSArray <NSValue *> *points, cv::Point2f pt) {
         NSMutableArray *multipliedPts = @[].mutableCopy;
@@ -196,38 +176,6 @@ namespace nsarray {
 }
 
 namespace vectors {
-    std::vector<std::vector<double>> hstack(std::vector<std::vector<double>> mat1, std::vector<std::vector<double>> mat2) {
-        // rows then cols
-        int mat1R = int(mat1.size());
-        int mat2R = int(mat2.size());
-        int mat1C = int(mat1[0].size());
-        int mat2C = int(mat2[0].size());
-        assert(mat1R == mat2R);
-        std::vector<std::vector<double>> output(mat1R, std::vector<double>(mat1C + mat2C, 0));
-        for (int r = 0; r < mat1R; r++) {
-            for (int m1 = 0; m1 < mat1C; m1++) {
-                output[r][m1] = mat1[r][m1];
-            }
-            for (int m2 = 0; m2 < mat2C; m2++) {
-                output[r][m2 + mat1C] = mat2[r][m2];
-            }
-        }
-        return output;
-    }
-
-    std::vector<std::vector<double>> reshape(std::vector<double> p, int rows, int cols) {
-        assert(rows * cols == p.size());
-        std::vector<std::vector<double>> output(rows, std::vector<double>(cols, 0));
-        int i = 0;
-        for (int r = 0; r < rows; r++) {
-            for (int c = 0; c < cols; c++) {
-                output[r][c] = p[i];
-                i++;
-            }
-        }
-        return output;
-    }
-
     NSArray <NSValue *> * convertTo(std::vector<std::vector<int>> vector) {
         assert(vector.size() == 2);
         NSMutableArray <NSValue *> *output = @[].mutableCopy;
@@ -247,137 +195,6 @@ namespace vectors {
 
 // MARK: - Loggging
 namespace logs {
-    void describe_vector(std::vector<std::vector<double>> vector, char const *name) {
-        printf("\n# %s #\n", name);
-        printf("----------------------------\n");
-        int numCols = int(vector.size());
-        int numRows = int(vector[0].size());
-        printf("[");
-        for (int x = 0; x < numCols; x++) {
-            printf("[");
-            for (int y = 0; y < numRows; y++) {
-                double z = vector[x][y];
-                printf("%f", z);
-                if (y < numRows-1) { printf(", "); }
-            }
-            if (x < numCols-1) { printf("]\n"); }
-            else { printf("]"); }
-        }
-        printf("]\n");
-        printf("----------------------------\n");
-        printf("\n");
-    }
-
-    void describe_vector(std::vector<double> vector, char const *name) {
-        printf("\n# %s #\n", name);
-        printf("size: {%zul}\n", vector.size());
-        printf("----------------------------\n");
-        int numRows = int(vector.size());
-        printf("[");
-        for (int x = 0; x < numRows; x++) {
-            double z = vector[x];
-            printf("%f", z);
-            if (x < numRows-1) { printf(",\n"); }
-            else { printf("]\n"); }
-        }
-        printf("----------------------------\n");
-        printf("\n");
-    }
-
-    void describe_vector(std::vector<float> vector, char const *name) {
-        printf("\n# %s #\n", name);
-        printf("size: {%zul}\n", vector.size());
-        printf("----------------------------\n");
-        int numRows = int(vector.size());
-        printf("[");
-        for (int x = 0; x < numRows; x++) {
-            float z = vector[x];
-            printf("%f", z);
-            if (x < numRows-1) { printf(",\n"); }
-            else { printf("]\n"); }
-        }
-        printf("----------------------------\n");
-        printf("\n");
-    }
-
-    void describe_vector(std::vector<cv::Point> vector, char const *name ) {
-        printf("\n############ cv::Point %s ############\n", name);
-        printf("size: {%zul}\n", vector.size());
-        printf("----------------------------\n");
-
-        std::cout << vector << std::endl;
-
-        printf("\n############ %s ############\n", name);
-        printf("\n");
-    }
-
-    void describe_vector(std::vector<cv::Point2d> vector, char const *name ) {
-        printf("\n############ cv::Point2d %s ############\n", name);
-        printf("size: {%zul}\n", vector.size());
-        printf("----------------------------\n");
-
-        std::cout << vector << std::endl;
-
-        printf("\n############ %s ############\n", name);
-        printf("\n");
-    }
-
-    void describe_vector(std::vector<cv::Point2f> vector, char const *name ) {
-        printf("\n############ cv::Point2f %s ############\n", name);
-        printf("size: {%zul}\n", vector.size());
-        printf("----------------------------\n");
-
-        std::cout << vector << std::endl;
-
-        printf("\n############ %s ############\n", name);
-        printf("\n");
-    }
-
-    void describe_vector(std::vector<cv::Point3d> vector, char const *name) {
-        printf("\n############ cv::Point3d %s ############\n", name);
-        printf("size: {%zul}\n", vector.size());
-        printf("----------------------------\n");
-
-        std::cout << vector << std::endl;
-
-        printf("\n############ %s ############\n", name);
-        printf("\n");
-    }
-
-    void describe_vector(std::vector<cv::Point3f> vector, char const *name) {
-        printf("\n############ cv::Point3f %s ############\n", name);
-        printf("size: {%zul}\n", vector.size());
-        printf("----------------------------\n");
-
-        std::cout << vector << std::endl;
-
-        printf("\n############ %s ############\n", name);
-        printf("\n");
-    }
-
-    void describe_vector( cv::Mat mat, char const *name ) {
-        printf("\n############ cv::Mat::%s ############\n", name);
-        printf("type: %i\n", mat.type());
-        printf("depth: %i\n", mat.depth());
-        printf("dims: %i\n", mat.dims);
-        printf("channels: %i\n", mat.channels());
-        printf("size: {%i, %i}\n", mat.size().height, mat.size().width);
-        printf("shape: {");
-        for (int i = 0; i < mat.dims; ++i) {
-            printf("%i", mat.size[i]);
-            if (i < mat.dims - 1){ printf(", "); }
-        }
-        printf(", %i", mat.cols);
-        printf("}\n");
-        printf("total: %zul\n", mat.total());
-        printf("----------------------------\n");
-
-        std::cout << mat << std::endl;
-
-        printf("\n############ %s ############\n", name);
-        printf("\n");
-    }
-
     void describe_values(NSArray <NSNumber *> *pts, char const *name) {
         printf("\n############ values::%s ############\n", name);
         for (NSNumber *ptNumber in pts) {

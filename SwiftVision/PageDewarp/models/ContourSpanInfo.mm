@@ -113,14 +113,14 @@ using namespace cv;
     CGSize dimensions = self.roughDimensions;
 
     // Array of object points in the object coordinate space
-    vector<Point3f> cornersObject3d = {
-        Point3f(0, 0, 0),
-        Point3f(dimensions.width, 0, 0),
-        Point3f(dimensions.width, dimensions.height, 0),
-        Point3f(0, dimensions.height, 0)};
+    vector<Point3d> cornersObject3d = {
+        Point3d(0, 0, 0),
+        Point3d(dimensions.width, 0, 0),
+        Point3d(dimensions.width, dimensions.height, 0),
+        Point3d(0, dimensions.height, 0)};
 
     // Array of corresponding image points
-    vector<Point2f> imagePoints = nsarray::convertTo2f(nsarray::pointsFrom(self.corners));
+    vector<Point2d> imagePoints = nsarray::convertTo2d(nsarray::pointsFrom(self.corners));
 
     std::vector<cv::Point3d> camera = {
         cv::Point3d(1.8,0.0,0.0),
@@ -137,7 +137,7 @@ using namespace cv;
     // estimate rotation and translation from four 2D-to-3D point correspondences
     solvePnP(cornersObject3d, imagePoints,
              K,
-             Mat(5, 1, cv::DataType<double>::type, 0.0),
+             Mat::zeros(5, 1, cv::DataType<double>::type),
              rvec,
              tvec);
 
@@ -166,12 +166,12 @@ using namespace cv;
     }
 
     for (NSNumber *number in self.yCoordinates) {
-        params.push_back(number.doubleValue);
+        params.push_back(number.floatValue);
     }
 
     for (NSArray <NSNumber *> *numbers in self.xCoordinates) {
         for (NSNumber *number in numbers) {
-            params.push_back(number.doubleValue);
+            params.push_back(number.floatValue);
         }
     }
 

@@ -132,6 +132,14 @@ namespace nsarray {
         return vectorPoints;
     }
 
+    std::vector<cv::Point2d>convertTo2d(NSArray <NSValue *> *points) {
+        std::vector<cv::Point2d> vectorPoints = std::vector<cv::Point2d>();
+        for (NSValue *point in points) {
+            vectorPoints.push_back(geom::convertTo(point.CGPointValue));
+        }
+        return vectorPoints;
+    }
+
     std::vector<double> convertTo(NSArray <NSValue *> *values) {
         std::vector<double> output = std::vector<double>(values.count * 2, 1);
         for (int i = 0; i < values.count; i++) {

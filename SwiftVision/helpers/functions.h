@@ -49,6 +49,7 @@ namespace nsarray {
     NSArray <NSValue *> * norm2pix(CGSize size, NSArray <NSValue *> *points);
 
     std::vector<cv::Point2f> convertTo2f(NSArray <NSValue *> *points);
+    std::vector<cv::Point2d> convertTo2d(NSArray <NSValue *> *points);
     std::vector<double> convertTo(NSArray <NSValue *> *values);
     std::vector<double> convertTo(NSArray <NSNumber *> *numbers);
 

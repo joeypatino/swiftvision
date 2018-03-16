@@ -10,12 +10,14 @@
 
 @implementation ContourSpanInfo
 - (instancetype)initWithCorners:(CGRectOutline)corners
+                   allKeyPoints:(std::vector<std::vector<cv::Point2d>>)allSpanPoints
                    xCoordinates:(std::vector<std::vector<double>>)xCoordinates
                    yCoordinates:(std::vector<double>)yCoordinates {
     self = [super init];
     _corners = corners;
     _xCoordinates = xCoordinates;
     _yCoordinates = yCoordinates;
+    _allSpanPoints = allSpanPoints;
     return self;
 }
 

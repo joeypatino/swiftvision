@@ -27,6 +27,13 @@ typedef NS_ENUM(NSUInteger, ContourRenderingMode) {
 /// returns an image containing all the contours span keypoints.
 - (UIImage *_Nullable)renderKeyPoints NS_SWIFT_NAME(renderKeyPoints());
 
+/// returns an image containing keypoint correspondences, before optimization
+- (UIImage *_Nullable)renderPreCorrespondences NS_SWIFT_NAME(renderPreCorrespondences());
+/// returns an image containing keypoint correspondences, after optimization
+- (UIImage *_Nullable)renderPostCorrespondences NS_SWIFT_NAME(renderPostCorrespondences());
+
 // the original input image
 @property (nonatomic, strong) UIImage *_Nonnull inputImage;
+// resized "working" copy of the image
+@property (nonatomic, strong) UIImage *_Nonnull workingImage;
 @end

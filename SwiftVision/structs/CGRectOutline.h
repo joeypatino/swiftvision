@@ -4,17 +4,18 @@ CGRectOutline {
     CGPoint botLeft;
     CGPoint botRight;
     CGPoint topRight;
+    CGSize size;
 };
 typedef struct CG_BOXABLE CGRectOutline CGRectOutline;
 
 static inline struct CGRectOutline
-CGRectOutlineMake(CGPoint topLeft, CGPoint botLeft, CGPoint botRight, CGPoint topRight) {
+CGRectOutlineMake(CGPoint topLeft, CGPoint topRight, CGPoint botRight, CGPoint botLeft) {
     struct CGRectOutline outline;
 
     outline.topLeft = topLeft;
     outline.botLeft = botLeft;
     outline.botRight = botRight;
     outline.topRight = topRight;
-
+    outline.size = CGSizeMake(topRight.x - topLeft.x, botLeft.y - topLeft.y);
     return outline;
 }

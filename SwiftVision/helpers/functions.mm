@@ -60,9 +60,9 @@ namespace geom {
         int ymax = int(size.height) - PAGE_MARGIN_Y;
 
         return CGRectOutlineMake(CGPointMake(xmin, ymin),
-                                 CGPointMake(xmin, ymax),
+                                 CGPointMake(xmax, ymin),
                                  CGPointMake(xmax, ymax),
-                                 CGPointMake(xmax, ymin));
+                                 CGPointMake(xmin, ymax));
     }
 }
 

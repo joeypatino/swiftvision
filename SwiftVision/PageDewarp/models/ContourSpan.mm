@@ -26,7 +26,7 @@ using namespace std;
 @implementation ContourSpan
 - (instancetype)initWithImage:(UIImage *)image contours:(NSArray <Contour *> *)contours {
     self = [super init];
-    _samplingStep = 20;
+    _samplingStep = 40;
     _color = [UIColor randomColor];
     _image = image;
     _contours = contours;

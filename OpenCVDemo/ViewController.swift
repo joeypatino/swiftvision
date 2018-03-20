@@ -8,10 +8,7 @@ class ViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         let image = UIImage(named: "input_image.jpeg")!
-        guard let resized = image.resize(to: CGSize(width: 1280, height: 700))
-            else { return }
-
-        imageContours = PageDewarp(image: resized)
+        imageContours = PageDewarp(image: image)
         imageView.image = imageContours.inputImage
     }
 
@@ -35,9 +32,15 @@ class ViewController: UIViewController {
         imageView.image = imageContours.renderKeyPoints()
     }
 
+    @IBAction func preCorrespondencesAction(_ sender: Any) {
+        imageView.image = imageContours.renderPreCorrespondences()
+    }
+
+    @IBAction func postCorrespondencesAction(_ sender: Any) {
+        imageView.image = imageContours.renderPostCorrespondences()
+    }
+
     @IBAction func dewarpAction(_ sender: Any) {
         imageView.image = imageContours.render()
     }
-
-
 }

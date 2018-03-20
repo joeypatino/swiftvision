@@ -3,19 +3,28 @@
 #include "math+extras.hpp"
 #include "print+extras.hpp"
 
-vector<Point2d> KeyPointProjector::projectKeypoints(vector<Point2d> keyPoints, double *vectors) const {
-    std::vector<Point2d> projectedPoints;
+std::vector<cv::Point2d> KeyPointProjector::projectKeypoints(std::vector<cv::Point2d> keyPoints, double *vectors) const {
+    std::vector<cv::Point2d> projectedPoints;
     for (int i = 0; i < keyPoints.size(); i++) {
-        Point2f p = keyPoints[i];
+        cv::Point2f p = keyPoints[i];
         float x = vectors[int(p.x)];
         float y = vectors[int(p.y)];
-        projectedPoints.push_back(Point2d(x, y));
+        projectedPoints.push_back(cv::Point2d(x, y));
     }
-    projectedPoints[0] = Point2d(0, 0);
+    projectedPoints[0] = cv::Point2d(0, 0);
     return projectXY(projectedPoints, vectors);
 }
 
-vector<Point2d> KeyPointProjector::projectXY(vector<Point2d> xyCoordsArr, double *vectors) const {
+std::vector<cv::Point2d> KeyPointProjector::projectXY(std::vector<std::vector<double>> xyCoordsArr, double *vectors) const {
+    std::vector<cv::Point2d> points;
+    for (int r = 0; r < xyCoordsArr.size(); r++) {
+        std::vector<double> row = xyCoordsArr[r];
+        points.push_back(Point2d(row[0], row[1]));
+    }
+    return projectXY(points, vectors);
+}
+
+std::vector<cv::Point2d> KeyPointProjector::projectXY(std::vector<cv::Point2d> xyCoordsArr, double *vectors) const {
     std::vector<cv::Point3d> objectPoints = objectPointsFrom(xyCoordsArr, vectors);
     //logs::describe_vector(objectPoints, "objectPoints");
 
@@ -34,21 +43,21 @@ vector<Point2d> KeyPointProjector::projectXY(vector<Point2d> xyCoordsArr, double
     //logs::describe_vector(cv::Mat(tvec), "tvec");
 
     // Input camera matrix
-    cv::Mat intrinsics = cameraIntrinsics();
-    //logs::describe_vector(intrinsics, "intrinsics");
+    cv::Matx33d intrinsics = cameraIntrinsics();
+    //logs::describe_vector(cv::Mat(intrinsics), "intrinsics");
 
     // Input vector of distortion coefficients
-    cv::Mat distanceCoeffs = cv::Mat::zeros(1, 5, CV_64FC1);
+    cv::Mat distanceCoeffs = cv::Mat::zeros(5, 1, cv::DataType<double>::type);
     //logs::describe_vector(distanceCoeffs, "distanceCoeffs");
 
     std::vector<cv::Point2d> imagePoints;
-    projectPoints(objectPoints, rvec, tvec, intrinsics, distanceCoeffs, imagePoints);
+    cv::projectPoints(objectPoints, rvec, tvec, intrinsics, distanceCoeffs, imagePoints);
     //logs::describe_vector(imagePoints, "imagePoints");
 
     return imagePoints;
 }
 
-vector<Point3d> KeyPointProjector::objectPointsFrom(vector<Point2d> xyCoordsArr, double *vectors) const {
+std::vector<cv::Point3d> KeyPointProjector::objectPointsFrom(std::vector<cv::Point2d> xyCoordsArr, double *vectors) const {
     float alpha = vectors[6];
     float beta = vectors[7];
 
@@ -70,17 +79,19 @@ vector<Point3d> KeyPointProjector::objectPointsFrom(vector<Point2d> xyCoordsArr,
         double x = objPoints[i][0];
         double y = objPoints[i][1];
         double z = objPoints[i][2];
-        Point3d point = cv::Point3d(x, y, z);
+        cv::Point3d point = cv::Point3d(x, y, z);
         objectPoints.push_back(point);
     }
 
     return objectPoints;
 }
 
-Mat KeyPointProjector::cameraIntrinsics() const {
-    Mat intrinsics = Mat(3, 3, CV_64FC1);
-    intrinsics.at<double>(0, 0) = 1.8;
-    intrinsics.at<double>(1, 1) = 1.8;
-    intrinsics.at<double>(2, 2) = 1.0;
+cv::Matx33d KeyPointProjector::cameraIntrinsics() const {
+    cv::Matx33d intrinsics = Matx<double, 3, 3>();
+    intrinsics(0, 0) = 1.8;
+    intrinsics(1, 1) = 1.8;
+    intrinsics(0, 2) = 0.;
+    intrinsics(1, 2) = 0.;
+    intrinsics(2, 2) = 1.;
     return intrinsics;
 }

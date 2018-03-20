@@ -31,9 +31,10 @@ using namespace cv;
 @implementation PageDewarp
 - (instancetype)initWithImage:(UIImage *)image filteredBy:(BOOL (^)(Contour *c))filter {
     self = [super init];
-    UIImage *mask = [[[image threshold:55 constant:25] dilate:CGSizeMake(9, 1)] erode:CGSizeMake(1, 3)];
-
     self.inputImage = image;
+    self.workingImage = [image resizeTo:CGSizeMake(1280, 700)];
+
+    UIImage *mask = [[[self.workingImage threshold:55 constant:25] dilate:CGSizeMake(9, 1)] erode:CGSizeMake(1, 3)];
     self.contours = [mask contoursFilteredBy:filter];;
     self.spans = [mask spansFromContours:self.contours];;
 
@@ -43,7 +44,9 @@ using namespace cv;
 // MARK: - render dewarped image
 - (UIImage *)render {
     std::vector<std::vector<cv::Point2d>> allSpanPoints = [self allSamplePoints:self.spans];
-    ImageRemapper *remapper = [[ImageRemapper alloc] initWithImage:self.inputImage remappingKeypoints:allSpanPoints];
+    ImageRemapper *remapper = [[ImageRemapper alloc] initWithOriginalImage:self.inputImage
+                                                              workingImage:self.workingImage
+                                                        remappingKeypoints:allSpanPoints];
     return [remapper remap];
 }
 
@@ -53,7 +56,7 @@ using namespace cv;
 }
 
 - (UIImage *)renderContours {
-    cv::Mat display = [self.inputImage mat];
+    cv::Mat display = [self.workingImage mat];
     vector<vector<cv::Point>> contours;
     for (int i = 0; i < self.contours.count; i++){
         Contour *contour = self.contours[i];
@@ -65,7 +68,7 @@ using namespace cv;
         cv::drawContours(display, contours, i, color, -1);
     }
 
-    cv::Mat output = [self.inputImage mat];
+    cv::Mat output = [self.workingImage mat];
     cv::addWeighted(display, 0.7, output, 0.3, 0, output);
     for (Contour *contour in self.contours) {
         cv::Scalar color = [self scalarColorFrom:[UIColor whiteColor]];
@@ -81,9 +84,9 @@ using namespace cv;
 }
 
 - (UIImage *)render:(UIColor *)color mode:(ContourRenderingMode)mode {
-    cv::Mat outImage = [self.inputImage mat];
-    vector<vector<cv::Point> > contours;
+    cv::Mat outImage = [self.workingImage mat];
 
+    vector<vector<cv::Point>> contours;
     for (int i = 0; i < self.contours.count; i++){
         Contour *contour = self.contours[i];
         contours.push_back(contour.opencvContour);
@@ -101,7 +104,7 @@ using namespace cv;
 }
 
 - (UIImage *)renderKeyPoints:(UIColor *)color mode:(ContourRenderingMode)mode {
-    cv::Mat display = [self.inputImage mat];
+    cv::Mat display = [self.workingImage mat];
 
     for (ContourSpan *span in self.spans) {
         cv::Point2f start = geom::convertTo(span.line.p1);
@@ -115,6 +118,22 @@ using namespace cv;
     }
 
     return [[UIImage alloc] initWithCVMat:display];
+}
+
+- (UIImage *)renderPreCorrespondences {
+    std::vector<std::vector<cv::Point2d>> allSpanPoints = [self allSamplePoints:self.spans];
+    ImageRemapper *remapper = [[ImageRemapper alloc] initWithOriginalImage:self.inputImage
+                                                              workingImage:self.workingImage
+                                                        remappingKeypoints:allSpanPoints];
+    return [remapper preCorrespondenceKeyPoints];
+}
+
+- (UIImage *)renderPostCorrespondences {
+    std::vector<std::vector<cv::Point2d>> allSpanPoints = [self allSamplePoints:self.spans];
+    ImageRemapper *remapper = [[ImageRemapper alloc] initWithOriginalImage:self.inputImage
+                                                              workingImage:self.workingImage
+                                                        remappingKeypoints:allSpanPoints];
+    return [remapper postCorresponenceKeyPoints];
 }
 
 // MARK: - Render helpers

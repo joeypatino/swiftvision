@@ -4,6 +4,7 @@ import SwiftVision
 class ViewController: UIViewController {
     @IBOutlet weak var imageView: UIImageView!
     var imageContours: PageDewarp!
+    var dewarpedImage: UIImage?
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -41,6 +42,7 @@ class ViewController: UIViewController {
     }
 
     @IBAction func dewarpAction(_ sender: Any) {
-        imageView.image = imageContours.render()
+        imageView.image = dewarpedImage ?? imageContours.render()
+        dewarpedImage = imageView.image
     }
 }

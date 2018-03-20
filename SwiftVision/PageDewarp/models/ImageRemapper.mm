@@ -63,62 +63,63 @@ EigenVectorMake(cv::Point2f x, cv::Point2f y) {
     int REMAP_DECIMATE = 16.0;
     int height = math::round(0.5 * self.normalizedDimensions.height * 1.0 * self.inputImage.size.height, REMAP_DECIMATE);
     int width = math::round(height * self.normalizedDimensions.width / self.normalizedDimensions.height, REMAP_DECIMATE);
-    cout << "input was " << self.inputImage.size.width << "x" << self.inputImage.size.height << endl;
-    cout << "output will be " << width << "x" << height << endl;
 
     int heightSmall = height / REMAP_DECIMATE;
     int widthSmall = width / REMAP_DECIMATE;
 
-    vector_d pageXRng = math::linspace(0, self.normalizedDimensions.width, widthSmall);
-    vector_d pageYRng = math::linspace(0, self.normalizedDimensions.height, heightSmall);
+    vector_d xRng = math::linspace(0, self.normalizedDimensions.width, widthSmall);
+    vector_d yRng = math::linspace(0, self.normalizedDimensions.height, heightSmall);
 
-    int xsize = int(pageXRng.size());
-    int ysize = int(pageYRng.size());
-    vector_dd xx = vector_dd(ysize, vector_d(xsize, 0));
-    vector_dd yy = vector_dd(ysize, vector_d(xsize, 0));
-    vectors::meshgrid(pageXRng, pageYRng, &xx, &yy);
+    int xsize = int(xRng.size());
+    int ysize = int(yRng.size());
+    vector_dd meshX = vector_dd(ysize, vector_d(xsize, 0));
+    vector_dd meshY = vector_dd(ysize, vector_d(xsize, 0));
+    vectors::meshgrid(xRng, yRng, &meshX, &meshY);
 
-    vector_dd xx_flat = vectors::reshape(xx, int(xx.size()), 1);
-    vector_dd yy_flat = vectors::reshape(yy, int(yy.size()), 1);
-    vector_dd xy = vectors::hstack(xx_flat, yy_flat);
+    vector_dd flatX = vectors::reshape(meshX, int(meshX.size()), 1);
+    vector_dd flatY = vectors::reshape(meshY, int(meshY.size()), 1);
+    vector_dd xy = vectors::hstack(flatX, flatY);
 
-    vector_d p = self.defaultParameters;
-//    OptimizerResult res = [self optimizeImage];
-//    OptimizerResult res2 = [self optimizeImageCornersWithOptimizedKeypoints:res.x];
-//    vector_d p = res2.x;
+//    vector_d parameters = self.defaultParameters;
+    OptimizerResult popt = [self optimizeImage];
+//    OptimizerResult copt = [self optimizeImageCornersWithOptimizedKeypoints:popt.x];
+    vector_d parameters = popt.x;
 
-    cv::Size inputShape = cv::Size(self.inputImage.size.height, self.inputImage.size.width);
-    std::vector<cv::Point2d> projectedPoints = self.projector->projectXY(xy, p.data());
-    std::vector<cv::Point2d> imagePoints = vectors::norm2pix(inputShape, projectedPoints);
+    cv::Size inputShape = cv::Size(self.inputImage.size.width, self.inputImage.size.height);
+    std::vector<cv::Point2d> prjtdPts = self.projector->projectXY(xy, parameters.data());
+    std::vector<cv::Point2d> imgPts = vectors::norm2pix(inputShape, prjtdPts);
 
     cv::Size size = cv::Size(width, height);
-    cv::Mat xPts = [self scaled:vectors::axis(0, imagePoints) size:size];
-    cv::Mat yPts = [self scaled:vectors::axis(1, imagePoints) size:size];
+    cv::Mat xPts = [self scale:vectors::axis(0, imgPts) from:cv::Size(xsize, ysize) size:size];
+    cv::Mat yPts = [self scale:vectors::axis(1, imgPts) from:cv::Size(xsize, ysize) size:size];
 
-    cv::Mat inputImage = [self.inputImage mat];
     cv::Mat outputImage;
-    cv::remap(inputImage,
+    cv::remap([self.inputImage mat],
               outputImage,
               xPts,
               yPts,
               cv::INTER_CUBIC,
-              BORDER_DEFAULT);
+              cv::BORDER_REPLICATE);
 
     return [[UIImage alloc] initWithCVMat:outputImage];
 }
 
-- (cv::Mat)scaled:(vector_d)axis size:(cv::Size)size {
+- (cv::Mat)scale:(vector_d)axis from:(cv::Size)from size:(cv::Size)size {
+    cv::Mat base = cv::Mat::zeros(from.height, from.width, cv::DataType<double>::type);
+    int i = 0;
+    for (int r = 0; r < from.height; r++) {
+        for (int c = 0; c < from.width; c++) {
+            base.at<double>(r, c) = axis[i];
+            i++;
+        }
+    }
     cv::Mat resized;
-    cv::Mat converted;
-    cv::resize(axis,
+    cv::resize(base,
                resized,
                size, 0, 0,
                cv::INTER_CUBIC);
-    resized.convertTo(converted, CV_32F);
-    //logs::describe_vector(converted, "converted");
-    cout << converted.size << " x " << converted.channels() << endl;
-
-    return converted;
+    resized.convertTo(resized, CV_32F);
+    return resized;
 }
 
 - (UIImage *)preCorrespondenceKeyPoints {

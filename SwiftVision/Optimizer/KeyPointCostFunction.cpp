@@ -16,5 +16,6 @@ double KeyPointCostFunction::calc(const double* x) const {
     cv::Mat diff = cv::Mat(destinationPoints) - cv::Mat(ppts);
     cv::Mat sqrd = diff.mul(diff);
     cv::Scalar sums = cv::sum(sqrd);
-    return math::filterNanInf(sums[0]) + math::filterNanInf(sums[1]);
+    return sums[0] + sums[1];
+    //return math::filterNanInf(sums[0]) + math::filterNanInf(sums[1]);
 }

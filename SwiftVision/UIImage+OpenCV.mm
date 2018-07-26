@@ -2,6 +2,7 @@
 #import "UIImage+OpenCV.h"
 // extras
 #import "UIImage+Mat.h"
+#import "CGRectOutline.h"
 
 @implementation UIImage (OpenCV)
 - (UIImage *)resizeTo:(CGSize)size {
@@ -70,8 +71,18 @@
     cv::Mat compImage = [img mat];
 
     cv::MatExpr expr = cv::min(inImage, compImage);
-    cv::Mat outImage = cv::Mat(expr);
-
-    return [[UIImage alloc] initWithCVMat:outImage];
+    return [[UIImage alloc] initWithCVMat:expr];
 }
+
+- (UIImage *_Nullable)rectangle:(CGRectOutline)outline {
+    int width = self.size.width;
+    int height = self.size.height;
+    cv::Mat r = cv::Mat::zeros(height, width, cv::DataType<int>::type);
+
+    cv::Point tl = cv::Point(outline.topLeft.x, outline.topLeft.y);
+    cv::Point br = cv::Point(outline.botRight.x, outline.botRight.y);
+    cv::rectangle(r, tl, br, cv::Scalar(255, 255, 255), -1);
+    return [[UIImage alloc] initWithCVMat: r];
+}
+
 @end

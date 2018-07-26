@@ -4,7 +4,6 @@ CGRectOutline {
     CGPoint botLeft;
     CGPoint botRight;
     CGPoint topRight;
-    CGSize size;
 };
 typedef struct CG_BOXABLE CGRectOutline CGRectOutline;
 
@@ -16,6 +15,5 @@ CGRectOutlineMake(CGPoint topLeft, CGPoint topRight, CGPoint botRight, CGPoint b
     outline.botLeft = botLeft;
     outline.botRight = botRight;
     outline.topRight = topRight;
-    outline.size = CGSizeMake(topRight.x - topLeft.x, botLeft.y - topLeft.y);
     return outline;
 }

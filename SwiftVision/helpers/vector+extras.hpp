@@ -16,7 +16,6 @@ namespace vectors {
     vector_dd reshape(vector_d p, int rows, int cols);
     vector_dd reshape(vector_dd p, int rows, int cols);
 
-    vector_dd* createdd(double r, double c);
     void meshgrid(vector_d x, vector_d y, vector_dd *xx, vector_dd *yy);
     
     vector<double> axis(int x, vector<Point2d> points);

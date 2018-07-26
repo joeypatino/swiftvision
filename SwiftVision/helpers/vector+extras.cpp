@@ -46,10 +46,6 @@ namespace vectors {
         return reshape(output, totalSize, cols);
     }
 
-    vector_dd* createdd(double r, double c) {
-        return new std::vector<std::vector<double>>(r, std::vector<double>(c, 0));
-    }
-
     void meshgrid(std::vector<double> x, std::vector<double> y, std::vector<std::vector<double>> *xx, std::vector<std::vector<double>> *yy) {
         int xsize = int(x.size());
         int ysize = int(y.size());

@@ -9,13 +9,11 @@
 #import "ImageRemapper+internal.h"
 // extras
 #import "functions.h"
-//#import "NSArray+extras.h"
 #import "UIImage+Mat.h"
 #import "UIImage+OpenCV.h"
 #import "UIImage+Contour.h"
 #import "UIColor+extras.h"
 // structs
-//#import "EigenVector.h"
 #import "LineInfo.h"
 #import "CGRectOutline.h"
 
@@ -34,9 +32,14 @@ using namespace cv;
     self.inputImage = image;
     self.workingImage = [image resizeTo:CGSizeMake(1280, 700)];
 
-    UIImage *mask = [[[self.workingImage threshold:55 constant:25] dilate:CGSizeMake(9, 1)] erode:CGSizeMake(1, 3)];
-    self.contours = [mask contoursFilteredBy:filter];;
-    self.spans = [mask spansFromContours:self.contours];;
+    UIImage *mask = [[[self.workingImage
+                        threshold:55
+                        constant:25]
+                       dilate:CGSizeMake(9, 1)]
+                      erode:CGSizeMake(1, 3)];
+    UIImage *minMask = [mask elementwiseMinimum:[self.workingImage rectangle:geom::outlineWithSize(self.workingImage.size)]];
+    self.contours = [minMask contoursFilteredBy:filter];
+    self.spans = [minMask spansFromContours:self.contours];
 
     return self;
 }
@@ -72,9 +75,30 @@ using namespace cv;
     cv::addWeighted(display, 0.7, output, 0.3, 0, output);
     for (Contour *contour in self.contours) {
         cv::Scalar color = [self scalarColorFrom:[UIColor whiteColor]];
-        cv::circle(output, geom::convertTo(contour.center), 3, color, 1, cv::LINE_AA);
+        cv::circle(output, geom::convertTo(contour.center), 3, color, -1, cv::LINE_AA);
         cv::line(output, geom::convertTo(contour.clxMin), geom::convertTo(contour.clxMax), color, 1, cv::LINE_AA);
     }
+
+    [self renderMaskedBounds:output];
+
+    return [[UIImage alloc] initWithCVMat:output];
+}
+
+- (UIImage *)renderSpans {
+    cv::Mat display = [self.workingImage mat];
+    for (ContourSpan *span in self.spans) {
+        vector<vector<cv::Point>> contours;
+        for (Contour *contour in span.contours) {
+            contours.push_back(contour.opencvContour);
+        }
+        cv::Scalar color = [self scalarColorFrom:span.color];
+        cv::drawContours(display, contours, -1, color, -1);
+    }
+
+    cv::Mat output = [self.workingImage mat];
+    cv::addWeighted(display, 0.7, output, 0.3, 0, output);
+
+    [self renderMaskedBounds:output];
 
     return [[UIImage alloc] initWithCVMat:output];
 }
@@ -147,18 +171,39 @@ using namespace cv;
     return cv::Scalar(red * 255.0, green * 255.0, blue * 255.0, alpha * 255.0);
 }
 
+- (void)renderMaskedBounds:(cv::Mat)output {
+    std::vector<std::vector<cv::Point2d>> allSpanPoints = [self allSamplePoints:self.spans];
+    ImageRemapper *remapper = [[ImageRemapper alloc] initWithOriginalImage:self.inputImage
+                                                              workingImage:self.workingImage
+                                                        remappingKeypoints:allSpanPoints];
+    [self renderCorners:remapper.corners using:[UIColor whiteColor] in:output];
+}
+
+- (void)renderCorners:(CGRectOutline)cornerOutline using:(UIColor *)color in:(cv::Mat)display {
+    std::vector<cv::Point2d> corners = {
+        geom::convertTo(cornerOutline.topLeft),
+        geom::convertTo(cornerOutline.topRight),
+        geom::convertTo(cornerOutline.botRight),
+        geom::convertTo(cornerOutline.botLeft)
+    };
+    cv::Size2d size = cv::Size2d(self.workingImage.size.width, self.workingImage.size.height);
+    std::vector<cv::Point2d> normalizedPts = vectors::norm2pix(size, corners);
+    std::vector<cv::Point> pts;
+    for (int i = 0; i < normalizedPts.size(); i++) {
+        pts.push_back(cv::Point(normalizedPts[i]));
+    }
+    cv::polylines(display, pts, true, [self scalarColorFrom:color]);
+}
+
 - (std::vector<vector<cv::Point2d>>)allSamplePoints:(NSArray <ContourSpan *> *)spans {
     std::vector<vector<cv::Point2d>> allPoints;
     for (ContourSpan *span in spans) {
         std::vector<Point2d> samplePoints;
-        for (NSArray <NSValue *> *points in span.spanPoints) {
-            for (NSValue *p in points) {
-                samplePoints.push_back(cv::Point2f(p.CGPointValue.x, p.CGPointValue.y));
-            }
+        for (NSValue *p in span.spanPoints) {
+            samplePoints.push_back(cv::Point2f(p.CGPointValue.x, p.CGPointValue.y));
         }
         allPoints.push_back(samplePoints);
     }
-
     return allPoints;
 }
 @end

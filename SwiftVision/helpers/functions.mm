@@ -51,8 +51,8 @@ namespace geom {
 
     CGRectOutline outlineWithSize(CGSize size) {
 
-#define PAGE_MARGIN_X 0
-#define PAGE_MARGIN_Y 0
+        int PAGE_MARGIN_X = 50;
+        int PAGE_MARGIN_Y = 20;
 
         int xmin = PAGE_MARGIN_X;
         int ymin = PAGE_MARGIN_Y;

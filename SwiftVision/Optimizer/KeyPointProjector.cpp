@@ -7,8 +7,8 @@ std::vector<cv::Point2d> KeyPointProjector::projectKeypoints(std::vector<cv::Poi
     std::vector<cv::Point2d> projectedPoints;
     for (int i = 0; i < keyPoints.size(); i++) {
         cv::Point2f p = keyPoints[i];
-        float x = vectors[int(p.x)];
-        float y = vectors[int(p.y)];
+        double x = vectors[int(p.x)];
+        double y = vectors[int(p.y)];
         projectedPoints.push_back(cv::Point2d(x, y));
     }
     projectedPoints[0] = cv::Point2d(0, 0);
@@ -88,10 +88,16 @@ std::vector<cv::Point3d> KeyPointProjector::objectPointsFrom(std::vector<cv::Poi
 
 cv::Matx33d KeyPointProjector::cameraIntrinsics() const {
     cv::Matx33d intrinsics = Matx<double, 3, 3>();
-    intrinsics(0, 0) = 1.8;
-    intrinsics(1, 1) = 1.8;
+    intrinsics(0, 0) = 1.2;
+    intrinsics(0, 1) = 0.;
     intrinsics(0, 2) = 0.;
+
+    intrinsics(1, 0) = 0.;
+    intrinsics(1, 1) = 1.2;
     intrinsics(1, 2) = 0.;
+
+    intrinsics(2, 0) = 0.;
+    intrinsics(2, 1) = 0.;
     intrinsics(2, 2) = 1.;
     return intrinsics;
 }

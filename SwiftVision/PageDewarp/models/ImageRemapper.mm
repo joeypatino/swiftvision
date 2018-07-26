@@ -60,15 +60,21 @@ EigenVectorMake(cv::Point2f x, cv::Point2f y) {
 }
 
 - (UIImage *)remap {
-    int REMAP_DECIMATE = 16.0;
-    int height = math::round(0.5 * self.normalizedDimensions.height * 1.0 * self.inputImage.size.height, REMAP_DECIMATE);
-    int width = math::round(height * self.normalizedDimensions.width / self.normalizedDimensions.height, REMAP_DECIMATE);
+    int REMAP_DECIMATE = 16;
+
+    vector_d parameters = [self optimizeImage].x;
+    OptimizerResult copt = [self optimizeImageCornersWithOptimizedKeypoints:parameters];
+    cv::Size2d optimizedDims = cv::Size2d(copt.x[0], copt.x[1]);
+
+    int height = math::round(0.5 * optimizedDims.height * 1.0 * self.inputImage.size.height, REMAP_DECIMATE);
+    int width = math::round(height * optimizedDims.width / optimizedDims.height, REMAP_DECIMATE);
+    cout << "  output will be {" << width << "x" << height << "}" << endl;
 
     int heightSmall = height / REMAP_DECIMATE;
     int widthSmall = width / REMAP_DECIMATE;
 
-    vector_d xRng = math::linspace(0, self.normalizedDimensions.width, widthSmall);
-    vector_d yRng = math::linspace(0, self.normalizedDimensions.height, heightSmall);
+    vector_d xRng = math::linspace(0, optimizedDims.width, widthSmall);
+    vector_d yRng = math::linspace(0, optimizedDims.height, heightSmall);
 
     int xsize = int(xRng.size());
     int ysize = int(yRng.size());
@@ -79,11 +85,6 @@ EigenVectorMake(cv::Point2f x, cv::Point2f y) {
     vector_dd flatX = vectors::reshape(meshX, int(meshX.size()), 1);
     vector_dd flatY = vectors::reshape(meshY, int(meshY.size()), 1);
     vector_dd xy = vectors::hstack(flatX, flatY);
-
-//    vector_d parameters = self.defaultParameters;
-    OptimizerResult popt = [self optimizeImage];
-//    OptimizerResult copt = [self optimizeImageCornersWithOptimizedKeypoints:popt.x];
-    vector_d parameters = popt.x;
 
     cv::Size inputShape = cv::Size(self.inputImage.size.width, self.inputImage.size.height);
     std::vector<cv::Point2d> prjtdPts = self.projector->projectXY(xy, parameters.data());
@@ -131,25 +132,21 @@ EigenVectorMake(cv::Point2f x, cv::Point2f y) {
     std::vector<cv::Point2d> keyPointIndexes = [self keyPointIndexes:self.numKeyPointsPerSpan];
     std::vector<cv::Point2d> dstpoints = [self destinationPoints:self.keyPoints];
     std::vector<double> parameters = self.defaultParameters;
-
-    double params[parameters.size()];
-    for (int i = 0; i < int(parameters.size()); i++) {
-        params[i] = parameters[i];
-    }
-    std::vector<cv::Point2d> projectedPoints = self.projector->projectKeypoints(keyPointIndexes, params);
+    std::vector<cv::Point2d> projectedPoints = self.projector->projectKeypoints(keyPointIndexes, parameters.data());
     return [self renderKeyPoints:projectedPoints destinations:dstpoints];
 }
 
 - (UIImage *)postCorresponenceKeyPoints {
+    std::vector<int> pts = self.numKeyPointsPerSpan;
+    int npts = std::accumulate(pts.begin(), pts.end(), 0);
+    cout << "   got " << pts.size() << " spans";
+    cout << " with " << npts << " points." << endl;
+
     std::vector<cv::Point2d> keyPointIndexes = [self keyPointIndexes:self.numKeyPointsPerSpan];
     std::vector<cv::Point2d> dstpoints = [self destinationPoints:self.keyPoints];
     OptimizerResult res = [self optimizeImage];
     std::vector<double> parameters = res.x;
-    double params[parameters.size()];
-    for (int i = 0; i < int(parameters.size()); i++) {
-        params[i] = parameters[i];
-    }
-    std::vector<cv::Point2d> projectedPoints = self.projector->projectKeypoints(keyPointIndexes, params);
+    std::vector<cv::Point2d> projectedPoints = self.projector->projectKeypoints(keyPointIndexes, parameters.data());
     return [self renderKeyPoints:projectedPoints destinations:dstpoints];
 }
 
@@ -165,13 +162,9 @@ EigenVectorMake(cv::Point2f x, cv::Point2f y) {
     cv::Scalar blue = cv::Scalar(0, 0, 255);
     cv::Scalar white = cv::Scalar(255, 255, 255);
     for (int i = 0; i < pointCnt; i++) {
-        cv::Point2d p1 = projectedPoints[i];
-        cv::circle(display, p1, 3, red, -1, cv::LINE_AA);
-
-        cv::Point2d p2 = destinationPoints[i];
-        cv::circle(display, p2, 3, blue, -1, cv::LINE_AA);
-
-        cv::line(display, p1, p2, white, 1, cv::LINE_AA);
+        cv::circle(display, destinationPoints[i], 3, blue, -1, cv::LINE_AA);
+        cv::circle(display, projectedPoints[i], 3, red, -1, cv::LINE_AA);
+        cv::line(display, projectedPoints[i], destinationPoints[i], white, 1, cv::LINE_AA);
     }
 
     return [[UIImage alloc] initWithCVMat:display];
@@ -217,11 +210,22 @@ EigenVectorMake(cv::Point2f x, cv::Point2f y) {
     CGSize dimensions = self.normalizedDimensions;
 
     // Array of object points in the object coordinate space
-    std::vector<cv::Point3d> cornersObject3d = {
-        cv::Point3d(0, 0, 0),
-        cv::Point3d(dimensions.width, 0, 0),
-        cv::Point3d(dimensions.width, dimensions.height, 0),
-        cv::Point3d(0, dimensions.height, 0)};
+    cv::Matx43d cornersObject3d = Matx<double, 4, 3>();
+    cornersObject3d(0, 0) = 0;
+    cornersObject3d(0, 1) = 0;
+    cornersObject3d(0, 2) = 0;
+
+    cornersObject3d(1, 0) = dimensions.width;
+    cornersObject3d(1, 1) = 0;
+    cornersObject3d(1, 2) = 0;
+
+    cornersObject3d(2, 0) = dimensions.width;
+    cornersObject3d(2, 1) = dimensions.height;
+    cornersObject3d(2, 2) = 0;
+
+    cornersObject3d(3, 0) = 0;
+    cornersObject3d(3, 1) = dimensions.height;
+    cornersObject3d(3, 2) = 0;
 
     // Array of corresponding image points
     std::vector<cv::Point2d> imagePoints = {
@@ -231,12 +235,7 @@ EigenVectorMake(cv::Point2f x, cv::Point2f y) {
         geom::convertTo(self.corners.botLeft)
     };
 
-    cv::Matx33d intrinsics = Matx<double, 3, 3>();
-    intrinsics(0, 0) = 1.8;
-    intrinsics(1, 1) = 1.8;
-    intrinsics(0, 2) = 0.;
-    intrinsics(1, 2) = 0.;
-    intrinsics(2, 2) = 1.;
+    cv::Matx33d intrinsics = self.projector->cameraIntrinsics();
 
     // output rotation vectors
     std::vector<double> rvec;
@@ -247,7 +246,7 @@ EigenVectorMake(cv::Point2f x, cv::Point2f y) {
     cv::solvePnP(cornersObject3d,
                  imagePoints,
                  intrinsics,
-                 cv::Mat::zeros(5, 1, cv::DataType<double>::type),
+                 cv::Mat::zeros(1, 5, cv::DataType<double>::type),
                  rvec,
                  tvec);
 
@@ -332,7 +331,7 @@ EigenVectorMake(cv::Point2f x, cv::Point2f y) {
     for (int i = 0; i < keyPoints.size(); i++) {
         std::vector<cv::Point2d> vectorPoints = keyPoints[i];
         cv::Mat computePoints = cv::Mat(vectorPoints).reshape(1);
-        cv::PCA pca(computePoints, cv::Mat(), CV_PCA_USE_AVG, 1);
+        cv::PCA pca(computePoints, cv::noArray(), CV_PCA_DATA_AS_ROW, 1);
 
         cv::Point2d firstP = vectorPoints[0];
         cv::Point2d lastP = vectorPoints[vectorPoints.size() -1];
@@ -360,15 +359,27 @@ EigenVectorMake(cv::Point2f x, cv::Point2f y) {
 
 - (std::vector<double>)normalizeOutline:(CGRectOutline)outline with:(CGPoint)eigenVector {
     cv::Point2d eigenVec = geom::convertTo(eigenVector);
-    std::vector<cv::Point2d> pts = {
-        geom::convertTo(outline.topLeft),
-        geom::convertTo(outline.topRight),
-        geom::convertTo(outline.botRight),
-        geom::convertTo(outline.botLeft)
+    std::vector<cv::Point> pts = {
+        cv::Point(geom::convertTo(outline.topLeft)),
+        cv::Point(geom::convertTo(outline.topRight)),
+        cv::Point(geom::convertTo(outline.botRight)),
+        cv::Point(geom::convertTo(outline.botLeft))
     };
-    cv::Size2d size = cv::Size2d(outline.size.width, outline.size.height);
-    std::vector<cv::Point2d> normalizedPts = vectors::pix2norm(size, pts);
-    
+
+    cv::Mat p = cv::Mat(pts, cv::DataType<cv::Point>::type);
+    cv::Mat pageCoords;
+    cv::convexHull(p, pageCoords);
+
+    std::vector<cv::Point2d> hullpts;
+    for (int c = 0; c < pageCoords.cols; c++) {
+        for (int r = 0; r < pageCoords.rows; r++) {
+            hullpts.push_back(pageCoords.at<cv::Point>(c, r));
+        }
+    }
+
+    cv::Size2d size = cv::Size2d(self.workingImage.size.width, self.workingImage.size.height);
+    std::vector<cv::Point2d> normalizedPts = vectors::pix2norm(size, hullpts);
+
     return vectors::dotProduct(normalizedPts, eigenVec);
 }
 
@@ -418,63 +429,4 @@ EigenVectorMake(cv::Point2f x, cv::Point2f y) {
 
     return results;
 }
-
-// Testing
-- (std::vector<double>)testDefaultParameters {
-    std::vector<cv::Point3d> corner_object3d = {
-        cv::Point3d(0.00000000,0.00000000,0.00000000),
-        cv::Point3d(1.52559066,0.00000000,0.00000000),
-        cv::Point3d(1.52559066,2.01848703,0.00000000),
-        cv::Point3d(0.00000000,2.01848703,0.00000000)
-    };
-    std::vector<cv::Point2d> corners = {
-        cv::Point2d(-0.74919273,-1.01938189),
-        cv::Point2d(0.77626074,-0.99892364),
-        cv::Point2d(0.74919273,1.01938189),
-        cv::Point2d(-0.77626074,0.99892364)
-    };
-    std::vector<cv::Point3d> camera = {
-        cv::Point3d(1.8,0.0,0.0),
-        cv::Point3d(0.0,1.8,0.0),
-        cv::Point3d(0.0,0.0,1.0)
-    };
-    cv::Mat K = Mat(3, 3, cv::DataType<double>::type, &camera);
-    cv::Mat rvec;
-    cv::Mat tvec;
-
-    cv::Mat inliers;
-    cv::solvePnPRansac(corner_object3d,
-                       corners,
-                       K,
-                       cv::Mat::zeros(5, 1, CV_64FC1),
-                       rvec, tvec,
-                       false,
-                       500,
-                       2.0,
-                       0.95,
-                       inliers,
-                       cv::SOLVEPNP_ITERATIVE);
-
-    logs::describe_vector(corner_object3d, "corner_object3d");
-    logs::describe_vector(corners, "corners");
-    logs::describe_vector(camera, "K");
-    logs::describe_vector(rvec, "rvec");
-    logs::describe_vector(tvec, "tvec");
-
-    /**
-     expected rvec:
-     --------------
-     [-0.00000000]
-     [0.00000000]
-     [0.01341045]
-
-     expected tvec:
-     --------------
-     [-0.74919273]
-     [-1.01938189]
-     [1.79999995]
-     */
-    return {};
-}
-
 @end

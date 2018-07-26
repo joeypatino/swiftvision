@@ -20,6 +20,8 @@ typedef NS_ENUM(NSUInteger, ContourRenderingMode) {
 - (UIImage *_Nullable)render NS_SWIFT_NAME(render());
 /// returns an image containing all the contour
 - (UIImage *_Nullable)renderContours NS_SWIFT_NAME(renderContours());
+/// returns an image containing all the spans
+- (UIImage *_Nullable)renderSpans NS_SWIFT_NAME(renderSpans());
 /// returns an image containing all the contour outlines
 - (UIImage *_Nullable)renderOutlines NS_SWIFT_NAME(renderOutlines());
 /// returns an image containing all the contours masks.

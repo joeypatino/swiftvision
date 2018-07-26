@@ -13,13 +13,9 @@ CornerPointCostFunction::~CornerPointCostFunction() {
 }
 
 double CornerPointCostFunction::calc(const double* x) const {
-    double params[keyPoints.size()];
-    for (int i = 0; i < keyPoints.size(); i++){
-        params[i] = keyPoints[i];
-    }
     std::vector<cv::Point2d> dims;
     dims.push_back(cv::Point2d(x[0], x[1]));
-    std::vector<cv::Point2d> ppts = projector->projectXY(dims, params);
+    std::vector<cv::Point2d> ppts = projector->projectXY(dims, (double *)keyPoints.data());
     cv::Mat diff = cv::Mat(destinationPoints) - cv::Mat(ppts);
     cv::Mat sqrd = diff.mul(diff);
     cv::Scalar sums = cv::sum(sqrd);

@@ -156,7 +156,7 @@ using namespace cv;
 - (ContourEdge *)contourEdgeWithAdjacentContour:(Contour *)otherContour {
     double EDGE_MAX_OVERLAP = 1.0;   // max px horiz. overlap of contours in span
     double EDGE_MAX_LENGTH = 100.0;  // max px length of edge connecting contours
-    double EDGE_MAX_ANGLE = 15.0;    // maximum change in angle allowed between contours
+    double EDGE_MAX_ANGLE = 7.5;    // maximum change in angle allowed between contours
 
     Contour *contourA = self;
     Contour *contourB = otherContour;

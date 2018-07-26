@@ -23,7 +23,6 @@
 		D42981812052AF0300A28DF5 /* SwiftVision.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D40B28392028856300CA8559 /* SwiftVision.framework */; };
 		D42981872052AF6B00A28DF5 /* opencv2.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D40B28452028858A00CA8559 /* opencv2.framework */; };
 		D42981882052AF7800A28DF5 /* functions.mm in Sources */ = {isa = PBXBuildFile; fileRef = D439947020388BA800D9B783 /* functions.mm */; };
-		D429818A2057EF4D00A28DF5 /* input_image_eroded.png in Resources */ = {isa = PBXBuildFile; fileRef = D42981892057EF4D00A28DF5 /* input_image_eroded.png */; };
 		D439947120388BA800D9B783 /* functions.h in Headers */ = {isa = PBXBuildFile; fileRef = D439946F20388BA800D9B783 /* functions.h */; };
 		D439947220388BA800D9B783 /* functions.mm in Sources */ = {isa = PBXBuildFile; fileRef = D439947020388BA800D9B783 /* functions.mm */; };
 		D43C4531205B1DFF0072AF8F /* vector+extras.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D43C452F205B1DFF0072AF8F /* vector+extras.cpp */; };
@@ -38,6 +37,10 @@
 		D43C4543205C167D0072AF8F /* KeyPointCostFunction.hpp in Headers */ = {isa = PBXBuildFile; fileRef = D43C4541205C167D0072AF8F /* KeyPointCostFunction.hpp */; };
 		D43C4546205C19AA0072AF8F /* CornerPointCostFunction.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D43C4544205C19AA0072AF8F /* CornerPointCostFunction.cpp */; };
 		D43C4547205C19AA0072AF8F /* CornerPointCostFunction.hpp in Headers */ = {isa = PBXBuildFile; fileRef = D43C4545205C19AA0072AF8F /* CornerPointCostFunction.hpp */; };
+		D44D558120628D2C00BFD3C6 /* boston_cooking_a.jpg in Resources */ = {isa = PBXBuildFile; fileRef = D44D558020628D2C00BFD3C6 /* boston_cooking_a.jpg */; };
+		D465E57420654AE5000BEE77 /* nlopt.h in Headers */ = {isa = PBXBuildFile; fileRef = D465E57120654AE5000BEE77 /* nlopt.h */; };
+		D465E57520654AE5000BEE77 /* nlopt.hpp in Headers */ = {isa = PBXBuildFile; fileRef = D465E57220654AE5000BEE77 /* nlopt.hpp */; };
+		D465E57920654B5B000BEE77 /* libnlopt.a in Frameworks */ = {isa = PBXBuildFile; fileRef = D465E57820654B5B000BEE77 /* libnlopt.a */; };
 		D471D7D620500C4A00F38C26 /* LineInfo.h in Headers */ = {isa = PBXBuildFile; fileRef = D471D7D320500C4A00F38C26 /* LineInfo.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		D471D7D720500C4A00F38C26 /* CGRectOutline.h in Headers */ = {isa = PBXBuildFile; fileRef = D471D7D420500C4A00F38C26 /* CGRectOutline.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		D471D7D820500C4A00F38C26 /* EigenVector.h in Headers */ = {isa = PBXBuildFile; fileRef = D471D7D520500C4A00F38C26 /* EigenVector.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -64,13 +67,13 @@
 		D4792BA8205B10E400F74B2E /* KeyPointProjector.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D4792BA6205B10E400F74B2E /* KeyPointProjector.cpp */; };
 		D4792BA9205B10E400F74B2E /* KeyPointProjector.hpp in Headers */ = {isa = PBXBuildFile; fileRef = D4792BA7205B10E400F74B2E /* KeyPointProjector.hpp */; };
 		D48B4B712028AC0600DFA7AC /* input_image.jpeg in Resources */ = {isa = PBXBuildFile; fileRef = D48B4B702028AC0600DFA7AC /* input_image.jpeg */; };
-		D48B4B732028B6DC00DFA7AC /* 90550036_edit.jpg in Resources */ = {isa = PBXBuildFile; fileRef = D48B4B722028B6DC00DFA7AC /* 90550036_edit.jpg */; };
 		D4A572C2202A1E1500D8F4B0 /* PageDewarp.h in Headers */ = {isa = PBXBuildFile; fileRef = D4A572C0202A1E1500D8F4B0 /* PageDewarp.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		D4A572C3202A1E1500D8F4B0 /* PageDewarp.mm in Sources */ = {isa = PBXBuildFile; fileRef = D4A572C1202A1E1500D8F4B0 /* PageDewarp.mm */; };
 		D4A572CA202A1E2800D8F4B0 /* UIImage+Mat.h in Headers */ = {isa = PBXBuildFile; fileRef = D4A572C6202A1E2800D8F4B0 /* UIImage+Mat.h */; };
 		D4A572CC202A1E2800D8F4B0 /* UIImage+Mat.mm in Sources */ = {isa = PBXBuildFile; fileRef = D4A572C8202A1E2800D8F4B0 /* UIImage+Mat.mm */; };
 		D4BAD1C52034DBB200F4A32C /* NSArray+extras.h in Headers */ = {isa = PBXBuildFile; fileRef = D4BAD1C32034DBB200F4A32C /* NSArray+extras.h */; };
 		D4BAD1C62034DBB200F4A32C /* NSArray+extras.m in Sources */ = {isa = PBXBuildFile; fileRef = D4BAD1C42034DBB200F4A32C /* NSArray+extras.m */; };
+		D4D8304A206198F0001B1535 /* UIImage+extras.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4D83049206198F0001B1535 /* UIImage+extras.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -124,7 +127,6 @@
 		D429817C2052AF0300A28DF5 /* SwiftVisionTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = SwiftVisionTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		D429817E2052AF0300A28DF5 /* SwiftVisionTests.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = SwiftVisionTests.mm; sourceTree = "<group>"; };
 		D42981802052AF0300A28DF5 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		D42981892057EF4D00A28DF5 /* input_image_eroded.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = input_image_eroded.png; sourceTree = "<group>"; };
 		D439946F20388BA800D9B783 /* functions.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = functions.h; sourceTree = "<group>"; };
 		D439947020388BA800D9B783 /* functions.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = functions.mm; sourceTree = "<group>"; };
 		D43C452F205B1DFF0072AF8F /* vector+extras.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = "vector+extras.cpp"; sourceTree = "<group>"; };
@@ -139,6 +141,10 @@
 		D43C4541205C167D0072AF8F /* KeyPointCostFunction.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = KeyPointCostFunction.hpp; sourceTree = "<group>"; };
 		D43C4544205C19AA0072AF8F /* CornerPointCostFunction.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = CornerPointCostFunction.cpp; sourceTree = "<group>"; };
 		D43C4545205C19AA0072AF8F /* CornerPointCostFunction.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = CornerPointCostFunction.hpp; sourceTree = "<group>"; };
+		D44D558020628D2C00BFD3C6 /* boston_cooking_a.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = boston_cooking_a.jpg; sourceTree = "<group>"; };
+		D465E57120654AE5000BEE77 /* nlopt.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = nlopt.h; sourceTree = "<group>"; };
+		D465E57220654AE5000BEE77 /* nlopt.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = nlopt.hpp; sourceTree = "<group>"; };
+		D465E57820654B5B000BEE77 /* libnlopt.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libnlopt.a; path = SwiftVision/libnlopt.a; sourceTree = "<group>"; };
 		D4711A0820502C1200F38C26 /* Accelerate.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Accelerate.framework; path = System/Library/Frameworks/Accelerate.framework; sourceTree = SDKROOT; };
 		D4711A0A20502C7500F38C26 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		D4711A0C20502C8300F38C26 /* CoreFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreFoundation.framework; path = System/Library/Frameworks/CoreFoundation.framework; sourceTree = SDKROOT; };
@@ -166,13 +172,13 @@
 		D4792BA6205B10E400F74B2E /* KeyPointProjector.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = KeyPointProjector.cpp; sourceTree = "<group>"; };
 		D4792BA7205B10E400F74B2E /* KeyPointProjector.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = KeyPointProjector.hpp; sourceTree = "<group>"; };
 		D48B4B702028AC0600DFA7AC /* input_image.jpeg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = input_image.jpeg; sourceTree = "<group>"; };
-		D48B4B722028B6DC00DFA7AC /* 90550036_edit.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = 90550036_edit.jpg; sourceTree = "<group>"; };
 		D4A572C0202A1E1500D8F4B0 /* PageDewarp.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PageDewarp.h; sourceTree = "<group>"; };
 		D4A572C1202A1E1500D8F4B0 /* PageDewarp.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = PageDewarp.mm; sourceTree = "<group>"; };
 		D4A572C6202A1E2800D8F4B0 /* UIImage+Mat.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImage+Mat.h"; sourceTree = "<group>"; };
 		D4A572C8202A1E2800D8F4B0 /* UIImage+Mat.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = "UIImage+Mat.mm"; sourceTree = "<group>"; };
 		D4BAD1C32034DBB200F4A32C /* NSArray+extras.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "NSArray+extras.h"; sourceTree = "<group>"; };
 		D4BAD1C42034DBB200F4A32C /* NSArray+extras.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "NSArray+extras.m"; sourceTree = "<group>"; };
+		D4D83049206198F0001B1535 /* UIImage+extras.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIImage+extras.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -181,6 +187,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				D40B286920288EEA00CA8559 /* UIKit.framework in Frameworks */,
+				D465E57920654B5B000BEE77 /* libnlopt.a in Frameworks */,
 				D40B286720288EE100CA8559 /* CoreGraphics.framework in Frameworks */,
 				D40B28462028858A00CA8559 /* opencv2.framework in Frameworks */,
 			);
@@ -230,6 +237,7 @@
 		D40B283B2028856300CA8559 /* SwiftVision */ = {
 			isa = PBXGroup;
 			children = (
+				D465E56F20654AE5000BEE77 /* include */,
 				D40B283C2028856300CA8559 /* SwiftVision.h */,
 				D471D7F420500EE300F38C26 /* UIImage+OpenCV.h */,
 				D471D7F320500EE300F38C26 /* UIImage+OpenCV.mm */,
@@ -247,6 +255,7 @@
 		D40B28442028858A00CA8559 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				D465E57820654B5B000BEE77 /* libnlopt.a */,
 				D4711A0C20502C8300F38C26 /* CoreFoundation.framework */,
 				D4711A0A20502C7500F38C26 /* Foundation.framework */,
 				D4711A0820502C1200F38C26 /* Accelerate.framework */,
@@ -261,14 +270,14 @@
 			isa = PBXGroup;
 			children = (
 				D48B4B702028AC0600DFA7AC /* input_image.jpeg */,
-				D42981892057EF4D00A28DF5 /* input_image_eroded.png */,
-				D48B4B722028B6DC00DFA7AC /* 90550036_edit.jpg */,
+				D44D558020628D2C00BFD3C6 /* boston_cooking_a.jpg */,
 				D40B28512028860D00CA8559 /* AppDelegate.swift */,
 				D40B28532028860D00CA8559 /* ViewController.swift */,
 				D40B28552028860D00CA8559 /* Main.storyboard */,
 				D40B28582028860D00CA8559 /* Assets.xcassets */,
 				D40B285A2028860D00CA8559 /* LaunchScreen.storyboard */,
 				D40B285D2028860D00CA8559 /* Info.plist */,
+				D4D83049206198F0001B1535 /* UIImage+extras.swift */,
 			);
 			path = OpenCVDemo;
 			sourceTree = "<group>";
@@ -295,6 +304,15 @@
 				D43C4537205B239C0072AF8F /* print+extras.cpp */,
 			);
 			path = helpers;
+			sourceTree = "<group>";
+		};
+		D465E56F20654AE5000BEE77 /* include */ = {
+			isa = PBXGroup;
+			children = (
+				D465E57120654AE5000BEE77 /* nlopt.h */,
+				D465E57220654AE5000BEE77 /* nlopt.hpp */,
+			);
+			path = include;
 			sourceTree = "<group>";
 		};
 		D471D7D220500C4A00F38C26 /* structs */ = {
@@ -397,6 +415,7 @@
 				D4792BA5205B0C1600F74B2E /* Optimizer.hpp in Headers */,
 				D43C4532205B1DFF0072AF8F /* vector+extras.hpp in Headers */,
 				D4A572C2202A1E1500D8F4B0 /* PageDewarp.h in Headers */,
+				D465E57520654AE5000BEE77 /* nlopt.hpp in Headers */,
 				D471D7E520500CE600F38C26 /* Contour.h in Headers */,
 				D40B2889202891D800CA8559 /* PrefixHeader.pch in Headers */,
 				D43C453A205B239C0072AF8F /* print+extras.hpp in Headers */,
@@ -418,6 +437,7 @@
 				D4A572CA202A1E2800D8F4B0 /* UIImage+Mat.h in Headers */,
 				D43C4536205B1ECB0072AF8F /* math+extras.hpp in Headers */,
 				D471D7FB20500F2200F38C26 /* UIImage+Contour.h in Headers */,
+				D465E57420654AE5000BEE77 /* nlopt.h in Headers */,
 				D43C4547205C19AA0072AF8F /* CornerPointCostFunction.hpp in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -537,12 +557,11 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D44D558120628D2C00BFD3C6 /* boston_cooking_a.jpg in Resources */,
 				D40B285C2028860D00CA8559 /* LaunchScreen.storyboard in Resources */,
 				D40B28592028860D00CA8559 /* Assets.xcassets in Resources */,
 				D48B4B712028AC0600DFA7AC /* input_image.jpeg in Resources */,
-				D48B4B732028B6DC00DFA7AC /* 90550036_edit.jpg in Resources */,
 				D40B28572028860D00CA8559 /* Main.storyboard in Resources */,
-				D429818A2057EF4D00A28DF5 /* input_image_eroded.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -588,6 +607,7 @@
 			files = (
 				D40B28542028860D00CA8559 /* ViewController.swift in Sources */,
 				D40B28522028860D00CA8559 /* AppDelegate.swift in Sources */,
+				D4D8304A206198F0001B1535 /* UIImage+extras.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -776,6 +796,11 @@
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				KEEP_PRIVATE_EXTERNS = NO;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				LIBRARY_SEARCH_PATHS = (
+					"~/Desktop",
+					"$(PROJECT_DIR)/SwiftVision",
+				);
+				ONLY_ACTIVE_ARCH = YES;
 				OTHER_CPLUSPLUSFLAGS = "$(OTHER_CFLAGS)";
 				PRODUCT_BUNDLE_IDENTIFIER = com.onitaps.SwiftVision;
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
@@ -815,6 +840,11 @@
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				KEEP_PRIVATE_EXTERNS = NO;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				LIBRARY_SEARCH_PATHS = (
+					"~/Desktop",
+					"$(PROJECT_DIR)/SwiftVision",
+				);
+				ONLY_ACTIVE_ARCH = NO;
 				OTHER_CPLUSPLUSFLAGS = "$(OTHER_CFLAGS)";
 				PRODUCT_BUNDLE_IDENTIFIER = com.onitaps.SwiftVision;
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";

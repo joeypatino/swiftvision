@@ -3,13 +3,12 @@ import SwiftVision
 
 class ViewController: UIViewController {
     @IBOutlet weak var imageView: UIImageView!
-    var imageContours: PageDewarp!
-    var dewarpedImage: UIImage?
+    private let imagePicker = UIImagePickerController()
+    private var imageContours = PageDewarp(image: UIImage(named: "boston_cooking_a.jpg")!.normalizedImage())
+    private var dewarpedImage: UIImage?
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        let image = UIImage(named: "input_image.jpeg")!
-        imageContours = PageDewarp(image: image)
         imageView.image = imageContours.inputImage
     }
 
@@ -19,6 +18,10 @@ class ViewController: UIViewController {
 
     @IBAction func contoursAction(_ sender: Any) {
         imageView.image = imageContours.renderContours()
+    }
+
+    @IBAction func spansAction(_ sender: Any) {
+        imageView.image = imageContours.renderSpans()
     }
 
     @IBAction func outlinesAction(_ sender: Any) {
@@ -38,11 +41,63 @@ class ViewController: UIViewController {
     }
 
     @IBAction func postCorrespondencesAction(_ sender: Any) {
-        imageView.image = imageContours.renderPostCorrespondences()
+        UIApplication.shared.isNetworkActivityIndicatorVisible = true
+        DispatchQueue.global(qos: .background).async {
+            let image = self.imageContours.renderPostCorrespondences()
+
+            DispatchQueue.main.async {
+                self.imageView.image = image
+                UIApplication.shared.isNetworkActivityIndicatorVisible = false
+            }
+        }
     }
 
     @IBAction func dewarpAction(_ sender: Any) {
-        imageView.image = dewarpedImage ?? imageContours.render()
-        dewarpedImage = imageView.image
+        if dewarpedImage == nil {
+            self.imageView.image = self.imageContours.inputImage
+        }
+
+        UIApplication.shared.isNetworkActivityIndicatorVisible = true
+        DispatchQueue.global(qos: .background).async {
+            let image = self.dewarpedImage ?? self.imageContours.render()
+
+            DispatchQueue.main.async {
+                self.imageView.image = image
+                self.dewarpedImage = image
+                UIApplication.shared.isNetworkActivityIndicatorVisible = false
+            }
+        }
+    }
+
+    @IBAction private func takePhoto(){
+        imagePicker.sourceType = .camera
+        imagePicker.cameraCaptureMode = .photo
+        imagePicker.cameraDevice = .rear
+        imagePicker.delegate = self
+        present(imagePicker, animated: true, completion: nil)
+    }
+
+    private func loadImage(_ image:UIImage) {
+        dewarpedImage = nil
+        imageContours = PageDewarp(image: image.normalizedImage())
+        imageView.image = imageContours.inputImage
+        dewarpAction(image)
+    }
+}
+
+extension ViewController: UIImagePickerControllerDelegate, UINavigationControllerDelegate {
+    public func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : Any]) {
+
+        picker.dismiss(animated: true, completion: nil)
+        guard let image = info[UIImagePickerControllerOriginalImage] as? UIImage else { return }
+
+        loadImage(image)
+    }
+
+    public func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
+        picker.dismiss(animated: true, completion: nil)
+        guard let image = UIImage(named: "input_image.jpeg") else { return }
+
+        loadImage(image)
     }
 }

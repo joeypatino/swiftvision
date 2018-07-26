@@ -1,4 +1,5 @@
 #import <UIKit/UIKit.h>
+#import "CGRectOutline.h"
 
 @interface UIImage (OpenCV)
 /**
@@ -10,4 +11,5 @@
 - (UIImage *_Nullable)erode:(CGSize)kernelSize;
 - (UIImage *_Nullable)elementwiseMinimum:(UIImage *_Nonnull)img;
 - (UIImage *_Nullable)resizeTo:(CGSize)minSize;
+- (UIImage *_Nullable)rectangle:(CGRectOutline)outline;
 @end

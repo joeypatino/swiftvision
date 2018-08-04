@@ -11,9 +11,11 @@
 #import "NSArray+extras.h"
 #import "math+extras.hpp"
 #import "leptonica.hpp"
+#import "types.h"
 #import "print+extras.hpp"
 #import "UIImage+Mat.h"
 // optimization
+#import "PtraArray.hpp"
 #import "Optimizer.hpp"
 #import "KeyPointCostFunction.hpp"
 #import "CornerPointCostFunction.hpp"
@@ -65,54 +67,77 @@ typedef std::vector<std::vector<cv::Point2d>> vector_pointdd;
 }
 
 - (UIImage *)remap {
+    // -------------
+    // Constructor input
+    // -------------
+    // Sampled KeyPoints : vvectorPointD
+    // Size of Image : DSize
+    // -------------
+    // -------------
+    // Properties
+    // -------------
+    // Sampling frequency value : int
+    // -------------
+    // -------------
+
     cv::Mat display = [self.inputImage mat];
     cv::Scalar red = cv::Scalar(255, 0, 0);
     cv::Scalar blue = cv::Scalar(0, 0, 255);
-    cv::Scalar green = cv::Scalar(34, 139, 34);
     cv::Scalar black = cv::Scalar(0, 0, 0);
+    cv::Scalar green = cv::Scalar(34, 139, 34);
     cv::Scalar yellow = cv::Scalar(255, 250, 205);
 
-    bool debug = true;
+    bool debugv = false;
+    bool debugh = true;
 
-    vector_pointdd *ptaa = new vector_pointdd(self.keyPoints);
-    int w = self.inputImage.size.width;
-    int h = self.inputImage.size.height;
+    DSize inSize = (DSize){ .width = self.inputImage.size.width, .height = self.inputImage.size.height };
+    printf("inSize: {%f, %f}\n", inSize.width, inSize.height);
+    vvectorPointD *ptaa = new vvectorPointD();
+    for (int v = 0; v < self.keyPoints.size(); v++) {
+        std::vector<cv::Point2d> ps = self.keyPoints.at(v);
+        vectorPointD *pta = new vectorPointD();
+        for (int c = 0; c < ps.size(); c++) {
+            cv::Point2d p = ps.at(c);
+            DPoint pt = (DPoint){ .x = p.x, .y = p.y };
+            pta->push_back(pt);
+        }
+        vectorPointD normalizedPts = math::norm2pix(inSize, *pta);
+        ptaa->push_back(normalizedPts);
+    }
     int sampling = 40;
-    int nx = (w + 2 * sampling - 2) / sampling;     // number of sampling pts in x-dir
-    int ny = (h + 2 * sampling - 2) / sampling;     // number of sampling pts in y-dir
+    int nx = (inSize.width + 2 * sampling - 2) / sampling;     // number of sampling pts in x-dir
+    int ny = (inSize.height + 2 * sampling - 2) / sampling;     // number of sampling pts in y-dir
     int nlines = (int) ptaa->size();
     double c2, c1, c0;
+    double val;
     int i, j;
 
-    cv::Size inputShape = cv::Size(self.inputImage.size.width, self.inputImage.size.height);
-    vector_pointdd *ptaa0 = new vector_pointdd();
-    vector_d *nacurve0 = new vector_d();
+    vvectorPointD *ptaa0 = new vvectorPointD();
+    vectorD *nacurve0 = new vectorD();
     for (i = 0; i < nlines; i++) {  // take all the vertical center points for a line
         if (ptaa->at(i).size() < 3)
             continue;
 
-        std::vector<cv::Point2d> *pts = new vector_pointd((*ptaa)[i]);
-        vector_pointd *pta = new vector_pointd(vectors::norm2pix(inputShape, *pts));
-        leptonica::getQuadraticLSF(pta, &c2, &c1, &c0, NULL);               // calculate the LSF
-        nacurve0->push_back(c2);                                            // store the c2 coeffecient..
-        vector_pointd *ptad = new vector_pointd();                          // create a point array with a size = the number of
+        vectorPointD *pta = new vectorPointD((*ptaa)[i]);
+        math::getQuadraticLSF(pta, &c2, &c1, &c0, NULL);        // calculate the LSF
+        nacurve0->push_back(c2);                                // store the c2 coeffecient..
+        vectorPointD *ptad = new vectorPointD();              // create a point array with a size = the number of
 
-        float x = 0;
-        float y = 0;
+        double x, y = 0;
         for (j = 0; j < nx; j++) {                              // samples in the horizontal direction
             x = j * sampling;                                   // keep jumping forward by the sampling value...
-            leptonica::applyQuadraticFit(c2, c1, c0, x, &y);    // and run the quadratic fit, y is an out variable...
-            ptad->push_back(cv::Point2d(x, y));                 // and store x and y in the ptad
+            math::applyQuadraticFit(c2, c1, c0, x, &y);         // and run the quadratic fit, y is an out variable...
+            DPoint p = (DPoint){.x = x, .y = y};
+            ptad->push_back(p);                 // and store x and y in the ptad
 
-            if (debug)
+            if (debugv)
                 cv::circle(display, cv::Point2d(x, y), 12, blue, -1, cv::LINE_AA);
         }
-        ptaa0->push_back(*ptad);                                 // push the solved vertical disparity values onto our output ptaa0
+        ptaa0->push_back(*ptad);
         free(ptad);
         free(pta);
-        free(pts);
     }
-    free(ptaa);
+//    free(ptaa);
     nlines = (int) ptaa0->size();
 
     /* Remove lines with outlier curvatures.
@@ -121,14 +146,14 @@ typedef std::vector<std::vector<cv::Point2d>> vector_pointdd;
     double medvar;
     double medval;
     leptonica::getMedianVariation(nacurve0, &medval, &medvar);
-    vector_pointdd *ptaa1 = new vector_pointdd();
-    vector_d *nacurve1 = new vector_d();
-    float val;
+    vvectorPointD *ptaa1 = new vvectorPointD();
+    vectorD *nacurve1 = new vectorD();
+
     for (i = 0; i < nlines; i++) {  /* for each line */
         val = nacurve0->at(i);
         if (ABSX(val - medval) > 7.0 * medvar)
             continue;
-        vector_pointd *pta = new vector_pointd((*ptaa0)[i]);
+        vectorPointD *pta = new vectorPointD((*ptaa0)[i]);
         ptaa1->push_back(*pta);
         nacurve1->push_back(val);
         free(pta);
@@ -143,15 +168,15 @@ typedef std::vector<std::vector<cv::Point2d>> vector_pointdd;
 
     /* Find and save the y values at the mid-points in each curve.
      * If the slope is zero anywhere, it will typically be here. */
-    vector_d *namidy = new vector_d();
+    vectorD *namidy = new vectorD();
     for (i = 0; i < nlines; i++) {
-        vector_pointd *pta = new vector_pointd((*ptaa1)[i]);
+        vectorPointD *pta = new vectorPointD((*ptaa1)[i]);
         int npts = (int)pta->size();
-        cv::Point2d mid = pta->at(npts/2);
+        DPoint mid = pta->at(npts/2);
         namidy->push_back(mid.y);
-        if (debug) {
-            cv::circle(display, mid, 20, red, -1, cv::LINE_AA);
-            cv::line(display, cv::Point(0, mid.y), cv::Point(w, mid.y), black, 5, cv::LINE_AA);
+        if (debugv) {
+            cv::circle(display, cv::Point(mid.x, mid.y), 20, red, -1, cv::LINE_AA);
+            cv::line(display, cv::Point(0, mid.y), cv::Point(inSize.width, mid.y), black, 5, cv::LINE_AA);
         }
         free(pta);
     }
@@ -159,10 +184,10 @@ typedef std::vector<std::vector<cv::Point2d>> vector_pointdd;
     /**
      * Sort the lines in ptaa1 by their vertical position, going down
      */
-    vector_d *namidysi = leptonica::getSortIndex(namidy, L_SORT_INCREASING);
-    vector_d *namidys = leptonica::sortByIndex(namidy, namidysi);
-    vector_d *nacurves = leptonica::sortByIndex(nacurve1, namidysi);
-    vector_pointdd *ptaa2 = leptonica::sortByIndex(ptaa1, namidysi);
+    vectorD *namidysi = leptonica::getSortIndex(namidy, L_SORT_INCREASING);
+    vectorD *namidys = leptonica::sortByIndex(namidy, namidysi);
+    vectorD *nacurves = leptonica::sortByIndex(nacurve1, namidysi);
+    vvectorPointD *ptaa2 = leptonica::sortByIndex(ptaa1, namidysi);
     free(namidy);
     free(nacurve1);
     free(namidysi);
@@ -172,23 +197,21 @@ typedef std::vector<std::vector<cv::Point2d>> vector_pointdd;
      * with respect to the y value at the mid point in the curve.
      * The disparity is the distance the point needs to move;
      * plus is downward.  */
-    vector_pointdd *ptaa3 = new vector_pointdd();
+    vvectorPointD *ptaa3 = new vvectorPointD();
     for (i = 0; i < nlines; i++) {
-        vector_pointd *pta = new vector_pointd((*ptaa2)[i]);
-        vector_pointd *ptad = new vector_pointd();
+        vectorPointD *pta = new vectorPointD((*ptaa2)[i]);
+        vectorPointD *ptad = new vectorPointD();
         double midy = namidys->at(i);
 
         for (j = 0; j < nx; j++) {
-            cv::Point2d p = pta->at(j);
-            cv::Point2d disparity = cv::Point2d(p.x, midy - p.y);
+            DPoint p = pta->at(j);
+            DPoint disparity = (DPoint){.x = p.x, .y = midy - p.y};
             ptad->push_back(disparity);
 
-            if (debug) {
-                cv::circle(display, p, 10, red, -1, cv::LINE_AA);
-                //cv::circle(display, cv::Point2d(disparity.x, p.y + disparity.y), 10, yellow, -1, cv::LINE_AA);
+            if (debugv) {
+                cv::circle(display, cv::Point(p.x, p.y), 10, red, -1, cv::LINE_AA);
             }
         }
-//        logs::describe_vector(*ptad, "pta3");
         ptaa3->push_back(*ptad);
         free(pta);
         free(ptad);
@@ -200,16 +223,16 @@ typedef std::vector<std::vector<cv::Point2d>> vector_pointdd;
      * obtain from namidys.  So each pta in ptaa4 is the set of
      * vertical disparities down a column of points.  The columns
      * in ptaa4 are equally spaced in x. */
-    vector_pointdd *ptaa4 = new vector_pointdd();
-    std::vector<double> *famidys = new std::vector<double>(*namidys);
+    vvectorPointD *ptaa4 = new vvectorPointD();
+    vectorD *famidys = new vectorD(*namidys);
     for (j = 0; j < nx; j++) {
-        vector_pointd *pta = new vector_pointd();
+        vectorPointD *pta = new vectorPointD();
         for (i = 0; i < nlines; i++) {
             double y = (*famidys)[i];
-            cv::Point2d p = (*ptaa3)[i][j];
-            pta->push_back(cv::Point2d(y, p.y));
+            DPoint p = (*ptaa3)[i][j];
+            DPoint op = (DPoint){.x = y, .y = p.y};
+            pta->push_back(op);
         }
-//        logs::describe_vector(*pta, "pta4");
         ptaa4->push_back(*pta);
         free(pta);
     }
@@ -223,37 +246,43 @@ typedef std::vector<std::vector<cv::Point2d>> vector_pointdd;
      * regular grid in the vertical direction.  Each pta in ptaa5
      * gives the vertical displacement for regularly sampled y values
      * at a fixed x. */
-    vector_pointdd *ptaa5 = new vector_pointdd();  /* uniformly sampled across full height of image */
+    vvectorPointD *ptaa5 = new vvectorPointD();  /* uniformly sampled across full height of image */
     for (j = 0; j < nx; j++) {  /* for each column */
-        vector_pointd *pta = new vector_pointd((*ptaa4)[j]);
-        leptonica::getQuadraticLSF(pta, &c2, &c1, &c0, NULL);
-        vector_pointd *ptad = new vector_pointd();
+        vectorPointD *pta = new vectorPointD((*ptaa4)[j]);
+        math::getQuadraticLSF(pta, &c2, &c1, &c0, NULL);
+        vectorPointD *ptad = new vectorPointD();
         for (i = 0; i < ny; i++) {  /* uniformly sampled in y */
             int y = i * sampling;
-            float val;
-            leptonica::applyQuadraticFit(c2, c1, c0, y, &val);
-            ptad->push_back(cv::Point2d(y, val));
+            double val;
+            math::applyQuadraticFit(c2, c1, c0, y, &val);
+            DPoint p = (DPoint){.x = (double)y, .y = val};
+            ptad->push_back(p);
         }
-        logs::describe_vector(*ptad, "pta5");
+        //logs::describe_vector(*ptad, "ptad");
         ptaa5->push_back(*ptad);
         free(ptad);
         free(pta);
     }
 
-    vector_pointdd *pix = new vector_pointdd();
+    vvectorPointD *pix = new vvectorPointD();
+    for (i = 0; i < ny; i++) {
+        vectorPointD *row = new vectorPointD();
+        for (j = 0; j < nx; j++) {
+            DPoint p = ptaa5->at(j).at(i);
+            row->push_back(p);
+        }
+        //logs::describe_vector(*row, "row");
+        pix->push_back(*row);
+        free(row);
+    }
+
+    cv::Mat fpix = cv::Mat(nx, ny, cv::DataType<cv::Point2d>::type);
     for (i = 0; i < ny; i++) {
         for (j = 0; j < nx; j++) {
-            cv::Point2d p = ptaa5->at(j).at(i);
-            pix->at(j).at(i) = p;
+            DPoint p = (*ptaa5)[j][i];
+            fpix.at<cv::Point2d>(j, i) = cv::Point2d(p.x, p.y);
         }
     }
-//    cv::Mat fpix = cv::Mat(nx, ny, cv::DataType<cv::Point2d>::type);
-//    for (i = 0; i < ny; i++) {
-//        for (j = 0; j < nx; j++) {
-//            cv::Point2d p = (*ptaa5)[j][i];
-//            fpix.at<cv::Point2d>(j, i) = p;
-//        }
-//    }
 
     free(famidys);
     free(ptaa0);
@@ -262,6 +291,158 @@ typedef std::vector<std::vector<cv::Point2d>> vector_pointdd;
     free(ptaa3);
     free(ptaa4);
     free(ptaa5);
+
+
+
+
+
+
+
+
+
+
+
+    /**
+     * GetLineEndPoints
+     */
+
+    vectorPointD *pptal, *pptar; /* the output */
+    vectorPointD *ptal1, *ptar1;  /* left/right end points of lines; initial */
+    vectorPointD *ptal2, *ptar2;  /* left/right end points; after filtering */
+    vectorPointD *ptal3, *ptar3;  /* left and right block, fitted, uniform spacing */
+    vectorD      *nald, *nard;
+
+    int n = (int)ptaa->size();
+    /* Extract the line end points, and transpose x and y values */
+    ptal1 = new vectorPointD();
+    ptar1 = new vectorPointD();
+    for (i = 0; i < n; i++) {
+        vectorPointD *pta = new vectorPointD((*ptaa)[i]);
+        DPoint p1 = pta->at(0);
+        DPoint tp1 = (DPoint){ .x = p1.y, .y = p1.x};  /* transpose */
+        ptal1->push_back(tp1);
+
+        int npt = (int)pta->size();
+        DPoint p2 = pta->at(npt-1);
+        DPoint tp2 = (DPoint){ .x = p2.y, .y = p2.x};  /* transpose */
+        ptar1->push_back(tp2);
+
+        free(pta);
+
+        if (debugh) {
+            cv::circle(display, cv::Point(tp1.y, tp1.x), 12, yellow, -1, cv::LINE_AA);
+            cv::circle(display, cv::Point(tp2.y, tp2.x), 12, yellow, -1, cv::LINE_AA);
+        }
+    }
+
+    /*
+     * TODO: Use the min and max of the y value on the left side!
+     */
+
+    /* Sort from top to bottom */
+    pptal = leptonica::sort(ptal1, L_SORT_BY_X, L_SORT_INCREASING, NULL);
+    pptar = leptonica::sort(ptar1, L_SORT_BY_X, L_SORT_INCREASING, NULL);
+
+    /* Filter the points by x-location to prevent 2-column images
+     * from getting confused about left and right endpoints. We
+     * require valid left points to not be farther than
+     *     0.20 * (remaining distance to the right edge of the image)
+     * to the right of the leftmost endpoint, and similarly for
+     * the right endpoints. (Note: x and y are reversed in the pta.)
+     * Also require end points to be near the medians in the
+     * upper and lower halves. */
+    //ret = dewarpFilterLineEndPoints(dew, ptal1, ptar1, &ptal2, &ptar2);
+    ptal2 = new vectorPointD(*ptal1);
+    ptar2 = new vectorPointD(*ptar1);
+    free(ptal1);
+    free(ptar1);
+
+    /* Do a quadratic fit to the left and right endpoints of the
+     * longest lines.  Each line is represented by 3 coefficients:
+     *     x(y) = c2 * y^2 + c1 * y + c0.
+     * Using the coefficients, sample each fitted curve uniformly
+     * along the full height of the image. */
+    double mederr, cl0, cl1, cl2, cr0, cr1, cr2;
+    double x, y, refl, refr;
+
+    math::dewarpQuadraticLSF(ptal2, &cl2, &cl1, &cl0, &mederr);
+    ptal3 = new vectorPointD();
+    for (i = 0; i < ny; i++) {  /* uniformly sampled in y */
+        y = i * sampling;
+        math::applyQuadraticFit(cl2, cl1, cl0, y, &x);
+        DPoint cp = (DPoint){.x = x, .y = y};
+        ptal3->push_back(cp);
+    }
+
+    /* Fit the right side in the same way. */
+    math::dewarpQuadraticLSF(ptar2, &cr2, &cr1, &cr0, &mederr);
+    ptar3 = new vectorPointD();
+    for (i = 0; i < ny; i++) {  /* uniformly sampled in y */
+        y = i * sampling;
+        math::applyQuadraticFit(cr2, cr1, cr0, y, &x);
+        DPoint cp = (DPoint){.x = x, .y = y};
+        ptar3->push_back(cp);
+    }
+
+    /* Find the x value at the midpoints (in y) of the two vertical lines,
+     * ptal3 and ptar3.  These are the reference values for each of the
+     * lines.  Then use the difference between the these midpoint
+     * values and the actual x coordinates of the lines to represent
+     * the horizontal disparity (nald, nard) on the vertical lines
+     * for the sampled y values. */
+    refl = ptal3->at(ny/2).x;
+    refr = ptar3->at(ny/2).x;
+    nald = new std::vector<double>();
+    nard = new std::vector<double>();
+    for (i = 0; i < ny; i++) {
+        DPoint pl = ptal3->at(i);
+        nald->push_back(refl-pl.x);
+
+        DPoint pr = ptar3->at(i);
+        nard->push_back(refr-pr.x);
+
+        if (debugh) {
+            cv::circle(display, cv::Point(pl.x, pl.y), 20, red, -1, cv::LINE_AA);
+            cv::circle(display, cv::Point(pr.x, pr.y), 20, red, -1, cv::LINE_AA);
+        }
+    }
+
+    if (debugh) {
+        cv::line(display, cv::Point(refl, 0), cv::Point(refl, inSize.height), black, 5, cv::LINE_AA);
+        cv::line(display, cv::Point(refr, 0), cv::Point(refr, inSize.height), black, 5, cv::LINE_AA);
+    }
+
+    /* Now for each pair of sampled values of the two lines (at the
+     * same value of y), do a linear interpolation to generate
+     * the horizontal disparity on all sampled points between them.  */
+    vvectorPointD *ptaah = new vvectorPointD();
+    for (i = 0; i < ny; i++) {
+        vectorPointD *pta = new vectorPointD();
+        val = nald->at(i);
+        pta->push_back((DPoint){.x = refl, .y = val});
+        val = nard->at(i);
+        pta->push_back((DPoint){.x = refr, .y = val});
+
+        math::getLinearLSF(pta, &c1, &c0, NULL);  /* horiz disparity along line */
+        vectorPointD *ptat = new vectorPointD();
+        for (j = 0; j < nx; j++) {
+            x = j * sampling;
+            math::applyLinearFit(c1, c0, x, &val);
+            ptat->push_back((DPoint){.x = x, .y = val});
+        }
+        ptaah->push_back(*ptat);
+        free(pta);
+    }
+    free(nald);
+    free(nard);
+
+    // construct output!
+
+    free(ptal2);
+    free(ptar2);
+    free(ptal3);
+    free(ptar3);
+    free(ptaah);
 
     return [[UIImage alloc] initWithCVMat:display];
 }

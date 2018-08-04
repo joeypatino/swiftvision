@@ -77,6 +77,9 @@
 		D4C8B38021148AC80037FDDE /* cat.035.jpg in Resources */ = {isa = PBXBuildFile; fileRef = D4C8B37F21148AC80037FDDE /* cat.035.jpg */; };
 		D4C8B38321159E1E0037FDDE /* VerticalDisparity.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D4C8B38121159E1E0037FDDE /* VerticalDisparity.cpp */; };
 		D4C8B38421159E1E0037FDDE /* VerticalDisparity.hpp in Headers */ = {isa = PBXBuildFile; fileRef = D4C8B38221159E1E0037FDDE /* VerticalDisparity.hpp */; };
+		D4C8B38621159FF30037FDDE /* types.h in Headers */ = {isa = PBXBuildFile; fileRef = D4C8B38521159FF30037FDDE /* types.h */; };
+		D4C8B3892115A04F0037FDDE /* PtraArray.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D4C8B3872115A04F0037FDDE /* PtraArray.cpp */; };
+		D4C8B38A2115A04F0037FDDE /* PtraArray.hpp in Headers */ = {isa = PBXBuildFile; fileRef = D4C8B3882115A04F0037FDDE /* PtraArray.hpp */; };
 		D4D8304A206198F0001B1535 /* UIImage+extras.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4D83049206198F0001B1535 /* UIImage+extras.swift */; };
 /* End PBXBuildFile section */
 
@@ -186,6 +189,9 @@
 		D4C8B37F21148AC80037FDDE /* cat.035.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = cat.035.jpg; sourceTree = "<group>"; };
 		D4C8B38121159E1E0037FDDE /* VerticalDisparity.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = VerticalDisparity.cpp; sourceTree = "<group>"; };
 		D4C8B38221159E1E0037FDDE /* VerticalDisparity.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = VerticalDisparity.hpp; sourceTree = "<group>"; };
+		D4C8B38521159FF30037FDDE /* types.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = types.h; sourceTree = "<group>"; };
+		D4C8B3872115A04F0037FDDE /* PtraArray.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = PtraArray.cpp; sourceTree = "<group>"; };
+		D4C8B3882115A04F0037FDDE /* PtraArray.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = PtraArray.hpp; sourceTree = "<group>"; };
 		D4D83049206198F0001B1535 /* UIImage+extras.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIImage+extras.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -382,8 +388,11 @@
 				D43C4540205C167D0072AF8F /* KeyPointCostFunction.cpp */,
 				D43C4545205C19AA0072AF8F /* CornerPointCostFunction.hpp */,
 				D43C4544205C19AA0072AF8F /* CornerPointCostFunction.cpp */,
+				D4C8B38521159FF30037FDDE /* types.h */,
 				D4C8B38221159E1E0037FDDE /* VerticalDisparity.hpp */,
 				D4C8B38121159E1E0037FDDE /* VerticalDisparity.cpp */,
+				D4C8B3882115A04F0037FDDE /* PtraArray.hpp */,
+				D4C8B3872115A04F0037FDDE /* PtraArray.cpp */,
 			);
 			path = Optimizer;
 			sourceTree = "<group>";
@@ -450,6 +459,8 @@
 				D4C8B37E21135C150037FDDE /* leptonica.hpp in Headers */,
 				D471D7FB20500F2200F38C26 /* UIImage+Contour.h in Headers */,
 				D465E57420654AE5000BEE77 /* nlopt.h in Headers */,
+				D4C8B38621159FF30037FDDE /* types.h in Headers */,
+				D4C8B38A2115A04F0037FDDE /* PtraArray.hpp in Headers */,
 				D4C8B38421159E1E0037FDDE /* VerticalDisparity.hpp in Headers */,
 				D43C4547205C19AA0072AF8F /* CornerPointCostFunction.hpp in Headers */,
 			);
@@ -603,6 +614,7 @@
 				D471D7F520500EE300F38C26 /* UIImage+OpenCV.mm in Sources */,
 				D43C4531205B1DFF0072AF8F /* vector+extras.cpp in Sources */,
 				D43C4542205C167D0072AF8F /* KeyPointCostFunction.cpp in Sources */,
+				D4C8B3892115A04F0037FDDE /* PtraArray.cpp in Sources */,
 				D428ED33204987D6002A7322 /* UIColor+extras.m in Sources */,
 				D471D7E720500CE600F38C26 /* ContourEdge.m in Sources */,
 				D43C453E205C151E0072AF8F /* CostFunction.cpp in Sources */,

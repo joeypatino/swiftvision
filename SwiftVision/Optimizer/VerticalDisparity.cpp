@@ -1,5 +1,8 @@
 #include "VerticalDisparity.hpp"
 
-VerticalDisparity::VerticalDisparity() {
-    
+using namespace std;
+namespace dewarp {
+    VerticalDisparity::VerticalDisparity() {
+
+    }
 }

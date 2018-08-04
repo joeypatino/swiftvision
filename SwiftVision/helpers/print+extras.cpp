@@ -54,6 +54,21 @@ namespace logs {
         printf("\n");
     }
 
+    void describe_vector(std::vector<DPoint> vector, char const *name ) {
+        printf("\n############ DPoint %s ############\n", name);
+        printf("size: {%zul}\n", vector.size());
+        printf("----------------------------\n");
+
+        printf("[\n");
+        for (int i = 0; i < vector.size(); i++) {
+            printf("%f, %f\n", vector[i].x, vector[i].y);
+        }
+        printf("]\n");
+
+        printf("\n############ %s ############\n", name);
+        printf("\n");
+    }
+
     void describe_vector(std::vector<cv::Point> vector, char const *name ) {
         printf("\n############ cv::Point %s ############\n", name);
         printf("size: {%zul}\n", vector.size());

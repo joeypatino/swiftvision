@@ -467,5 +467,89 @@ namespace leptonica {
 
         return ptad;
     }
-}
 
+
+    std::vector<std::vector<double>> *scaleByInteger(std::vector<std::vector<double>> *fpixs,
+                                                     int factor) {
+        int     i, j, k, m, ws, hs, wd, hd, wpls, wpld;
+        double   val0, val1, val2, val3;
+        double  *datas, *datad, *lines, *lined, *fract;
+        std::vector<std::vector<double>> *fpixd;
+
+        if (!fpixs)
+            return (std::vector<std::vector<double>> *)NULL;
+        hs = (int)fpixs->size();
+        ws = (int)fpixs->at(0).size();
+
+        hd = factor * (hs - 1) + 1;
+        wd = factor * (ws - 1) + 1;
+
+        datas = (double *)calloc(hs * ws, sizeof(double));
+        datad = (double *)calloc(hd * wd, sizeof(double));
+        for (int i = 0; i < hs; i++) {
+            for (int j = 0; j < ws; j++) {
+                datas[i * ws + j] = (*fpixs)[i][j];
+            }
+        }
+
+        wpls = ws; /* 4-byte words */
+        wpld = wd; /* 4-byte words */
+        fract = (double *)calloc(factor, sizeof(double));
+        for (i = 0; i < factor; i++)
+            fract[i] = i / (double)factor;
+        for (i = 0; i < hs - 1; i++) {
+            lines = datas + i * wpls;
+            for (j = 0; j < ws - 1; j++) {
+                val0 = lines[j];
+                val1 = lines[j + 1];
+                val2 = lines[wpls + j];
+                val3 = lines[wpls + j + 1];
+                for (k = 0; k < factor; k++) {  /* rows of sub-block */
+                    lined = datad + (i * factor + k) * wpld;
+                    for (m = 0; m < factor; m++) {  /* cols of sub-block */
+                        lined[j * factor + m] =
+                        val0 * (1.0 - fract[m]) * (1.0 - fract[k]) +
+                        val1 * fract[m] * (1.0 - fract[k]) +
+                        val2 * (1.0 - fract[m]) * fract[k] +
+                        val3 * fract[m] * fract[k];
+                    }
+                }
+            }
+        }
+
+        /* Do the right-most column of fpixd, skipping LR corner */
+        for (i = 0; i < hs - 1; i++) {
+            lines = datas + i * wpls;
+            val0 = lines[ws - 1];
+            val1 = lines[wpls + ws - 1];
+            for (k = 0; k < factor; k++) {
+                lined = datad + (i * factor + k) * wpld;
+                lined[wd - 1] = val0 * (1.0 - fract[k]) + val1 * fract[k];
+            }
+        }
+
+        /* Do the bottom-most row of fpixd */
+        lines = datas + (hs - 1) * wpls;
+        lined = datad + (hd - 1) * wpld;
+        for (j = 0; j < ws - 1; j++) {
+            val0 = lines[j];
+            val1 = lines[j + 1];
+            for (m = 0; m < factor; m++)
+                lined[j * factor + m] = val0 * (1.0 - fract[m]) + val1 * fract[m];
+            lined[wd - 1] = lines[ws - 1];  /* LR corner */
+        }
+
+        free(fract);
+        free(datas);
+
+        fpixd = new std::vector<std::vector<double>>(hd, std::vector<double>(wd));
+        for (int i = 0; i < hd; i++) {
+            for (int j = 0; j < wd; j++) {
+                (*fpixd)[i][j] = datad[i * wd + j];
+            }
+        }
+        free(datad);
+
+        return fpixd;
+    }
+}

@@ -12,6 +12,7 @@ namespace logs {
     void describe_vector(std::vector<std::vector<double>> vector, char const *name);
     void describe_vector(std::vector<double> vector, char const *name);
     void describe_vector(std::vector<float> vector, char const *name);
+    void describe_vector(std::vector<std::vector<DPoint>> vector, char const *name);
     void describe_vector(std::vector<DPoint> vector, char const *name);
     void describe_vector(std::vector<cv::Point> vector, char const *name);
     void describe_vector(std::vector<cv::Point2d> vector, char const *name);

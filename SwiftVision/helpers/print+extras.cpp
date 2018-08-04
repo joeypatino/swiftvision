@@ -4,17 +4,19 @@ namespace logs {
     void describe_vector(std::vector<std::vector<double>> vector, char const *name) {
         printf("\n# %s #\n", name);
         printf("----------------------------\n");
-        int numCols = int(vector.size());
-        int numRows = int(vector[0].size());
+        int numRows = int(vector.size());
+        int numCols = int(vector[0].size());
+
+        printf("[%i, %i]\n", numCols, numRows);
         printf("[");
-        for (int x = 0; x < numCols; x++) {
+        for (int x = 0; x < numRows; x++) {
             printf("[");
-            for (int y = 0; y < numRows; y++) {
+            for (int y = 0; y < numCols; y++) {
                 double z = vector[x][y];
                 printf("%f", z);
-                if (y < numRows-1) { printf(", "); }
+                if (y < numCols-1) { printf(", "); }
             }
-            if (x < numCols-1) { printf("]\n"); }
+            if (x < numRows-1) { printf("]\n"); }
             else { printf("]"); }
         }
         printf("]\n");
@@ -50,6 +52,27 @@ namespace logs {
             if (x < numRows-1) { printf(",\n"); }
             else { printf("]\n"); }
         }
+        printf("----------------------------\n");
+        printf("\n");
+    }
+
+    void describe_vector(std::vector<std::vector<DPoint>> vector, char const *name ) {
+        printf("\n# %s #\n", name);
+        printf("----------------------------\n");
+        int numCols = int(vector.size());
+        int numRows = int(vector[0].size());
+        printf("[");
+        for (int x = 0; x < numCols; x++) {
+            printf("[");
+            for (int y = 0; y < numRows; y++) {
+                DPoint z = vector[x][y];
+                printf("{%f, %f}", z.x, z.y);
+                if (y < numRows-1) { printf(", "); }
+            }
+            if (x < numCols-1) { printf("]\n"); }
+            else { printf("]"); }
+        }
+        printf("]\n");
         printf("----------------------------\n");
         printf("\n");
     }

@@ -1,7 +1,4 @@
 #include "Optimizer.hpp"
-#include "nlopt.h"
-#include "nlopt.hpp"
-
 
 typedef struct {
     double a, b;
@@ -29,24 +26,6 @@ Optimizer::Optimizer(cv::Ptr<CostFunction> fn, vector<double> unoptimizedParamet
     solver->setFunction(fn);
     fn->setParameters(unoptimizedParameters);
     parameters = unoptimizedParameters;
-
-    // ::nlopt::
-    nlopt::algorithm alg = nlopt::algorithm::LN_COBYLA;
-    nlopt::opt opt = nlopt::opt(alg, 2);
-
-    std::vector<double> lb = { -HUGE_VAL, 0 };
-    opt.set_lower_bounds(lb);
-    opt.set_min_objective(optimizeFn, NULL);
-
-    //KeyPointCostData data[] = { {0, 1}, {0, 1} };
-    //opt.add_inequality_constraint(constraintFn, &data[0], 1e-8);
-    //opt.add_inequality_constraint(constraintFn, &data[1], 1e-8);
-    opt.set_xtol_rel(1e-4);
-
-    std::vector<double> x = { 1.234, 5.678 };
-    double minf;
-    nlopt::result result = opt.optimize(x, minf);
-    // ::nlopt::
 }
 
 OptimizerResult Optimizer::optimize() {

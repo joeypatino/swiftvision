@@ -10,6 +10,8 @@
 #import "functions.h"
 #import "NSArray+extras.h"
 #import "math+extras.hpp"
+#import "leptonica.hpp"
+#import "print+extras.hpp"
 #import "UIImage+Mat.h"
 // optimization
 #import "Optimizer.hpp"
@@ -23,6 +25,9 @@ EigenVectorMake(cv::Point2f x, cv::Point2f y) {
     eigen.y = geom::convertTo(y);
     return eigen;
 }
+
+typedef std::vector<cv::Point2d> vector_pointd;
+typedef std::vector<std::vector<cv::Point2d>> vector_pointdd;
 
 @interface ImageRemapper ()
 @property (nonatomic, assign, readonly) KeyPointProjector *projector;
@@ -60,6 +65,208 @@ EigenVectorMake(cv::Point2f x, cv::Point2f y) {
 }
 
 - (UIImage *)remap {
+    cv::Mat display = [self.inputImage mat];
+    cv::Scalar red = cv::Scalar(255, 0, 0);
+    cv::Scalar blue = cv::Scalar(0, 0, 255);
+    cv::Scalar green = cv::Scalar(34, 139, 34);
+    cv::Scalar black = cv::Scalar(0, 0, 0);
+    cv::Scalar yellow = cv::Scalar(255, 250, 205);
+
+    bool debug = true;
+
+    vector_pointdd *ptaa = new vector_pointdd(self.keyPoints);
+    int w = self.inputImage.size.width;
+    int h = self.inputImage.size.height;
+    int sampling = 40;
+    int nx = (w + 2 * sampling - 2) / sampling;     // number of sampling pts in x-dir
+    int ny = (h + 2 * sampling - 2) / sampling;     // number of sampling pts in y-dir
+    int nlines = (int) ptaa->size();
+    double c2, c1, c0;
+    int i, j;
+
+    cv::Size inputShape = cv::Size(self.inputImage.size.width, self.inputImage.size.height);
+    vector_pointdd *ptaa0 = new vector_pointdd();
+    vector_d *nacurve0 = new vector_d();
+    for (i = 0; i < nlines; i++) {  // take all the vertical center points for a line
+        if (ptaa->at(i).size() < 3)
+            continue;
+
+        std::vector<cv::Point2d> *pts = new vector_pointd((*ptaa)[i]);
+        vector_pointd *pta = new vector_pointd(vectors::norm2pix(inputShape, *pts));
+        leptonica::getQuadraticLSF(pta, &c2, &c1, &c0, NULL);               // calculate the LSF
+        nacurve0->push_back(c2);                                            // store the c2 coeffecient..
+        vector_pointd *ptad = new vector_pointd();                          // create a point array with a size = the number of
+
+        float x = 0;
+        float y = 0;
+        for (j = 0; j < nx; j++) {                              // samples in the horizontal direction
+            x = j * sampling;                                   // keep jumping forward by the sampling value...
+            leptonica::applyQuadraticFit(c2, c1, c0, x, &y);    // and run the quadratic fit, y is an out variable...
+            ptad->push_back(cv::Point2d(x, y));                 // and store x and y in the ptad
+
+            if (debug)
+                cv::circle(display, cv::Point2d(x, y), 12, blue, -1, cv::LINE_AA);
+        }
+        ptaa0->push_back(*ptad);                                 // push the solved vertical disparity values onto our output ptaa0
+        free(ptad);
+        free(pta);
+        free(pts);
+    }
+    free(ptaa);
+    nlines = (int) ptaa0->size();
+
+    /* Remove lines with outlier curvatures.
+     * Note that this is just looking for internal consistency in
+     * the line curvatures. */
+    double medvar;
+    double medval;
+    leptonica::getMedianVariation(nacurve0, &medval, &medvar);
+    vector_pointdd *ptaa1 = new vector_pointdd();
+    vector_d *nacurve1 = new vector_d();
+    float val;
+    for (i = 0; i < nlines; i++) {  /* for each line */
+        val = nacurve0->at(i);
+        if (ABSX(val - medval) > 7.0 * medvar)
+            continue;
+        vector_pointd *pta = new vector_pointd((*ptaa0)[i]);
+        ptaa1->push_back(*pta);
+        nacurve1->push_back(val);
+        free(pta);
+    }
+    nlines = (int)ptaa1->size();
+    free(nacurve0);
+
+    /**
+     * TODO: calculate and store the min and max curvature (from nacurve1)
+     *
+     */
+
+    /* Find and save the y values at the mid-points in each curve.
+     * If the slope is zero anywhere, it will typically be here. */
+    vector_d *namidy = new vector_d();
+    for (i = 0; i < nlines; i++) {
+        vector_pointd *pta = new vector_pointd((*ptaa1)[i]);
+        int npts = (int)pta->size();
+        cv::Point2d mid = pta->at(npts/2);
+        namidy->push_back(mid.y);
+        if (debug) {
+            cv::circle(display, mid, 20, red, -1, cv::LINE_AA);
+            cv::line(display, cv::Point(0, mid.y), cv::Point(w, mid.y), black, 5, cv::LINE_AA);
+        }
+        free(pta);
+    }
+
+    /**
+     * Sort the lines in ptaa1 by their vertical position, going down
+     */
+    vector_d *namidysi = leptonica::getSortIndex(namidy, L_SORT_INCREASING);
+    vector_d *namidys = leptonica::sortByIndex(namidy, namidysi);
+    vector_d *nacurves = leptonica::sortByIndex(nacurve1, namidysi);
+    vector_pointdd *ptaa2 = leptonica::sortByIndex(ptaa1, namidysi);
+    free(namidy);
+    free(nacurve1);
+    free(namidysi);
+    free(nacurves);
+
+    /* Convert the sampled points in ptaa2 to a sampled disparity with
+     * with respect to the y value at the mid point in the curve.
+     * The disparity is the distance the point needs to move;
+     * plus is downward.  */
+    vector_pointdd *ptaa3 = new vector_pointdd();
+    for (i = 0; i < nlines; i++) {
+        vector_pointd *pta = new vector_pointd((*ptaa2)[i]);
+        vector_pointd *ptad = new vector_pointd();
+        double midy = namidys->at(i);
+
+        for (j = 0; j < nx; j++) {
+            cv::Point2d p = pta->at(j);
+            cv::Point2d disparity = cv::Point2d(p.x, midy - p.y);
+            ptad->push_back(disparity);
+
+            if (debug) {
+                cv::circle(display, p, 10, red, -1, cv::LINE_AA);
+                //cv::circle(display, cv::Point2d(disparity.x, p.y + disparity.y), 10, yellow, -1, cv::LINE_AA);
+            }
+        }
+//        logs::describe_vector(*ptad, "pta3");
+        ptaa3->push_back(*ptad);
+        free(pta);
+        free(ptad);
+    }
+
+    /* Generate ptaa4 by taking vertical 'columns' from ptaa3.
+     * We want to fit the vertical disparity on the column to the
+     * vertical position of the line, which we call 'y' here and
+     * obtain from namidys.  So each pta in ptaa4 is the set of
+     * vertical disparities down a column of points.  The columns
+     * in ptaa4 are equally spaced in x. */
+    vector_pointdd *ptaa4 = new vector_pointdd();
+    std::vector<double> *famidys = new std::vector<double>(*namidys);
+    for (j = 0; j < nx; j++) {
+        vector_pointd *pta = new vector_pointd();
+        for (i = 0; i < nlines; i++) {
+            double y = (*famidys)[i];
+            cv::Point2d p = (*ptaa3)[i][j];
+            pta->push_back(cv::Point2d(y, p.y));
+        }
+//        logs::describe_vector(*pta, "pta4");
+        ptaa4->push_back(*pta);
+        free(pta);
+    }
+    free(namidys);
+
+    /* Do quadratic fit vertically on each of the pixel columns
+     * in ptaa4, for the vertical displacement (which identifies the
+     * src pixel(s) for each dest pixel) as a function of y (the
+     * y value of the mid-points for each line).  Then generate
+     * ptaa5 by sampling the fitted vertical displacement on a
+     * regular grid in the vertical direction.  Each pta in ptaa5
+     * gives the vertical displacement for regularly sampled y values
+     * at a fixed x. */
+    vector_pointdd *ptaa5 = new vector_pointdd();  /* uniformly sampled across full height of image */
+    for (j = 0; j < nx; j++) {  /* for each column */
+        vector_pointd *pta = new vector_pointd((*ptaa4)[j]);
+        leptonica::getQuadraticLSF(pta, &c2, &c1, &c0, NULL);
+        vector_pointd *ptad = new vector_pointd();
+        for (i = 0; i < ny; i++) {  /* uniformly sampled in y */
+            int y = i * sampling;
+            float val;
+            leptonica::applyQuadraticFit(c2, c1, c0, y, &val);
+            ptad->push_back(cv::Point2d(y, val));
+        }
+        logs::describe_vector(*ptad, "pta5");
+        ptaa5->push_back(*ptad);
+        free(ptad);
+        free(pta);
+    }
+
+    vector_pointdd *pix = new vector_pointdd();
+    for (i = 0; i < ny; i++) {
+        for (j = 0; j < nx; j++) {
+            cv::Point2d p = ptaa5->at(j).at(i);
+            pix->at(j).at(i) = p;
+        }
+    }
+//    cv::Mat fpix = cv::Mat(nx, ny, cv::DataType<cv::Point2d>::type);
+//    for (i = 0; i < ny; i++) {
+//        for (j = 0; j < nx; j++) {
+//            cv::Point2d p = (*ptaa5)[j][i];
+//            fpix.at<cv::Point2d>(j, i) = p;
+//        }
+//    }
+
+    free(famidys);
+    free(ptaa0);
+    free(ptaa1);
+    free(ptaa2);
+    free(ptaa3);
+    free(ptaa4);
+    free(ptaa5);
+
+    return [[UIImage alloc] initWithCVMat:display];
+}
+
+- (UIImage *)_remap {
     int REMAP_DECIMATE = 16;
 
     vector_d parameters = [self optimizeImage].x;
@@ -91,8 +298,8 @@ EigenVectorMake(cv::Point2f x, cv::Point2f y) {
     std::vector<cv::Point2d> imgPts = vectors::norm2pix(inputShape, prjtdPts);
 
     cv::Size size = cv::Size(width, height);
-    cv::Mat xPts = [self scale:vectors::axis(0, imgPts) from:cv::Size(xsize, ysize) size:size];
-    cv::Mat yPts = [self scale:vectors::axis(1, imgPts) from:cv::Size(xsize, ysize) size:size];
+    cv::Mat xPts = [self scale:vectors::axis(0, imgPts) from:cv::Size(xsize, ysize) to:size];
+    cv::Mat yPts = [self scale:vectors::axis(1, imgPts) from:cv::Size(xsize, ysize) to:size];
 
     cv::Mat outputImage;
     cv::remap([self.inputImage mat],
@@ -105,7 +312,7 @@ EigenVectorMake(cv::Point2f x, cv::Point2f y) {
     return [[UIImage alloc] initWithCVMat:outputImage];
 }
 
-- (cv::Mat)scale:(vector_d)axis from:(cv::Size)from size:(cv::Size)size {
+- (cv::Mat)scale:(vector_d)axis from:(cv::Size)from to:(cv::Size)size {
     cv::Mat base = cv::Mat::zeros(from.height, from.width, cv::DataType<double>::type);
     int i = 0;
     for (int r = 0; r < from.height; r++) {

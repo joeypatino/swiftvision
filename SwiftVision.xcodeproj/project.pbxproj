@@ -40,7 +40,6 @@
 		D44D558120628D2C00BFD3C6 /* boston_cooking_a.jpg in Resources */ = {isa = PBXBuildFile; fileRef = D44D558020628D2C00BFD3C6 /* boston_cooking_a.jpg */; };
 		D465E57420654AE5000BEE77 /* nlopt.h in Headers */ = {isa = PBXBuildFile; fileRef = D465E57120654AE5000BEE77 /* nlopt.h */; };
 		D465E57520654AE5000BEE77 /* nlopt.hpp in Headers */ = {isa = PBXBuildFile; fileRef = D465E57220654AE5000BEE77 /* nlopt.hpp */; };
-		D465E57920654B5B000BEE77 /* libnlopt.a in Frameworks */ = {isa = PBXBuildFile; fileRef = D465E57820654B5B000BEE77 /* libnlopt.a */; };
 		D471D7D620500C4A00F38C26 /* LineInfo.h in Headers */ = {isa = PBXBuildFile; fileRef = D471D7D320500C4A00F38C26 /* LineInfo.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		D471D7D720500C4A00F38C26 /* CGRectOutline.h in Headers */ = {isa = PBXBuildFile; fileRef = D471D7D420500C4A00F38C26 /* CGRectOutline.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		D471D7D820500C4A00F38C26 /* EigenVector.h in Headers */ = {isa = PBXBuildFile; fileRef = D471D7D520500C4A00F38C26 /* EigenVector.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -73,6 +72,11 @@
 		D4A572CC202A1E2800D8F4B0 /* UIImage+Mat.mm in Sources */ = {isa = PBXBuildFile; fileRef = D4A572C8202A1E2800D8F4B0 /* UIImage+Mat.mm */; };
 		D4BAD1C52034DBB200F4A32C /* NSArray+extras.h in Headers */ = {isa = PBXBuildFile; fileRef = D4BAD1C32034DBB200F4A32C /* NSArray+extras.h */; };
 		D4BAD1C62034DBB200F4A32C /* NSArray+extras.m in Sources */ = {isa = PBXBuildFile; fileRef = D4BAD1C42034DBB200F4A32C /* NSArray+extras.m */; };
+		D4C8B37D21135C150037FDDE /* leptonica.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D4C8B37B21135C150037FDDE /* leptonica.cpp */; };
+		D4C8B37E21135C150037FDDE /* leptonica.hpp in Headers */ = {isa = PBXBuildFile; fileRef = D4C8B37C21135C150037FDDE /* leptonica.hpp */; };
+		D4C8B38021148AC80037FDDE /* cat.035.jpg in Resources */ = {isa = PBXBuildFile; fileRef = D4C8B37F21148AC80037FDDE /* cat.035.jpg */; };
+		D4C8B38321159E1E0037FDDE /* VerticalDisparity.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D4C8B38121159E1E0037FDDE /* VerticalDisparity.cpp */; };
+		D4C8B38421159E1E0037FDDE /* VerticalDisparity.hpp in Headers */ = {isa = PBXBuildFile; fileRef = D4C8B38221159E1E0037FDDE /* VerticalDisparity.hpp */; };
 		D4D8304A206198F0001B1535 /* UIImage+extras.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4D83049206198F0001B1535 /* UIImage+extras.swift */; };
 /* End PBXBuildFile section */
 
@@ -144,7 +148,6 @@
 		D44D558020628D2C00BFD3C6 /* boston_cooking_a.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = boston_cooking_a.jpg; sourceTree = "<group>"; };
 		D465E57120654AE5000BEE77 /* nlopt.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = nlopt.h; sourceTree = "<group>"; };
 		D465E57220654AE5000BEE77 /* nlopt.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = nlopt.hpp; sourceTree = "<group>"; };
-		D465E57820654B5B000BEE77 /* libnlopt.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libnlopt.a; path = SwiftVision/libnlopt.a; sourceTree = "<group>"; };
 		D4711A0820502C1200F38C26 /* Accelerate.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Accelerate.framework; path = System/Library/Frameworks/Accelerate.framework; sourceTree = SDKROOT; };
 		D4711A0A20502C7500F38C26 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		D4711A0C20502C8300F38C26 /* CoreFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreFoundation.framework; path = System/Library/Frameworks/CoreFoundation.framework; sourceTree = SDKROOT; };
@@ -178,6 +181,11 @@
 		D4A572C8202A1E2800D8F4B0 /* UIImage+Mat.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = "UIImage+Mat.mm"; sourceTree = "<group>"; };
 		D4BAD1C32034DBB200F4A32C /* NSArray+extras.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "NSArray+extras.h"; sourceTree = "<group>"; };
 		D4BAD1C42034DBB200F4A32C /* NSArray+extras.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "NSArray+extras.m"; sourceTree = "<group>"; };
+		D4C8B37B21135C150037FDDE /* leptonica.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = leptonica.cpp; sourceTree = "<group>"; };
+		D4C8B37C21135C150037FDDE /* leptonica.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = leptonica.hpp; sourceTree = "<group>"; };
+		D4C8B37F21148AC80037FDDE /* cat.035.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = cat.035.jpg; sourceTree = "<group>"; };
+		D4C8B38121159E1E0037FDDE /* VerticalDisparity.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = VerticalDisparity.cpp; sourceTree = "<group>"; };
+		D4C8B38221159E1E0037FDDE /* VerticalDisparity.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = VerticalDisparity.hpp; sourceTree = "<group>"; };
 		D4D83049206198F0001B1535 /* UIImage+extras.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIImage+extras.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -187,7 +195,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				D40B286920288EEA00CA8559 /* UIKit.framework in Frameworks */,
-				D465E57920654B5B000BEE77 /* libnlopt.a in Frameworks */,
 				D40B286720288EE100CA8559 /* CoreGraphics.framework in Frameworks */,
 				D40B28462028858A00CA8559 /* opencv2.framework in Frameworks */,
 			);
@@ -255,7 +262,6 @@
 		D40B28442028858A00CA8559 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				D465E57820654B5B000BEE77 /* libnlopt.a */,
 				D4711A0C20502C8300F38C26 /* CoreFoundation.framework */,
 				D4711A0A20502C7500F38C26 /* Foundation.framework */,
 				D4711A0820502C1200F38C26 /* Accelerate.framework */,
@@ -270,6 +276,7 @@
 			isa = PBXGroup;
 			children = (
 				D48B4B702028AC0600DFA7AC /* input_image.jpeg */,
+				D4C8B37F21148AC80037FDDE /* cat.035.jpg */,
 				D44D558020628D2C00BFD3C6 /* boston_cooking_a.jpg */,
 				D40B28512028860D00CA8559 /* AppDelegate.swift */,
 				D40B28532028860D00CA8559 /* ViewController.swift */,
@@ -300,6 +307,8 @@
 				D43C452F205B1DFF0072AF8F /* vector+extras.cpp */,
 				D43C4534205B1ECB0072AF8F /* math+extras.hpp */,
 				D43C4533205B1ECB0072AF8F /* math+extras.cpp */,
+				D4C8B37C21135C150037FDDE /* leptonica.hpp */,
+				D4C8B37B21135C150037FDDE /* leptonica.cpp */,
 				D43C4538205B239C0072AF8F /* print+extras.hpp */,
 				D43C4537205B239C0072AF8F /* print+extras.cpp */,
 			);
@@ -373,6 +382,8 @@
 				D43C4540205C167D0072AF8F /* KeyPointCostFunction.cpp */,
 				D43C4545205C19AA0072AF8F /* CornerPointCostFunction.hpp */,
 				D43C4544205C19AA0072AF8F /* CornerPointCostFunction.cpp */,
+				D4C8B38221159E1E0037FDDE /* VerticalDisparity.hpp */,
+				D4C8B38121159E1E0037FDDE /* VerticalDisparity.cpp */,
 			);
 			path = Optimizer;
 			sourceTree = "<group>";
@@ -436,8 +447,10 @@
 				D471D7F120500D0800F38C26 /* Contour+internal.h in Headers */,
 				D4A572CA202A1E2800D8F4B0 /* UIImage+Mat.h in Headers */,
 				D43C4536205B1ECB0072AF8F /* math+extras.hpp in Headers */,
+				D4C8B37E21135C150037FDDE /* leptonica.hpp in Headers */,
 				D471D7FB20500F2200F38C26 /* UIImage+Contour.h in Headers */,
 				D465E57420654AE5000BEE77 /* nlopt.h in Headers */,
+				D4C8B38421159E1E0037FDDE /* VerticalDisparity.hpp in Headers */,
 				D43C4547205C19AA0072AF8F /* CornerPointCostFunction.hpp in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -507,7 +520,7 @@
 			isa = PBXProject;
 			attributes = {
 				LastSwiftUpdateCheck = 0920;
-				LastUpgradeCheck = 0920;
+				LastUpgradeCheck = 0940;
 				ORGANIZATIONNAME = "Joseph Patino";
 				TargetAttributes = {
 					D40B28382028856300CA8559 = {
@@ -561,6 +574,7 @@
 				D40B285C2028860D00CA8559 /* LaunchScreen.storyboard in Resources */,
 				D40B28592028860D00CA8559 /* Assets.xcassets in Resources */,
 				D48B4B712028AC0600DFA7AC /* input_image.jpeg in Resources */,
+				D4C8B38021148AC80037FDDE /* cat.035.jpg in Resources */,
 				D40B28572028860D00CA8559 /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -584,6 +598,7 @@
 				D4A572C3202A1E1500D8F4B0 /* PageDewarp.mm in Sources */,
 				D43C4539205B239C0072AF8F /* print+extras.cpp in Sources */,
 				D471D7FA20500F2200F38C26 /* UIImage+Contour.mm in Sources */,
+				D4C8B37D21135C150037FDDE /* leptonica.cpp in Sources */,
 				D43C4546205C19AA0072AF8F /* CornerPointCostFunction.cpp in Sources */,
 				D471D7F520500EE300F38C26 /* UIImage+OpenCV.mm in Sources */,
 				D43C4531205B1DFF0072AF8F /* vector+extras.cpp in Sources */,
@@ -596,6 +611,7 @@
 				D4792BA4205B0C1600F74B2E /* Optimizer.cpp in Sources */,
 				D439947220388BA800D9B783 /* functions.mm in Sources */,
 				D43C4535205B1ECB0072AF8F /* math+extras.cpp in Sources */,
+				D4C8B38321159E1E0037FDDE /* VerticalDisparity.cpp in Sources */,
 				D471D7E620500CE600F38C26 /* ContourSpan.mm in Sources */,
 				D4792BA8205B10E400F74B2E /* KeyPointProjector.cpp in Sources */,
 			);
@@ -669,6 +685,7 @@
 				CLANG_WARN_BOOL_CONVERSION = YES;
 				CLANG_WARN_COMMA = YES;
 				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
 				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
 				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
 				CLANG_WARN_EMPTY_BODY = YES;
@@ -676,6 +693,7 @@
 				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
 				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
 				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
@@ -727,6 +745,7 @@
 				CLANG_WARN_BOOL_CONVERSION = YES;
 				CLANG_WARN_COMMA = YES;
 				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
 				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
 				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
 				CLANG_WARN_EMPTY_BODY = YES;
@@ -734,6 +753,7 @@
 				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
 				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
 				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
@@ -759,6 +779,7 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 11.2;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				SDKROOT = iphoneos;
+				SWIFT_COMPILATION_MODE = wholemodule;
 				VALIDATE_PRODUCT = YES;
 				VERSIONING_SYSTEM = "apple-generic";
 				VERSION_INFO_PREFIX = "";

@@ -468,6 +468,36 @@ namespace leptonica {
         return ptad;
     }
 
+    int addMultConstant(std::vector<std::vector<double>> *fpix,
+                        double addc,
+                        double multc) {
+        int i, j, w, h;
+        if (!fpix)
+            return 1;
+
+        if (addc == 0.0 && multc == 1.0)
+            return 0;
+
+        h = (int)fpix->size();
+        w = (int)fpix->at(0).size();
+
+        for (i = 0; i < h; i++) {
+            if (addc == 0.0) {
+                for (j = 0; j < w; j++)
+                    fpix->at(i).at(j) *= multc;
+            } else if (multc == 1.0) {
+                for (j = 0; j < w; j++)
+                    fpix->at(i).at(j) += addc;
+            } else {
+                for (j = 0; j < w; j++) {
+                    double val = fpix->at(i).at(j);
+                    fpix->at(i).at(j) = multc * val + addc;
+                }
+            }
+        }
+
+        return 0;
+    }
 
     std::vector<std::vector<double>> *scaleByInteger(std::vector<std::vector<double>> *fpixs,
                                                      int factor) {

@@ -20,6 +20,9 @@
 #import "KeyPointCostFunction.hpp"
 #import "CornerPointCostFunction.hpp"
 
+#include <stdio.h>
+#include <vector>
+
 static inline struct EigenVector
 EigenVectorMake(cv::Point2f x, cv::Point2f y) {
     struct EigenVector eigen;
@@ -67,32 +70,17 @@ typedef std::vector<std::vector<cv::Point2d>> vector_pointdd;
 }
 
 - (UIImage *)remap {
-    // -------------
-    // Constructor input
-    // -------------
-    // Sampled KeyPoints : vvectorPointD
-    // Size of Image : DSize
-    // -------------
-    // -------------
-    // Properties
-    // -------------
-    // Sampling frequency value : int
-    // -------------
-    // -------------
-
     cv::Mat display = [self.inputImage mat];
     cv::Scalar red = cv::Scalar(255, 0, 0);
     cv::Scalar blue = cv::Scalar(0, 0, 255);
     cv::Scalar black = cv::Scalar(0, 0, 0);
     cv::Scalar yellow = cv::Scalar(255, 250, 205);
-    //    //cv::Scalar green = cv::Scalar(34, 139, 34);
 
-    BOOL debugVerts = true;
-    BOOL debugHoriz = true;
+    BOOL debugVerts = false;
+    BOOL debugHoriz = false;
     DSize inSize = (DSize){ .width = self.inputImage.size.width, .height = self.inputImage.size.height };
     vvectorPointD *ptaa = [self unnormalizedKeypoints:self.keyPoints inputImageSize:inSize];
-    int sampling = 100;
-
+    int sampling = 80;
 
     // Debugging output
     vvectorPointD *vQuadraticCurvePoints = NULL;
@@ -108,16 +96,16 @@ typedef std::vector<std::vector<cv::Point2d>> vector_pointdd;
                                        inputImageSize:inSize
                                      samplinginterval:sampling
                                  quadraticCurvePoints:&vQuadraticCurvePoints
-                                    curveCenterPoints:&vCurveCenterPoints];
+                                    curveCenterPoints:NULL];
     vvectorD *hdisparity = [self getHorizontalDisparity:ptaa
                                          inputImageSize:inSize
                                        samplinginterval:sampling
-                                   quadraticCurvePoints:&hLeftQuadraticCurvePoints
-                                   quadraticCurvePoints:&hRightQuadraticCurvePoints
+                                   quadraticCurvePoints:NULL
+                                   quadraticCurvePoints:NULL
                                       leftLineEndPoints:&hLeftEndPoints
                                      rightLineEndPoints:&hRightEndPoints
-                                             leftBounds:&hLeftBound
-                                            rightBounds:&hRightBound];
+                                             leftBounds:NULL
+                                            rightBounds:NULL];
     free(ptaa);
 
     if (vQuadraticCurvePoints && debugVerts) {
@@ -125,7 +113,7 @@ typedef std::vector<std::vector<cv::Point2d>> vector_pointdd;
             vectorPointD pts = vQuadraticCurvePoints->at(i);
             for (int j = 0; j < pts.size(); j++) {
                 DPoint p = pts[j];
-                cv::circle(display, cv::Point2d(p.x, p.y), 12, blue, -1, cv::LINE_AA);
+                cv::circle(display, cv::Point2d(p.x, p.y), 6, blue, -1, cv::LINE_AA);
             }
         }
         free(vQuadraticCurvePoints);
@@ -162,7 +150,7 @@ typedef std::vector<std::vector<cv::Point2d>> vector_pointdd;
     if (hRightEndPoints && debugHoriz) {
         for (int i = 0; i < hRightEndPoints->size(); i++) {
             DPoint p = hRightEndPoints->at(i);
-            cv::circle(display, cv::Point(p.y, p.x), 12, yellow, -1, cv::LINE_AA);
+            cv::circle(display, cv::Point(p.y, p.x), 10, yellow, -1, cv::LINE_AA);
         }
         free(hRightEndPoints);
     }
@@ -173,7 +161,27 @@ typedef std::vector<std::vector<cv::Point2d>> vector_pointdd;
         cv::line(display, cv::Point(hRightBound, 0), cv::Point(hRightBound, inSize.height), black, 5, cv::LINE_AA);
     }
 
-    return [[UIImage alloc] initWithCVMat:display];
+    /** apply the disparity maps to the image, render it, and you're done */
+    int isrc, i, j;
+    int grayin = -1;
+    int channels = display.channels();
+    cv::Mat pixd = display.clone();
+
+    for(i = 0; i < inSize.height; i++) {
+        int wpl = inSize.width * channels;
+
+        for(j = 0; j < wpl; j++) {
+            isrc = (int)(i - vdisparity->at(i).at(j/channels) + 0.5);
+            if (grayin < 0)
+                isrc = min(max(isrc, 0), (int)inSize.height - 1);
+            if (isrc >= 0 && isrc < inSize.height){
+                unsigned char *rowPtr = display.ptr(isrc);
+                pixd.at<unsigned char>(i, j) = rowPtr[j];
+            }
+        }
+    }
+
+    return [[UIImage alloc] initWithCVMat:pixd];
 }
 
 - (vvectorPointD *)unnormalizedKeypoints:(std::vector<vector<cv::Point2d>>)keyPoints inputImageSize:(DSize)inSize {
@@ -202,7 +210,7 @@ typedef std::vector<std::vector<cv::Point2d>> vector_pointdd;
     int nx, ny;
 
     /* Find the required width and height expansion deltas */
-    redfactor = 2;
+    redfactor = 1;
     nx = (inSize.width + 2 * sampling - 2) / sampling;      // number of sampling pts in x-dir
     ny = (inSize.height + 2 * sampling - 2) / sampling;     // number of sampling pts in y-dir
     deltaw = inSize.width - sampling * (nx - 1) + 2;
@@ -214,8 +222,9 @@ typedef std::vector<std::vector<cv::Point2d>> vector_pointdd;
      * extending it as required to make it big enough.  Use x,y
      * to determine the amounts on each side. */
     fpixt1 = new vvectorD(*disparity);
-    //    if (redfactor == 2)
-    //        addMultConstant(fpixt1, 0.0, (double)redfactor);
+    if (redfactor == 2)
+        leptonica::addMultConstant(fpixt1, 0.0, (double)redfactor);
+
     fpixt2 = leptonica::scaleByInteger(fpixt1, sampling * redfactor);
     fulldisparity = new vvectorD(*fpixt2);
     free(fpixt1);
@@ -448,7 +457,7 @@ typedef std::vector<std::vector<cv::Point2d>> vector_pointdd;
 
     for (i = 0; i < nlines; i++) {  /* for each line */
         val = nacurve0->at(i);
-        if (ABSX(val - medval) > 7.0 * medvar)
+        if (ABSX(val - medval) > 3.0 * medvar)
             continue;
         vectorPointD *pta = new vectorPointD((*ptaa0)[i]);
         ptaa1->push_back(*pta);

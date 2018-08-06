@@ -83,6 +83,10 @@ namespace leptonica {
     std::vector<double> *getSortIndex(std::vector<double> *na,
                                       int sortorder);
 
+    int addMultConstant(std::vector<std::vector<double>> *fpix,
+                        double addc,
+                        double multc);
+
     std::vector<std::vector<double>> *scaleByInteger(std::vector<std::vector<double>> *fpixs,
                                                      int factor);
 }

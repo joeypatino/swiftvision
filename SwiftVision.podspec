@@ -17,7 +17,7 @@ Pod::Spec.new do |s|
 
   s.name         = "SwiftVision"
   s.version      = "0.0.1"
-  s.summary      = "A short description of SwiftVision."
+  s.summary      = "A framework for image dewarping and manipulation."
 
   # This description is used to generate tags and improve search results.
   #   * Think: What does it do? Why did you write it? What is the focus?
@@ -28,7 +28,7 @@ Pod::Spec.new do |s|
 SwiftVision is a framework to perform image manipulation. The main component is a text dewarping class that corrects for camera lens distortion in images.
                    DESC
 
-  s.homepage     = "www.github.com/joeypatino/swiftvision.git"
+  s.homepage     = "https://www.github.com/joeypatino/swiftvision.git"
 
 
   # ―――  Spec License  ――――――――――――――――――――――――――――――――――――――――――――――――――――――――――― #
@@ -38,7 +38,6 @@ SwiftVision is a framework to perform image manipulation. The main component is 
   #  Popular ones are 'MIT', 'BSD' and 'Apache License, Version 2.0'.
   #
 
-  # s.license      = "MIT (example)"
   s.license      = { :type => "MIT", :file => "license" }
 
 
@@ -53,9 +52,6 @@ SwiftVision is a framework to perform image manipulation. The main component is 
   #
 
   s.author             = { "joey patino" => "joseph.onitap@gmail.com" }
-  # Or just: s.author    = "joey patino"
-  # s.authors            = { "joey patino" => "joseph.onitap@gmail.com" }
-  # s.social_media_url   = "http://twitter.com/joey patino"
 
   # ――― Platform Specifics ――――――――――――――――――――――――――――――――――――――――――――――――――――――― #
   #
@@ -79,7 +75,7 @@ SwiftVision is a framework to perform image manipulation. The main component is 
   #  Supports git, hg, bzr, svn and HTTP.
   #
 
-  s.source       = { :git => "git@github.com:joeypatino/swiftvision.git", :tag => "#{s.version}" }
+  s.source       = { :git => "https://github.com/joeypatino/swiftvision.git", :tag => "#{s.version}" }
 
 
   # ――― Source Code ―――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――― #
@@ -91,10 +87,6 @@ SwiftVision is a framework to perform image manipulation. The main component is 
   #
 
   s.source_files  = "SwiftVision"
-  # s.exclude_files = "Classes/Exclude"
-
-  # s.public_header_files = "Classes/**/*.h"
-
 
   # ――― Resources ―――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――― #
   #
@@ -117,7 +109,6 @@ SwiftVision is a framework to perform image manipulation. The main component is 
   #
 
   s.framework  = "opencv2"
-  # s.frameworks = "SomeFramework", "AnotherFramework"
 
   # s.library   = "iconv"
   # s.libraries = "iconv", "xml2"
@@ -131,7 +122,7 @@ SwiftVision is a framework to perform image manipulation. The main component is 
 
   # s.requires_arc = true
 
-  # s.xcconfig = { "HEADER_SEARCH_PATHS" => "$(SDKROOT)/usr/include/libxml2" }
+  s.xcconfig = { "FRAMEWORK_SEARCH_PATHS" => "$(PROJECT_DIR)/SwiftVision", "LIBRARY_SEARCH_PATHS" => "$(PROJECT_DIR)/SwiftVision" }
   # s.dependency "JSONKit", "~> 1.4"
 
 end

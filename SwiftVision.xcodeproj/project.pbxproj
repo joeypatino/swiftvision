@@ -22,64 +22,44 @@
 		D429817F2052AF0300A28DF5 /* SwiftVisionTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = D429817E2052AF0300A28DF5 /* SwiftVisionTests.mm */; };
 		D42981812052AF0300A28DF5 /* SwiftVision.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D40B28392028856300CA8559 /* SwiftVision.framework */; };
 		D42981872052AF6B00A28DF5 /* opencv2.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D40B28452028858A00CA8559 /* opencv2.framework */; };
-		D42981882052AF7800A28DF5 /* functions.mm in Sources */ = {isa = PBXBuildFile; fileRef = D439947020388BA800D9B783 /* functions.mm */; };
-		D439947120388BA800D9B783 /* functions.h in Headers */ = {isa = PBXBuildFile; fileRef = D439946F20388BA800D9B783 /* functions.h */; };
-		D439947220388BA800D9B783 /* functions.mm in Sources */ = {isa = PBXBuildFile; fileRef = D439947020388BA800D9B783 /* functions.mm */; };
-		D43C4531205B1DFF0072AF8F /* vector+extras.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D43C452F205B1DFF0072AF8F /* vector+extras.cpp */; };
-		D43C4532205B1DFF0072AF8F /* vector+extras.hpp in Headers */ = {isa = PBXBuildFile; fileRef = D43C4530205B1DFF0072AF8F /* vector+extras.hpp */; };
-		D43C4535205B1ECB0072AF8F /* math+extras.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D43C4533205B1ECB0072AF8F /* math+extras.cpp */; };
-		D43C4536205B1ECB0072AF8F /* math+extras.hpp in Headers */ = {isa = PBXBuildFile; fileRef = D43C4534205B1ECB0072AF8F /* math+extras.hpp */; };
-		D43C4539205B239C0072AF8F /* print+extras.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D43C4537205B239C0072AF8F /* print+extras.cpp */; };
-		D43C453A205B239C0072AF8F /* print+extras.hpp in Headers */ = {isa = PBXBuildFile; fileRef = D43C4538205B239C0072AF8F /* print+extras.hpp */; };
-		D43C453E205C151E0072AF8F /* CostFunction.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D43C453C205C151E0072AF8F /* CostFunction.cpp */; };
-		D43C453F205C151E0072AF8F /* CostFunction.hpp in Headers */ = {isa = PBXBuildFile; fileRef = D43C453D205C151E0072AF8F /* CostFunction.hpp */; };
-		D43C4542205C167D0072AF8F /* KeyPointCostFunction.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D43C4540205C167D0072AF8F /* KeyPointCostFunction.cpp */; };
-		D43C4543205C167D0072AF8F /* KeyPointCostFunction.hpp in Headers */ = {isa = PBXBuildFile; fileRef = D43C4541205C167D0072AF8F /* KeyPointCostFunction.hpp */; };
-		D43C4546205C19AA0072AF8F /* CornerPointCostFunction.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D43C4544205C19AA0072AF8F /* CornerPointCostFunction.cpp */; };
-		D43C4547205C19AA0072AF8F /* CornerPointCostFunction.hpp in Headers */ = {isa = PBXBuildFile; fileRef = D43C4545205C19AA0072AF8F /* CornerPointCostFunction.hpp */; };
+		D43C4531205B1DFF0072AF8F /* vectors.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D43C452F205B1DFF0072AF8F /* vectors.cpp */; };
+		D43C4532205B1DFF0072AF8F /* vectors.hpp in Headers */ = {isa = PBXBuildFile; fileRef = D43C4530205B1DFF0072AF8F /* vectors.hpp */; };
+		D43C4535205B1ECB0072AF8F /* math.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D43C4533205B1ECB0072AF8F /* math.cpp */; };
+		D43C4536205B1ECB0072AF8F /* math.hpp in Headers */ = {isa = PBXBuildFile; fileRef = D43C4534205B1ECB0072AF8F /* math.hpp */; };
+		D43C4539205B239C0072AF8F /* debug.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D43C4537205B239C0072AF8F /* debug.cpp */; };
+		D43C453A205B239C0072AF8F /* debug.hpp in Headers */ = {isa = PBXBuildFile; fileRef = D43C4538205B239C0072AF8F /* debug.hpp */; };
 		D44D558120628D2C00BFD3C6 /* boston_cooking_a.jpg in Resources */ = {isa = PBXBuildFile; fileRef = D44D558020628D2C00BFD3C6 /* boston_cooking_a.jpg */; };
-		D465E57420654AE5000BEE77 /* nlopt.h in Headers */ = {isa = PBXBuildFile; fileRef = D465E57120654AE5000BEE77 /* nlopt.h */; };
-		D465E57520654AE5000BEE77 /* nlopt.hpp in Headers */ = {isa = PBXBuildFile; fileRef = D465E57220654AE5000BEE77 /* nlopt.hpp */; };
-		D471D7D620500C4A00F38C26 /* LineInfo.h in Headers */ = {isa = PBXBuildFile; fileRef = D471D7D320500C4A00F38C26 /* LineInfo.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		D471D7D720500C4A00F38C26 /* CGRectOutline.h in Headers */ = {isa = PBXBuildFile; fileRef = D471D7D420500C4A00F38C26 /* CGRectOutline.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		D471D7D820500C4A00F38C26 /* EigenVector.h in Headers */ = {isa = PBXBuildFile; fileRef = D471D7D520500C4A00F38C26 /* EigenVector.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		D471D7E220500CE600F38C26 /* ContourEdge.h in Headers */ = {isa = PBXBuildFile; fileRef = D471D7DA20500CE600F38C26 /* ContourEdge.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		D471D7E320500CE600F38C26 /* Contour.mm in Sources */ = {isa = PBXBuildFile; fileRef = D471D7DB20500CE600F38C26 /* Contour.mm */; };
-		D471D7E420500CE600F38C26 /* ImageRemapper.h in Headers */ = {isa = PBXBuildFile; fileRef = D471D7DC20500CE600F38C26 /* ImageRemapper.h */; };
+		D471D7E420500CE600F38C26 /* DisparityModel.h in Headers */ = {isa = PBXBuildFile; fileRef = D471D7DC20500CE600F38C26 /* DisparityModel.h */; };
 		D471D7E520500CE600F38C26 /* Contour.h in Headers */ = {isa = PBXBuildFile; fileRef = D471D7DD20500CE600F38C26 /* Contour.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		D471D7E620500CE600F38C26 /* ContourSpan.mm in Sources */ = {isa = PBXBuildFile; fileRef = D471D7DE20500CE600F38C26 /* ContourSpan.mm */; };
 		D471D7E720500CE600F38C26 /* ContourEdge.m in Sources */ = {isa = PBXBuildFile; fileRef = D471D7DF20500CE600F38C26 /* ContourEdge.m */; };
 		D471D7E820500CE600F38C26 /* ContourSpan.h in Headers */ = {isa = PBXBuildFile; fileRef = D471D7E020500CE600F38C26 /* ContourSpan.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		D471D7E920500CE600F38C26 /* ImageRemapper.mm in Sources */ = {isa = PBXBuildFile; fileRef = D471D7E120500CE600F38C26 /* ImageRemapper.mm */; };
+		D471D7E920500CE600F38C26 /* DisparityModel.mm in Sources */ = {isa = PBXBuildFile; fileRef = D471D7E120500CE600F38C26 /* DisparityModel.mm */; };
 		D471D7EF20500D0800F38C26 /* ContourEdge+internal.h in Headers */ = {isa = PBXBuildFile; fileRef = D471D7EB20500D0800F38C26 /* ContourEdge+internal.h */; };
 		D471D7F020500D0800F38C26 /* ContourSpan+internal.h in Headers */ = {isa = PBXBuildFile; fileRef = D471D7EC20500D0800F38C26 /* ContourSpan+internal.h */; };
 		D471D7F120500D0800F38C26 /* Contour+internal.h in Headers */ = {isa = PBXBuildFile; fileRef = D471D7ED20500D0800F38C26 /* Contour+internal.h */; };
-		D471D7F220500D0800F38C26 /* ImageRemapper+internal.h in Headers */ = {isa = PBXBuildFile; fileRef = D471D7EE20500D0800F38C26 /* ImageRemapper+internal.h */; };
 		D471D7F520500EE300F38C26 /* UIImage+OpenCV.mm in Sources */ = {isa = PBXBuildFile; fileRef = D471D7F320500EE300F38C26 /* UIImage+OpenCV.mm */; };
 		D471D7F620500EE300F38C26 /* UIImage+OpenCV.h in Headers */ = {isa = PBXBuildFile; fileRef = D471D7F420500EE300F38C26 /* UIImage+OpenCV.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		D471D7FA20500F2200F38C26 /* UIImage+Contour.mm in Sources */ = {isa = PBXBuildFile; fileRef = D471D7F820500F2200F38C26 /* UIImage+Contour.mm */; };
 		D471D7FB20500F2200F38C26 /* UIImage+Contour.h in Headers */ = {isa = PBXBuildFile; fileRef = D471D7F920500F2200F38C26 /* UIImage+Contour.h */; };
 		D4792B9C205AF9E100F74B2E /* SwiftVision.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D40B28392028856300CA8559 /* SwiftVision.framework */; };
 		D4792B9D205AF9E100F74B2E /* SwiftVision.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = D40B28392028856300CA8559 /* SwiftVision.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
-		D4792BA4205B0C1600F74B2E /* Optimizer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D4792BA2205B0C1600F74B2E /* Optimizer.cpp */; };
-		D4792BA5205B0C1600F74B2E /* Optimizer.hpp in Headers */ = {isa = PBXBuildFile; fileRef = D4792BA3205B0C1600F74B2E /* Optimizer.hpp */; };
-		D4792BA8205B10E400F74B2E /* KeyPointProjector.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D4792BA6205B10E400F74B2E /* KeyPointProjector.cpp */; };
-		D4792BA9205B10E400F74B2E /* KeyPointProjector.hpp in Headers */ = {isa = PBXBuildFile; fileRef = D4792BA7205B10E400F74B2E /* KeyPointProjector.hpp */; };
 		D48B4B712028AC0600DFA7AC /* input_image.jpeg in Resources */ = {isa = PBXBuildFile; fileRef = D48B4B702028AC0600DFA7AC /* input_image.jpeg */; };
-		D4A572C2202A1E1500D8F4B0 /* PageDewarp.h in Headers */ = {isa = PBXBuildFile; fileRef = D4A572C0202A1E1500D8F4B0 /* PageDewarp.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		D4A572C3202A1E1500D8F4B0 /* PageDewarp.mm in Sources */ = {isa = PBXBuildFile; fileRef = D4A572C1202A1E1500D8F4B0 /* PageDewarp.mm */; };
+		D4A3DB5121199E03000413B8 /* PtraArray.hpp in Headers */ = {isa = PBXBuildFile; fileRef = D4A3DB4E21199E03000413B8 /* PtraArray.hpp */; };
+		D4A3DB5221199E03000413B8 /* DataTypes.h in Headers */ = {isa = PBXBuildFile; fileRef = D4A3DB4F21199E03000413B8 /* DataTypes.h */; };
+		D4A3DB5321199E03000413B8 /* PtraArray.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D4A3DB5021199E03000413B8 /* PtraArray.cpp */; };
+		D4A572C2202A1E1500D8F4B0 /* TextDewarper.h in Headers */ = {isa = PBXBuildFile; fileRef = D4A572C0202A1E1500D8F4B0 /* TextDewarper.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		D4A572C3202A1E1500D8F4B0 /* TextDewarper.mm in Sources */ = {isa = PBXBuildFile; fileRef = D4A572C1202A1E1500D8F4B0 /* TextDewarper.mm */; };
 		D4A572CA202A1E2800D8F4B0 /* UIImage+Mat.h in Headers */ = {isa = PBXBuildFile; fileRef = D4A572C6202A1E2800D8F4B0 /* UIImage+Mat.h */; };
 		D4A572CC202A1E2800D8F4B0 /* UIImage+Mat.mm in Sources */ = {isa = PBXBuildFile; fileRef = D4A572C8202A1E2800D8F4B0 /* UIImage+Mat.mm */; };
 		D4BAD1C52034DBB200F4A32C /* NSArray+extras.h in Headers */ = {isa = PBXBuildFile; fileRef = D4BAD1C32034DBB200F4A32C /* NSArray+extras.h */; };
 		D4BAD1C62034DBB200F4A32C /* NSArray+extras.m in Sources */ = {isa = PBXBuildFile; fileRef = D4BAD1C42034DBB200F4A32C /* NSArray+extras.m */; };
-		D4C8B37D21135C150037FDDE /* leptonica.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D4C8B37B21135C150037FDDE /* leptonica.cpp */; };
-		D4C8B37E21135C150037FDDE /* leptonica.hpp in Headers */ = {isa = PBXBuildFile; fileRef = D4C8B37C21135C150037FDDE /* leptonica.hpp */; };
+		D4C8B37D21135C150037FDDE /* dewarp.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D4C8B37B21135C150037FDDE /* dewarp.cpp */; };
+		D4C8B37E21135C150037FDDE /* dewarp.hpp in Headers */ = {isa = PBXBuildFile; fileRef = D4C8B37C21135C150037FDDE /* dewarp.hpp */; };
 		D4C8B38021148AC80037FDDE /* cat.035.jpg in Resources */ = {isa = PBXBuildFile; fileRef = D4C8B37F21148AC80037FDDE /* cat.035.jpg */; };
-		D4C8B38321159E1E0037FDDE /* VerticalDisparity.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D4C8B38121159E1E0037FDDE /* VerticalDisparity.cpp */; };
-		D4C8B38421159E1E0037FDDE /* VerticalDisparity.hpp in Headers */ = {isa = PBXBuildFile; fileRef = D4C8B38221159E1E0037FDDE /* VerticalDisparity.hpp */; };
-		D4C8B38621159FF30037FDDE /* types.h in Headers */ = {isa = PBXBuildFile; fileRef = D4C8B38521159FF30037FDDE /* types.h */; };
-		D4C8B3892115A04F0037FDDE /* PtraArray.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D4C8B3872115A04F0037FDDE /* PtraArray.cpp */; };
-		D4C8B38A2115A04F0037FDDE /* PtraArray.hpp in Headers */ = {isa = PBXBuildFile; fileRef = D4C8B3882115A04F0037FDDE /* PtraArray.hpp */; };
 		D4D8304A206198F0001B1535 /* UIImage+extras.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4D83049206198F0001B1535 /* UIImage+extras.swift */; };
 /* End PBXBuildFile section */
 
@@ -134,64 +114,45 @@
 		D429817C2052AF0300A28DF5 /* SwiftVisionTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = SwiftVisionTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		D429817E2052AF0300A28DF5 /* SwiftVisionTests.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = SwiftVisionTests.mm; sourceTree = "<group>"; };
 		D42981802052AF0300A28DF5 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		D439946F20388BA800D9B783 /* functions.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = functions.h; sourceTree = "<group>"; };
-		D439947020388BA800D9B783 /* functions.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = functions.mm; sourceTree = "<group>"; };
-		D43C452F205B1DFF0072AF8F /* vector+extras.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = "vector+extras.cpp"; sourceTree = "<group>"; };
-		D43C4530205B1DFF0072AF8F /* vector+extras.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = "vector+extras.hpp"; sourceTree = "<group>"; };
-		D43C4533205B1ECB0072AF8F /* math+extras.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = "math+extras.cpp"; sourceTree = "<group>"; };
-		D43C4534205B1ECB0072AF8F /* math+extras.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = "math+extras.hpp"; sourceTree = "<group>"; };
-		D43C4537205B239C0072AF8F /* print+extras.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = "print+extras.cpp"; sourceTree = "<group>"; };
-		D43C4538205B239C0072AF8F /* print+extras.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = "print+extras.hpp"; sourceTree = "<group>"; };
-		D43C453C205C151E0072AF8F /* CostFunction.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = CostFunction.cpp; sourceTree = "<group>"; };
-		D43C453D205C151E0072AF8F /* CostFunction.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = CostFunction.hpp; sourceTree = "<group>"; };
-		D43C4540205C167D0072AF8F /* KeyPointCostFunction.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = KeyPointCostFunction.cpp; sourceTree = "<group>"; };
-		D43C4541205C167D0072AF8F /* KeyPointCostFunction.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = KeyPointCostFunction.hpp; sourceTree = "<group>"; };
-		D43C4544205C19AA0072AF8F /* CornerPointCostFunction.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = CornerPointCostFunction.cpp; sourceTree = "<group>"; };
-		D43C4545205C19AA0072AF8F /* CornerPointCostFunction.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = CornerPointCostFunction.hpp; sourceTree = "<group>"; };
+		D43C452F205B1DFF0072AF8F /* vectors.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = vectors.cpp; sourceTree = "<group>"; };
+		D43C4530205B1DFF0072AF8F /* vectors.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = vectors.hpp; sourceTree = "<group>"; };
+		D43C4533205B1ECB0072AF8F /* math.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = math.cpp; sourceTree = "<group>"; };
+		D43C4534205B1ECB0072AF8F /* math.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = math.hpp; sourceTree = "<group>"; };
+		D43C4537205B239C0072AF8F /* debug.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = debug.cpp; sourceTree = "<group>"; };
+		D43C4538205B239C0072AF8F /* debug.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = debug.hpp; sourceTree = "<group>"; };
 		D44D558020628D2C00BFD3C6 /* boston_cooking_a.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = boston_cooking_a.jpg; sourceTree = "<group>"; };
-		D465E57120654AE5000BEE77 /* nlopt.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = nlopt.h; sourceTree = "<group>"; };
-		D465E57220654AE5000BEE77 /* nlopt.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = nlopt.hpp; sourceTree = "<group>"; };
 		D4711A0820502C1200F38C26 /* Accelerate.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Accelerate.framework; path = System/Library/Frameworks/Accelerate.framework; sourceTree = SDKROOT; };
 		D4711A0A20502C7500F38C26 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		D4711A0C20502C8300F38C26 /* CoreFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreFoundation.framework; path = System/Library/Frameworks/CoreFoundation.framework; sourceTree = SDKROOT; };
-		D471D7D320500C4A00F38C26 /* LineInfo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LineInfo.h; sourceTree = "<group>"; };
 		D471D7D420500C4A00F38C26 /* CGRectOutline.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CGRectOutline.h; sourceTree = "<group>"; };
-		D471D7D520500C4A00F38C26 /* EigenVector.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EigenVector.h; sourceTree = "<group>"; };
 		D471D7DA20500CE600F38C26 /* ContourEdge.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ContourEdge.h; sourceTree = "<group>"; };
 		D471D7DB20500CE600F38C26 /* Contour.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = Contour.mm; sourceTree = "<group>"; };
-		D471D7DC20500CE600F38C26 /* ImageRemapper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ImageRemapper.h; sourceTree = "<group>"; };
+		D471D7DC20500CE600F38C26 /* DisparityModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DisparityModel.h; sourceTree = "<group>"; };
 		D471D7DD20500CE600F38C26 /* Contour.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Contour.h; sourceTree = "<group>"; };
 		D471D7DE20500CE600F38C26 /* ContourSpan.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = ContourSpan.mm; sourceTree = "<group>"; };
 		D471D7DF20500CE600F38C26 /* ContourEdge.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ContourEdge.m; sourceTree = "<group>"; };
 		D471D7E020500CE600F38C26 /* ContourSpan.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ContourSpan.h; sourceTree = "<group>"; };
-		D471D7E120500CE600F38C26 /* ImageRemapper.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = ImageRemapper.mm; sourceTree = "<group>"; };
+		D471D7E120500CE600F38C26 /* DisparityModel.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = DisparityModel.mm; sourceTree = "<group>"; };
 		D471D7EB20500D0800F38C26 /* ContourEdge+internal.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "ContourEdge+internal.h"; sourceTree = "<group>"; };
 		D471D7EC20500D0800F38C26 /* ContourSpan+internal.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "ContourSpan+internal.h"; sourceTree = "<group>"; };
 		D471D7ED20500D0800F38C26 /* Contour+internal.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "Contour+internal.h"; sourceTree = "<group>"; };
-		D471D7EE20500D0800F38C26 /* ImageRemapper+internal.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "ImageRemapper+internal.h"; sourceTree = "<group>"; };
 		D471D7F320500EE300F38C26 /* UIImage+OpenCV.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = "UIImage+OpenCV.mm"; sourceTree = "<group>"; };
 		D471D7F420500EE300F38C26 /* UIImage+OpenCV.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImage+OpenCV.h"; sourceTree = "<group>"; };
 		D471D7F820500F2200F38C26 /* UIImage+Contour.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = "UIImage+Contour.mm"; sourceTree = "<group>"; };
 		D471D7F920500F2200F38C26 /* UIImage+Contour.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImage+Contour.h"; sourceTree = "<group>"; };
-		D4792BA2205B0C1600F74B2E /* Optimizer.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; path = Optimizer.cpp; sourceTree = "<group>"; };
-		D4792BA3205B0C1600F74B2E /* Optimizer.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = Optimizer.hpp; sourceTree = "<group>"; };
-		D4792BA6205B10E400F74B2E /* KeyPointProjector.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = KeyPointProjector.cpp; sourceTree = "<group>"; };
-		D4792BA7205B10E400F74B2E /* KeyPointProjector.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = KeyPointProjector.hpp; sourceTree = "<group>"; };
 		D48B4B702028AC0600DFA7AC /* input_image.jpeg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = input_image.jpeg; sourceTree = "<group>"; };
-		D4A572C0202A1E1500D8F4B0 /* PageDewarp.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PageDewarp.h; sourceTree = "<group>"; };
-		D4A572C1202A1E1500D8F4B0 /* PageDewarp.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = PageDewarp.mm; sourceTree = "<group>"; };
+		D4A3DB4E21199E03000413B8 /* PtraArray.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = PtraArray.hpp; sourceTree = "<group>"; };
+		D4A3DB4F21199E03000413B8 /* DataTypes.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DataTypes.h; sourceTree = "<group>"; };
+		D4A3DB5021199E03000413B8 /* PtraArray.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = PtraArray.cpp; sourceTree = "<group>"; };
+		D4A572C0202A1E1500D8F4B0 /* TextDewarper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TextDewarper.h; sourceTree = "<group>"; };
+		D4A572C1202A1E1500D8F4B0 /* TextDewarper.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = TextDewarper.mm; sourceTree = "<group>"; };
 		D4A572C6202A1E2800D8F4B0 /* UIImage+Mat.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImage+Mat.h"; sourceTree = "<group>"; };
 		D4A572C8202A1E2800D8F4B0 /* UIImage+Mat.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = "UIImage+Mat.mm"; sourceTree = "<group>"; };
 		D4BAD1C32034DBB200F4A32C /* NSArray+extras.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "NSArray+extras.h"; sourceTree = "<group>"; };
 		D4BAD1C42034DBB200F4A32C /* NSArray+extras.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "NSArray+extras.m"; sourceTree = "<group>"; };
-		D4C8B37B21135C150037FDDE /* leptonica.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = leptonica.cpp; sourceTree = "<group>"; };
-		D4C8B37C21135C150037FDDE /* leptonica.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = leptonica.hpp; sourceTree = "<group>"; };
+		D4C8B37B21135C150037FDDE /* dewarp.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = dewarp.cpp; sourceTree = "<group>"; };
+		D4C8B37C21135C150037FDDE /* dewarp.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = dewarp.hpp; sourceTree = "<group>"; };
 		D4C8B37F21148AC80037FDDE /* cat.035.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = cat.035.jpg; sourceTree = "<group>"; };
-		D4C8B38121159E1E0037FDDE /* VerticalDisparity.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = VerticalDisparity.cpp; sourceTree = "<group>"; };
-		D4C8B38221159E1E0037FDDE /* VerticalDisparity.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = VerticalDisparity.hpp; sourceTree = "<group>"; };
-		D4C8B38521159FF30037FDDE /* types.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = types.h; sourceTree = "<group>"; };
-		D4C8B3872115A04F0037FDDE /* PtraArray.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = PtraArray.cpp; sourceTree = "<group>"; };
-		D4C8B3882115A04F0037FDDE /* PtraArray.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = PtraArray.hpp; sourceTree = "<group>"; };
 		D4D83049206198F0001B1535 /* UIImage+extras.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIImage+extras.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -250,14 +211,12 @@
 		D40B283B2028856300CA8559 /* SwiftVision */ = {
 			isa = PBXGroup;
 			children = (
-				D465E56F20654AE5000BEE77 /* include */,
 				D40B283C2028856300CA8559 /* SwiftVision.h */,
 				D471D7F420500EE300F38C26 /* UIImage+OpenCV.h */,
 				D471D7F320500EE300F38C26 /* UIImage+OpenCV.mm */,
 				D4A572BF202A1E1500D8F4B0 /* PageDewarp */,
 				D40B283D2028856300CA8559 /* Info.plist */,
 				D40B2888202891D800CA8559 /* PrefixHeader.pch */,
-				D4792BA1205B0BFF00F74B2E /* Optimizer */,
 				D439946E20388B9700D9B783 /* helpers */,
 				D4A572C4202A1E2800D8F4B0 /* extensions */,
 				D471D7D220500C4A00F38C26 /* structs */,
@@ -307,35 +266,25 @@
 		D439946E20388B9700D9B783 /* helpers */ = {
 			isa = PBXGroup;
 			children = (
-				D439946F20388BA800D9B783 /* functions.h */,
-				D439947020388BA800D9B783 /* functions.mm */,
-				D43C4530205B1DFF0072AF8F /* vector+extras.hpp */,
-				D43C452F205B1DFF0072AF8F /* vector+extras.cpp */,
-				D43C4534205B1ECB0072AF8F /* math+extras.hpp */,
-				D43C4533205B1ECB0072AF8F /* math+extras.cpp */,
-				D4C8B37C21135C150037FDDE /* leptonica.hpp */,
-				D4C8B37B21135C150037FDDE /* leptonica.cpp */,
-				D43C4538205B239C0072AF8F /* print+extras.hpp */,
-				D43C4537205B239C0072AF8F /* print+extras.cpp */,
+				D43C4530205B1DFF0072AF8F /* vectors.hpp */,
+				D43C452F205B1DFF0072AF8F /* vectors.cpp */,
+				D43C4534205B1ECB0072AF8F /* math.hpp */,
+				D43C4533205B1ECB0072AF8F /* math.cpp */,
+				D4A3DB4F21199E03000413B8 /* DataTypes.h */,
+				D4A3DB4E21199E03000413B8 /* PtraArray.hpp */,
+				D4A3DB5021199E03000413B8 /* PtraArray.cpp */,
+				D4C8B37C21135C150037FDDE /* dewarp.hpp */,
+				D4C8B37B21135C150037FDDE /* dewarp.cpp */,
+				D43C4538205B239C0072AF8F /* debug.hpp */,
+				D43C4537205B239C0072AF8F /* debug.cpp */,
 			);
 			path = helpers;
-			sourceTree = "<group>";
-		};
-		D465E56F20654AE5000BEE77 /* include */ = {
-			isa = PBXGroup;
-			children = (
-				D465E57120654AE5000BEE77 /* nlopt.h */,
-				D465E57220654AE5000BEE77 /* nlopt.hpp */,
-			);
-			path = include;
 			sourceTree = "<group>";
 		};
 		D471D7D220500C4A00F38C26 /* structs */ = {
 			isa = PBXGroup;
 			children = (
-				D471D7D320500C4A00F38C26 /* LineInfo.h */,
 				D471D7D420500C4A00F38C26 /* CGRectOutline.h */,
-				D471D7D520500C4A00F38C26 /* EigenVector.h */,
 			);
 			path = structs;
 			sourceTree = "<group>";
@@ -349,8 +298,8 @@
 				D471D7DE20500CE600F38C26 /* ContourSpan.mm */,
 				D471D7DA20500CE600F38C26 /* ContourEdge.h */,
 				D471D7DF20500CE600F38C26 /* ContourEdge.m */,
-				D471D7DC20500CE600F38C26 /* ImageRemapper.h */,
-				D471D7E120500CE600F38C26 /* ImageRemapper.mm */,
+				D471D7DC20500CE600F38C26 /* DisparityModel.h */,
+				D471D7E120500CE600F38C26 /* DisparityModel.mm */,
 			);
 			path = models;
 			sourceTree = "<group>";
@@ -361,7 +310,6 @@
 				D471D7ED20500D0800F38C26 /* Contour+internal.h */,
 				D471D7EC20500D0800F38C26 /* ContourSpan+internal.h */,
 				D471D7EB20500D0800F38C26 /* ContourEdge+internal.h */,
-				D471D7EE20500D0800F38C26 /* ImageRemapper+internal.h */,
 			);
 			path = "models+internal";
 			sourceTree = "<group>";
@@ -369,39 +317,17 @@
 		D471D7F720500F2200F38C26 /* extensions+internal */ = {
 			isa = PBXGroup;
 			children = (
-				D471D7F820500F2200F38C26 /* UIImage+Contour.mm */,
 				D471D7F920500F2200F38C26 /* UIImage+Contour.h */,
+				D471D7F820500F2200F38C26 /* UIImage+Contour.mm */,
 			);
 			path = "extensions+internal";
-			sourceTree = "<group>";
-		};
-		D4792BA1205B0BFF00F74B2E /* Optimizer */ = {
-			isa = PBXGroup;
-			children = (
-				D4792BA3205B0C1600F74B2E /* Optimizer.hpp */,
-				D4792BA2205B0C1600F74B2E /* Optimizer.cpp */,
-				D4792BA7205B10E400F74B2E /* KeyPointProjector.hpp */,
-				D4792BA6205B10E400F74B2E /* KeyPointProjector.cpp */,
-				D43C453D205C151E0072AF8F /* CostFunction.hpp */,
-				D43C453C205C151E0072AF8F /* CostFunction.cpp */,
-				D43C4541205C167D0072AF8F /* KeyPointCostFunction.hpp */,
-				D43C4540205C167D0072AF8F /* KeyPointCostFunction.cpp */,
-				D43C4545205C19AA0072AF8F /* CornerPointCostFunction.hpp */,
-				D43C4544205C19AA0072AF8F /* CornerPointCostFunction.cpp */,
-				D4C8B38521159FF30037FDDE /* types.h */,
-				D4C8B38221159E1E0037FDDE /* VerticalDisparity.hpp */,
-				D4C8B38121159E1E0037FDDE /* VerticalDisparity.cpp */,
-				D4C8B3882115A04F0037FDDE /* PtraArray.hpp */,
-				D4C8B3872115A04F0037FDDE /* PtraArray.cpp */,
-			);
-			path = Optimizer;
 			sourceTree = "<group>";
 		};
 		D4A572BF202A1E1500D8F4B0 /* PageDewarp */ = {
 			isa = PBXGroup;
 			children = (
-				D4A572C0202A1E1500D8F4B0 /* PageDewarp.h */,
-				D4A572C1202A1E1500D8F4B0 /* PageDewarp.mm */,
+				D4A572C0202A1E1500D8F4B0 /* TextDewarper.h */,
+				D4A572C1202A1E1500D8F4B0 /* TextDewarper.mm */,
 				D471D7D920500CE600F38C26 /* models */,
 				D471D7EA20500D0800F38C26 /* models+internal */,
 				D471D7F720500F2200F38C26 /* extensions+internal */,
@@ -429,40 +355,28 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				D4792BA9205B10E400F74B2E /* KeyPointProjector.hpp in Headers */,
 				D40B283E2028856300CA8559 /* SwiftVision.h in Headers */,
+				D4A3DB5221199E03000413B8 /* DataTypes.h in Headers */,
 				D471D7F620500EE300F38C26 /* UIImage+OpenCV.h in Headers */,
-				D4792BA5205B0C1600F74B2E /* Optimizer.hpp in Headers */,
-				D43C4532205B1DFF0072AF8F /* vector+extras.hpp in Headers */,
-				D4A572C2202A1E1500D8F4B0 /* PageDewarp.h in Headers */,
-				D465E57520654AE5000BEE77 /* nlopt.hpp in Headers */,
+				D43C4532205B1DFF0072AF8F /* vectors.hpp in Headers */,
+				D4A572C2202A1E1500D8F4B0 /* TextDewarper.h in Headers */,
 				D471D7E520500CE600F38C26 /* Contour.h in Headers */,
 				D40B2889202891D800CA8559 /* PrefixHeader.pch in Headers */,
-				D43C453A205B239C0072AF8F /* print+extras.hpp in Headers */,
+				D43C453A205B239C0072AF8F /* debug.hpp in Headers */,
 				D471D7E220500CE600F38C26 /* ContourEdge.h in Headers */,
 				D471D7E820500CE600F38C26 /* ContourSpan.h in Headers */,
-				D471D7E420500CE600F38C26 /* ImageRemapper.h in Headers */,
+				D471D7E420500CE600F38C26 /* DisparityModel.h in Headers */,
 				D471D7D720500C4A00F38C26 /* CGRectOutline.h in Headers */,
-				D471D7D820500C4A00F38C26 /* EigenVector.h in Headers */,
-				D43C4543205C167D0072AF8F /* KeyPointCostFunction.hpp in Headers */,
-				D471D7D620500C4A00F38C26 /* LineInfo.h in Headers */,
-				D43C453F205C151E0072AF8F /* CostFunction.hpp in Headers */,
-				D471D7F220500D0800F38C26 /* ImageRemapper+internal.h in Headers */,
 				D471D7F020500D0800F38C26 /* ContourSpan+internal.h in Headers */,
 				D428ED32204987D6002A7322 /* UIColor+extras.h in Headers */,
 				D4BAD1C52034DBB200F4A32C /* NSArray+extras.h in Headers */,
 				D471D7EF20500D0800F38C26 /* ContourEdge+internal.h in Headers */,
-				D439947120388BA800D9B783 /* functions.h in Headers */,
 				D471D7F120500D0800F38C26 /* Contour+internal.h in Headers */,
 				D4A572CA202A1E2800D8F4B0 /* UIImage+Mat.h in Headers */,
-				D43C4536205B1ECB0072AF8F /* math+extras.hpp in Headers */,
-				D4C8B37E21135C150037FDDE /* leptonica.hpp in Headers */,
+				D43C4536205B1ECB0072AF8F /* math.hpp in Headers */,
+				D4A3DB5121199E03000413B8 /* PtraArray.hpp in Headers */,
+				D4C8B37E21135C150037FDDE /* dewarp.hpp in Headers */,
 				D471D7FB20500F2200F38C26 /* UIImage+Contour.h in Headers */,
-				D465E57420654AE5000BEE77 /* nlopt.h in Headers */,
-				D4C8B38621159FF30037FDDE /* types.h in Headers */,
-				D4C8B38A2115A04F0037FDDE /* PtraArray.hpp in Headers */,
-				D4C8B38421159E1E0037FDDE /* VerticalDisparity.hpp in Headers */,
-				D43C4547205C19AA0072AF8F /* CornerPointCostFunction.hpp in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -605,27 +519,20 @@
 			buildActionMask = 2147483647;
 			files = (
 				D4A572CC202A1E2800D8F4B0 /* UIImage+Mat.mm in Sources */,
-				D471D7E920500CE600F38C26 /* ImageRemapper.mm in Sources */,
-				D4A572C3202A1E1500D8F4B0 /* PageDewarp.mm in Sources */,
-				D43C4539205B239C0072AF8F /* print+extras.cpp in Sources */,
+				D471D7E920500CE600F38C26 /* DisparityModel.mm in Sources */,
+				D4A572C3202A1E1500D8F4B0 /* TextDewarper.mm in Sources */,
+				D43C4539205B239C0072AF8F /* debug.cpp in Sources */,
 				D471D7FA20500F2200F38C26 /* UIImage+Contour.mm in Sources */,
-				D4C8B37D21135C150037FDDE /* leptonica.cpp in Sources */,
-				D43C4546205C19AA0072AF8F /* CornerPointCostFunction.cpp in Sources */,
+				D4C8B37D21135C150037FDDE /* dewarp.cpp in Sources */,
 				D471D7F520500EE300F38C26 /* UIImage+OpenCV.mm in Sources */,
-				D43C4531205B1DFF0072AF8F /* vector+extras.cpp in Sources */,
-				D43C4542205C167D0072AF8F /* KeyPointCostFunction.cpp in Sources */,
-				D4C8B3892115A04F0037FDDE /* PtraArray.cpp in Sources */,
+				D43C4531205B1DFF0072AF8F /* vectors.cpp in Sources */,
 				D428ED33204987D6002A7322 /* UIColor+extras.m in Sources */,
+				D4A3DB5321199E03000413B8 /* PtraArray.cpp in Sources */,
 				D471D7E720500CE600F38C26 /* ContourEdge.m in Sources */,
-				D43C453E205C151E0072AF8F /* CostFunction.cpp in Sources */,
 				D4BAD1C62034DBB200F4A32C /* NSArray+extras.m in Sources */,
 				D471D7E320500CE600F38C26 /* Contour.mm in Sources */,
-				D4792BA4205B0C1600F74B2E /* Optimizer.cpp in Sources */,
-				D439947220388BA800D9B783 /* functions.mm in Sources */,
-				D43C4535205B1ECB0072AF8F /* math+extras.cpp in Sources */,
-				D4C8B38321159E1E0037FDDE /* VerticalDisparity.cpp in Sources */,
+				D43C4535205B1ECB0072AF8F /* math.cpp in Sources */,
 				D471D7E620500CE600F38C26 /* ContourSpan.mm in Sources */,
-				D4792BA8205B10E400F74B2E /* KeyPointProjector.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -644,7 +551,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				D429817F2052AF0300A28DF5 /* SwiftVisionTests.mm in Sources */,
-				D42981882052AF7800A28DF5 /* functions.mm in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

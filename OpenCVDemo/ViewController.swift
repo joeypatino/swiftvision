@@ -4,7 +4,7 @@ import SwiftVision
 class ViewController: UIViewController {
     @IBOutlet weak var imageView: UIImageView!
     private let imagePicker = UIImagePickerController()
-    private var imageContours = PageDewarp(image: UIImage(named: "boston_cooking_a.jpg")!.normalizedImage())
+    private var imageContours = TextDewarper(image: UIImage(named: "boston_cooking_a.jpg")!.normalizedImage())
     private var dewarpedImage: UIImage?
 
     override func viewDidLoad() {
@@ -14,14 +14,6 @@ class ViewController: UIViewController {
 
     @IBAction func originalAction(_ sender: Any) {
         imageView.image = imageContours.inputImage
-    }
-
-    @IBAction func contoursAction(_ sender: Any) {
-        imageView.image = imageContours.renderContours()
-    }
-
-    @IBAction func spansAction(_ sender: Any) {
-        imageView.image = imageContours.renderSpans()
     }
 
     @IBAction func outlinesAction(_ sender: Any) {
@@ -36,22 +28,6 @@ class ViewController: UIViewController {
         imageView.image = imageContours.renderKeyPoints()
     }
 
-    @IBAction func preCorrespondencesAction(_ sender: Any) {
-        imageView.image = imageContours.renderPreCorrespondences()
-    }
-
-    @IBAction func postCorrespondencesAction(_ sender: Any) {
-        UIApplication.shared.isNetworkActivityIndicatorVisible = true
-        DispatchQueue.global(qos: .background).async {
-            let image = self.imageContours.renderPostCorrespondences()
-
-            DispatchQueue.main.async {
-                self.imageView.image = image
-                UIApplication.shared.isNetworkActivityIndicatorVisible = false
-            }
-        }
-    }
-
     @IBAction func dewarpAction(_ sender: Any) {
         if dewarpedImage == nil {
             self.imageView.image = self.imageContours.inputImage
@@ -59,7 +35,8 @@ class ViewController: UIViewController {
 
         UIApplication.shared.isNetworkActivityIndicatorVisible = true
         DispatchQueue.global(qos: .background).async {
-            let image = self.dewarpedImage ?? self.imageContours.render()
+            //let image = self.dewarpedImage ?? self.imageContours.render()
+            let image = self.imageContours.dewarp()
 
             DispatchQueue.main.async {
                 self.imageView.image = image
@@ -70,6 +47,10 @@ class ViewController: UIViewController {
     }
 
     @IBAction private func takePhoto(){
+        guard UIImagePickerController.isSourceTypeAvailable(.camera) else {
+            imagePickerControllerDidCancel(self.imagePicker)
+            return
+        }
         imagePicker.sourceType = .camera
         imagePicker.cameraCaptureMode = .photo
         imagePicker.cameraDevice = .rear
@@ -79,7 +60,7 @@ class ViewController: UIViewController {
 
     private func loadImage(_ image:UIImage) {
         dewarpedImage = nil
-        imageContours = PageDewarp(image: image.normalizedImage())
+        imageContours = TextDewarper(image: image.normalizedImage())
         imageView.image = imageContours.inputImage
         dewarpAction(image)
     }

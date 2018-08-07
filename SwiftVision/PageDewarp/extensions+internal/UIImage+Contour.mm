@@ -7,12 +7,9 @@
 #import "Contour+internal.h"
 #import "ContourSpan+internal.h"
 #import "UIImage+Mat.h"
-// extras
-#import "functions.h"
 
 using namespace std;
 using namespace cv;
-
 
 @implementation UIImage (Contour)
 // MARK: -
@@ -41,13 +38,11 @@ using namespace cv;
             if (!filter(contour))
                 continue;
 
-        //logs::describe_vector(contour.mask, "contour.mask");
         Mat summedMask = Mat::zeros(0, 0, CV_64FC1);
         cv::reduce(contour.mask, summedMask, 0, CV_REDUCE_SUM, CV_64FC1);
-        //logs::describe_vector(summedMask, "summedMask");
 
         double max;
-        cv::minMaxLoc(summedMask, NULL, &max);
+        minMaxLoc(summedMask, NULL, &max);
         if (max > TEXT_MAX_THICKNESS)
            continue;
 

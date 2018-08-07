@@ -6,11 +6,10 @@
 #import "ContourEdge+internal.h"
 #import "Contour+internal.h"
 // extras
-#import "functions.h"
 #import "NSArray+extras.h"
 #import "UIColor+extras.h"
+#import "math.hpp"
 
-using namespace std;
 using namespace cv;
 
 // MARK: -
@@ -138,7 +137,7 @@ using namespace cv;
     CGPoint localRng = CGPointMake(clxMin, clxMax);
     CGPoint projectedRng = CGPointMake(xmin, xmax);
 
-    return geom::intervalOverlap(localRng, projectedRng);
+    return MIN(localRng.y, projectedRng.y) - MAX(localRng.x, projectedRng.x);
 }
 
 // MARK: -
@@ -165,16 +164,16 @@ using namespace cv;
         contourB = self;
     }
 
-    Point2f overallTangent = geom::convertTo(contourB.center) - geom::convertTo(contourA.center);
+    Point2f overallTangent = [self convert:contourB.center] - [self convert:contourA.center];
     double overallAngle = atan2(overallTangent.y, overallTangent.x);
-    double deltaAngle = MAX(geom::angleDistance(contourA.angle, overallAngle),
-                            geom::angleDistance(contourB.angle, overallAngle)) * 180 / M_PI;
+    double deltaAngle = MAX(math::angleDistance(contourA.angle, overallAngle),
+                            math::angleDistance(contourB.angle, overallAngle)) * 180 / M_PI;
 
     double xOverlapA = [contourA contourOverlap:contourB];
     double xOverlapB = [contourB contourOverlap:contourA];
     double xOverlap = MAX(xOverlapA, xOverlapB);
 
-    Point2f minMaxDiff = geom::convertTo(contourB.clxMin) - geom::convertTo(contourA.clxMax);
+    Point2f minMaxDiff = [self convert:contourB.clxMin] - [self convert:contourA.clxMax];
     double dist = norm(minMaxDiff);
 
     if (dist > EDGE_MAX_LENGTH || xOverlap > EDGE_MAX_OVERLAP || deltaAngle > EDGE_MAX_ANGLE) {
@@ -201,4 +200,9 @@ using namespace cv;
     }
     return tight_mask;
 }
+
+- (cv::Point2f)convert:(CGPoint)p {
+    return Point2f(p.x, p.y);
+}
+
 @end

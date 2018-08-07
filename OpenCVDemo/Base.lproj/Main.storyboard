@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="13771" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="BYZ-38-t0r">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14113" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="BYZ-38-t0r">
     <device id="retina4_7" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="13772"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14088"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -25,7 +25,7 @@
                                 <rect key="frame" x="0.0" y="587" width="375" height="40"/>
                                 <subviews>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="kDw-da-SVc">
-                                        <rect key="frame" x="0.0" y="0.0" width="94" height="40"/>
+                                        <rect key="frame" x="0.0" y="0.0" width="125" height="40"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="40" id="VIl-0Z-An8"/>
                                         </constraints>
@@ -35,27 +35,17 @@
                                         </connections>
                                     </button>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Yx0-gu-hQT">
-                                        <rect key="frame" x="94" y="0.0" width="93.5" height="40"/>
+                                        <rect key="frame" x="125" y="0.0" width="125" height="40"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="40" id="UAN-rc-fPw"/>
                                         </constraints>
-                                        <state key="normal" title="contours"/>
+                                        <state key="normal" title="outlines"/>
                                         <connections>
-                                            <action selector="contoursAction:" destination="BYZ-38-t0r" eventType="touchUpInside" id="6m4-LD-tPu"/>
-                                        </connections>
-                                    </button>
-                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="8Mh-jl-BhE">
-                                        <rect key="frame" x="187.5" y="0.0" width="94" height="40"/>
-                                        <constraints>
-                                            <constraint firstAttribute="height" constant="40" id="AvU-PC-hwQ"/>
-                                        </constraints>
-                                        <state key="normal" title="Spans"/>
-                                        <connections>
-                                            <action selector="spansAction:" destination="BYZ-38-t0r" eventType="touchUpInside" id="KwJ-cd-1dD"/>
+                                            <action selector="outlinesAction:" destination="BYZ-38-t0r" eventType="touchUpInside" id="b8N-oT-xtB"/>
                                         </connections>
                                     </button>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="6BX-rm-lKE">
-                                        <rect key="frame" x="281.5" y="0.0" width="93.5" height="40"/>
+                                        <rect key="frame" x="250" y="0.0" width="125" height="40"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="40" id="nfI-hm-37Z"/>
                                         </constraints>
@@ -73,7 +63,7 @@
                                 <rect key="frame" x="0.0" y="627" width="375" height="40"/>
                                 <subviews>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Nfz-87-OuT">
-                                        <rect key="frame" x="0.0" y="0.0" width="94" height="40"/>
+                                        <rect key="frame" x="0.0" y="0.0" width="187.5" height="40"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="40" id="kwz-fo-6QK"/>
                                         </constraints>
@@ -82,28 +72,8 @@
                                             <action selector="keyPointsAction:" destination="BYZ-38-t0r" eventType="touchUpInside" id="4an-iK-D1D"/>
                                         </connections>
                                     </button>
-                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ODu-WF-KLs" userLabel="Keypoints-before">
-                                        <rect key="frame" x="94" y="0.0" width="93.5" height="40"/>
-                                        <constraints>
-                                            <constraint firstAttribute="height" constant="40" id="hV5-uO-Ndi"/>
-                                        </constraints>
-                                        <state key="normal" title="Pre"/>
-                                        <connections>
-                                            <action selector="preCorrespondencesAction:" destination="BYZ-38-t0r" eventType="touchUpInside" id="Qxc-qC-QPB"/>
-                                        </connections>
-                                    </button>
-                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="N7P-kI-37n" userLabel="Keypoints-after">
-                                        <rect key="frame" x="187.5" y="0.0" width="94" height="40"/>
-                                        <constraints>
-                                            <constraint firstAttribute="height" constant="40" id="KNt-ii-Fjo"/>
-                                        </constraints>
-                                        <state key="normal" title="Post"/>
-                                        <connections>
-                                            <action selector="postCorrespondencesAction:" destination="BYZ-38-t0r" eventType="touchUpInside" id="CWJ-Qp-ejn"/>
-                                        </connections>
-                                    </button>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="LAH-wB-SRe">
-                                        <rect key="frame" x="281.5" y="0.0" width="93.5" height="40"/>
+                                        <rect key="frame" x="187.5" y="0.0" width="187.5" height="40"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="40" id="WNd-Rk-MJC"/>
                                         </constraints>

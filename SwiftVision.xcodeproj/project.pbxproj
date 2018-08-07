@@ -8,7 +8,6 @@
 
 /* Begin PBXBuildFile section */
 		D40B283E2028856300CA8559 /* SwiftVision.h in Headers */ = {isa = PBXBuildFile; fileRef = D40B283C2028856300CA8559 /* SwiftVision.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		D40B28462028858A00CA8559 /* opencv2.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D40B28452028858A00CA8559 /* opencv2.framework */; };
 		D40B28522028860D00CA8559 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = D40B28512028860D00CA8559 /* AppDelegate.swift */; };
 		D40B28542028860D00CA8559 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D40B28532028860D00CA8559 /* ViewController.swift */; };
 		D40B28572028860D00CA8559 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = D40B28552028860D00CA8559 /* Main.storyboard */; };
@@ -21,7 +20,6 @@
 		D428ED33204987D6002A7322 /* UIColor+extras.m in Sources */ = {isa = PBXBuildFile; fileRef = D428ED31204987D6002A7322 /* UIColor+extras.m */; };
 		D429817F2052AF0300A28DF5 /* SwiftVisionTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = D429817E2052AF0300A28DF5 /* SwiftVisionTests.mm */; };
 		D42981812052AF0300A28DF5 /* SwiftVision.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D40B28392028856300CA8559 /* SwiftVision.framework */; };
-		D42981872052AF6B00A28DF5 /* opencv2.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D40B28452028858A00CA8559 /* opencv2.framework */; };
 		D43C4531205B1DFF0072AF8F /* vectors.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D43C452F205B1DFF0072AF8F /* vectors.cpp */; };
 		D43C4532205B1DFF0072AF8F /* vectors.hpp in Headers */ = {isa = PBXBuildFile; fileRef = D43C4530205B1DFF0072AF8F /* vectors.hpp */; };
 		D43C4535205B1ECB0072AF8F /* math.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D43C4533205B1ECB0072AF8F /* math.cpp */; };
@@ -62,6 +60,7 @@
 		D4C8B37E21135C150037FDDE /* dewarp.hpp in Headers */ = {isa = PBXBuildFile; fileRef = D4C8B37C21135C150037FDDE /* dewarp.hpp */; };
 		D4C8B38021148AC80037FDDE /* cat.035.jpg in Resources */ = {isa = PBXBuildFile; fileRef = D4C8B37F21148AC80037FDDE /* cat.035.jpg */; };
 		D4D8304A206198F0001B1535 /* UIImage+extras.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4D83049206198F0001B1535 /* UIImage+extras.swift */; };
+		D4E45DAE211A25820094CE23 /* opencv2.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D4E45DAD211A25820094CE23 /* opencv2.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -99,7 +98,6 @@
 		D40B28392028856300CA8559 /* SwiftVision.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = SwiftVision.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		D40B283C2028856300CA8559 /* SwiftVision.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SwiftVision.h; sourceTree = "<group>"; };
 		D40B283D2028856300CA8559 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		D40B28452028858A00CA8559 /* opencv2.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = opencv2.framework; path = SwiftVision/opencv2.framework; sourceTree = "<group>"; };
 		D40B284F2028860D00CA8559 /* OpenCVDemo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = OpenCVDemo.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		D40B28512028860D00CA8559 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		D40B28532028860D00CA8559 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -156,6 +154,7 @@
 		D4C8B37C21135C150037FDDE /* dewarp.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = dewarp.hpp; sourceTree = "<group>"; };
 		D4C8B37F21148AC80037FDDE /* cat.035.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = cat.035.jpg; sourceTree = "<group>"; };
 		D4D83049206198F0001B1535 /* UIImage+extras.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIImage+extras.swift"; sourceTree = "<group>"; };
+		D4E45DAD211A25820094CE23 /* opencv2.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = opencv2.framework; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -163,9 +162,9 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D4E45DAE211A25820094CE23 /* opencv2.framework in Frameworks */,
 				D40B286920288EEA00CA8559 /* UIKit.framework in Frameworks */,
 				D40B286720288EE100CA8559 /* CoreGraphics.framework in Frameworks */,
-				D40B28462028858A00CA8559 /* opencv2.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -182,7 +181,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				D42981812052AF0300A28DF5 /* SwiftVision.framework in Frameworks */,
-				D42981872052AF6B00A28DF5 /* opencv2.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -229,12 +227,12 @@
 		D40B28442028858A00CA8559 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				D4E45DAD211A25820094CE23 /* opencv2.framework */,
 				D4711A0C20502C8300F38C26 /* CoreFoundation.framework */,
 				D4711A0A20502C7500F38C26 /* Foundation.framework */,
 				D4711A0820502C1200F38C26 /* Accelerate.framework */,
 				D40B286820288EEA00CA8559 /* UIKit.framework */,
 				D40B286620288EE100CA8559 /* CoreGraphics.framework */,
-				D40B28452028858A00CA8559 /* opencv2.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -724,7 +722,10 @@
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
-				FRAMEWORK_SEARCH_PATHS = "$(PROJECT_DIR)/SwiftVision";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(PROJECT_DIR)/SwiftVision",
+					"$(PROJECT_DIR)",
+				);
 				GCC_C_LANGUAGE_STANDARD = c11;
 				GCC_INPUT_FILETYPE = automatic;
 				GCC_PREFIX_HEADER = "$(PROJECT_DIR)/SwiftVision/PrefixHeader.pch";
@@ -771,7 +772,10 @@
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
-				FRAMEWORK_SEARCH_PATHS = "$(PROJECT_DIR)/SwiftVision";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(PROJECT_DIR)/SwiftVision",
+					"$(PROJECT_DIR)",
+				);
 				GCC_C_LANGUAGE_STANDARD = c11;
 				GCC_INPUT_FILETYPE = automatic;
 				GCC_PREFIX_HEADER = "$(PROJECT_DIR)/SwiftVision/PrefixHeader.pch";

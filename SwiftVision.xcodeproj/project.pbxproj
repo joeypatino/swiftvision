@@ -60,7 +60,6 @@
 		D4C8B37E21135C150037FDDE /* dewarp.hpp in Headers */ = {isa = PBXBuildFile; fileRef = D4C8B37C21135C150037FDDE /* dewarp.hpp */; };
 		D4C8B38021148AC80037FDDE /* cat.035.jpg in Resources */ = {isa = PBXBuildFile; fileRef = D4C8B37F21148AC80037FDDE /* cat.035.jpg */; };
 		D4D8304A206198F0001B1535 /* UIImage+extras.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4D83049206198F0001B1535 /* UIImage+extras.swift */; };
-		D4E45DAE211A25820094CE23 /* opencv2.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D4E45DAD211A25820094CE23 /* opencv2.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -154,7 +153,6 @@
 		D4C8B37C21135C150037FDDE /* dewarp.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = dewarp.hpp; sourceTree = "<group>"; };
 		D4C8B37F21148AC80037FDDE /* cat.035.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = cat.035.jpg; sourceTree = "<group>"; };
 		D4D83049206198F0001B1535 /* UIImage+extras.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIImage+extras.swift"; sourceTree = "<group>"; };
-		D4E45DAD211A25820094CE23 /* opencv2.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = opencv2.framework; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -162,7 +160,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				D4E45DAE211A25820094CE23 /* opencv2.framework in Frameworks */,
 				D40B286920288EEA00CA8559 /* UIKit.framework in Frameworks */,
 				D40B286720288EE100CA8559 /* CoreGraphics.framework in Frameworks */,
 			);
@@ -227,7 +224,6 @@
 		D40B28442028858A00CA8559 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				D4E45DAD211A25820094CE23 /* opencv2.framework */,
 				D4711A0C20502C8300F38C26 /* CoreFoundation.framework */,
 				D4711A0A20502C7500F38C26 /* Foundation.framework */,
 				D4711A0820502C1200F38C26 /* Accelerate.framework */,

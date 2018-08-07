@@ -51,6 +51,7 @@
 		D4A3DB5121199E03000413B8 /* PtraArray.hpp in Headers */ = {isa = PBXBuildFile; fileRef = D4A3DB4E21199E03000413B8 /* PtraArray.hpp */; };
 		D4A3DB5221199E03000413B8 /* DataTypes.h in Headers */ = {isa = PBXBuildFile; fileRef = D4A3DB4F21199E03000413B8 /* DataTypes.h */; };
 		D4A3DB5321199E03000413B8 /* PtraArray.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D4A3DB5021199E03000413B8 /* PtraArray.cpp */; };
+		D4A3DB59211A17E1000413B8 /* leptonica-license.txt in Resources */ = {isa = PBXBuildFile; fileRef = D4A3DB58211A17E1000413B8 /* leptonica-license.txt */; };
 		D4A572C2202A1E1500D8F4B0 /* TextDewarper.h in Headers */ = {isa = PBXBuildFile; fileRef = D4A572C0202A1E1500D8F4B0 /* TextDewarper.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		D4A572C3202A1E1500D8F4B0 /* TextDewarper.mm in Sources */ = {isa = PBXBuildFile; fileRef = D4A572C1202A1E1500D8F4B0 /* TextDewarper.mm */; };
 		D4A572CA202A1E2800D8F4B0 /* UIImage+Mat.h in Headers */ = {isa = PBXBuildFile; fileRef = D4A572C6202A1E2800D8F4B0 /* UIImage+Mat.h */; };
@@ -144,6 +145,7 @@
 		D4A3DB4E21199E03000413B8 /* PtraArray.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = PtraArray.hpp; sourceTree = "<group>"; };
 		D4A3DB4F21199E03000413B8 /* DataTypes.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DataTypes.h; sourceTree = "<group>"; };
 		D4A3DB5021199E03000413B8 /* PtraArray.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = PtraArray.cpp; sourceTree = "<group>"; };
+		D4A3DB58211A17E1000413B8 /* leptonica-license.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "leptonica-license.txt"; sourceTree = "<group>"; };
 		D4A572C0202A1E1500D8F4B0 /* TextDewarper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TextDewarper.h; sourceTree = "<group>"; };
 		D4A572C1202A1E1500D8F4B0 /* TextDewarper.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = TextDewarper.mm; sourceTree = "<group>"; };
 		D4A572C6202A1E2800D8F4B0 /* UIImage+Mat.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImage+Mat.h"; sourceTree = "<group>"; };
@@ -266,6 +268,7 @@
 		D439946E20388B9700D9B783 /* helpers */ = {
 			isa = PBXGroup;
 			children = (
+				D4A3DB58211A17E1000413B8 /* leptonica-license.txt */,
 				D43C4530205B1DFF0072AF8F /* vectors.hpp */,
 				D43C452F205B1DFF0072AF8F /* vectors.cpp */,
 				D43C4534205B1ECB0072AF8F /* math.hpp */,
@@ -488,6 +491,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D4A3DB59211A17E1000413B8 /* leptonica-license.txt in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -32,7 +32,7 @@ using namespace cv;
     };
     vvectorPointD *txtLinePts = [self convertKeypoints:self.keyPoints];
     int w, h, d, i, j;
-    int sampling = 80;
+    int sampling = 20;
     int grayin = -1;
     d = inImage.channels();
     w = inSize.width;
@@ -563,7 +563,7 @@ rightQuadraticCurvePoints:(vectorPointD *)rightQuadraticCurvePoints
             vectorPointD pts = quadraticCurvePoints->at(i);
             for (int j = 0; j < pts.size(); j++) {
                 DPoint p = pts[j];
-                circle(display, Point2d(p.x, p.y), 6, yellow, -1, cv::LINE_AA);
+                circle(display, Point2d(p.x, p.y), 2, yellow, -1, cv::LINE_AA);
             }
         }
         free(quadraticCurvePoints);
@@ -571,7 +571,7 @@ rightQuadraticCurvePoints:(vectorPointD *)rightQuadraticCurvePoints
     if (curveCenterPoints) {
         for (int i = 0; i < curveCenterPoints->size(); i++) {
             DPoint mid = curveCenterPoints->at(i);
-            circle(display, Point2d(mid.x, mid.y), 8, red, -1, cv::LINE_AA);
+            circle(display, Point2d(mid.x, mid.y), 4, red, -1, cv::LINE_AA);
         }
         free(curveCenterPoints);
     }

@@ -59,15 +59,8 @@ SwiftVision is a framework to perform image manipulation. The main component is 
   #  the deployment target. You can optionally include the target after the platform.
   #
 
-  # s.platform     = :ios
   s.platform     = :ios, "9.0"
-
-  #  When using multiple platforms
-  # s.ios.deployment_target = "5.0"
-  # s.osx.deployment_target = "10.7"
-  # s.watchos.deployment_target = "2.0"
-  # s.tvos.deployment_target = "9.0"
-
+  s.swift_version = "4.0"
 
   # ――― Source Location ―――――――――――――――――――――――――――――――――――――――――――――――――――――――――― #
   #
@@ -77,7 +70,6 @@ SwiftVision is a framework to perform image manipulation. The main component is 
 
   s.source       = { :git => "https://github.com/joeypatino/swiftvision.git", :tag => "#{s.version}" }
 
-
   # ――― Source Code ―――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――― #
   #
   #  CocoaPods is smart about how it includes source code. For source files
@@ -86,8 +78,10 @@ SwiftVision is a framework to perform image manipulation. The main component is 
   #  Not including the public_header_files will make all headers public.
   #
 
-  s.source_files  = "SwiftVision"
-
+  s.source_files = "SwiftVision/**/*.{h,m,mm,hpp,cpp}"
+  # s.public_header_files = "SwiftVision/SwiftVision.h",
+  s.public_header_files = "SwiftVision/UIImage+OpenCV.h","SwiftVision/PageDewarp/TextDewarper.h","SwiftVision/PageDewarp/models/{Contour,ContourEdge,ContourSpan}.h","SwiftVision/structs/CGRectOutline.h"
+	
   # ――― Resources ―――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――― #
   #
   #  A list of resources included with the Pod. These are copied into the
@@ -101,18 +95,14 @@ SwiftVision is a framework to perform image manipulation. The main component is 
 
   # s.preserve_paths = "FilesToSave", "MoreFilesToSave"
 
-
   # ――― Project Linking ―――――――――――――――――――――――――――――――――――――――――――――――――――――――――― #
   #
   #  Link your library with frameworks, or libraries. Libraries do not include
   #  the lib prefix of their name.
   #
-
-  s.framework  = "opencv2"
-
-  # s.library   = "iconv"
-  # s.libraries = "iconv", "xml2"
-
+  
+  s.frameworks = "CoreGraphics","UIKit","opencv2"
+  s.vendored_frameworks = "opencv2.framework"
 
   # ――― Project Settings ――――――――――――――――――――――――――――――――――――――――――――――――――――――――― #
   #
@@ -120,9 +110,12 @@ SwiftVision is a framework to perform image manipulation. The main component is 
   #  where they will only apply to your library. If you depend on other Podspecs
   #  you can include multiple dependencies to ensure it works.
 
-  # s.requires_arc = true
-
-  s.xcconfig = { "FRAMEWORK_SEARCH_PATHS" => "$(PROJECT_DIR)/SwiftVision", "LIBRARY_SEARCH_PATHS" => "$(PROJECT_DIR)/SwiftVision" }
-  # s.dependency "JSONKit", "~> 1.4"
+  s.xcconfig = {
+     'CLANG_CXX_LANGUAGE_STANDARD' => 'gnu++11',
+     'CLANG_CXX_LIBRARY' => 'libc++',
+     'GCC_C_LANGUAGE_STANDARD' => 'c11',
+     'GCC_INPUT_FILETYPE' => 'automatic',
+     'FRAMEWORK_SEARCH_PATHS' => '$(PROJECT_DIR)'
+  }
 
 end

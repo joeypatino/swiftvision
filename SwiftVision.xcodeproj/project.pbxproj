@@ -54,13 +54,13 @@
 		D4A572C3202A1E1500D8F4B0 /* TextDewarper.mm in Sources */ = {isa = PBXBuildFile; fileRef = D4A572C1202A1E1500D8F4B0 /* TextDewarper.mm */; };
 		D4A572CA202A1E2800D8F4B0 /* UIImage+Mat.h in Headers */ = {isa = PBXBuildFile; fileRef = D4A572C6202A1E2800D8F4B0 /* UIImage+Mat.h */; };
 		D4A572CC202A1E2800D8F4B0 /* UIImage+Mat.mm in Sources */ = {isa = PBXBuildFile; fileRef = D4A572C8202A1E2800D8F4B0 /* UIImage+Mat.mm */; };
+		D4A649D9211B3C8000457B78 /* opencv2.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D4E45DAF211A52010094CE23 /* opencv2.framework */; };
 		D4BAD1C52034DBB200F4A32C /* NSArray+extras.h in Headers */ = {isa = PBXBuildFile; fileRef = D4BAD1C32034DBB200F4A32C /* NSArray+extras.h */; };
 		D4BAD1C62034DBB200F4A32C /* NSArray+extras.m in Sources */ = {isa = PBXBuildFile; fileRef = D4BAD1C42034DBB200F4A32C /* NSArray+extras.m */; };
 		D4C8B37D21135C150037FDDE /* dewarp.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D4C8B37B21135C150037FDDE /* dewarp.cpp */; };
 		D4C8B37E21135C150037FDDE /* dewarp.hpp in Headers */ = {isa = PBXBuildFile; fileRef = D4C8B37C21135C150037FDDE /* dewarp.hpp */; };
 		D4C8B38021148AC80037FDDE /* cat.035.jpg in Resources */ = {isa = PBXBuildFile; fileRef = D4C8B37F21148AC80037FDDE /* cat.035.jpg */; };
 		D4D8304A206198F0001B1535 /* UIImage+extras.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4D83049206198F0001B1535 /* UIImage+extras.swift */; };
-		D4E45DB1211A52030094CE23 /* opencv2.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D4E45DB0211A52030094CE23 /* opencv2.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -155,7 +155,6 @@
 		D4C8B37F21148AC80037FDDE /* cat.035.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = cat.035.jpg; sourceTree = "<group>"; };
 		D4D83049206198F0001B1535 /* UIImage+extras.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIImage+extras.swift"; sourceTree = "<group>"; };
 		D4E45DAF211A52010094CE23 /* opencv2.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = opencv2.framework; sourceTree = "<group>"; };
-		D4E45DB0211A52030094CE23 /* opencv2.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = opencv2.framework; path = ../../opencv2.framework; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -163,7 +162,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				D4E45DB1211A52030094CE23 /* opencv2.framework in Frameworks */,
+				D4A649D9211B3C8000457B78 /* opencv2.framework in Frameworks */,
 				D40B286920288EEA00CA8559 /* UIKit.framework in Frameworks */,
 				D40B286720288EE100CA8559 /* CoreGraphics.framework in Frameworks */,
 			);
@@ -229,7 +228,6 @@
 			isa = PBXGroup;
 			children = (
 				D4E45DAF211A52010094CE23 /* opencv2.framework */,
-				D4E45DB0211A52030094CE23 /* opencv2.framework */,
 				D4711A0C20502C8300F38C26 /* CoreFoundation.framework */,
 				D4711A0A20502C7500F38C26 /* Foundation.framework */,
 				D4711A0820502C1200F38C26 /* Accelerate.framework */,

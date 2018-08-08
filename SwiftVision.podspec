@@ -16,7 +16,7 @@ Pod::Spec.new do |s|
   #
 
   s.name         = "SwiftVision"
-  s.version      = "0.0.1"
+  s.version      = "0.0.3"
   s.summary      = "A framework for image dewarping and manipulation."
 
   # This description is used to generate tags and improve search results.

@@ -27,7 +27,7 @@ using namespace cv;
 - (instancetype)initWithImage:(UIImage *)image filteredBy:(BOOL (^)(Contour *c))filter {
     self = [super init];
     self.inputImage = image;
-    self.workingImage = [image resizeTo:CGSizeMake(1280, 700)];
+    self.workingImage = [image resizeTo:CGSizeMake(1080, 1920)];
 
     UIImage *mask = [[[self.workingImage
                         threshold:55
@@ -45,7 +45,7 @@ using namespace cv;
 // MARK: - returns dewarped image
 - (UIImage *)dewarp {
     std::vector<std::vector<cv::Point2d>> allSpanPoints = [self allSamplePoints:self.spans];
-    DisparityModel *disparity = [[DisparityModel alloc] initWithImage:self.inputImage keyPoints:allSpanPoints];
+    DisparityModel *disparity = [[DisparityModel alloc] initWithImage:self.workingImage keyPoints:allSpanPoints];
     return [disparity apply];
 }
 
@@ -80,7 +80,7 @@ using namespace cv;
 
 - (UIImage *)renderKeyPoints:(UIColor *)color mode:(ContourRenderingMode)mode {
     std::vector<std::vector<Point2d>> allSpanPoints = [self allSamplePoints:self.spans];
-    DisparityModel *disparity = [[DisparityModel alloc] initWithImage:self.inputImage keyPoints:allSpanPoints];
+    DisparityModel *disparity = [[DisparityModel alloc] initWithImage:self.workingImage keyPoints:allSpanPoints];
     return [disparity apply:DewarpOutputVerticalQuadraticCurves | DewarpOutputVerticalCenterLines];
 }
 
@@ -112,7 +112,7 @@ using namespace cv;
 }
 
 - (std::vector<vector<Point2d>>)allSamplePoints:(NSArray <ContourSpan *> *)spans {
-    Size2d size = Size2d(self.inputImage.size.width, self.inputImage.size.height);
+    Size2d size = Size2d(self.workingImage.size.width, self.workingImage.size.height);
     std::vector<vector<Point2d>> allPoints;
     for (ContourSpan *span in spans) {
         std::vector<Point2d> samplePoints;

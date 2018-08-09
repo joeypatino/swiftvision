@@ -115,11 +115,59 @@
                     </view>
                     <connections>
                         <outlet property="imageView" destination="rvT-VK-Sfj" id="adh-Wr-b6L"/>
+                        <segue destination="lNw-GD-bry" kind="presentation" identifier="CaptureViewController" id="AuE-tH-xSQ"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="136.80000000000001" y="133.5832083958021"/>
+        </scene>
+        <!--Capture View Controller-->
+        <scene sceneID="SE8-Iu-QNm">
+            <objects>
+                <viewController id="lNw-GD-bry" customClass="CaptureViewController" customModule="OpenCVDemo" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="m5k-Zd-4vX">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <toolbar opaque="NO" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" translucent="NO" translatesAutoresizingMaskIntoConstraints="NO" id="tre-gg-JNu">
+                                <rect key="frame" x="0.0" y="20" width="375" height="44"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="44" id="ZPV-Uv-rR7"/>
+                                </constraints>
+                                <items>
+                                    <barButtonItem systemItem="done" id="DlC-4f-gN5">
+                                        <color key="tintColor" red="0.96470588239999999" green="0.96470588239999999" blue="0.96470588239999999" alpha="1" colorSpace="calibratedRGB"/>
+                                        <connections>
+                                            <action selector="cancelCapture:" destination="lNw-GD-bry" id="UK1-ww-3Wa"/>
+                                        </connections>
+                                    </barButtonItem>
+                                </items>
+                                <color key="barTintColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                            </toolbar>
+                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="IUQ-mM-RxP">
+                                <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                            </imageView>
+                        </subviews>
+                        <color key="backgroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <constraints>
+                            <constraint firstItem="IUQ-mM-RxP" firstAttribute="bottom" secondItem="5JH-mO-Fbo" secondAttribute="bottom" id="78U-HY-EOf"/>
+                            <constraint firstItem="IUQ-mM-RxP" firstAttribute="trailing" secondItem="5JH-mO-Fbo" secondAttribute="trailing" id="PBf-n2-NXa"/>
+                            <constraint firstItem="IUQ-mM-RxP" firstAttribute="top" secondItem="m5k-Zd-4vX" secondAttribute="top" id="Yan-k0-OGB"/>
+                            <constraint firstItem="tre-gg-JNu" firstAttribute="leading" secondItem="5JH-mO-Fbo" secondAttribute="leading" id="Z6Z-mX-6DD"/>
+                            <constraint firstItem="tre-gg-JNu" firstAttribute="top" secondItem="5JH-mO-Fbo" secondAttribute="top" id="aiA-th-KWt"/>
+                            <constraint firstItem="tre-gg-JNu" firstAttribute="trailing" secondItem="5JH-mO-Fbo" secondAttribute="trailing" id="cbz-bp-GsU"/>
+                            <constraint firstItem="IUQ-mM-RxP" firstAttribute="leading" secondItem="5JH-mO-Fbo" secondAttribute="leading" id="rdC-UR-BLJ"/>
+                        </constraints>
+                        <viewLayoutGuide key="safeArea" id="5JH-mO-Fbo"/>
+                    </view>
+                    <connections>
+                        <outlet property="imageView" destination="IUQ-mM-RxP" id="bkz-7O-FZg"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="WyB-3s-IvM" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1197.5999999999999" y="133.5832083958021"/>
         </scene>
     </scenes>
 </document>

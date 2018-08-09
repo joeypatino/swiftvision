@@ -9,5 +9,6 @@
 @property (nonatomic, strong, readonly) NSArray <Contour *> *_Nonnull contours;
 /// The color to render this Span
 @property (nonatomic, strong, readonly) UIColor *_Nonnull color;
+@property (nonatomic, assign, readonly) CGRect boundingBox;
 - (instancetype _Nonnull)init NS_UNAVAILABLE;
 @end

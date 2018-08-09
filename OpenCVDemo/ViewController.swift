@@ -47,15 +47,16 @@ class ViewController: UIViewController {
     }
 
     @IBAction private func takePhoto(){
-        guard UIImagePickerController.isSourceTypeAvailable(.camera) else {
-            imagePickerControllerDidCancel(self.imagePicker)
-            return
-        }
-        imagePicker.sourceType = .camera
-        imagePicker.cameraCaptureMode = .photo
-        imagePicker.cameraDevice = .rear
-        imagePicker.delegate = self
-        present(imagePicker, animated: true, completion: nil)
+        performSegue(withIdentifier: "CaptureViewController", sender: nil)
+//        guard UIImagePickerController.isSourceTypeAvailable(.camera) else {
+//            imagePickerControllerDidCancel(self.imagePicker)
+//            return
+//        }
+//        imagePicker.sourceType = .camera
+//        imagePicker.cameraCaptureMode = .photo
+//        imagePicker.cameraDevice = .rear
+//        imagePicker.delegate = self
+//        present(imagePicker, animated: true, completion: nil)
     }
 
     private func loadImage(_ image:UIImage) {

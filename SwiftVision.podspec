@@ -80,7 +80,7 @@ SwiftVision is a framework to perform image manipulation. The main component is 
 
   s.source_files = "SwiftVision/**/*.{h,m,mm,hpp,cpp}"
   # s.public_header_files = "SwiftVision/SwiftVision.h",
-  s.public_header_files = "SwiftVision/UIImage+OpenCV.h","SwiftVision/PageDewarp/TextDewarper.h","SwiftVision/PageDewarp/models/{Contour,ContourEdge,ContourSpan}.h","SwiftVision/structs/CGRectOutline.h"
+  s.public_header_files = "SwiftVision/UIImage+OpenCV.h","SwiftVision/TextDewarper/TextDewarper.h","SwiftVision/TextDewarper/models/{Contour,ContourEdge,ContourSpan}.h","SwiftVision/structs/CGRectOutline.h"
 	
   # ――― Resources ―――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――― #
   #

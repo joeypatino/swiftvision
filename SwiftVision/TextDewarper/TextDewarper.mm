@@ -27,7 +27,7 @@ using namespace cv;
 - (instancetype)initWithImage:(UIImage *)image filteredBy:(BOOL (^)(Contour *c))filter {
     self = [super init];
     self.inputImage = image;
-    self.workingImage = [image resizeTo:CGSizeMake(1080, 1920)];
+    self.workingImage = [image resizeTo:CGSizeMake(1920, 1440)];
 
     UIImage *mask = [[[self.workingImage
                         threshold:55
@@ -45,7 +45,9 @@ using namespace cv;
 // MARK: - returns dewarped image
 - (UIImage *)dewarp {
     std::vector<std::vector<cv::Point2d>> allSpanPoints = [self allSamplePoints:self.spans];
-    DisparityModel *disparity = [[DisparityModel alloc] initWithImage:self.workingImage keyPoints:allSpanPoints];
+    UIImage *image = [self renderTextBounds:self.workingImage];
+    DisparityModel *disparity = [[DisparityModel alloc] initWithImage:self.workingImage
+                                                            keyPoints:allSpanPoints];
     return [disparity apply];
 }
 
@@ -109,6 +111,28 @@ using namespace cv;
     [color getRed:&red green:&green blue:&blue alpha:&alpha];
 
     return Scalar(red * 255.0, green * 255.0, blue * 255.0, alpha * 255.0);
+}
+
+- (UIImage *)renderTextBounds:(UIImage *)inImage {
+
+    cv::Mat outImage = [inImage mat];
+    CGRect rect = CGRectZero;
+    for (ContourSpan *span in self.spans) {
+        if (CGRectEqualToRect(rect, CGRectZero))
+            rect = span.boundingBox;
+        rect = CGRectUnion(rect, span.boundingBox);
+    }
+    rect = CGRectIntersection(CGRectInset(rect, -20, -20),
+                              CGRectMake(0, 0, inImage.size.width, inImage.size.height));
+
+    cv::Scalar color = [self scalarColorFrom:[UIColor lightGrayColor]];
+    cv::Rect roi = cv::Rect(rect.origin.x, rect.origin.y, rect.size.width, rect.size.height);
+    cv::rectangle(outImage, roi, color);
+
+    cv::Mat masked = cv::Mat(outImage.size(), outImage.type(), color);
+    outImage(roi).copyTo(masked);
+
+    return [[UIImage alloc] initWithCVMat:masked];
 }
 
 - (std::vector<vector<Point2d>>)allSamplePoints:(NSArray <ContourSpan *> *)spans {

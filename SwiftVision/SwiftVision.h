@@ -10,3 +10,4 @@ FOUNDATION_EXPORT const unsigned char SwiftVisionVersionString[];
 
 #import "UIImage+OpenCV.h"
 #import "TextDewarper.h"
+#import "PageDetector.h"

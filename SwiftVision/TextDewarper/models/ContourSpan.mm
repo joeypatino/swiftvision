@@ -19,12 +19,24 @@ using namespace cv;
     _image = image;
     _contours = contours;
     _spanPoints = [self sampleSpanPointsFrom:self.contours];
+    _boundingBox = [self calculateBoundingBoxFrom:self.contours];
 
     return self;
 }
 
 - (void)dealloc {
 
+}
+
+- (CGRect)calculateBoundingBoxFrom:(NSArray <Contour *> *)contours {
+    CGRect rect = CGRectZero;
+    for (Contour *contour in contours) {
+        if (CGRectEqualToRect(rect, CGRectZero))
+            rect = contour.bounds;
+
+        rect = CGRectUnion(rect, contour.bounds);
+    }
+    return rect;
 }
 
 - (std::vector<Point2d>)sampleSpanPointsFrom:(NSArray <Contour *> *)contours {

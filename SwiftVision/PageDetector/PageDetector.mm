@@ -6,23 +6,29 @@
 using namespace std;
 using namespace cv;
 
+@interface PageDetector()
+@property (nonatomic, assign) std::vector<std::vector<cv::Point>> *squares;
+@end
+
 @implementation PageDetector
 
-- (CGRectOutline)detectPage:(UIImage *)image {
-    cv::Mat inImage = [image mat];
-    std::vector<std::vector<cv::Point>> points = [self findSquaresIn:inImage];
+/** Returns the page boundary outline struct */
+- (CGRectOutline)pageBounds:(UIImage *)image {
+    cv::Mat inImage = [self preprocessImage:image];
+    std::vector<std::vector<cv::Point>> points = [self findPageBounds:inImage];
 
     int largestArea = -1;
-    CGRectOutline detectedOutline = CGRectOutlineMake(CGPointZero, CGPointZero, CGPointZero, CGPointZero);
+    cv::Point center = cv::Point(inImage.cols/2, inImage.rows/2);
+    CGRectOutline detectedOutline = CGRectOutlineZero;
     for (int i = 0; i < points.size(); i++) {
         std::vector<cv::Point> row = points.at(i);
         double area = fabs(cv::contourArea(row));
-        double inPoly = cv::pointPolygonTest(cv::Mat(row), cv::Point(inImage.cols/2, inImage.rows/2), false);
+        double inPoly = cv::pointPolygonTest(row, center, false);
         if (((area > largestArea) && (inPoly > 0)) || area == -1) {
             CGPoint topLeft = CGPointMake(row[0].x, row[0].y);
-            CGPoint topRight = CGPointMake(row[3].x, row[3].y);
+            CGPoint topRight = CGPointMake(row[1].x, row[1].y);
             CGPoint botRight = CGPointMake(row[2].x, row[2].y);
-            CGPoint botLeft = CGPointMake(row[1].x, row[1].y);
+            CGPoint botLeft = CGPointMake(row[3].x, row[3].y);
             detectedOutline = CGRectOutlineMake(topLeft, topRight, botRight, botLeft);
             largestArea = area;
         }
@@ -31,106 +37,142 @@ using namespace cv;
     return detectedOutline;
 }
 
-- (UIImage *)debug:(UIImage *)image {
-    cv::Mat inImage = [image mat];
-    CGRectOutline outline = [self detectPage:image];
-    if (CGPointEqualToPoint(CGPointZero, outline.topLeft) &&
-        CGPointEqualToPoint(CGPointZero, outline.topRight) &&
-        CGPointEqualToPoint(CGPointZero, outline.botLeft) &&
-        CGPointEqualToPoint(CGPointZero, outline.botRight))
-        return [[UIImage alloc] initWithCVMat:inImage];
+/** Returns an new UIImage with the page area masked against a
+ * white background */
+- (UIImage *)extractPage:(UIImage *)image {
+    CGRectOutline outline = [self pageBounds:image];
+    if (CGRectOutlineEquals(outline, CGRectOutlineZero))
+        return image;
 
+    return [self extractPage:outline fromImage:image];
+}
+
+- (UIImage *)extractPage:(CGRectOutline)outline fromImage:(UIImage *)image {
+    cv::Mat inImage = [image mat];
     std::vector<std::vector<cv::Point>> outlines;
     cv::Point topLeft = cv::Point(outline.topLeft.x, outline.topLeft.y);
     cv::Point topRight = cv::Point(outline.topRight.x, outline.topRight.y);
     cv::Point botRight = cv::Point(outline.botRight.x, outline.botRight.y);
     cv::Point botLeft = cv::Point(outline.botLeft.x, outline.botLeft.y);
     outlines.push_back({ topLeft, botLeft, botRight, topRight });
-    [self renderSquares:outlines in:inImage];
 
+    cv::Mat mask = cv::Mat::zeros(inImage.rows, inImage.cols, CV_8UC1);
+
+    // CV_FILLED fills the connected components found
+    cv::drawContours(mask, outlines, -1, cv::Scalar(255), CV_FILLED, LINE_AA);
+
+    // let's create a new image now
+    cv::Mat crop(inImage.rows, inImage.cols, CV_8UC4);
+
+    // set background to white
+    crop.setTo(cv::Scalar(255, 255, 255, 255));
+
+    // and copy the magic apple
+    inImage.copyTo(crop, mask);
+
+    return [[UIImage alloc] initWithCVMat:crop];
+}
+
+/** Returns image with a boundary indicator rendered around the frame of the
+ * largest contour. */
+- (UIImage *)renderPageBounds:(CGRectOutline)outline forImage:(UIImage *)image {
+    std::vector<std::vector<cv::Point>> outlines;
+    if (CGRectOutlineEquals(outline, CGRectOutlineZero)) {
+        return image;
+    }
+    outlines = [self contoursFromOutline:outline];
+    cv::Mat inImage = [image mat];
+    cv::drawContours(inImage, outlines, -1, cv::Scalar(255,0,0), 1, LINE_AA);
     return [[UIImage alloc] initWithCVMat:inImage];
 }
 
-- (std::vector<std::vector<cv::Point>>)findSquaresIn:(cv::Mat)inImage {
+/** Returns image with a boundary indicator rendered around the frame of the
+ * largest contour. */
+- (UIImage *)renderedPageBounds:(UIImage *)image {
+    CGRectOutline outline = [self pageBounds:image];
+    std::vector<std::vector<cv::Point>> outlines;
+    if (CGRectOutlineEquals(outline, CGRectOutlineZero)) {
+        return image;
+    }
+    outlines = [self contoursFromOutline:outline];
+    cv::Mat inImage = [image mat];
+    cv::drawContours(inImage, outlines, -1, cv::Scalar(255,0,0), 1, LINE_AA);
+    return [[UIImage alloc] initWithCVMat:inImage];
+}
+
+/** Preprocesses a UIImage for edge detection. */
+- (cv::Mat)preprocessImage:(UIImage *)image {
+    cv::Mat inImage = [image mat];
+    cv::Mat outImage;
+    cv::Mat blurred, gray, dialate1, dialate2, canny;
+
+    cv::cvtColor(inImage, gray, cv::COLOR_RGBA2GRAY);
+    cv::medianBlur(gray, blurred, 21);
+
+    cv::Mat dialateKernel1 = cv::Mat::ones(21, 21, CV_8UC1);
+    cv::dilate(blurred, dialate1, dialateKernel1);
+
+    cv::Canny(dialate1, canny, 1, 255, 3);
+
+    cv::Mat dialateKernel2 = cv::Mat::ones(8, 8, CV_8UC1);
+    cv::dilate(canny, dialate2, dialateKernel2);
+
+    cv::Mat structure = cv::getStructuringElement(MORPH_RECT, cv::Size(5, 5));
+    cv::morphologyEx(dialate2, outImage, MORPH_CLOSE, structure);
+
+    return outImage;
+}
+
+/** Converts a CGRectOutline into a 'outlines' vector. */
+- (std::vector<std::vector<cv::Point>>)contoursFromOutline:(CGRectOutline)outline {
+    std::vector<std::vector<cv::Point>> outlines;
+    cv::Point topLeft = cv::Point(outline.topLeft.x, outline.topLeft.y);
+    cv::Point topRight = cv::Point(outline.topRight.x, outline.topRight.y);
+    cv::Point botRight = cv::Point(outline.botRight.x, outline.botRight.y);
+    cv::Point botLeft = cv::Point(outline.botLeft.x, outline.botLeft.y);
+    outlines.push_back({ topLeft, botLeft, botRight, topRight });
+    return outlines;
+}
+
+/** finds the boundary points of the largest contour in inImage.
+ * inImage must be a grayscale image, already preprocessed for edge
+ * detection. */
+- (std::vector<std::vector<cv::Point>>)findPageBounds:(cv::Mat)inImage {
+    double imageArea = inImage.cols * inImage.rows;
     std::vector<std::vector<cv::Point>> squares;
+    std::vector<std::vector<cv::Point>> contours;
+    std::vector<cv::Point> approx;
 
-    cv::Mat image = inImage.clone();
-    // blur will enhance edge detection
-    cv::Mat blurred(image);
-    cv::GaussianBlur(image, blurred, cv::Size(3,3), 0.02);
-    cv::Mat gray0(blurred.size(), CV_8U), gray;
-    std::vector<std::vector<cv::Point> > contours;
+    // Find contours, store them in a list and test each
+    cv::findContours(inImage, contours, CV_RETR_LIST, CV_CHAIN_APPROX_SIMPLE);
+    for (size_t i = 0; i < contours.size(); i++) {
+        // approximate contour with accuracy proportional
+        // to the contour perimeter
+        cv::approxPolyDP(Mat(contours[i]),
+                         approx,
+                         cv::arcLength(cv::Mat(contours[i]), true)*0.02,
+                         true);
 
-    // find squares in every color plane of the image
-    for (int c = 0; c < 3; c++) {
-        int ch[] = {c, 0};
-        cv::mixChannels(&blurred, 1, &gray0, 1, ch, 1);
+        // Note: absolute value of an area is used because
+        // area may be positive or negative - in accordance with the
+        // contour orientation
+        double contourArea = fabs(cv::contourArea(cv::Mat(approx)));
+        if (approx.size() == 4 &&
+            cv::isContourConvex(cv::Mat(approx)) &&
+            contourArea > imageArea * 0.35 &&
+            contourArea < imageArea * 0.7) {
 
-        // try several threshold levels
-        const int threshold_level = 2;
-        for (int l = 0; l < threshold_level; l++) {
-            // Use Canny instead of zero threshold level!
-            // Canny helps to catch squares with gradient shading
-            if (l == 0) {
-                cv::Canny(gray0, gray, 0, 84, 3);
-
-                // Dilate helps to remove potential holes between edge segments
-                cv::dilate(gray, gray, cv::Mat(), cv::Point(-1,-1));
+            double maxCosine = 0;
+            for (int j = 2; j < 5; j++) {
+                double cosine = fabs(angle(approx[j%4], approx[j-2], approx[j-1]));
+                maxCosine = MAX(maxCosine, cosine);
             }
-            else {
-                gray = gray0 >= (l+1) * 255 / threshold_level;
-            }
 
-            // Find contours and store them in a list
-            cv::findContours(gray, contours, CV_RETR_LIST, CV_CHAIN_APPROX_SIMPLE);
-
-            // Test contours
-            std::vector<cv::Point> approx;
-            for (size_t i = 0; i < contours.size(); i++) {
-                // approximate contour with accuracy proportional
-                // to the contour perimeter
-                cv::approxPolyDP(Mat(contours[i]), approx, cv::arcLength(cv::Mat(contours[i]), true)*0.02, true);
-
-                // Note: absolute value of an area is used because
-                // area may be positive or negative - in accordance with the
-                // contour orientation
-                if (approx.size() == 4 &&
-                    fabs(cv::contourArea(cv::Mat(approx))) > 1000 &&
-                    fabs(cv::contourArea(cv::Mat(approx))) < ((inImage.cols * inImage.rows) * 0.8) &&
-                    cv::isContourConvex(cv::Mat(approx))) {
-
-                    double maxCosine = 0;
-                    for (int j = 2; j < 5; j++) {
-                        double cosine = fabs(angle(approx[j%4], approx[j-2], approx[j-1]));
-                        maxCosine = MAX(maxCosine, cosine);
-                    }
-
-                    if (maxCosine < 0.3)
-                        squares.push_back(approx);
-                }
-            }
+            if (maxCosine < 0.3)
+                squares.push_back(approx);
         }
     }
     return squares;
-}
-
-- (void)renderSquares:(std::vector<std::vector<cv::Point>>)squares in:(cv::Mat)mat {
-    for ( int i = 0; i< squares.size(); i++ ) {
-        // draw contour
-        cv::drawContours(mat, squares, i, cv::Scalar(255,0,0), 1, LINE_AA);
-
-//        // draw bounding rect
-//        cv::Rect rect = boundingRect(cv::Mat(squares[i]));
-//        cv::rectangle(mat, rect.tl(), rect.br(), cv::Scalar(0,255,0));
-//
-//        // draw rotated rect
-//        cv::RotatedRect minRect = minAreaRect(cv::Mat(squares[i]));
-//        cv::Point2f rect_points[4];
-//        minRect.points( rect_points );
-//        for ( int j = 0; j < 4; j++ ) {
-//            cv::line( mat, rect_points[j], rect_points[(j+1)%4], cv::Scalar(0,0,255));
-//        }
-    }
 }
 
 double angle( cv::Point pt1, cv::Point pt2, cv::Point pt0 ) {

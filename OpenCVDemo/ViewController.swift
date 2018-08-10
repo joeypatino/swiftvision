@@ -35,7 +35,6 @@ class ViewController: UIViewController {
 
         UIApplication.shared.isNetworkActivityIndicatorVisible = true
         DispatchQueue.global(qos: .background).async {
-            //let image = self.dewarpedImage ?? self.imageContours.render()
             let image = self.imageContours.dewarp()
 
             DispatchQueue.main.async {
@@ -47,16 +46,10 @@ class ViewController: UIViewController {
     }
 
     @IBAction private func takePhoto(){
-        performSegue(withIdentifier: "CaptureViewController", sender: nil)
-//        guard UIImagePickerController.isSourceTypeAvailable(.camera) else {
-//            imagePickerControllerDidCancel(self.imagePicker)
-//            return
-//        }
-//        imagePicker.sourceType = .camera
-//        imagePicker.cameraCaptureMode = .photo
-//        imagePicker.cameraDevice = .rear
-//        imagePicker.delegate = self
-//        present(imagePicker, animated: true, completion: nil)
+        let storyBoard = UIStoryboard(name: "Main", bundle: Bundle.main)
+        guard let viewController = storyBoard.instantiateViewController(withIdentifier: "PageCaptureViewController") as? PageCaptureViewController else { return }
+        viewController.delegate = self
+        present(viewController, animated: true)
     }
 
     private func loadImage(_ image:UIImage) {
@@ -64,6 +57,13 @@ class ViewController: UIViewController {
         imageContours = TextDewarper(image: image.normalizedImage())
         imageView.image = imageContours.inputImage
         dewarpAction(image)
+    }
+}
+
+extension ViewController: PageCaptureDelegate {
+    func captureViewController(_ viewController: PageCaptureViewController, didCapturePage page: UIImage) {
+        viewController.dismiss(animated: true)
+        loadImage(page)
     }
 }
 

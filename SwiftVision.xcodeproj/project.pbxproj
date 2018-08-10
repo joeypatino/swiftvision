@@ -45,8 +45,7 @@
 		D471D7FB20500F2200F38C26 /* UIImage+Contour.h in Headers */ = {isa = PBXBuildFile; fileRef = D471D7F920500F2200F38C26 /* UIImage+Contour.h */; };
 		D4792B9C205AF9E100F74B2E /* SwiftVision.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D40B28392028856300CA8559 /* SwiftVision.framework */; };
 		D4792B9D205AF9E100F74B2E /* SwiftVision.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = D40B28392028856300CA8559 /* SwiftVision.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
-		D48A959F211CC37600A12E4B /* CameraView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D48A959E211CC37600A12E4B /* CameraView.swift */; };
-		D48A95A1211CC61200A12E4B /* CaptureViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D48A95A0211CC61200A12E4B /* CaptureViewController.swift */; };
+		D48A95A1211CC61200A12E4B /* PageCaptureViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D48A95A0211CC61200A12E4B /* PageCaptureViewController.swift */; };
 		D48A95A7211CCAE200A12E4B /* PageDetector.h in Headers */ = {isa = PBXBuildFile; fileRef = D48A95A5211CCAE200A12E4B /* PageDetector.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		D48A95A8211CCAE200A12E4B /* PageDetector.mm in Sources */ = {isa = PBXBuildFile; fileRef = D48A95A6211CCAE200A12E4B /* PageDetector.mm */; };
 		D48A95AA211CE50A00A12E4B /* FrameExtractor.swift in Sources */ = {isa = PBXBuildFile; fileRef = D48A95A9211CE50A00A12E4B /* FrameExtractor.swift */; };
@@ -144,8 +143,7 @@
 		D471D7F420500EE300F38C26 /* UIImage+OpenCV.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImage+OpenCV.h"; sourceTree = "<group>"; };
 		D471D7F820500F2200F38C26 /* UIImage+Contour.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = "UIImage+Contour.mm"; sourceTree = "<group>"; };
 		D471D7F920500F2200F38C26 /* UIImage+Contour.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImage+Contour.h"; sourceTree = "<group>"; };
-		D48A959E211CC37600A12E4B /* CameraView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraView.swift; sourceTree = "<group>"; };
-		D48A95A0211CC61200A12E4B /* CaptureViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CaptureViewController.swift; sourceTree = "<group>"; };
+		D48A95A0211CC61200A12E4B /* PageCaptureViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PageCaptureViewController.swift; sourceTree = "<group>"; };
 		D48A95A5211CCAE200A12E4B /* PageDetector.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PageDetector.h; sourceTree = "<group>"; };
 		D48A95A6211CCAE200A12E4B /* PageDetector.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = PageDetector.mm; sourceTree = "<group>"; };
 		D48A95A9211CE50A00A12E4B /* FrameExtractor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FrameExtractor.swift; sourceTree = "<group>"; };
@@ -261,8 +259,7 @@
 				D40B285A2028860D00CA8559 /* LaunchScreen.storyboard */,
 				D40B285D2028860D00CA8559 /* Info.plist */,
 				D4D83049206198F0001B1535 /* UIImage+extras.swift */,
-				D48A95A0211CC61200A12E4B /* CaptureViewController.swift */,
-				D48A959E211CC37600A12E4B /* CameraView.swift */,
+				D48A95A0211CC61200A12E4B /* PageCaptureViewController.swift */,
 				D48A95A9211CE50A00A12E4B /* FrameExtractor.swift */,
 			);
 			path = OpenCVDemo;
@@ -571,8 +568,7 @@
 				D40B28542028860D00CA8559 /* ViewController.swift in Sources */,
 				D40B28522028860D00CA8559 /* AppDelegate.swift in Sources */,
 				D4D8304A206198F0001B1535 /* UIImage+extras.swift in Sources */,
-				D48A959F211CC37600A12E4B /* CameraView.swift in Sources */,
-				D48A95A1211CC61200A12E4B /* CaptureViewController.swift in Sources */,
+				D48A95A1211CC61200A12E4B /* PageCaptureViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

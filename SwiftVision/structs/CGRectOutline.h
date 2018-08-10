@@ -1,5 +1,8 @@
-struct
-CGRectOutline {
+#ifndef cg_rect_outline_h
+#define cg_rect_outline_h
+
+
+struct CGRectOutline {
     CGPoint topLeft;
     CGPoint botLeft;
     CGPoint botRight;
@@ -7,13 +10,32 @@ CGRectOutline {
 };
 typedef struct CG_BOXABLE CGRectOutline CGRectOutline;
 
-static inline struct CGRectOutline
-CGRectOutlineMake(CGPoint topLeft, CGPoint topRight, CGPoint botRight, CGPoint botLeft) {
-    struct CGRectOutline outline;
+CG_INLINE CGRectOutline
+CGRectOutlineMake(CGPoint topLeft, CGPoint topRight, CGPoint botRight, CGPoint botLeft);
 
-    outline.topLeft = topLeft;
-    outline.botLeft = botLeft;
-    outline.botRight = botRight;
-    outline.topRight = topRight;
-    return outline;
-}
+CG_INLINE bool
+CGRectOutlineEquals(CGRectOutline outline1, CGRectOutline outline2);
+
+#define CGRectOutlineZero CGRectOutlineMake(CGPointZero, CGPointZero, CGPointZero, CGPointZero)
+
+/*** Definitions of inline functions. ***/
+
+inline CGRectOutline
+CGRectOutlineMake(CGPoint topLeft, CGPoint topRight, CGPoint botRight, CGPoint botLeft) {
+    return (CGRectOutline){
+        .topLeft = topLeft,
+        .botLeft = botLeft,
+        .botRight = botRight,
+        .topRight = topRight
+    };
+};
+
+inline bool
+CGRectOutlineEquals(CGRectOutline outline1, CGRectOutline outline2) {
+    return (CGPointEqualToPoint(outline1.topLeft, outline2.topLeft) &&
+            CGPointEqualToPoint(outline1.topRight, outline2.topRight) &&
+            CGPointEqualToPoint(outline1.botLeft, outline2.botLeft) &&
+            CGPointEqualToPoint(outline1.botRight, outline2.botRight));
+};
+
+#endif /* cg_rect_outline_h */

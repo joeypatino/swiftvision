@@ -68,8 +68,8 @@ class PageCaptureViewController: UIViewController {
 extension PageCaptureViewController: FrameExtractorDelegate {
     func frameExtractor(_ extractor:FrameExtractor, didOutput frame: UIImage) {
         let outline = pageDetector.pageBounds(frame)
-        let isValidOutline = !CGRectOutlineEquals(outline, CGRectOutlineMake(.zero, .zero, .zero, .zero))
-        let image = pageDetector.renderPageBounds(outline, for: frame)
+        let isValidOutline = !CGRectOutlineEquals(outline, CGRectOutlineZeroMake())
+        let image = pageDetector.render(outline, in: frame)
 
         isValidOutline ? update() : stop()
         imageView.image = image

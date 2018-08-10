@@ -7,19 +7,17 @@ using namespace std;
 using namespace cv;
 
 @interface PageDetector()
-@property (nonatomic, assign) std::vector<std::vector<cv::Point>> *squares;
 @end
 
 @implementation PageDetector
 
-/** Returns the page boundary outline struct */
 - (CGRectOutline)pageBounds:(UIImage *)image {
     cv::Mat inImage = [self preprocessImage:image];
     std::vector<std::vector<cv::Point>> points = [self findPageBounds:inImage];
 
     int largestArea = -1;
     cv::Point center = cv::Point(inImage.cols/2, inImage.rows/2);
-    CGRectOutline detectedOutline = CGRectOutlineZero;
+    CGRectOutline detectedOutline = CGRectOutlineZeroMake();
     for (int i = 0; i < points.size(); i++) {
         std::vector<cv::Point> row = points.at(i);
         double area = fabs(cv::contourArea(row));
@@ -37,25 +35,18 @@ using namespace cv;
     return detectedOutline;
 }
 
-/** Returns an new UIImage with the page area masked against a
- * white background */
 - (UIImage *)extractPage:(UIImage *)image {
     CGRectOutline outline = [self pageBounds:image];
-    if (CGRectOutlineEquals(outline, CGRectOutlineZero))
+    if (CGRectOutlineEquals(outline, CGRectOutlineZeroMake()))
         return image;
 
-    return [self extractPage:outline fromImage:image];
+    return [self extract:outline fromImage:image];
 }
 
-- (UIImage *)extractPage:(CGRectOutline)outline fromImage:(UIImage *)image {
-    cv::Mat inImage = [image mat];
-    std::vector<std::vector<cv::Point>> outlines;
-    cv::Point topLeft = cv::Point(outline.topLeft.x, outline.topLeft.y);
-    cv::Point topRight = cv::Point(outline.topRight.x, outline.topRight.y);
-    cv::Point botRight = cv::Point(outline.botRight.x, outline.botRight.y);
-    cv::Point botLeft = cv::Point(outline.botLeft.x, outline.botLeft.y);
-    outlines.push_back({ topLeft, botLeft, botRight, topRight });
+- (UIImage *)extract:(CGRectOutline)outline fromImage:(UIImage *)image {
+    std::vector<std::vector<cv::Point>> outlines = [self contoursFromOutline:outline];
 
+    cv::Mat inImage = [image mat];
     cv::Mat mask = cv::Mat::zeros(inImage.rows, inImage.cols, CV_8UC1);
 
     // CV_FILLED fills the connected components found
@@ -73,29 +64,23 @@ using namespace cv;
     return [[UIImage alloc] initWithCVMat:crop];
 }
 
-/** Returns image with a boundary indicator rendered around the frame of the
- * largest contour. */
-- (UIImage *)renderPageBounds:(CGRectOutline)outline forImage:(UIImage *)image {
-    std::vector<std::vector<cv::Point>> outlines;
-    if (CGRectOutlineEquals(outline, CGRectOutlineZero)) {
+- (UIImage *)renderPageBounds:(UIImage *)image {
+    CGRectOutline outline = [self pageBounds:image];
+    if (CGRectOutlineEquals(outline, CGRectOutlineZeroMake())) {
         return image;
     }
-    outlines = [self contoursFromOutline:outline];
     cv::Mat inImage = [image mat];
+    std::vector<std::vector<cv::Point>> outlines = [self contoursFromOutline:outline];
     cv::drawContours(inImage, outlines, -1, cv::Scalar(255,0,0), 1, LINE_AA);
     return [[UIImage alloc] initWithCVMat:inImage];
 }
 
-/** Returns image with a boundary indicator rendered around the frame of the
- * largest contour. */
-- (UIImage *)renderedPageBounds:(UIImage *)image {
-    CGRectOutline outline = [self pageBounds:image];
-    std::vector<std::vector<cv::Point>> outlines;
-    if (CGRectOutlineEquals(outline, CGRectOutlineZero)) {
+- (UIImage *)render:(CGRectOutline)outline inImage:(UIImage *)image {
+    if (CGRectOutlineEquals(outline, CGRectOutlineZeroMake())) {
         return image;
     }
-    outlines = [self contoursFromOutline:outline];
     cv::Mat inImage = [image mat];
+    std::vector<std::vector<cv::Point>> outlines = [self contoursFromOutline:outline];
     cv::drawContours(inImage, outlines, -1, cv::Scalar(255,0,0), 1, LINE_AA);
     return [[UIImage alloc] initWithCVMat:inImage];
 }
@@ -160,7 +145,7 @@ using namespace cv;
         if (approx.size() == 4 &&
             cv::isContourConvex(cv::Mat(approx)) &&
             contourArea > imageArea * 0.35 &&
-            contourArea < imageArea * 0.7) {
+            contourArea < imageArea * 0.8) {
 
             double maxCosine = 0;
             for (int j = 2; j < 5; j++) {

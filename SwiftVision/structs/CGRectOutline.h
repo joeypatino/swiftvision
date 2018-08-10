@@ -1,7 +1,6 @@
 #ifndef cg_rect_outline_h
 #define cg_rect_outline_h
 
-
 struct CGRectOutline {
     CGPoint topLeft;
     CGPoint botLeft;
@@ -13,10 +12,11 @@ typedef struct CG_BOXABLE CGRectOutline CGRectOutline;
 CG_INLINE CGRectOutline
 CGRectOutlineMake(CGPoint topLeft, CGPoint topRight, CGPoint botRight, CGPoint botLeft);
 
+CG_INLINE CGRectOutline
+CGRectOutlineZeroMake();
+
 CG_INLINE bool
 CGRectOutlineEquals(CGRectOutline outline1, CGRectOutline outline2);
-
-#define CGRectOutlineZero CGRectOutlineMake(CGPointZero, CGPointZero, CGPointZero, CGPointZero)
 
 /*** Definitions of inline functions. ***/
 
@@ -29,6 +29,16 @@ CGRectOutlineMake(CGPoint topLeft, CGPoint topRight, CGPoint botRight, CGPoint b
         .topRight = topRight
     };
 };
+
+inline CGRectOutline
+CGRectOutlineZeroMake() {
+    return (CGRectOutline){
+        .topLeft = CGPointZero,
+        .botLeft = CGPointZero,
+        .botRight = CGPointZero,
+        .topRight = CGPointZero
+    };
+}
 
 inline bool
 CGRectOutlineEquals(CGRectOutline outline1, CGRectOutline outline2) {

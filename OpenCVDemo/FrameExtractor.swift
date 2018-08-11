@@ -14,16 +14,16 @@ protocol FrameExtractorDelegate: class {
 }
 
 class FrameExtractor: NSObject {
-
-    private let position = AVCaptureDevice.Position.back
-    private let quality = AVCaptureSession.Preset.medium
-
-    private var useFlash: Bool = true
-    private var isReadyToCapture:Bool {
+    public var isFlashEnabled: Bool = false {
+        didSet { configureFlash(enabled: isFlashEnabled) }
+    }
+    public var isReadyToCapture:Bool {
         return
             selectCaptureDevice()?.isAdjustingWhiteBalance == false &&
             selectCaptureDevice()?.isAdjustingExposure == false
     }
+    private let position = AVCaptureDevice.Position.back
+    private let quality = AVCaptureSession.Preset.medium
     private var permissionGranted = false
     private let sessionQueue = DispatchQueue(label: "session_queue")
     private let bufferQueue = DispatchQueue(label: "buffer_queue")
@@ -34,7 +34,6 @@ class FrameExtractor: NSObject {
 
     override init() {
         super.init()
-        configureFlash(enabled:useFlash)
         checkPermission()
         sessionQueue.async { [unowned self] in
             self.configureSession()
@@ -44,16 +43,6 @@ class FrameExtractor: NSObject {
 
     deinit {
         configureFlash(enabled:false)
-    }
-
-    private func configureFlash(enabled: Bool) {
-        do {
-            try selectCaptureDevice()?.lockForConfiguration()
-            selectCaptureDevice()?.torchMode = enabled ? .on : .off
-            selectCaptureDevice()?.unlockForConfiguration()
-        } catch {
-            print("Torch could not be configured")
-        }
     }
 
     public func captureCurrentFrame(with quality: AVCaptureSession.Preset = .high, captured: @escaping (UIImage) -> ()) {
@@ -119,6 +108,16 @@ class FrameExtractor: NSObject {
         connection.isVideoMirrored = position == .front
     }
 
+    private func configureFlash(enabled: Bool) {
+        do {
+            try selectCaptureDevice()?.lockForConfiguration()
+            selectCaptureDevice()?.torchMode = enabled ? .on : .off
+            selectCaptureDevice()?.unlockForConfiguration()
+        } catch {
+            print("Torch could not be configured")
+        }
+    }
+
     private func selectCaptureDevice() -> AVCaptureDevice? {
         return AVCaptureDevice.devices().filter { $0.hasMediaType(.video) && $0.position == position }.first
     }
@@ -134,7 +133,7 @@ class FrameExtractor: NSObject {
 
 extension FrameExtractor: AVCaptureVideoDataOutputSampleBufferDelegate {
     func captureOutput(_ output: AVCaptureOutput, didOutput sampleBuffer: CMSampleBuffer, from connection: AVCaptureConnection) {
-        guard let image = imageFromSampleBuffer(sampleBuffer: sampleBuffer), isReadyToCapture else { return }
+        guard let image = imageFromSampleBuffer(sampleBuffer: sampleBuffer), isReadyToCapture, captureSession.isRunning else { return }
         DispatchQueue.main.async { [unowned self] in
             guard let captured = self.captureClosure else {
                 self.delegate?.frameExtractor(self, didOutput: image)

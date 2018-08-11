@@ -15,10 +15,14 @@ protocol PageCaptureDelegate: class {
 
 class PageCaptureViewController: UIViewController {
     @IBOutlet weak var imageView: UIImageView!
+    @IBOutlet weak var flash: UISwitch!
     private var timer: Timer?
+    private var pageOutline = CGRectOutlineZeroMake()
     private let pageDetector = PageDetector()
     private let extractor = FrameExtractor()
+
     weak var delegate: PageCaptureDelegate?
+
     override func viewDidLoad() {
         super.viewDidLoad()
         extractor.delegate = self
@@ -26,6 +30,10 @@ class PageCaptureViewController: UIViewController {
 
     @IBAction func cancelCapture(_ sender: UIBarButtonItem) {
         dismiss(animated: true)
+    }
+
+    @IBAction func flashToggle(_ sender: UISwitch) {
+        extractor.isFlashEnabled = sender.isOn
     }
 
     private func update() {
@@ -51,14 +59,14 @@ class PageCaptureViewController: UIViewController {
     }
 
     @objc private func capture() {
-        extractor.captureCurrentFrame { [unowned self] frame in
+        extractor.captureCurrentFrame(with: .high) { [unowned self] frame in
             /**!
              1) use a saved copy of the outline to extract the page
              2) the saved copy should be normalized
              3) it must then be converted back to pixel space before
              calling `self.pageDetector.extractPage(outline, from: frame)`
              */
-            let image = self.pageDetector.extractPage(frame)
+            let image = self.pageDetector.extract(self.pageOutline, from: frame)
             self.delegate?.captureViewController(self, didCapturePage: image ?? frame)
         }
         stop()
@@ -73,6 +81,7 @@ extension PageCaptureViewController: FrameExtractorDelegate {
 
         isValidOutline ? update() : stop()
         imageView.image = image
+        if isValidOutline { pageOutline = outline }
 
         /**!
          1) The outline must be normalized at this point and stored..

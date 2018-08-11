@@ -2,6 +2,7 @@
 #import "PageDetector.h"
 // extras
 #import "UIImage+Mat.h"
+#import "vectors.hpp"
 
 using namespace std;
 using namespace cv;
@@ -13,15 +14,20 @@ using namespace cv;
 
 - (CGRectOutline)pageBounds:(UIImage *)image {
     cv::Mat inImage = [self preprocessImage:image];
-    std::vector<std::vector<cv::Point>> points = [self findPageBounds:inImage];
-
+    std::vector<std::vector<cv::Point2d>> points = [self findPageBounds:inImage];
     int largestArea = -1;
-    cv::Point center = cv::Point(inImage.cols/2, inImage.rows/2);
+    cv::Point center = cv::Point2d(inImage.cols/2, inImage.rows/2);
     CGRectOutline detectedOutline = CGRectOutlineZeroMake();
     for (int i = 0; i < points.size(); i++) {
-        std::vector<cv::Point> row = points.at(i);
-        double area = fabs(cv::contourArea(row));
-        double inPoly = cv::pointPolygonTest(row, center, false);
+        std::vector<cv::Point2d> row = points.at(i);
+        std::vector<cv::Point> row2i;
+        for (int i = 0; i < row.size(); i++) {
+            row2i.push_back(cv::Point(row[i].x, row[i].y));
+        }
+        double area = fabs(cv::contourArea(row2i));
+        double inPoly = cv::pointPolygonTest(row2i, center, false);
+
+        row = vectors::pix2norm(cv::Size(image.size.width, image.size.height), row);
         if (((area > largestArea) && (inPoly > 0)) || area == -1) {
             CGPoint topLeft = CGPointMake(row[0].x, row[0].y);
             CGPoint topRight = CGPointMake(row[1].x, row[1].y);
@@ -44,13 +50,28 @@ using namespace cv;
 }
 
 - (UIImage *)extract:(CGRectOutline)outline fromImage:(UIImage *)image {
-    std::vector<std::vector<cv::Point>> outlines = [self contoursFromOutline:outline];
+    std::vector<std::vector<cv::Point2d>> normOutlines = [self contoursFromOutline:outline];
+    std::vector<std::vector<cv::Point2d>> outlines;
+    std::vector<std::vector<cv::Point>> outlinesI;
+    for (int i = 0; i < normOutlines.size(); i++) {
+        std::vector<cv::Point2d> pts = normOutlines[i];
+        outlines.push_back(vectors::norm2pix(cv::Size(image.size.width, image.size.height), pts));
+    }
+    for (int i = 0; i < outlines.size(); i++) {
+        std::vector<cv::Point2d> pts = outlines[i];
+        std::vector<cv::Point> pt;
+        for (int j = 0; j < pts.size(); j++) {
+            cv::Point2d ptd = pts[j];
+            pt.push_back(cv::Point(ptd.x, ptd.y));
+        }
+        outlinesI.push_back(pt);
+    }
 
     cv::Mat inImage = [image mat];
     cv::Mat mask = cv::Mat::zeros(inImage.rows, inImage.cols, CV_8UC1);
 
     // CV_FILLED fills the connected components found
-    cv::drawContours(mask, outlines, -1, cv::Scalar(255), CV_FILLED, LINE_AA);
+    cv::drawContours(mask, outlinesI, -1, cv::Scalar(255), CV_FILLED, LINE_AA);
 
     // let's create a new image now
     cv::Mat crop(inImage.rows, inImage.cols, CV_8UC4);
@@ -70,8 +91,23 @@ using namespace cv;
         return image;
     }
     cv::Mat inImage = [image mat];
-    std::vector<std::vector<cv::Point>> outlines = [self contoursFromOutline:outline];
-    cv::drawContours(inImage, outlines, -1, cv::Scalar(255,0,0), 1, LINE_AA);
+    std::vector<std::vector<cv::Point2d>> normOutlines = [self contoursFromOutline:outline];
+    std::vector<std::vector<cv::Point2d>> outlines;
+    std::vector<std::vector<cv::Point>> outlinesI;
+    for (int i = 0; i < normOutlines.size(); i++) {
+        std::vector<cv::Point2d> pts = normOutlines[i];
+        outlines.push_back(vectors::norm2pix(cv::Size(image.size.width, image.size.height), pts));
+    }
+    for (int i = 0; i < outlines.size(); i++) {
+        std::vector<cv::Point2d> pts = outlines[i];
+        std::vector<cv::Point> pt;
+        for (int j = 0; j < pts.size(); j++) {
+            cv::Point2d ptd = pts[j];
+            pt.push_back(cv::Point(ptd.x, ptd.y));
+        }
+        outlinesI.push_back(pt);
+    }
+    cv::drawContours(inImage, outlinesI, -1, cv::Scalar(255,0,0), 1, LINE_AA);
     return [[UIImage alloc] initWithCVMat:inImage];
 }
 
@@ -80,8 +116,23 @@ using namespace cv;
         return image;
     }
     cv::Mat inImage = [image mat];
-    std::vector<std::vector<cv::Point>> outlines = [self contoursFromOutline:outline];
-    cv::drawContours(inImage, outlines, -1, cv::Scalar(255,0,0), 1, LINE_AA);
+    std::vector<std::vector<cv::Point2d>> normOutlines = [self contoursFromOutline:outline];
+    std::vector<std::vector<cv::Point2d>> outlines;
+    std::vector<std::vector<cv::Point>> outlinesI;
+    for (int i = 0; i < normOutlines.size(); i++) {
+        std::vector<cv::Point2d> pts = normOutlines[i];
+        outlines.push_back(vectors::norm2pix(cv::Size(image.size.width, image.size.height), pts));
+    }
+    for (int i = 0; i < outlines.size(); i++) {
+        std::vector<cv::Point2d> pts = outlines[i];
+        std::vector<cv::Point> pt;
+        for (int j = 0; j < pts.size(); j++) {
+            cv::Point2d ptd = pts[j];
+            pt.push_back(cv::Point(ptd.x, ptd.y));
+        }
+        outlinesI.push_back(pt);
+    }
+    cv::drawContours(inImage, outlinesI, -1, cv::Scalar(255,0,0), 1, LINE_AA);
     return [[UIImage alloc] initWithCVMat:inImage];
 }
 
@@ -109,12 +160,12 @@ using namespace cv;
 }
 
 /** Converts a CGRectOutline into a 'outlines' vector. */
-- (std::vector<std::vector<cv::Point>>)contoursFromOutline:(CGRectOutline)outline {
-    std::vector<std::vector<cv::Point>> outlines;
-    cv::Point topLeft = cv::Point(outline.topLeft.x, outline.topLeft.y);
-    cv::Point topRight = cv::Point(outline.topRight.x, outline.topRight.y);
-    cv::Point botRight = cv::Point(outline.botRight.x, outline.botRight.y);
-    cv::Point botLeft = cv::Point(outline.botLeft.x, outline.botLeft.y);
+- (std::vector<std::vector<cv::Point2d>>)contoursFromOutline:(CGRectOutline)outline {
+    std::vector<std::vector<cv::Point2d>> outlines;
+    cv::Point2d topLeft = cv::Point2d(outline.topLeft.x, outline.topLeft.y);
+    cv::Point2d topRight = cv::Point2d(outline.topRight.x, outline.topRight.y);
+    cv::Point2d botRight = cv::Point2d(outline.botRight.x, outline.botRight.y);
+    cv::Point2d botLeft = cv::Point2d(outline.botLeft.x, outline.botLeft.y);
     outlines.push_back({ topLeft, botLeft, botRight, topRight });
     return outlines;
 }
@@ -122,9 +173,9 @@ using namespace cv;
 /** finds the boundary points of the largest contour in inImage.
  * inImage must be a grayscale image, already preprocessed for edge
  * detection. */
-- (std::vector<std::vector<cv::Point>>)findPageBounds:(cv::Mat)inImage {
+- (std::vector<std::vector<cv::Point2d>>)findPageBounds:(cv::Mat)inImage {
     double imageArea = inImage.cols * inImage.rows;
-    std::vector<std::vector<cv::Point>> squares;
+    std::vector<std::vector<cv::Point2d>> squares;
     std::vector<std::vector<cv::Point>> contours;
     std::vector<cv::Point> approx;
 
@@ -153,14 +204,20 @@ using namespace cv;
                 maxCosine = MAX(maxCosine, cosine);
             }
 
-            if (maxCosine < 0.3)
-                squares.push_back(approx);
+            if (maxCosine < 0.3) {
+                std::vector<cv::Point2d> approxOut;
+                for (int i = 0; i < approx.size(); i++) {
+                    cv::Point p = approx[i];
+                    approxOut.push_back(cv::Point2d(p.x, p.y));
+                }
+                squares.push_back(approxOut);
+            }
         }
     }
     return squares;
 }
 
-double angle( cv::Point pt1, cv::Point pt2, cv::Point pt0 ) {
+double angle( cv::Point2d pt1, cv::Point2d pt2, cv::Point2d pt0 ) {
     double dx1 = pt1.x - pt0.x;
     double dy1 = pt1.y - pt0.y;
     double dx2 = pt2.x - pt0.x;

@@ -32,7 +32,7 @@ namespace vectors {
 
     std::vector<cv::Point2d> norm2pix(cv::Size2d size, std::vector<cv::Point2d> points) {
         float scale = MAX(size.height, size.width) * 0.5;
-        cv::Point2f offset = cv::Point2f(0.5 * size.width, 0.5 * size.height);
+        cv::Point2d offset = cv::Point2d(0.5 * size.width, 0.5 * size.height);
         return add(multi(points, scale), offset);
     }
 

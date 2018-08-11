@@ -9,6 +9,7 @@ class ViewController: UIViewController {
     private let camera = Camera()
     override func viewDidLoad() {
         super.viewDidLoad()
+        camera.quality = .medium
         imageView.image = imageContours.inputImage
     }
 

@@ -16,7 +16,7 @@ Pod::Spec.new do |s|
   #
 
   s.name         = "SwiftVision"
-  s.version      = "0.0.3"
+  s.version      = "0.0.4"
   s.summary      = "A framework for image dewarping and manipulation."
 
   # This description is used to generate tags and improve search results.
@@ -100,7 +100,7 @@ SwiftVision is a framework to perform image manipulation. The main component is 
   #  the lib prefix of their name.
   #
   
-  s.frameworks = "CoreGraphics","UIKit","opencv2"
+  s.frameworks = "CoreGraphics","UIKit","AVFoundation","opencv2"
   s.vendored_frameworks = "opencv2.framework"
 
   # ――― Project Settings ――――――――――――――――――――――――――――――――――――――――――――――――――――――――― #

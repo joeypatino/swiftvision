@@ -19,10 +19,12 @@ final public class Camera: NSObject {
     public var isFlashEnabled: Bool = false {
         didSet { configureFlash(enabled: isFlashEnabled) }
     }
+    public var quality:AVCaptureSession.Preset = .high {
+        didSet { captureSession.sessionPreset = quality }
+    }
 
     private var captureClosure:((UIImage) -> ())?
     private let position = AVCaptureDevice.Position.back
-    private let quality = AVCaptureSession.Preset.high
     private var permissionGranted = false
     private let videoOutput = AVCaptureVideoDataOutput()
     private let sessionQueue = DispatchQueue(label: "session_queue")

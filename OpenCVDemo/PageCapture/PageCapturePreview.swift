@@ -1,5 +1,5 @@
 //
-//  PageCaptureView.swift
+//  PageCapturePreview.swift
 //  OpenCVDemo
 //
 //  Created by Joey Patino on 8/11/18.
@@ -10,15 +10,19 @@ import UIKit
 import AVFoundation
 import SwiftVision
 
-class PageCaptureView: UIView {
+class PageCapturePreview: UIView {
     override class var layerClass: AnyClass {
         return AVCaptureVideoPreviewLayer.self
     }
-    public var videoPreviewLayer: AVCaptureVideoPreviewLayer {
-        return layer as! AVCaptureVideoPreviewLayer
+    public var session: AVCaptureSession? {
+        get { return videoPreviewLayer.session }
+        set { videoPreviewLayer.session = session }
     }
     public var outline: CGRectOutline = CGRectOutlineZeroMake() {
         didSet { drawOutline(outline) }
+    }
+    private var videoPreviewLayer: AVCaptureVideoPreviewLayer {
+        return layer as! AVCaptureVideoPreviewLayer
     }
 
     private let outlineLayer = CAShapeLayer()

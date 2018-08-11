@@ -2,6 +2,10 @@
 #import "UIImage+Mat.h"
 
 @implementation UIImage (Mat)
++ (instancetype)imageWithMat:(cv::Mat)mat {
+    return [[UIImage alloc] initWithCVMat:mat];
+}
+
 - (instancetype)initWithCVMat:(cv::Mat)cvMat {
     NSData *data = [NSData dataWithBytes:cvMat.data length:cvMat.elemSize()*cvMat.total()];
     CGColorSpaceRef colorSpace;

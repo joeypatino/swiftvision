@@ -136,25 +136,112 @@ using namespace cv;
 /** Preprocesses a UIImage for edge detection. */
 - (cv::Mat)preprocessImage:(UIImage *)image {
     cv::Mat inImage = [image mat];
-    cv::Mat outImage;
-    cv::Mat blurred, gray, dialate1, dialate2, canny;
+    cv::Mat gray, blurred, dialate1, canny, dialate2, morph;
 
+    gray = [self _gray:inImage];
+    blurred = [self _blurred:gray];
+    dialate1 = [self _dialate1:blurred];
+    canny = [self _canny:dialate1];
+    dialate2 = [self _dialate2:canny];
+    morph = [self _morph:dialate2];
+
+    return morph;
+}
+
+- (UIImage *)gray:(UIImage *)image {
+    cv::Mat inImage = [image mat];
+    cv::Mat gray;
+    gray = [self _gray:inImage];
+    return [UIImage imageWithMat:gray];
+}
+
+- (UIImage *)blurred:(UIImage *)image {
+    cv::Mat inImage = [image mat];
+    cv::Mat gray, blurred;
+    gray = [self _gray:inImage];
+    blurred = [self _blurred:gray];
+    return [UIImage imageWithMat:blurred];
+}
+
+- (UIImage *)dialate1:(UIImage *)image {
+    cv::Mat inImage = [image mat];
+    cv::Mat gray, blurred, dialate1;
+    gray = [self _gray:inImage];
+    blurred = [self _blurred:gray];
+    dialate1 = [self _dialate1:blurred];
+    return [UIImage imageWithMat:dialate1];
+}
+
+- (UIImage *)canny:(UIImage *)image {
+    cv::Mat inImage = [image mat];
+    cv::Mat gray, blurred, dialate1, canny;
+    gray = [self _gray:inImage];
+    blurred = [self _blurred:gray];
+    dialate1 = [self _dialate1:blurred];
+    canny = [self _canny:dialate1];
+    return [UIImage imageWithMat:canny];
+}
+
+- (UIImage *)dialate2:(UIImage *)image {
+    cv::Mat inImage = [image mat];
+    cv::Mat gray, blurred, dialate1, canny, dialate2;
+    gray = [self _gray:inImage];
+    blurred = [self _blurred:gray];
+    dialate1 = [self _dialate1:blurred];
+    canny = [self _canny:dialate1];
+    dialate2 = [self _dialate2:canny];
+    return [UIImage imageWithMat:dialate2];
+}
+
+- (UIImage *)morph:(UIImage *)image {
+    cv::Mat inImage = [image mat];
+    cv::Mat gray, blurred, dialate1, canny, dialate2, morph;
+    gray = [self _gray:inImage];
+    blurred = [self _blurred:gray];
+    dialate1 = [self _dialate1:blurred];
+    canny = [self _canny:dialate1];
+    dialate2 = [self _dialate2:canny];
+    morph = [self _morph:dialate2];
+    return [UIImage imageWithMat:morph];
+}
+
+- (cv::Mat)_gray:(cv::Mat)inImage {
+    cv::Mat gray;
     cv::cvtColor(inImage, gray, cv::COLOR_RGBA2GRAY);
+    return gray;
+}
 
-    cv::medianBlur(gray, blurred, 21);
+- (cv::Mat)_blurred:(cv::Mat)inImage {
+    cv::Mat blurred;
+    cv::medianBlur(inImage, blurred, 21);
+    return blurred;
+}
 
+- (cv::Mat)_dialate1:(cv::Mat)inImage {
+    cv::Mat dialate1;
     cv::Mat dialateKernel1 = cv::Mat::ones(21, 21, CV_8UC1);
-    cv::dilate(blurred, dialate1, dialateKernel1);
+    cv::dilate(inImage, dialate1, dialateKernel1);
+    return dialate1;
+}
 
-    cv::Canny(dialate1, canny, 1, 255, 3);
+- (cv::Mat)_canny:(cv::Mat)inImage {
+    cv::Mat canny;
+    cv::Canny(inImage, canny, 1, 255, 3);
+    return canny;
+}
 
+- (cv::Mat)_dialate2:(cv::Mat)inImage {
+    cv::Mat dialate2;
     cv::Mat dialateKernel2 = cv::Mat::ones(8, 8, CV_8UC1);
-    cv::dilate(canny, dialate2, dialateKernel2);
+    cv::dilate(inImage, dialate2, dialateKernel2);
+    return dialate2;
+}
 
+- (cv::Mat)_morph:(cv::Mat)inImage {
+    cv::Mat morph;
     cv::Mat structure = cv::getStructuringElement(MORPH_RECT, cv::Size(5, 5));
-    cv::morphologyEx(dialate2, outImage, MORPH_CLOSE, structure);
-
-    return outImage;
+    cv::morphologyEx(inImage, morph, MORPH_CLOSE, structure);
+    return morph;
 }
 
 /** Converts a CGRectOutline into a 'outlines' vector. */

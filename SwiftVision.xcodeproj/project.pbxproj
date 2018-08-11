@@ -26,7 +26,7 @@
 		D43C4536205B1ECB0072AF8F /* math.hpp in Headers */ = {isa = PBXBuildFile; fileRef = D43C4534205B1ECB0072AF8F /* math.hpp */; };
 		D43C4539205B239C0072AF8F /* debug.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D43C4537205B239C0072AF8F /* debug.cpp */; };
 		D43C453A205B239C0072AF8F /* debug.hpp in Headers */ = {isa = PBXBuildFile; fileRef = D43C4538205B239C0072AF8F /* debug.hpp */; };
-		D461D4D3211F63710082BBCC /* PageCaptureView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D461D4D0211F63700082BBCC /* PageCaptureView.swift */; };
+		D461D4D3211F63710082BBCC /* PageCapturePreview.swift in Sources */ = {isa = PBXBuildFile; fileRef = D461D4D0211F63700082BBCC /* PageCapturePreview.swift */; };
 		D461D4D4211F63710082BBCC /* PageCaptureViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D461D4D1211F63700082BBCC /* PageCaptureViewController.swift */; };
 		D461D4D9211F63870082BBCC /* input_image.jpeg in Resources */ = {isa = PBXBuildFile; fileRef = D461D4D6211F63870082BBCC /* input_image.jpeg */; };
 		D461D4DA211F63870082BBCC /* cat.035.jpg in Resources */ = {isa = PBXBuildFile; fileRef = D461D4D7211F63870082BBCC /* cat.035.jpg */; };
@@ -124,7 +124,7 @@
 		D43C4534205B1ECB0072AF8F /* math.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = math.hpp; sourceTree = "<group>"; };
 		D43C4537205B239C0072AF8F /* debug.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = debug.cpp; sourceTree = "<group>"; };
 		D43C4538205B239C0072AF8F /* debug.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = debug.hpp; sourceTree = "<group>"; };
-		D461D4D0211F63700082BBCC /* PageCaptureView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PageCaptureView.swift; sourceTree = "<group>"; };
+		D461D4D0211F63700082BBCC /* PageCapturePreview.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PageCapturePreview.swift; sourceTree = "<group>"; };
 		D461D4D1211F63700082BBCC /* PageCaptureViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PageCaptureViewController.swift; sourceTree = "<group>"; };
 		D461D4D6211F63870082BBCC /* input_image.jpeg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = input_image.jpeg; sourceTree = "<group>"; };
 		D461D4D7211F63870082BBCC /* cat.035.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = cat.035.jpg; sourceTree = "<group>"; };
@@ -297,7 +297,7 @@
 			isa = PBXGroup;
 			children = (
 				D461D4D1211F63700082BBCC /* PageCaptureViewController.swift */,
-				D461D4D0211F63700082BBCC /* PageCaptureView.swift */,
+				D461D4D0211F63700082BBCC /* PageCapturePreview.swift */,
 			);
 			path = PageCapture;
 			sourceTree = "<group>";
@@ -596,7 +596,7 @@
 				D40B28522028860D00CA8559 /* AppDelegate.swift in Sources */,
 				D4D8304A206198F0001B1535 /* UIImage+extras.swift in Sources */,
 				D461D4D4211F63710082BBCC /* PageCaptureViewController.swift in Sources */,
-				D461D4D3211F63710082BBCC /* PageCaptureView.swift in Sources */,
+				D461D4D3211F63710082BBCC /* PageCapturePreview.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

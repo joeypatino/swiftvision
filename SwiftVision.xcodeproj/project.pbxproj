@@ -26,13 +26,12 @@
 		D43C4536205B1ECB0072AF8F /* math.hpp in Headers */ = {isa = PBXBuildFile; fileRef = D43C4534205B1ECB0072AF8F /* math.hpp */; };
 		D43C4539205B239C0072AF8F /* debug.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D43C4537205B239C0072AF8F /* debug.cpp */; };
 		D43C453A205B239C0072AF8F /* debug.hpp in Headers */ = {isa = PBXBuildFile; fileRef = D43C4538205B239C0072AF8F /* debug.hpp */; };
-		D461D4CE211F63520082BBCC /* Camera.swift in Sources */ = {isa = PBXBuildFile; fileRef = D461D4CD211F63520082BBCC /* Camera.swift */; };
-		D461D4D2211F63710082BBCC /* FrameExtractor.swift in Sources */ = {isa = PBXBuildFile; fileRef = D461D4CF211F63700082BBCC /* FrameExtractor.swift */; };
 		D461D4D3211F63710082BBCC /* PageCaptureView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D461D4D0211F63700082BBCC /* PageCaptureView.swift */; };
 		D461D4D4211F63710082BBCC /* PageCaptureViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D461D4D1211F63700082BBCC /* PageCaptureViewController.swift */; };
 		D461D4D9211F63870082BBCC /* input_image.jpeg in Resources */ = {isa = PBXBuildFile; fileRef = D461D4D6211F63870082BBCC /* input_image.jpeg */; };
 		D461D4DA211F63870082BBCC /* cat.035.jpg in Resources */ = {isa = PBXBuildFile; fileRef = D461D4D7211F63870082BBCC /* cat.035.jpg */; };
 		D461D4DB211F63870082BBCC /* boston_cooking_a.jpg in Resources */ = {isa = PBXBuildFile; fileRef = D461D4D8211F63870082BBCC /* boston_cooking_a.jpg */; };
+		D461D4DF211F6B420082BBCC /* Camera.swift in Sources */ = {isa = PBXBuildFile; fileRef = D461D4DE211F6B410082BBCC /* Camera.swift */; };
 		D471D7D720500C4A00F38C26 /* CGRectOutline.h in Headers */ = {isa = PBXBuildFile; fileRef = D471D7D420500C4A00F38C26 /* CGRectOutline.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		D471D7E220500CE600F38C26 /* ContourEdge.h in Headers */ = {isa = PBXBuildFile; fileRef = D471D7DA20500CE600F38C26 /* ContourEdge.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		D471D7E320500CE600F38C26 /* Contour.mm in Sources */ = {isa = PBXBuildFile; fileRef = D471D7DB20500CE600F38C26 /* Contour.mm */; };
@@ -125,13 +124,12 @@
 		D43C4534205B1ECB0072AF8F /* math.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = math.hpp; sourceTree = "<group>"; };
 		D43C4537205B239C0072AF8F /* debug.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = debug.cpp; sourceTree = "<group>"; };
 		D43C4538205B239C0072AF8F /* debug.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = debug.hpp; sourceTree = "<group>"; };
-		D461D4CD211F63520082BBCC /* Camera.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Camera.swift; sourceTree = "<group>"; };
-		D461D4CF211F63700082BBCC /* FrameExtractor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FrameExtractor.swift; sourceTree = "<group>"; };
 		D461D4D0211F63700082BBCC /* PageCaptureView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PageCaptureView.swift; sourceTree = "<group>"; };
 		D461D4D1211F63700082BBCC /* PageCaptureViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PageCaptureViewController.swift; sourceTree = "<group>"; };
 		D461D4D6211F63870082BBCC /* input_image.jpeg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = input_image.jpeg; sourceTree = "<group>"; };
 		D461D4D7211F63870082BBCC /* cat.035.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = cat.035.jpg; sourceTree = "<group>"; };
 		D461D4D8211F63870082BBCC /* boston_cooking_a.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = boston_cooking_a.jpg; sourceTree = "<group>"; };
+		D461D4DE211F6B410082BBCC /* Camera.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Camera.swift; sourceTree = "<group>"; };
 		D4711A0820502C1200F38C26 /* Accelerate.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Accelerate.framework; path = System/Library/Frameworks/Accelerate.framework; sourceTree = SDKROOT; };
 		D4711A0A20502C7500F38C26 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		D4711A0C20502C8300F38C26 /* CoreFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreFoundation.framework; path = System/Library/Frameworks/CoreFoundation.framework; sourceTree = SDKROOT; };
@@ -226,6 +224,7 @@
 				D40B283C2028856300CA8559 /* SwiftVision.h */,
 				D471D7F420500EE300F38C26 /* UIImage+OpenCV.h */,
 				D471D7F320500EE300F38C26 /* UIImage+OpenCV.mm */,
+				D461D4DD211F6B410082BBCC /* Camera */,
 				D4A572BF202A1E1500D8F4B0 /* TextDewarper */,
 				D48A95A4211CCAA900A12E4B /* PageDetector */,
 				D40B283D2028856300CA8559 /* Info.plist */,
@@ -254,9 +253,9 @@
 			isa = PBXGroup;
 			children = (
 				D461D4D5211F63870082BBCC /* Images */,
+				D461D4CC211F63390082BBCC /* PageCapture */,
 				D40B28512028860D00CA8559 /* AppDelegate.swift */,
 				D40B28532028860D00CA8559 /* ViewController.swift */,
-				D461D4CC211F63390082BBCC /* PageCapture */,
 				D40B285A2028860D00CA8559 /* LaunchScreen.storyboard */,
 				D40B28552028860D00CA8559 /* Main.storyboard */,
 				D40B28582028860D00CA8559 /* Assets.xcassets */,
@@ -299,8 +298,6 @@
 			children = (
 				D461D4D1211F63700082BBCC /* PageCaptureViewController.swift */,
 				D461D4D0211F63700082BBCC /* PageCaptureView.swift */,
-				D461D4CD211F63520082BBCC /* Camera.swift */,
-				D461D4CF211F63700082BBCC /* FrameExtractor.swift */,
 			);
 			path = PageCapture;
 			sourceTree = "<group>";
@@ -313,6 +310,14 @@
 				D461D4D8211F63870082BBCC /* boston_cooking_a.jpg */,
 			);
 			path = Images;
+			sourceTree = "<group>";
+		};
+		D461D4DD211F6B410082BBCC /* Camera */ = {
+			isa = PBXGroup;
+			children = (
+				D461D4DE211F6B410082BBCC /* Camera.swift */,
+			);
+			path = Camera;
 			sourceTree = "<group>";
 		};
 		D471D7D220500C4A00F38C26 /* structs */ = {
@@ -570,6 +575,7 @@
 				D43C4539205B239C0072AF8F /* debug.cpp in Sources */,
 				D471D7FA20500F2200F38C26 /* UIImage+Contour.mm in Sources */,
 				D4C8B37D21135C150037FDDE /* dewarp.cpp in Sources */,
+				D461D4DF211F6B420082BBCC /* Camera.swift in Sources */,
 				D471D7F520500EE300F38C26 /* UIImage+OpenCV.mm in Sources */,
 				D43C4531205B1DFF0072AF8F /* vectors.cpp in Sources */,
 				D428ED33204987D6002A7322 /* UIColor+extras.m in Sources */,
@@ -589,9 +595,7 @@
 				D40B28542028860D00CA8559 /* ViewController.swift in Sources */,
 				D40B28522028860D00CA8559 /* AppDelegate.swift in Sources */,
 				D4D8304A206198F0001B1535 /* UIImage+extras.swift in Sources */,
-				D461D4CE211F63520082BBCC /* Camera.swift in Sources */,
 				D461D4D4211F63710082BBCC /* PageCaptureViewController.swift in Sources */,
-				D461D4D2211F63710082BBCC /* FrameExtractor.swift in Sources */,
 				D461D4D3211F63710082BBCC /* PageCaptureView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -855,6 +859,7 @@
 		D40B285F2028860D00CA8559 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
@@ -875,6 +880,7 @@
 		D40B28602028860D00CA8559 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 6C6HU52U6Y;
@@ -892,6 +898,7 @@
 		D42981852052AF0300A28DF5 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 6C6HU52U6Y;
 				FRAMEWORK_SEARCH_PATHS = (
@@ -909,6 +916,7 @@
 		D42981862052AF0300A28DF5 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 6C6HU52U6Y;
 				FRAMEWORK_SEARCH_PATHS = (

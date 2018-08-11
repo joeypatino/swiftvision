@@ -23,7 +23,6 @@ class PageCaptureViewController: UIViewController {
     private var pageOutline = CGRectOutlineZeroMake()
     private let pageDetector = PageDetector()
     private var camera: Camera!
-    private var extractor: FrameExtractor!
     private var timer: Timer?
     weak var delegate: PageCaptureDelegate?
 
@@ -31,7 +30,7 @@ class PageCaptureViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        extractor.delegate = self
+        camera.delegate = self
         pageCaptureView.videoPreviewLayer.session = camera.captureSession
     }
 
@@ -66,7 +65,7 @@ class PageCaptureViewController: UIViewController {
     }
 
     @objc private func capture() {
-        extractor.captureCurrentFrame { [unowned self] frame in
+        camera.captureCurrentFrame { [unowned self] frame in
             let image = self.pageDetector.extract(self.pageOutline, from: frame)
             self.delegate?.captureViewController(self, didCapturePage: image ?? frame)
         }
@@ -74,8 +73,8 @@ class PageCaptureViewController: UIViewController {
     }
 }
 
-extension PageCaptureViewController: FrameExtractorDelegate {
-    func frameExtractor(_ extractor:FrameExtractor, didOutput frame: UIImage) {
+extension PageCaptureViewController: CameraDelegate {
+    func camera(_ camera:Camera, didOutput frame: UIImage) {
         let outline = pageDetector.pageBounds(frame)
 
         DispatchQueue.main.async {
@@ -96,12 +95,10 @@ extension PageCaptureViewController: FrameExtractorDelegate {
 
 extension PageCaptureViewController {
     static func make(with camera: Camera) -> PageCaptureViewController {
-        let extractor = FrameExtractor(camera: camera)
         let storyBoard = UIStoryboard(name: "Main", bundle: Bundle.main)
         guard let viewController = storyBoard.instantiateViewController(withIdentifier: "PageCaptureViewController") as? PageCaptureViewController
             else { preconditionFailure() }
         viewController.camera = camera
-        viewController.extractor = extractor
         return viewController
     }
 }

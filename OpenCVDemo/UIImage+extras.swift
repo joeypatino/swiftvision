@@ -2,9 +2,8 @@ import UIKit
 
 public extension UIImage {
     public func normalizedImage() -> UIImage {
-
-        if (imageOrientation == .up) {
-            return self;
+        guard imageOrientation != .up else {
+            return self
         }
 
         UIGraphicsBeginImageContextWithOptions(size, false, scale);

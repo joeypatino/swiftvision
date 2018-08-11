@@ -122,14 +122,14 @@
         <scene sceneID="SE8-Iu-QNm">
             <objects>
                 <viewController storyboardIdentifier="PageCaptureViewController" id="lNw-GD-bry" customClass="PageCaptureViewController" customModule="OpenCVDemo" customModuleProvider="target" sceneMemberID="viewController">
-                    <view key="view" contentMode="scaleToFill" id="m5k-Zd-4vX">
+                    <view key="view" contentMode="scaleToFill" id="m5k-Zd-4vX" customClass="PageCaptureView" customModule="OpenCVDemo" customModuleProvider="target">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <toolbar opaque="NO" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" translucent="NO" translatesAutoresizingMaskIntoConstraints="NO" id="tre-gg-JNu">
-                                <rect key="frame" x="0.0" y="20" width="375" height="44"/>
+                                <rect key="frame" x="0.0" y="0.0" width="375" height="64"/>
                                 <constraints>
-                                    <constraint firstAttribute="height" constant="44" id="ZPV-Uv-rR7"/>
+                                    <constraint firstAttribute="height" constant="64" id="ZPV-Uv-rR7"/>
                                 </constraints>
                                 <items>
                                     <barButtonItem systemItem="done" id="DlC-4f-gN5">
@@ -141,9 +141,6 @@
                                 </items>
                                 <color key="barTintColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                             </toolbar>
-                            <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="IUQ-mM-RxP">
-                                <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
-                            </imageView>
                             <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="A1E-am-Q7T">
                                 <rect key="frame" x="16" y="616" width="51" height="31"/>
                                 <color key="onTintColor" red="0.99942404029999998" green="0.98555368190000003" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
@@ -154,21 +151,16 @@
                         </subviews>
                         <color key="backgroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
-                            <constraint firstItem="IUQ-mM-RxP" firstAttribute="bottom" secondItem="5JH-mO-Fbo" secondAttribute="bottom" id="78U-HY-EOf"/>
                             <constraint firstItem="5JH-mO-Fbo" firstAttribute="bottom" secondItem="A1E-am-Q7T" secondAttribute="bottom" constant="20" id="8Ij-KN-RHS"/>
-                            <constraint firstItem="IUQ-mM-RxP" firstAttribute="trailing" secondItem="5JH-mO-Fbo" secondAttribute="trailing" id="PBf-n2-NXa"/>
-                            <constraint firstItem="IUQ-mM-RxP" firstAttribute="top" secondItem="m5k-Zd-4vX" secondAttribute="top" id="Yan-k0-OGB"/>
                             <constraint firstItem="tre-gg-JNu" firstAttribute="leading" secondItem="5JH-mO-Fbo" secondAttribute="leading" id="Z6Z-mX-6DD"/>
-                            <constraint firstItem="tre-gg-JNu" firstAttribute="top" secondItem="5JH-mO-Fbo" secondAttribute="top" id="aiA-th-KWt"/>
+                            <constraint firstItem="tre-gg-JNu" firstAttribute="top" secondItem="5JH-mO-Fbo" secondAttribute="top" constant="-20" id="aiA-th-KWt"/>
                             <constraint firstItem="tre-gg-JNu" firstAttribute="trailing" secondItem="5JH-mO-Fbo" secondAttribute="trailing" id="cbz-bp-GsU"/>
-                            <constraint firstItem="IUQ-mM-RxP" firstAttribute="leading" secondItem="5JH-mO-Fbo" secondAttribute="leading" id="rdC-UR-BLJ"/>
                             <constraint firstItem="A1E-am-Q7T" firstAttribute="leading" secondItem="5JH-mO-Fbo" secondAttribute="leading" constant="16" id="tMI-p3-TyA"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="5JH-mO-Fbo"/>
                     </view>
                     <connections>
                         <outlet property="flash" destination="A1E-am-Q7T" id="ypJ-fh-OqJ"/>
-                        <outlet property="imageView" destination="IUQ-mM-RxP" id="bkz-7O-FZg"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="WyB-3s-IvM" userLabel="First Responder" sceneMemberID="firstResponder"/>

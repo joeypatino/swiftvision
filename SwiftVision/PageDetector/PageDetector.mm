@@ -7,9 +7,6 @@
 using namespace std;
 using namespace cv;
 
-@interface PageDetector()
-@end
-
 @implementation PageDetector
 
 - (CGRectOutline)pageBounds:(UIImage *)image {
@@ -79,7 +76,7 @@ using namespace cv;
     // set background to white
     crop.setTo(cv::Scalar(255, 255, 255, 255));
 
-    // and copy the magic apple
+    // and copy the masked component
     inImage.copyTo(crop, mask);
 
     return [[UIImage alloc] initWithCVMat:crop];
@@ -143,6 +140,7 @@ using namespace cv;
     cv::Mat blurred, gray, dialate1, dialate2, canny;
 
     cv::cvtColor(inImage, gray, cv::COLOR_RGBA2GRAY);
+
     cv::medianBlur(gray, blurred, 21);
 
     cv::Mat dialateKernel1 = cv::Mat::ones(21, 21, CV_8UC1);
@@ -168,6 +166,14 @@ using namespace cv;
     cv::Point2d botLeft = cv::Point2d(outline.botLeft.x, outline.botLeft.y);
     outlines.push_back({ topLeft, botLeft, botRight, topRight });
     return outlines;
+}
+
+- (CGRectOutline)norm2Pix:(CGRectOutline)outline size:(CGSize)size {
+    outline.topLeft = normalizePoint(outline.topLeft, size);
+    outline.topRight = normalizePoint(outline.topRight, size);
+    outline.botRight = normalizePoint(outline.botRight, size);
+    outline.botLeft = normalizePoint(outline.botLeft, size);
+    return outline;
 }
 
 /** finds the boundary points of the largest contour in inImage.
@@ -223,6 +229,12 @@ double angle( cv::Point2d pt1, cv::Point2d pt2, cv::Point2d pt0 ) {
     double dx2 = pt2.x - pt0.x;
     double dy2 = pt2.y - pt0.y;
     return (dx1*dx2 + dy1*dy2)/sqrt((dx1*dx1 + dy1*dy1)*(dx2*dx2 + dy2*dy2) + 1e-10);
+}
+
+CGPoint normalizePoint(CGPoint p, CGSize size) {
+    float scale = MAX(size.height, size.width) * 0.5;
+    CGPoint offset = CGPointMake(0.5 * size.width, 0.5 * size.height);
+    return CGPointMake((p.x * scale) + offset.x, (p.y * scale) + offset.y);
 }
 
 @end

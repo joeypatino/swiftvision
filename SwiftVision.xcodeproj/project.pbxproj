@@ -27,6 +27,7 @@
 		D43C4539205B239C0072AF8F /* debug.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D43C4537205B239C0072AF8F /* debug.cpp */; };
 		D43C453A205B239C0072AF8F /* debug.hpp in Headers */ = {isa = PBXBuildFile; fileRef = D43C4538205B239C0072AF8F /* debug.hpp */; };
 		D44D558120628D2C00BFD3C6 /* boston_cooking_a.jpg in Resources */ = {isa = PBXBuildFile; fileRef = D44D558020628D2C00BFD3C6 /* boston_cooking_a.jpg */; };
+		D461D4CB211F33590082BBCC /* PageCaptureView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D461D4CA211F33590082BBCC /* PageCaptureView.swift */; };
 		D471D7D720500C4A00F38C26 /* CGRectOutline.h in Headers */ = {isa = PBXBuildFile; fileRef = D471D7D420500C4A00F38C26 /* CGRectOutline.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		D471D7E220500CE600F38C26 /* ContourEdge.h in Headers */ = {isa = PBXBuildFile; fileRef = D471D7DA20500CE600F38C26 /* ContourEdge.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		D471D7E320500CE600F38C26 /* Contour.mm in Sources */ = {isa = PBXBuildFile; fileRef = D471D7DB20500CE600F38C26 /* Contour.mm */; };
@@ -124,6 +125,7 @@
 		D43C4537205B239C0072AF8F /* debug.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = debug.cpp; sourceTree = "<group>"; };
 		D43C4538205B239C0072AF8F /* debug.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = debug.hpp; sourceTree = "<group>"; };
 		D44D558020628D2C00BFD3C6 /* boston_cooking_a.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = boston_cooking_a.jpg; sourceTree = "<group>"; };
+		D461D4CA211F33590082BBCC /* PageCaptureView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PageCaptureView.swift; sourceTree = "<group>"; };
 		D4711A0820502C1200F38C26 /* Accelerate.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Accelerate.framework; path = System/Library/Frameworks/Accelerate.framework; sourceTree = SDKROOT; };
 		D4711A0A20502C7500F38C26 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		D4711A0C20502C8300F38C26 /* CoreFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreFoundation.framework; path = System/Library/Frameworks/CoreFoundation.framework; sourceTree = SDKROOT; };
@@ -260,6 +262,7 @@
 				D40B285D2028860D00CA8559 /* Info.plist */,
 				D4D83049206198F0001B1535 /* UIImage+extras.swift */,
 				D48A95A0211CC61200A12E4B /* PageCaptureViewController.swift */,
+				D461D4CA211F33590082BBCC /* PageCaptureView.swift */,
 				D48A95A9211CE50A00A12E4B /* FrameExtractor.swift */,
 			);
 			path = OpenCVDemo;
@@ -566,6 +569,7 @@
 			files = (
 				D48A95AA211CE50A00A12E4B /* FrameExtractor.swift in Sources */,
 				D40B28542028860D00CA8559 /* ViewController.swift in Sources */,
+				D461D4CB211F33590082BBCC /* PageCaptureView.swift in Sources */,
 				D40B28522028860D00CA8559 /* AppDelegate.swift in Sources */,
 				D4D8304A206198F0001B1535 /* UIImage+extras.swift in Sources */,
 				D48A95A1211CC61200A12E4B /* PageCaptureViewController.swift in Sources */,
@@ -833,6 +837,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				DEVELOPMENT_TEAM = 6C6HU52U6Y;
 				INFOPLIST_FILE = OpenCVDemo/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;

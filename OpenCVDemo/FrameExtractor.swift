@@ -14,23 +14,19 @@ protocol FrameExtractorDelegate: class {
 }
 
 class FrameExtractor: NSObject {
+    public let captureSession = AVCaptureSession()
     public var isFlashEnabled: Bool = false {
         didSet { configureFlash(enabled: isFlashEnabled) }
     }
-    public var isReadyToCapture:Bool {
-        return
-            selectCaptureDevice()?.isAdjustingWhiteBalance == false &&
-            selectCaptureDevice()?.isAdjustingExposure == false
-    }
+    public weak var delegate: FrameExtractorDelegate?
+
     private let position = AVCaptureDevice.Position.back
-    private let quality = AVCaptureSession.Preset.medium
+    private let quality = AVCaptureSession.Preset.high
     private var permissionGranted = false
     private let sessionQueue = DispatchQueue(label: "session_queue")
     private let bufferQueue = DispatchQueue(label: "buffer_queue")
-    private let captureSession = AVCaptureSession()
-    private let context = CIContext()
+    private let context = CIContext(options: [kCIContextUseSoftwareRenderer:false])
     private var captureClosure:((UIImage) -> ())?
-    weak var delegate: FrameExtractorDelegate?
 
     override init() {
         super.init()
@@ -42,19 +38,14 @@ class FrameExtractor: NSObject {
     }
 
     deinit {
+        print(#function, self)
         configureFlash(enabled:false)
     }
 
-    public func captureCurrentFrame(with quality: AVCaptureSession.Preset = .high, captured: @escaping (UIImage) -> ()) {
-        captureSession.sessionPreset = quality
-        self.captureClosure = {[weak self] image in
+    public func captureCurrentFrame(captured: @escaping (UIImage) -> ()) {
+        self.captureClosure = { image in
             captured(image)
-            self?.endCaptureCurrentFrame()
         }
-    }
-
-    private func endCaptureCurrentFrame() {
-        captureSession.stopRunning()
     }
 
     // MARK: AVSession configuration
@@ -122,24 +113,50 @@ class FrameExtractor: NSObject {
         return AVCaptureDevice.devices().filter { $0.hasMediaType(.video) && $0.position == position }.first
     }
 
-    // MARK: Sample buffer to UIImage conversion
-    private func imageFromSampleBuffer(sampleBuffer: CMSampleBuffer) -> UIImage? {
-        guard let imageBuffer = CMSampleBufferGetImageBuffer(sampleBuffer) else { return nil }
+    private func shutdown() {
+        sessionQueue.suspend()
+        bufferQueue.suspend()
+        captureSession.stopRunning()
+    }
+}
+
+extension FrameExtractor: AVCaptureVideoDataOutputSampleBufferDelegate {
+    func captureOutput(_ output: AVCaptureOutput, didOutput sampleBuffer: CMSampleBuffer, from connection: AVCaptureConnection) {
+        guard let image = sampleBuffer.image(using: context), captureSession.isRunning else { return }
+        guard let captured = captureClosure else {
+            delegate?.frameExtractor(self, didOutput: image)
+            return
+        }
+        captured(image)
+        captureClosure = nil
+        shutdown()
+    }
+}
+
+extension CMSampleBuffer {
+    func image(using context: CIContext) -> UIImage? {
+        guard let imageBuffer = CMSampleBufferGetImageBuffer(self) else { return nil }
         let ciImage = CIImage(cvPixelBuffer: imageBuffer)
         guard let cgImage = context.createCGImage(ciImage, from: ciImage.extent) else { return nil }
         return UIImage(cgImage: cgImage)
     }
 }
 
-extension FrameExtractor: AVCaptureVideoDataOutputSampleBufferDelegate {
-    func captureOutput(_ output: AVCaptureOutput, didOutput sampleBuffer: CMSampleBuffer, from connection: AVCaptureConnection) {
-        guard let image = imageFromSampleBuffer(sampleBuffer: sampleBuffer), isReadyToCapture, captureSession.isRunning else { return }
-        DispatchQueue.main.async { [unowned self] in
-            guard let captured = self.captureClosure else {
-                self.delegate?.frameExtractor(self, didOutput: image)
-                return
-            }
-            captured(image)
-        }
+extension CIContext {
+    func _createCGImage(_ image:CIImage, from rect:CGRect) -> CGImage? {
+        let width = Int(rect.width)
+        let height = Int(rect.height)
+        let rawData = UnsafeMutablePointer<UInt8>.allocate(capacity: width * height * 4)
+        render(image, toBitmap: rawData, rowBytes: width * 4, bounds: rect, format: kCIFormatRGBA8, colorSpace: CGColorSpaceCreateDeviceRGB())
+        guard let dataProvider = CGDataProvider(dataInfo: nil, data: rawData, size: height * width * 4, releaseData: { info, data, size in
+            UnsafeRawPointer(data).deallocate()
+        }) else { return nil}
+
+        return CGImage(width: width, height: height, bitsPerComponent: 8,
+                     bitsPerPixel: 32, bytesPerRow: width * 4,
+                     space: CGColorSpaceCreateDeviceRGB(),
+                     bitmapInfo: CGBitmapInfo(rawValue: CGImageAlphaInfo.premultipliedLast.rawValue),
+                     provider: dataProvider,
+                     decode: nil, shouldInterpolate: false, intent: .defaultIntent)
     }
 }

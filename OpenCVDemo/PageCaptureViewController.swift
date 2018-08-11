@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import AVFoundation
 import SwiftVision
 
 protocol PageCaptureDelegate: class {
@@ -14,19 +15,23 @@ protocol PageCaptureDelegate: class {
 }
 
 class PageCaptureViewController: UIViewController {
-    @IBOutlet weak var imageView: UIImageView!
     @IBOutlet weak var flash: UISwitch!
-    private var timer: Timer?
+    private var pageCaptureView: PageCaptureView {
+        return view as! PageCaptureView
+    }
     private var pageOutline = CGRectOutlineZeroMake()
     private let pageDetector = PageDetector()
     private let extractor = FrameExtractor()
-
+    private var timer: Timer?
     weak var delegate: PageCaptureDelegate?
 
     override func viewDidLoad() {
         super.viewDidLoad()
         extractor.delegate = self
+        pageCaptureView.videoPreviewLayer.session = extractor.captureSession
     }
+
+    public override var preferredStatusBarStyle: UIStatusBarStyle { return .lightContent }
 
     @IBAction func cancelCapture(_ sender: UIBarButtonItem) {
         dismiss(animated: true)
@@ -59,13 +64,7 @@ class PageCaptureViewController: UIViewController {
     }
 
     @objc private func capture() {
-        extractor.captureCurrentFrame(with: .high) { [unowned self] frame in
-            /**!
-             1) use a saved copy of the outline to extract the page
-             2) the saved copy should be normalized
-             3) it must then be converted back to pixel space before
-             calling `self.pageDetector.extractPage(outline, from: frame)`
-             */
+        extractor.captureCurrentFrame { [unowned self] frame in
             let image = self.pageDetector.extract(self.pageOutline, from: frame)
             self.delegate?.captureViewController(self, didCapturePage: image ?? frame)
         }
@@ -76,17 +75,17 @@ class PageCaptureViewController: UIViewController {
 extension PageCaptureViewController: FrameExtractorDelegate {
     func frameExtractor(_ extractor:FrameExtractor, didOutput frame: UIImage) {
         let outline = pageDetector.pageBounds(frame)
-        let isValidOutline = !CGRectOutlineEquals(outline, CGRectOutlineZeroMake())
-        let image = pageDetector.render(outline, in: frame)
 
-        isValidOutline ? update() : stop()
-        imageView.image = image
-        if isValidOutline { pageOutline = outline }
+        DispatchQueue.main.async {
+            let isValidOutline = !CGRectOutlineEquals(outline, CGRectOutlineZeroMake())
+            isValidOutline ? self.update() : self.stop()
+            if isValidOutline { self.pageOutline = outline }
+            let pixOutline = self.pageDetector.norm2Pix(isValidOutline ? outline : self.pageOutline, size: self.pageCaptureView.frame.size)
+            self.pageCaptureView.outline = pixOutline
+        }
 
         /**!
-         1) The outline must be normalized at this point and stored..
-         2) the normalized outline should be reused during the final page extractions
-         3) Consider how to handle "flickering" of the outline? Consider tracking the
+         Consider how to handle "flickering" of the outline? Consider tracking the
          percentage of time that a valid outline is returned within a selected sampling
          interval. If this drops too low, then reset the extraction timeout.
          */

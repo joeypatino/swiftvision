@@ -12,4 +12,6 @@
  * largest contour. */
 - (UIImage *_Nullable)renderPageBounds:(UIImage *_Nonnull)image;
 - (UIImage *_Nullable)render:(CGRectOutline)outline inImage:(UIImage *_Nonnull)image;
+
+- (CGRectOutline)norm2Pix:(CGRectOutline)outline size:(CGSize)size;
 @end

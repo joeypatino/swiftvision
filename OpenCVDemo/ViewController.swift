@@ -6,7 +6,7 @@ class ViewController: UIViewController {
     private let imagePicker = UIImagePickerController()
     private var imageContours = TextDewarper(image: UIImage(named: "boston_cooking_a.jpg")!.normalizedImage())
     private var dewarpedImage: UIImage?
-
+    private let camera = Camera()
     override func viewDidLoad() {
         super.viewDidLoad()
         imageView.image = imageContours.inputImage
@@ -46,8 +46,7 @@ class ViewController: UIViewController {
     }
 
     @IBAction private func takePhoto(){
-        let storyBoard = UIStoryboard(name: "Main", bundle: Bundle.main)
-        guard let viewController = storyBoard.instantiateViewController(withIdentifier: "PageCaptureViewController") as? PageCaptureViewController else { return }
+        let viewController = PageCaptureViewController.make(with: camera)
         viewController.delegate = self
         present(viewController, animated: true)
     }
@@ -64,6 +63,10 @@ extension ViewController: PageCaptureDelegate {
     func captureViewController(_ viewController: PageCaptureViewController, didCapturePage page: UIImage) {
         viewController.dismiss(animated: true)
         loadImage(page)
+    }
+
+    func captureViewControllerDidCancel(_ viewController: PageCaptureViewController) {
+        viewController.dismiss(animated: true)
     }
 }
 

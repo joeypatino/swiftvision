@@ -14,32 +14,22 @@ protocol FrameExtractorDelegate: class {
 }
 
 class FrameExtractor: NSObject {
-    public let captureSession = AVCaptureSession()
-    public var isFlashEnabled: Bool = false {
-        didSet { configureFlash(enabled: isFlashEnabled) }
-    }
     public weak var delegate: FrameExtractorDelegate?
-
-    private let position = AVCaptureDevice.Position.back
-    private let quality = AVCaptureSession.Preset.high
-    private var permissionGranted = false
-    private let sessionQueue = DispatchQueue(label: "session_queue")
-    private let bufferQueue = DispatchQueue(label: "buffer_queue")
     private let context = CIContext(options: [kCIContextUseSoftwareRenderer:false])
+    private let bufferQueue = DispatchQueue(label: "buffer_queue")
+    private let videoOutput = AVCaptureVideoDataOutput()
     private var captureClosure:((UIImage) -> ())?
+    private let camera: Camera
 
-    override init() {
+    required init(camera: Camera) {
+        self.camera = camera
         super.init()
-        checkPermission()
-        sessionQueue.async { [unowned self] in
-            self.configureSession()
-            self.captureSession.startRunning()
-        }
+        configure(camera: camera)
     }
 
     deinit {
-        print(#function, self)
-        configureFlash(enabled:false)
+        camera.isFlashEnabled = false
+        camera.captureSession.removeOutput(videoOutput)
     }
 
     public func captureCurrentFrame(captured: @escaping (UIImage) -> ()) {
@@ -48,45 +38,13 @@ class FrameExtractor: NSObject {
         }
     }
 
-    // MARK: AVSession configuration
-    private func checkPermission() {
-        switch AVCaptureDevice.authorizationStatus(for: .video) {
-        case .authorized:
-            permissionGranted = true
-        case .notDetermined:
-            requestPermission()
-        default:
-            permissionGranted = false
-        }
-    }
-
-    private func requestPermission() {
-        sessionQueue.suspend()
-        AVCaptureDevice.requestAccess(for: .video) { [unowned self] granted in
-            self.permissionGranted = granted
-            self.sessionQueue.resume()
-        }
-    }
-
-    private func configureSession() {
-        guard permissionGranted else { return }
-        captureSession.sessionPreset = quality
-
-        // setup the camera input device
-        guard
-            let captureDevice = selectCaptureDevice(),
-            let captureDeviceInput = try? AVCaptureDeviceInput(device: captureDevice),
-            captureSession.canAddInput(captureDeviceInput)
-            else { return }
-        captureSession.addInput(captureDeviceInput)
-
+    private func configure(camera: Camera) {
         // setup the capture data output
-        let videoOutput = AVCaptureVideoDataOutput()
         videoOutput.setSampleBufferDelegate(self, queue: bufferQueue)
         guard
-            captureSession.canAddOutput(videoOutput)
+            camera.captureSession.canAddOutput(videoOutput)
             else { return }
-        captureSession.addOutput(videoOutput)
+        camera.captureSession.addOutput(videoOutput)
 
         // configure the output connection
         guard
@@ -96,33 +54,20 @@ class FrameExtractor: NSObject {
             else { return }
 
         connection.videoOrientation = .portrait
-        connection.isVideoMirrored = position == .front
-    }
 
-    private func configureFlash(enabled: Bool) {
-        do {
-            try selectCaptureDevice()?.lockForConfiguration()
-            selectCaptureDevice()?.torchMode = enabled ? .on : .off
-            selectCaptureDevice()?.unlockForConfiguration()
-        } catch {
-            print("Torch could not be configured")
+        if !camera.captureSession.isRunning {
+            camera.captureSession.startRunning()
         }
     }
 
-    private func selectCaptureDevice() -> AVCaptureDevice? {
-        return AVCaptureDevice.devices().filter { $0.hasMediaType(.video) && $0.position == position }.first
-    }
-
     private func shutdown() {
-        sessionQueue.suspend()
-        bufferQueue.suspend()
-        captureSession.stopRunning()
+        camera.captureSession.stopRunning()
     }
 }
 
 extension FrameExtractor: AVCaptureVideoDataOutputSampleBufferDelegate {
     func captureOutput(_ output: AVCaptureOutput, didOutput sampleBuffer: CMSampleBuffer, from connection: AVCaptureConnection) {
-        guard let image = sampleBuffer.image(using: context), captureSession.isRunning else { return }
+        guard let image = sampleBuffer.image(using: context), camera.captureSession.isRunning else { return }
         guard let captured = captureClosure else {
             delegate?.frameExtractor(self, didOutput: image)
             return

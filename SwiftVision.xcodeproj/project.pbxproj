@@ -26,8 +26,13 @@
 		D43C4536205B1ECB0072AF8F /* math.hpp in Headers */ = {isa = PBXBuildFile; fileRef = D43C4534205B1ECB0072AF8F /* math.hpp */; };
 		D43C4539205B239C0072AF8F /* debug.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D43C4537205B239C0072AF8F /* debug.cpp */; };
 		D43C453A205B239C0072AF8F /* debug.hpp in Headers */ = {isa = PBXBuildFile; fileRef = D43C4538205B239C0072AF8F /* debug.hpp */; };
-		D44D558120628D2C00BFD3C6 /* boston_cooking_a.jpg in Resources */ = {isa = PBXBuildFile; fileRef = D44D558020628D2C00BFD3C6 /* boston_cooking_a.jpg */; };
-		D461D4CB211F33590082BBCC /* PageCaptureView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D461D4CA211F33590082BBCC /* PageCaptureView.swift */; };
+		D461D4CE211F63520082BBCC /* Camera.swift in Sources */ = {isa = PBXBuildFile; fileRef = D461D4CD211F63520082BBCC /* Camera.swift */; };
+		D461D4D2211F63710082BBCC /* FrameExtractor.swift in Sources */ = {isa = PBXBuildFile; fileRef = D461D4CF211F63700082BBCC /* FrameExtractor.swift */; };
+		D461D4D3211F63710082BBCC /* PageCaptureView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D461D4D0211F63700082BBCC /* PageCaptureView.swift */; };
+		D461D4D4211F63710082BBCC /* PageCaptureViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D461D4D1211F63700082BBCC /* PageCaptureViewController.swift */; };
+		D461D4D9211F63870082BBCC /* input_image.jpeg in Resources */ = {isa = PBXBuildFile; fileRef = D461D4D6211F63870082BBCC /* input_image.jpeg */; };
+		D461D4DA211F63870082BBCC /* cat.035.jpg in Resources */ = {isa = PBXBuildFile; fileRef = D461D4D7211F63870082BBCC /* cat.035.jpg */; };
+		D461D4DB211F63870082BBCC /* boston_cooking_a.jpg in Resources */ = {isa = PBXBuildFile; fileRef = D461D4D8211F63870082BBCC /* boston_cooking_a.jpg */; };
 		D471D7D720500C4A00F38C26 /* CGRectOutline.h in Headers */ = {isa = PBXBuildFile; fileRef = D471D7D420500C4A00F38C26 /* CGRectOutline.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		D471D7E220500CE600F38C26 /* ContourEdge.h in Headers */ = {isa = PBXBuildFile; fileRef = D471D7DA20500CE600F38C26 /* ContourEdge.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		D471D7E320500CE600F38C26 /* Contour.mm in Sources */ = {isa = PBXBuildFile; fileRef = D471D7DB20500CE600F38C26 /* Contour.mm */; };
@@ -46,11 +51,8 @@
 		D471D7FB20500F2200F38C26 /* UIImage+Contour.h in Headers */ = {isa = PBXBuildFile; fileRef = D471D7F920500F2200F38C26 /* UIImage+Contour.h */; };
 		D4792B9C205AF9E100F74B2E /* SwiftVision.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D40B28392028856300CA8559 /* SwiftVision.framework */; };
 		D4792B9D205AF9E100F74B2E /* SwiftVision.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = D40B28392028856300CA8559 /* SwiftVision.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
-		D48A95A1211CC61200A12E4B /* PageCaptureViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D48A95A0211CC61200A12E4B /* PageCaptureViewController.swift */; };
 		D48A95A7211CCAE200A12E4B /* PageDetector.h in Headers */ = {isa = PBXBuildFile; fileRef = D48A95A5211CCAE200A12E4B /* PageDetector.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		D48A95A8211CCAE200A12E4B /* PageDetector.mm in Sources */ = {isa = PBXBuildFile; fileRef = D48A95A6211CCAE200A12E4B /* PageDetector.mm */; };
-		D48A95AA211CE50A00A12E4B /* FrameExtractor.swift in Sources */ = {isa = PBXBuildFile; fileRef = D48A95A9211CE50A00A12E4B /* FrameExtractor.swift */; };
-		D48B4B712028AC0600DFA7AC /* input_image.jpeg in Resources */ = {isa = PBXBuildFile; fileRef = D48B4B702028AC0600DFA7AC /* input_image.jpeg */; };
 		D4A3DB5121199E03000413B8 /* PtraArray.hpp in Headers */ = {isa = PBXBuildFile; fileRef = D4A3DB4E21199E03000413B8 /* PtraArray.hpp */; };
 		D4A3DB5221199E03000413B8 /* DataTypes.h in Headers */ = {isa = PBXBuildFile; fileRef = D4A3DB4F21199E03000413B8 /* DataTypes.h */; };
 		D4A3DB5321199E03000413B8 /* PtraArray.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D4A3DB5021199E03000413B8 /* PtraArray.cpp */; };
@@ -64,7 +66,6 @@
 		D4BAD1C62034DBB200F4A32C /* NSArray+extras.m in Sources */ = {isa = PBXBuildFile; fileRef = D4BAD1C42034DBB200F4A32C /* NSArray+extras.m */; };
 		D4C8B37D21135C150037FDDE /* dewarp.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D4C8B37B21135C150037FDDE /* dewarp.cpp */; };
 		D4C8B37E21135C150037FDDE /* dewarp.hpp in Headers */ = {isa = PBXBuildFile; fileRef = D4C8B37C21135C150037FDDE /* dewarp.hpp */; };
-		D4C8B38021148AC80037FDDE /* cat.035.jpg in Resources */ = {isa = PBXBuildFile; fileRef = D4C8B37F21148AC80037FDDE /* cat.035.jpg */; };
 		D4D8304A206198F0001B1535 /* UIImage+extras.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4D83049206198F0001B1535 /* UIImage+extras.swift */; };
 /* End PBXBuildFile section */
 
@@ -124,8 +125,13 @@
 		D43C4534205B1ECB0072AF8F /* math.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = math.hpp; sourceTree = "<group>"; };
 		D43C4537205B239C0072AF8F /* debug.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = debug.cpp; sourceTree = "<group>"; };
 		D43C4538205B239C0072AF8F /* debug.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = debug.hpp; sourceTree = "<group>"; };
-		D44D558020628D2C00BFD3C6 /* boston_cooking_a.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = boston_cooking_a.jpg; sourceTree = "<group>"; };
-		D461D4CA211F33590082BBCC /* PageCaptureView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PageCaptureView.swift; sourceTree = "<group>"; };
+		D461D4CD211F63520082BBCC /* Camera.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Camera.swift; sourceTree = "<group>"; };
+		D461D4CF211F63700082BBCC /* FrameExtractor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FrameExtractor.swift; sourceTree = "<group>"; };
+		D461D4D0211F63700082BBCC /* PageCaptureView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PageCaptureView.swift; sourceTree = "<group>"; };
+		D461D4D1211F63700082BBCC /* PageCaptureViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PageCaptureViewController.swift; sourceTree = "<group>"; };
+		D461D4D6211F63870082BBCC /* input_image.jpeg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = input_image.jpeg; sourceTree = "<group>"; };
+		D461D4D7211F63870082BBCC /* cat.035.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = cat.035.jpg; sourceTree = "<group>"; };
+		D461D4D8211F63870082BBCC /* boston_cooking_a.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = boston_cooking_a.jpg; sourceTree = "<group>"; };
 		D4711A0820502C1200F38C26 /* Accelerate.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Accelerate.framework; path = System/Library/Frameworks/Accelerate.framework; sourceTree = SDKROOT; };
 		D4711A0A20502C7500F38C26 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		D4711A0C20502C8300F38C26 /* CoreFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreFoundation.framework; path = System/Library/Frameworks/CoreFoundation.framework; sourceTree = SDKROOT; };
@@ -145,11 +151,8 @@
 		D471D7F420500EE300F38C26 /* UIImage+OpenCV.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImage+OpenCV.h"; sourceTree = "<group>"; };
 		D471D7F820500F2200F38C26 /* UIImage+Contour.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = "UIImage+Contour.mm"; sourceTree = "<group>"; };
 		D471D7F920500F2200F38C26 /* UIImage+Contour.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImage+Contour.h"; sourceTree = "<group>"; };
-		D48A95A0211CC61200A12E4B /* PageCaptureViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PageCaptureViewController.swift; sourceTree = "<group>"; };
 		D48A95A5211CCAE200A12E4B /* PageDetector.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PageDetector.h; sourceTree = "<group>"; };
 		D48A95A6211CCAE200A12E4B /* PageDetector.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = PageDetector.mm; sourceTree = "<group>"; };
-		D48A95A9211CE50A00A12E4B /* FrameExtractor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FrameExtractor.swift; sourceTree = "<group>"; };
-		D48B4B702028AC0600DFA7AC /* input_image.jpeg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = input_image.jpeg; sourceTree = "<group>"; };
 		D4A3DB4E21199E03000413B8 /* PtraArray.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = PtraArray.hpp; sourceTree = "<group>"; };
 		D4A3DB4F21199E03000413B8 /* DataTypes.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DataTypes.h; sourceTree = "<group>"; };
 		D4A3DB5021199E03000413B8 /* PtraArray.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = PtraArray.cpp; sourceTree = "<group>"; };
@@ -162,7 +165,6 @@
 		D4BAD1C42034DBB200F4A32C /* NSArray+extras.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "NSArray+extras.m"; sourceTree = "<group>"; };
 		D4C8B37B21135C150037FDDE /* dewarp.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = dewarp.cpp; sourceTree = "<group>"; };
 		D4C8B37C21135C150037FDDE /* dewarp.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = dewarp.hpp; sourceTree = "<group>"; };
-		D4C8B37F21148AC80037FDDE /* cat.035.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = cat.035.jpg; sourceTree = "<group>"; };
 		D4D83049206198F0001B1535 /* UIImage+extras.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIImage+extras.swift"; sourceTree = "<group>"; };
 		D4E45DAF211A52010094CE23 /* opencv2.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = opencv2.framework; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -251,19 +253,15 @@
 		D40B28502028860D00CA8559 /* OpenCVDemo */ = {
 			isa = PBXGroup;
 			children = (
-				D48B4B702028AC0600DFA7AC /* input_image.jpeg */,
-				D4C8B37F21148AC80037FDDE /* cat.035.jpg */,
-				D44D558020628D2C00BFD3C6 /* boston_cooking_a.jpg */,
+				D461D4D5211F63870082BBCC /* Images */,
 				D40B28512028860D00CA8559 /* AppDelegate.swift */,
 				D40B28532028860D00CA8559 /* ViewController.swift */,
+				D461D4CC211F63390082BBCC /* PageCapture */,
+				D40B285A2028860D00CA8559 /* LaunchScreen.storyboard */,
 				D40B28552028860D00CA8559 /* Main.storyboard */,
 				D40B28582028860D00CA8559 /* Assets.xcassets */,
-				D40B285A2028860D00CA8559 /* LaunchScreen.storyboard */,
 				D40B285D2028860D00CA8559 /* Info.plist */,
 				D4D83049206198F0001B1535 /* UIImage+extras.swift */,
-				D48A95A0211CC61200A12E4B /* PageCaptureViewController.swift */,
-				D461D4CA211F33590082BBCC /* PageCaptureView.swift */,
-				D48A95A9211CE50A00A12E4B /* FrameExtractor.swift */,
 			);
 			path = OpenCVDemo;
 			sourceTree = "<group>";
@@ -294,6 +292,27 @@
 				D43C4537205B239C0072AF8F /* debug.cpp */,
 			);
 			path = helpers;
+			sourceTree = "<group>";
+		};
+		D461D4CC211F63390082BBCC /* PageCapture */ = {
+			isa = PBXGroup;
+			children = (
+				D461D4D1211F63700082BBCC /* PageCaptureViewController.swift */,
+				D461D4D0211F63700082BBCC /* PageCaptureView.swift */,
+				D461D4CD211F63520082BBCC /* Camera.swift */,
+				D461D4CF211F63700082BBCC /* FrameExtractor.swift */,
+			);
+			path = PageCapture;
+			sourceTree = "<group>";
+		};
+		D461D4D5211F63870082BBCC /* Images */ = {
+			isa = PBXGroup;
+			children = (
+				D461D4D6211F63870082BBCC /* input_image.jpeg */,
+				D461D4D7211F63870082BBCC /* cat.035.jpg */,
+				D461D4D8211F63870082BBCC /* boston_cooking_a.jpg */,
+			);
+			path = Images;
 			sourceTree = "<group>";
 		};
 		D471D7D220500C4A00F38C26 /* structs */ = {
@@ -521,11 +540,11 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				D44D558120628D2C00BFD3C6 /* boston_cooking_a.jpg in Resources */,
+				D461D4DB211F63870082BBCC /* boston_cooking_a.jpg in Resources */,
+				D461D4DA211F63870082BBCC /* cat.035.jpg in Resources */,
 				D40B285C2028860D00CA8559 /* LaunchScreen.storyboard in Resources */,
+				D461D4D9211F63870082BBCC /* input_image.jpeg in Resources */,
 				D40B28592028860D00CA8559 /* Assets.xcassets in Resources */,
-				D48B4B712028AC0600DFA7AC /* input_image.jpeg in Resources */,
-				D4C8B38021148AC80037FDDE /* cat.035.jpg in Resources */,
 				D40B28572028860D00CA8559 /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -567,12 +586,13 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				D48A95AA211CE50A00A12E4B /* FrameExtractor.swift in Sources */,
 				D40B28542028860D00CA8559 /* ViewController.swift in Sources */,
-				D461D4CB211F33590082BBCC /* PageCaptureView.swift in Sources */,
 				D40B28522028860D00CA8559 /* AppDelegate.swift in Sources */,
 				D4D8304A206198F0001B1535 /* UIImage+extras.swift in Sources */,
-				D48A95A1211CC61200A12E4B /* PageCaptureViewController.swift in Sources */,
+				D461D4CE211F63520082BBCC /* Camera.swift in Sources */,
+				D461D4D4211F63710082BBCC /* PageCaptureViewController.swift in Sources */,
+				D461D4D2211F63710082BBCC /* FrameExtractor.swift in Sources */,
+				D461D4D3211F63710082BBCC /* PageCaptureView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

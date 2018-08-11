@@ -12,6 +12,7 @@ import SwiftVision
 
 protocol PageCaptureDelegate: class {
     func captureViewController(_ viewController: PageCaptureViewController, didCapturePage page: UIImage)
+    func captureViewControllerDidCancel(_ viewController: PageCaptureViewController)
 }
 
 class PageCaptureViewController: UIViewController {
@@ -21,24 +22,25 @@ class PageCaptureViewController: UIViewController {
     }
     private var pageOutline = CGRectOutlineZeroMake()
     private let pageDetector = PageDetector()
-    private let extractor = FrameExtractor()
+    private var camera: Camera!
+    private var extractor: FrameExtractor!
     private var timer: Timer?
     weak var delegate: PageCaptureDelegate?
+
+    public override var preferredStatusBarStyle: UIStatusBarStyle { return .lightContent }
 
     override func viewDidLoad() {
         super.viewDidLoad()
         extractor.delegate = self
-        pageCaptureView.videoPreviewLayer.session = extractor.captureSession
+        pageCaptureView.videoPreviewLayer.session = camera.captureSession
     }
 
-    public override var preferredStatusBarStyle: UIStatusBarStyle { return .lightContent }
-
     @IBAction func cancelCapture(_ sender: UIBarButtonItem) {
-        dismiss(animated: true)
+        delegate?.captureViewControllerDidCancel(self)
     }
 
     @IBAction func flashToggle(_ sender: UISwitch) {
-        extractor.isFlashEnabled = sender.isOn
+        camera.isFlashEnabled = sender.isOn
     }
 
     private func update() {
@@ -89,5 +91,17 @@ extension PageCaptureViewController: FrameExtractorDelegate {
          percentage of time that a valid outline is returned within a selected sampling
          interval. If this drops too low, then reset the extraction timeout.
          */
+    }
+}
+
+extension PageCaptureViewController {
+    static func make(with camera: Camera) -> PageCaptureViewController {
+        let extractor = FrameExtractor(camera: camera)
+        let storyBoard = UIStoryboard(name: "Main", bundle: Bundle.main)
+        guard let viewController = storyBoard.instantiateViewController(withIdentifier: "PageCaptureViewController") as? PageCaptureViewController
+            else { preconditionFailure() }
+        viewController.camera = camera
+        viewController.extractor = extractor
+        return viewController
     }
 }

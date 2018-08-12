@@ -293,6 +293,8 @@ using namespace cv;
 }
 
 - (CGRectOutline)norm2Pix:(CGRectOutline)outline size:(CGSize)size {
+    if (CGRectOutlineEquals(outline, CGRectOutlineZeroMake()))
+        return outline;
     outline.topLeft = normalizePoint(outline.topLeft, size);
     outline.topRight = normalizePoint(outline.topRight, size);
     outline.botRight = normalizePoint(outline.botRight, size);

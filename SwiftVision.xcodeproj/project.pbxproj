@@ -65,6 +65,7 @@
 		D4BAD1C62034DBB200F4A32C /* NSArray+extras.m in Sources */ = {isa = PBXBuildFile; fileRef = D4BAD1C42034DBB200F4A32C /* NSArray+extras.m */; };
 		D4C8B37D21135C150037FDDE /* dewarp.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D4C8B37B21135C150037FDDE /* dewarp.cpp */; };
 		D4C8B37E21135C150037FDDE /* dewarp.hpp in Headers */ = {isa = PBXBuildFile; fileRef = D4C8B37C21135C150037FDDE /* dewarp.hpp */; };
+		D4D259322120B99300E98268 /* PageOutlineTracker.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4D259312120B99300E98268 /* PageOutlineTracker.swift */; };
 		D4D8304A206198F0001B1535 /* UIImage+extras.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4D83049206198F0001B1535 /* UIImage+extras.swift */; };
 /* End PBXBuildFile section */
 
@@ -163,6 +164,7 @@
 		D4BAD1C42034DBB200F4A32C /* NSArray+extras.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "NSArray+extras.m"; sourceTree = "<group>"; };
 		D4C8B37B21135C150037FDDE /* dewarp.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = dewarp.cpp; sourceTree = "<group>"; };
 		D4C8B37C21135C150037FDDE /* dewarp.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = dewarp.hpp; sourceTree = "<group>"; };
+		D4D259312120B99300E98268 /* PageOutlineTracker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PageOutlineTracker.swift; sourceTree = "<group>"; };
 		D4D83049206198F0001B1535 /* UIImage+extras.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIImage+extras.swift"; sourceTree = "<group>"; };
 		D4E45DAF211A52010094CE23 /* opencv2.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = opencv2.framework; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -298,6 +300,7 @@
 			children = (
 				D461D4D1211F63700082BBCC /* PageCaptureViewController.swift */,
 				D461D4D0211F63700082BBCC /* PageCapturePreview.swift */,
+				D4D259312120B99300E98268 /* PageOutlineTracker.swift */,
 			);
 			path = PageCapture;
 			sourceTree = "<group>";
@@ -596,6 +599,7 @@
 				D40B28522028860D00CA8559 /* AppDelegate.swift in Sources */,
 				D4D8304A206198F0001B1535 /* UIImage+extras.swift in Sources */,
 				D461D4D4211F63710082BBCC /* PageCaptureViewController.swift in Sources */,
+				D4D259322120B99300E98268 /* PageOutlineTracker.swift in Sources */,
 				D461D4D3211F63710082BBCC /* PageCapturePreview.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

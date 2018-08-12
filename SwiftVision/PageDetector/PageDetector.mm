@@ -136,13 +136,14 @@ using namespace cv;
 /** Preprocesses a UIImage for edge detection. */
 - (cv::Mat)preprocessImage:(UIImage *)image {
     cv::Mat inImage = [image mat];
-    cv::Mat gray, blurred, dialate1, canny, dialate2, morph;
+    cv::Mat gray, blurred, dialate1,thresh, canny, dialate2, morph;
 
     gray = [self _gray:inImage];
     blurred = [self _blurred:gray];
-    dialate1 = [self _dialate1:blurred];
-    canny = [self _canny:dialate1];
-    dialate2 = [self _dialate2:canny];
+    dialate1 = [self _dialate1:blurred];    // <-- IDENTITY
+    thresh = [self _threshhold:dialate1];
+    canny = [self _canny:thresh];           // <-- IDENTITY
+    dialate2 = [self _dialate2:canny];      // <-- IDENTITY
     morph = [self _morph:dialate2];
 
     return morph;
@@ -172,37 +173,37 @@ using namespace cv;
     return [UIImage imageWithMat:dialate1];
 }
 
-- (UIImage *)canny:(UIImage *)image {
+- (UIImage *)threshhold:(UIImage *)image {
     cv::Mat inImage = [image mat];
-    cv::Mat gray, blurred, dialate1, canny;
+    cv::Mat gray, blurred, dialate1, thresh;
     gray = [self _gray:inImage];
     blurred = [self _blurred:gray];
     dialate1 = [self _dialate1:blurred];
-    canny = [self _canny:dialate1];
+    thresh = [self _threshhold:dialate1];
+    return [UIImage imageWithMat:thresh];
+}
+
+- (UIImage *)canny:(UIImage *)image {
+    cv::Mat inImage = [image mat];
+    cv::Mat gray, blurred, dialate1, thresh, canny;
+    gray = [self _gray:inImage];
+    blurred = [self _blurred:gray];
+    dialate1 = [self _dialate1:blurred];
+    thresh = [self _threshhold:dialate1];
+    canny = [self _canny:thresh];
     return [UIImage imageWithMat:canny];
 }
 
 - (UIImage *)dialate2:(UIImage *)image {
     cv::Mat inImage = [image mat];
-    cv::Mat gray, blurred, dialate1, canny, dialate2;
+    cv::Mat gray, blurred, dialate1, thresh, canny, dialate2;
     gray = [self _gray:inImage];
     blurred = [self _blurred:gray];
     dialate1 = [self _dialate1:blurred];
-    canny = [self _canny:dialate1];
+    thresh = [self _threshhold:dialate1];
+    canny = [self _canny:thresh];
     dialate2 = [self _dialate2:canny];
     return [UIImage imageWithMat:dialate2];
-}
-
-- (UIImage *)morph:(UIImage *)image {
-    cv::Mat inImage = [image mat];
-    cv::Mat gray, blurred, dialate1, canny, dialate2, morph;
-    gray = [self _gray:inImage];
-    blurred = [self _blurred:gray];
-    dialate1 = [self _dialate1:blurred];
-    canny = [self _canny:dialate1];
-    dialate2 = [self _dialate2:canny];
-    morph = [self _morph:dialate2];
-    return [UIImage imageWithMat:morph];
 }
 
 - (cv::Mat)_gray:(cv::Mat)inImage {
@@ -213,35 +214,71 @@ using namespace cv;
 
 - (cv::Mat)_blurred:(cv::Mat)inImage {
     cv::Mat blurred;
-    cv::medianBlur(inImage, blurred, 21);
+    //cv::medianBlur(inImage, blurred, 5);
+    cv::GaussianBlur(inImage, blurred, cv::Size(9, 9), 0);
     return blurred;
 }
 
 - (cv::Mat)_dialate1:(cv::Mat)inImage {
-    cv::Mat dialate1;
-    cv::Mat dialateKernel1 = cv::Mat::ones(21, 21, CV_8UC1);
-    cv::dilate(inImage, dialate1, dialateKernel1);
-    return dialate1;
+    return inImage;
+//    cv::Mat dialate1;
+//    cv::Mat dialateKernel1 = cv::Mat::ones(14, 14, CV_8UC1);
+//    cv::dilate(inImage, dialate1, dialateKernel1);
+//    return dialate1;
+}
+
+- (cv::Mat)_threshhold:(cv::Mat)inImage {
+    cv::Mat thresh;
+    cv::adaptiveThreshold(inImage, thresh, 255, ADAPTIVE_THRESH_MEAN_C, THRESH_BINARY, 11, 2);
+    return thresh;
 }
 
 - (cv::Mat)_canny:(cv::Mat)inImage {
-    cv::Mat canny;
-    cv::Canny(inImage, canny, 1, 255, 3);
-    return canny;
+    return inImage;
+    //cv::Mat blurred;
+    //cv::medianBlur(inImage, blurred, 5);
+    //return blurred;
+
+//    cv::Mat canny;
+//    cv::Canny(inImage, canny, 255, 255, 3);
+//    return canny;
 }
 
 - (cv::Mat)_dialate2:(cv::Mat)inImage {
-    cv::Mat dialate2;
-    cv::Mat dialateKernel2 = cv::Mat::ones(8, 8, CV_8UC1);
-    cv::dilate(inImage, dialate2, dialateKernel2);
-    return dialate2;
+    return inImage;
+//    cv::Mat erode;
+//    cv::Mat erodeKernel = cv::Mat::ones(4, 4, CV_8UC1);
+//    cv::erode(inImage, erode, erodeKernel);
+//
+//    cv::Mat dialate2;
+//    cv::Mat dialateKernel2 = cv::Mat::ones(2, 2, CV_8UC1);
+//    cv::dilate(erode, dialate2, dialateKernel2);
+//    return dialate2;
 }
 
 - (cv::Mat)_morph:(cv::Mat)inImage {
-    cv::Mat morph;
-    cv::Mat structure = cv::getStructuringElement(MORPH_RECT, cv::Size(5, 5));
-    cv::morphologyEx(inImage, morph, MORPH_CLOSE, structure);
-    return morph;
+    // Operator:
+    // 2: Opening
+    // 3: Closing
+    // 4: Gradient
+    // 5: Top Hat
+    // 6: Black Hat
+    int operation = MORPH_OPEN;
+    // Element:
+    // 0: Rect
+    // 1: Cross
+    // 2: Ellipse
+    int morph_elem = MORPH_ELLIPSE;
+    int morph_size = 3;
+
+    cv::Mat element = cv::getStructuringElement(morph_elem,
+                                                cv::Size(2 * morph_size + 1, 2 * morph_size + 1),
+                                                cv::Point( morph_size, morph_size));
+
+    cv::Mat morphed;
+    /// Apply the specified morphology operation
+    cv::morphologyEx(inImage, morphed, operation, element);
+    return morphed;
 }
 
 /** Converts a CGRectOutline into a 'outlines' vector. */
@@ -273,7 +310,7 @@ using namespace cv;
     std::vector<cv::Point> approx;
 
     // Find contours, store them in a list and test each
-    cv::findContours(inImage, contours, CV_RETR_LIST, CV_CHAIN_APPROX_SIMPLE);
+    cv::findContours(inImage, contours, CV_RETR_LIST, CV_CHAIN_APPROX_NONE);
     for (size_t i = 0; i < contours.size(); i++) {
         // approximate contour with accuracy proportional
         // to the contour perimeter
@@ -287,7 +324,7 @@ using namespace cv;
         // contour orientation
         double contourArea = fabs(cv::contourArea(cv::Mat(approx)));
         if (approx.size() == 4 &&
-            cv::isContourConvex(cv::Mat(approx)) &&
+//            cv::isContourConvex(cv::Mat(approx)) &&
             contourArea > imageArea * 0.35 &&
             contourArea < imageArea * 0.8) {
 
@@ -297,7 +334,7 @@ using namespace cv;
                 maxCosine = MAX(maxCosine, cosine);
             }
 
-            if (maxCosine < 0.3) {
+            if (maxCosine < 0.45) {
                 std::vector<cv::Point2d> approxOut;
                 for (int i = 0; i < approx.size(); i++) {
                     cv::Point p = approx[i];

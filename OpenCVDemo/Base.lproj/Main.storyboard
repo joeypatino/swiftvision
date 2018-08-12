@@ -126,10 +126,25 @@
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="sjp-gD-CKe">
-                                <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
-                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                            </imageView>
+                            <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="jtv-rl-uo7">
+                                <rect key="frame" x="0.0" y="625" width="375" height="43"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="42" id="TBd-IS-iQi"/>
+                                </constraints>
+                                <segments>
+                                    <segment title="norm"/>
+                                    <segment title="gray"/>
+                                    <segment title="blur"/>
+                                    <segment title="dialate"/>
+                                    <segment title="thresh"/>
+                                    <segment title="canny"/>
+                                    <segment title="dialate"/>
+                                </segments>
+                                <color key="tintColor" red="0.99942404029999998" green="0.98555368190000003" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <connections>
+                                    <action selector="togglePreviewWithToggle:" destination="lNw-GD-bry" eventType="valueChanged" id="kZc-n6-BaI"/>
+                                </connections>
+                            </segmentedControl>
                             <toolbar opaque="NO" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" translucent="NO" translatesAutoresizingMaskIntoConstraints="NO" id="tre-gg-JNu">
                                 <rect key="frame" x="0.0" y="0.0" width="375" height="64"/>
                                 <constraints>
@@ -156,44 +171,20 @@
                                 </items>
                                 <color key="barTintColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                             </toolbar>
-                            <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="jtv-rl-uo7">
-                                <rect key="frame" x="0.0" y="625" width="375" height="43"/>
-                                <constraints>
-                                    <constraint firstAttribute="height" constant="42" id="TBd-IS-iQi"/>
-                                </constraints>
-                                <segments>
-                                    <segment title="norm"/>
-                                    <segment title="gray"/>
-                                    <segment title="blur"/>
-                                    <segment title="dialate"/>
-                                    <segment title="canny"/>
-                                    <segment title="dialate"/>
-                                    <segment title="morph"/>
-                                </segments>
-                                <color key="tintColor" red="0.99942404029999998" green="0.98555368190000003" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                <connections>
-                                    <action selector="togglePreviewWithToggle:" destination="lNw-GD-bry" eventType="valueChanged" id="kZc-n6-BaI"/>
-                                </connections>
-                            </segmentedControl>
                         </subviews>
                         <color key="backgroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
-                            <constraint firstItem="jtv-rl-uo7" firstAttribute="bottom" secondItem="5JH-mO-Fbo" secondAttribute="bottom" id="DVa-D3-Mje"/>
-                            <constraint firstItem="jtv-rl-uo7" firstAttribute="leading" secondItem="5JH-mO-Fbo" secondAttribute="leading" id="XmU-Vr-L3A"/>
+                            <constraint firstItem="5JH-mO-Fbo" firstAttribute="bottom" secondItem="jtv-rl-uo7" secondAttribute="bottom" id="4Qj-ZD-gUJ"/>
+                            <constraint firstItem="jtv-rl-uo7" firstAttribute="leading" secondItem="5JH-mO-Fbo" secondAttribute="leading" id="QvP-Zm-j0e"/>
                             <constraint firstItem="tre-gg-JNu" firstAttribute="leading" secondItem="5JH-mO-Fbo" secondAttribute="leading" id="Z6Z-mX-6DD"/>
                             <constraint firstItem="tre-gg-JNu" firstAttribute="top" secondItem="5JH-mO-Fbo" secondAttribute="top" constant="-20" id="aiA-th-KWt"/>
                             <constraint firstItem="tre-gg-JNu" firstAttribute="trailing" secondItem="5JH-mO-Fbo" secondAttribute="trailing" id="cbz-bp-GsU"/>
-                            <constraint firstItem="sjp-gD-CKe" firstAttribute="trailing" secondItem="5JH-mO-Fbo" secondAttribute="trailing" id="eet-Bw-79W"/>
-                            <constraint firstItem="sjp-gD-CKe" firstAttribute="top" secondItem="m5k-Zd-4vX" secondAttribute="top" id="fUd-fU-8pr"/>
-                            <constraint firstItem="sjp-gD-CKe" firstAttribute="bottom" secondItem="5JH-mO-Fbo" secondAttribute="bottom" id="hKW-yh-ELx"/>
-                            <constraint firstItem="jtv-rl-uo7" firstAttribute="trailing" secondItem="5JH-mO-Fbo" secondAttribute="trailing" id="yOD-Hh-zdx"/>
-                            <constraint firstItem="sjp-gD-CKe" firstAttribute="leading" secondItem="5JH-mO-Fbo" secondAttribute="leading" id="z6I-XQ-DdH"/>
+                            <constraint firstItem="jtv-rl-uo7" firstAttribute="trailing" secondItem="5JH-mO-Fbo" secondAttribute="trailing" id="le4-Lx-Wfk"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="5JH-mO-Fbo"/>
                     </view>
                     <connections>
                         <outlet property="flash" destination="A1E-am-Q7T" id="ypJ-fh-OqJ"/>
-                        <outlet property="imageView" destination="sjp-gD-CKe" id="CA6-U0-Obe"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="WyB-3s-IvM" userLabel="First Responder" sceneMemberID="firstResponder"/>

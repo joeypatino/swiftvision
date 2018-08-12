@@ -20,7 +20,7 @@
 - (UIImage *_Nullable)gray:(UIImage *_Nonnull)image;
 - (UIImage *_Nullable)blurred:(UIImage *_Nonnull)image;
 - (UIImage *_Nullable)dialate1:(UIImage *_Nonnull)image;
+- (UIImage *_Nullable)threshhold:(UIImage *_Nonnull)image;
 - (UIImage *_Nullable)canny:(UIImage *_Nonnull)image;
 - (UIImage *_Nullable)dialate2:(UIImage *_Nonnull)image;
-- (UIImage *_Nullable)morph:(UIImage *_Nonnull)image;
 @end

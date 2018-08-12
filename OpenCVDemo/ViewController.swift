@@ -4,9 +4,10 @@ import SwiftVision
 class ViewController: UIViewController {
     @IBOutlet weak var imageView: UIImageView!
     private let imagePicker = UIImagePickerController()
-    private var imageContours = TextDewarper(image: UIImage(named: "boston_cooking_a.jpg")!.normalizedImage())
+    private var imageContours = TextDewarper(image: UIImage().normalizedImage())
     private var dewarpedImage: UIImage?
     private let camera = Camera()
+
     override func viewDidLoad() {
         super.viewDidLoad()
         camera.quality = .medium

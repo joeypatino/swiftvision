@@ -11,7 +11,7 @@ import SwiftVision
 
 class PageOutlineTracker {
     public var trackingTrigger: ((CGRectOutline) -> ())?
-    public var trackingTimeout: TimeInterval = 3.0
+    public var trackingTimeout: TimeInterval = 20.0
     public var pageOutline: CGRectOutline = CGRectOutlineZeroMake() {
         didSet {
             isTracking

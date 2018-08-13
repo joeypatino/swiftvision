@@ -132,13 +132,8 @@
                                     <constraint firstAttribute="height" constant="42" id="TBd-IS-iQi"/>
                                 </constraints>
                                 <segments>
-                                    <segment title="norm"/>
-                                    <segment title="gray"/>
-                                    <segment title="blur"/>
-                                    <segment title="dialate"/>
-                                    <segment title="thresh"/>
-                                    <segment title="canny"/>
-                                    <segment title="dialate"/>
+                                    <segment title="normal"/>
+                                    <segment title="preprocessed"/>
                                 </segments>
                                 <color key="tintColor" red="0.99942404029999998" green="0.98555368190000003" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <connections>

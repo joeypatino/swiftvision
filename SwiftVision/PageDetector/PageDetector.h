@@ -13,14 +13,15 @@
 - (UIImage *_Nullable)renderPageBounds:(UIImage *_Nonnull)image;
 - (UIImage *_Nullable)render:(CGRectOutline)outline inImage:(UIImage *_Nonnull)image;
 
+// normalize a CGRectOutline
 - (CGRectOutline)norm2Pix:(CGRectOutline)outline size:(CGSize)size;
 
-
-// Helpers
-- (UIImage *_Nullable)gray:(UIImage *_Nonnull)image;
-- (UIImage *_Nullable)blurred:(UIImage *_Nonnull)image;
-- (UIImage *_Nullable)dialate1:(UIImage *_Nonnull)image;
-- (UIImage *_Nullable)threshhold:(UIImage *_Nonnull)image;
-- (UIImage *_Nullable)canny:(UIImage *_Nonnull)image;
-- (UIImage *_Nullable)dialate2:(UIImage *_Nonnull)image;
+// debug Helpers
+- (UIImage *_Nullable)process:(UIImage *_Nonnull)image;
+//- (UIImage *_Nullable)gray:(UIImage *_Nonnull)image;
+//- (UIImage *_Nullable)blurred:(UIImage *_Nonnull)image;
+//- (UIImage *_Nullable)dialate1:(UIImage *_Nonnull)image;
+//- (UIImage *_Nullable)threshhold:(UIImage *_Nonnull)image;
+//- (UIImage *_Nullable)canny:(UIImage *_Nonnull)image;
+//- (UIImage *_Nullable)dialate2:(UIImage *_Nonnull)image;
 @end

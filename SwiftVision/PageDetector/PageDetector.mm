@@ -136,150 +136,138 @@ using namespace cv;
 /** Preprocesses a UIImage for edge detection. */
 - (cv::Mat)preprocessImage:(UIImage *)image {
     cv::Mat inImage = [image mat];
-    cv::Mat gray, blurred, dialate1,thresh, canny, dialate2, morph;
+    cv::Mat outImage;
 
-    gray = [self _gray:inImage];
-    blurred = [self _blurred:gray];
-    dialate1 = [self _dialate1:blurred];    // <-- IDENTITY
-    thresh = [self _threshhold:dialate1];
-    canny = [self _canny:thresh];           // <-- IDENTITY
-    dialate2 = [self _dialate2:canny];      // <-- IDENTITY
-    morph = [self _morph:dialate2];
-
-    return morph;
-}
-
-- (UIImage *)gray:(UIImage *)image {
-    cv::Mat inImage = [image mat];
-    cv::Mat gray;
-    gray = [self _gray:inImage];
-    return [UIImage imageWithMat:gray];
-}
-
-- (UIImage *)blurred:(UIImage *)image {
-    cv::Mat inImage = [image mat];
-    cv::Mat gray, blurred;
-    gray = [self _gray:inImage];
-    blurred = [self _blurred:gray];
-    return [UIImage imageWithMat:blurred];
-}
-
-- (UIImage *)dialate1:(UIImage *)image {
-    cv::Mat inImage = [image mat];
-    cv::Mat gray, blurred, dialate1;
-    gray = [self _gray:inImage];
-    blurred = [self _blurred:gray];
-    dialate1 = [self _dialate1:blurred];
-    return [UIImage imageWithMat:dialate1];
-}
-
-- (UIImage *)threshhold:(UIImage *)image {
-    cv::Mat inImage = [image mat];
-    cv::Mat gray, blurred, dialate1, thresh;
-    gray = [self _gray:inImage];
-    blurred = [self _blurred:gray];
-    dialate1 = [self _dialate1:blurred];
-    thresh = [self _threshhold:dialate1];
-    return [UIImage imageWithMat:thresh];
-}
-
-- (UIImage *)canny:(UIImage *)image {
-    cv::Mat inImage = [image mat];
-    cv::Mat gray, blurred, dialate1, thresh, canny;
-    gray = [self _gray:inImage];
-    blurred = [self _blurred:gray];
-    dialate1 = [self _dialate1:blurred];
-    thresh = [self _threshhold:dialate1];
-    canny = [self _canny:thresh];
-    return [UIImage imageWithMat:canny];
-}
-
-- (UIImage *)dialate2:(UIImage *)image {
-    cv::Mat inImage = [image mat];
-    cv::Mat gray, blurred, dialate1, thresh, canny, dialate2;
-    gray = [self _gray:inImage];
-    blurred = [self _blurred:gray];
-    dialate1 = [self _dialate1:blurred];
-    thresh = [self _threshhold:dialate1];
-    canny = [self _canny:thresh];
-    dialate2 = [self _dialate2:canny];
-    return [UIImage imageWithMat:dialate2];
-}
-
-- (cv::Mat)_gray:(cv::Mat)inImage {
     cv::Mat gray;
     cv::cvtColor(inImage, gray, cv::COLOR_RGBA2GRAY);
-    return gray;
-}
 
-- (cv::Mat)_blurred:(cv::Mat)inImage {
     cv::Mat blurred;
-    //cv::medianBlur(inImage, blurred, 5);
-    cv::GaussianBlur(inImage, blurred, cv::Size(9, 9), 0);
-    return blurred;
+    cv::GaussianBlur(gray, blurred, cv::Size(5, 5), 0);
+
+    cv::Mat canny;
+    cv::Canny(blurred, canny, 10, 20);
+
+    cv::Mat dialate;
+    cv::Mat dialateKernel = cv::Mat::ones(4, 4, CV_8UC1);
+    cv::dilate(canny, dialate, dialateKernel);
+
+    // output the final results
+    outImage = dialate;
+    return outImage;
 }
 
-- (cv::Mat)_dialate1:(cv::Mat)inImage {
-    return inImage;
+- (UIImage *)process:(UIImage *)image {
+    return [UIImage imageWithMat:[self preprocessImage:image]];
+}
+
+//- (UIImage *)gray:(UIImage *)image {
+//    cv::Mat inImage = [image mat];
+//    cv::Mat gray;
+//    gray = [self _gray:inImage];
+//    return [UIImage imageWithMat:gray];
+//}
+//
+//- (UIImage *)blurred:(UIImage *)image {
+//    cv::Mat inImage = [image mat];
+//    cv::Mat gray, blurred;
+//    gray = [self _gray:inImage];
+//    blurred = [self _blurred:gray];
+//    return [UIImage imageWithMat:blurred];
+//}
+//
+//- (UIImage *)dialate1:(UIImage *)image {
+//    cv::Mat inImage = [image mat];
+//    cv::Mat gray, blurred, dialate1;
+//    gray = [self _gray:inImage];
+//    blurred = [self _blurred:gray];
+//    dialate1 = [self _dialate1:blurred];
+//    return [UIImage imageWithMat:dialate1];
+//}
+//
+//- (UIImage *)threshhold:(UIImage *)image {
+//    cv::Mat inImage = [image mat];
+//    cv::Mat gray, blurred, dialate1, thresh;
+//    gray = [self _gray:inImage];
+//    blurred = [self _blurred:gray];
+//    dialate1 = [self _dialate1:blurred];
+//    thresh = [self _threshhold:dialate1];
+//    return [UIImage imageWithMat:thresh];
+//}
+//
+//- (UIImage *)canny:(UIImage *)image {
+//    cv::Mat inImage = [image mat];
+//    cv::Mat gray, blurred, dialate1, thresh, canny;
+//    gray = [self _gray:inImage];
+//    blurred = [self _blurred:gray];
+//    dialate1 = [self _dialate1:blurred];
+//    thresh = [self _threshhold:dialate1];
+//    canny = [self _canny:thresh];
+//    return [UIImage imageWithMat:canny];
+//}
+//
+//- (UIImage *)dialate2:(UIImage *)image {
+//    cv::Mat inImage = [image mat];
+//    cv::Mat gray, blurred, dialate1, thresh, canny, dialate2;
+//    gray = [self _gray:inImage];
+//    blurred = [self _blurred:gray];
+//    dialate1 = [self _dialate1:blurred];
+//    thresh = [self _threshhold:dialate1];
+//    canny = [self _canny:thresh];
+//    dialate2 = [self _dialate2:canny];
+//    return [UIImage imageWithMat:dialate2];
+//}
+//
+//- (cv::Mat)_gray:(cv::Mat)inImage {
+//    cv::Mat gray;
+//    cv::cvtColor(inImage, gray, cv::COLOR_RGBA2GRAY);
+//    return gray;
+//}
+//
+//- (cv::Mat)_blurred:(cv::Mat)inImage {
+//    cv::Mat blurred;
+//    cv::GaussianBlur(inImage, blurred, cv::Size(9, 9), 0);
+//    return blurred;
+//}
+//
+//- (cv::Mat)_dialate1:(cv::Mat)inImage {
 //    cv::Mat dialate1;
 //    cv::Mat dialateKernel1 = cv::Mat::ones(14, 14, CV_8UC1);
 //    cv::dilate(inImage, dialate1, dialateKernel1);
 //    return dialate1;
-}
-
-- (cv::Mat)_threshhold:(cv::Mat)inImage {
-    cv::Mat thresh;
-    cv::adaptiveThreshold(inImage, thresh, 255, ADAPTIVE_THRESH_MEAN_C, THRESH_BINARY, 11, 2);
-    return thresh;
-}
-
-- (cv::Mat)_canny:(cv::Mat)inImage {
-    return inImage;
-    //cv::Mat blurred;
-    //cv::medianBlur(inImage, blurred, 5);
-    //return blurred;
-
+//}
+//
+//- (cv::Mat)_threshhold:(cv::Mat)inImage {
+//    cv::Mat thresh;
+//    cv::adaptiveThreshold(inImage, thresh, 255, ADAPTIVE_THRESH_MEAN_C, THRESH_BINARY, 11, 2);
+//    return thresh;
+//}
+//
+//- (cv::Mat)_canny:(cv::Mat)inImage {
 //    cv::Mat canny;
 //    cv::Canny(inImage, canny, 255, 255, 3);
 //    return canny;
-}
-
-- (cv::Mat)_dialate2:(cv::Mat)inImage {
-    return inImage;
-//    cv::Mat erode;
-//    cv::Mat erodeKernel = cv::Mat::ones(4, 4, CV_8UC1);
-//    cv::erode(inImage, erode, erodeKernel);
+//}
 //
-//    cv::Mat dialate2;
-//    cv::Mat dialateKernel2 = cv::Mat::ones(2, 2, CV_8UC1);
-//    cv::dilate(erode, dialate2, dialateKernel2);
-//    return dialate2;
-}
-
-- (cv::Mat)_morph:(cv::Mat)inImage {
-    // Operator:
-    // 2: Opening
-    // 3: Closing
-    // 4: Gradient
-    // 5: Top Hat
-    // 6: Black Hat
-    int operation = MORPH_OPEN;
-    // Element:
-    // 0: Rect
-    // 1: Cross
-    // 2: Ellipse
-    int morph_elem = MORPH_ELLIPSE;
-    int morph_size = 3;
-
-    cv::Mat element = cv::getStructuringElement(morph_elem,
-                                                cv::Size(2 * morph_size + 1, 2 * morph_size + 1),
-                                                cv::Point( morph_size, morph_size));
-
-    cv::Mat morphed;
-    /// Apply the specified morphology operation
-    cv::morphologyEx(inImage, morphed, operation, element);
-    return morphed;
-}
+//- (cv::Mat)_dialate2:(cv::Mat)inImage {
+//    cv::Mat dialate;
+//    cv::Mat dialateKernel = cv::Mat::ones(2, 2, CV_8UC1);
+//    cv::dilate(inImage, dialate, dialateKernel);
+//    return dialate;
+//}
+//
+//- (cv::Mat)_morph:(cv::Mat)inImage {
+//    int operation = MORPH_OPEN;
+//    int morph_elem = MORPH_ELLIPSE;
+//    int morph_size = 3;
+//
+//    cv::Mat element = cv::getStructuringElement(morph_elem,
+//                                                cv::Size(2 * morph_size + 1, 2 * morph_size + 1),
+//                                                cv::Point( morph_size, morph_size));
+//
+//    cv::Mat morphed;
+//    cv::morphologyEx(inImage, morphed, operation, element);
+//    return morphed;
+//}
 
 /** Converts a CGRectOutline into a 'outlines' vector. */
 - (std::vector<std::vector<cv::Point2d>>)contoursFromOutline:(CGRectOutline)outline {

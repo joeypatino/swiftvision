@@ -11,13 +11,8 @@ import AVFoundation
 import SwiftVision
 
 enum PreviewType: Int {
-    case none
-    case gray
-    case blur
-    case dialate1
-    case threshhold
-    case canny
-    case dialate2
+    case `default`
+    case preprocessed
 }
 
 protocol PageCaptureDelegate: class {
@@ -33,7 +28,7 @@ class PageCaptureViewController: UIViewController {
     private let outlineTracker = PageOutlineTracker()
     private let pageDetector = PageDetector()
     private var camera: Camera?
-    private var previewType: PreviewType = .none
+    private var previewType: PreviewType = .default
     weak var delegate: PageCaptureDelegate?
 
     public override var preferredStatusBarStyle: UIStatusBarStyle { return .lightContent }
@@ -74,25 +69,15 @@ class PageCaptureViewController: UIViewController {
 
 extension PageCaptureViewController {
     @IBAction func togglePreview(toggle: UISegmentedControl) {
-        previewType = PreviewType(rawValue: toggle.selectedSegmentIndex) ?? .none
+        previewType = PreviewType(rawValue: toggle.selectedSegmentIndex) ?? .default
     }
 
     private func updatePreview(_ image: UIImage) {
         switch previewType {
-        case .none:
+        case .default:
             pageCapturePreview.image = nil
-        case .gray:
-            pageCapturePreview.image = pageDetector.gray(image)
-        case .blur:
-            pageCapturePreview.image = pageDetector.blurred(image)
-        case .dialate1:
-            pageCapturePreview.image = pageDetector.dialate1(image)
-        case .threshhold:
-            pageCapturePreview.image = pageDetector.threshhold(image)
-        case .canny:
-            pageCapturePreview.image = pageDetector.canny(image)
-        case .dialate2:
-            pageCapturePreview.image = pageDetector.dialate2(image)
+        case .preprocessed:
+            pageCapturePreview.image = pageDetector.process(image)
         }
     }
 }

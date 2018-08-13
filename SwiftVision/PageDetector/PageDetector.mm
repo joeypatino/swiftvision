@@ -9,7 +9,7 @@ using namespace cv;
 
 @implementation PageDetector
 
-- (CGRectOutline)pageBounds:(UIImage *)image {
+- (CGRectOutline)pageOutline:(UIImage *)image {
     cv::Mat inImage = [self preprocessImage:image];
     std::vector<std::vector<cv::Point2d>> points = [self findPageBounds:inImage];
     int largestArea = -1;
@@ -39,7 +39,7 @@ using namespace cv;
 }
 
 - (UIImage *)extractPage:(UIImage *)image {
-    CGRectOutline outline = [self pageBounds:image];
+    CGRectOutline outline = [self pageOutline:image];
     if (CGRectOutlineEquals(outline, CGRectOutlineZeroMake()))
         return image;
 
@@ -79,8 +79,8 @@ using namespace cv;
     return [UIImage imageWithMat:outImage];
 }
 
-- (UIImage *)renderPageBounds:(UIImage *)image {
-    CGRectOutline outline = [self pageBounds:image];
+- (UIImage *)renderPageOutline:(UIImage *)image {
+    CGRectOutline outline = [self pageOutline:image];
     if (CGRectOutlineEquals(outline, CGRectOutlineZeroMake())) {
         return image;
     }
@@ -145,13 +145,13 @@ using namespace cv;
     return outlines;
 }
 
-- (CGRectOutline)norm2Pix:(CGRectOutline)outline size:(CGSize)size {
+- (CGRectOutline)denormalize:(CGRectOutline)outline withSize:(CGSize)size {
     if (CGRectOutlineEquals(outline, CGRectOutlineZeroMake()))
         return outline;
-    outline.topLeft = normalizePoint(outline.topLeft, size);
-    outline.topRight = normalizePoint(outline.topRight, size);
-    outline.botRight = normalizePoint(outline.botRight, size);
-    outline.botLeft = normalizePoint(outline.botLeft, size);
+    outline.topLeft = denormalizePoint(outline.topLeft, size);
+    outline.topRight = denormalizePoint(outline.topRight, size);
+    outline.botRight = denormalizePoint(outline.botRight, size);
+    outline.botLeft = denormalizePoint(outline.botLeft, size);
     return outline;
 }
 
@@ -179,7 +179,7 @@ using namespace cv;
 }
 
 - (UIImage *)deskew:(UIImage *)image withOutline:(CGRectOutline)outline {
-    CGRectOutline normOutline = [self norm2Pix:outline size:image.size];
+    CGRectOutline normOutline = [self denormalize:outline withSize:image.size];
     cv::Mat inImage = [image mat];
     cv::Mat outImage;
     int widthA = sqrt(pow(normOutline.botRight.x - normOutline.botLeft.x, 2) + pow(normOutline.botRight.y - normOutline.botLeft.y, 2));
@@ -228,7 +228,7 @@ using namespace cv;
         // contour orientation
         double contourArea = fabs(cv::contourArea(cv::Mat(approx)));
         if (approx.size() == 4 &&
-//            cv::isContourConvex(cv::Mat(approx)) &&
+            //            cv::isContourConvex(cv::Mat(approx)) &&
             contourArea > imageArea * 0.35 &&
             contourArea < imageArea * 0.8) {
 
@@ -259,7 +259,7 @@ double angle( cv::Point2d pt1, cv::Point2d pt2, cv::Point2d pt0 ) {
     return (dx1*dx2 + dy1*dy2)/sqrt((dx1*dx1 + dy1*dy1)*(dx2*dx2 + dy2*dy2) + 1e-10);
 }
 
-CGPoint normalizePoint(CGPoint p, CGSize size) {
+CGPoint denormalizePoint(CGPoint p, CGSize size) {
     float scale = MAX(size.height, size.width) * 0.5;
     CGPoint offset = CGPointMake(0.5 * size.width, 0.5 * size.height);
     return CGPointMake((p.x * scale) + offset.x, (p.y * scale) + offset.y);

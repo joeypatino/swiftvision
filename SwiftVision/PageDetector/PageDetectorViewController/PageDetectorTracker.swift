@@ -1,17 +1,16 @@
 //
-//  PageOutlineTracker.swift
-//  OpenCVDemo
+//  PageDetectorTracker.swift
+//  SwiftVision
 //
-//  Created by Joey Patino on 8/12/18.
+//  Created by Joey Patino on 8/13/18.
 //  Copyright © 2018 Joseph Patino. All rights reserved.
 //
 
 import Foundation
-import SwiftVision
 
-class PageOutlineTracker {
+final internal class PageOutlineTracker {
     public var trackingTrigger: ((CGRectOutline) -> ())?
-    public var trackingTimeout: TimeInterval = 1.0
+    public var trackingTimeout: TimeInterval = 3.0
     public var pageOutline: CGRectOutline = CGRectOutlineZeroMake() {
         didSet {
             isTracking

@@ -20,13 +20,17 @@
 		D428ED33204987D6002A7322 /* UIColor+extras.m in Sources */ = {isa = PBXBuildFile; fileRef = D428ED31204987D6002A7322 /* UIColor+extras.m */; };
 		D429817F2052AF0300A28DF5 /* SwiftVisionTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = D429817E2052AF0300A28DF5 /* SwiftVisionTests.mm */; };
 		D42981812052AF0300A28DF5 /* SwiftVision.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D40B28392028856300CA8559 /* SwiftVision.framework */; };
+		D431F6C42121BB0D00C8437B /* CameraPreview.swift in Sources */ = {isa = PBXBuildFile; fileRef = D431F6C32121BB0D00C8437B /* CameraPreview.swift */; };
+		D431F6D62121DBF300C8437B /* PageDetectorViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D431F6D22121DBF300C8437B /* PageDetectorViewController.swift */; };
+		D431F6D72121DBF300C8437B /* PageDetectorPreview.swift in Sources */ = {isa = PBXBuildFile; fileRef = D431F6D32121DBF300C8437B /* PageDetectorPreview.swift */; };
+		D431F6D82121DBF300C8437B /* CGRectOutlineView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D431F6D42121DBF300C8437B /* CGRectOutlineView.swift */; };
+		D431F6D92121DBF300C8437B /* PageDetectorTracker.swift in Sources */ = {isa = PBXBuildFile; fileRef = D431F6D52121DBF300C8437B /* PageDetectorTracker.swift */; };
 		D43C4531205B1DFF0072AF8F /* vectors.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D43C452F205B1DFF0072AF8F /* vectors.cpp */; };
 		D43C4532205B1DFF0072AF8F /* vectors.hpp in Headers */ = {isa = PBXBuildFile; fileRef = D43C4530205B1DFF0072AF8F /* vectors.hpp */; };
 		D43C4535205B1ECB0072AF8F /* math.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D43C4533205B1ECB0072AF8F /* math.cpp */; };
 		D43C4536205B1ECB0072AF8F /* math.hpp in Headers */ = {isa = PBXBuildFile; fileRef = D43C4534205B1ECB0072AF8F /* math.hpp */; };
 		D43C4539205B239C0072AF8F /* debug.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D43C4537205B239C0072AF8F /* debug.cpp */; };
 		D43C453A205B239C0072AF8F /* debug.hpp in Headers */ = {isa = PBXBuildFile; fileRef = D43C4538205B239C0072AF8F /* debug.hpp */; };
-		D461D4D3211F63710082BBCC /* PageCapturePreview.swift in Sources */ = {isa = PBXBuildFile; fileRef = D461D4D0211F63700082BBCC /* PageCapturePreview.swift */; };
 		D461D4D4211F63710082BBCC /* PageCaptureViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D461D4D1211F63700082BBCC /* PageCaptureViewController.swift */; };
 		D461D4D9211F63870082BBCC /* input_image.jpeg in Resources */ = {isa = PBXBuildFile; fileRef = D461D4D6211F63870082BBCC /* input_image.jpeg */; };
 		D461D4DA211F63870082BBCC /* cat.035.jpg in Resources */ = {isa = PBXBuildFile; fileRef = D461D4D7211F63870082BBCC /* cat.035.jpg */; };
@@ -65,7 +69,6 @@
 		D4BAD1C62034DBB200F4A32C /* NSArray+extras.m in Sources */ = {isa = PBXBuildFile; fileRef = D4BAD1C42034DBB200F4A32C /* NSArray+extras.m */; };
 		D4C8B37D21135C150037FDDE /* dewarp.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D4C8B37B21135C150037FDDE /* dewarp.cpp */; };
 		D4C8B37E21135C150037FDDE /* dewarp.hpp in Headers */ = {isa = PBXBuildFile; fileRef = D4C8B37C21135C150037FDDE /* dewarp.hpp */; };
-		D4D259322120B99300E98268 /* PageOutlineTracker.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4D259312120B99300E98268 /* PageOutlineTracker.swift */; };
 		D4D8304A206198F0001B1535 /* UIImage+extras.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4D83049206198F0001B1535 /* UIImage+extras.swift */; };
 /* End PBXBuildFile section */
 
@@ -119,13 +122,17 @@
 		D429817C2052AF0300A28DF5 /* SwiftVisionTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = SwiftVisionTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		D429817E2052AF0300A28DF5 /* SwiftVisionTests.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = SwiftVisionTests.mm; sourceTree = "<group>"; };
 		D42981802052AF0300A28DF5 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		D431F6C32121BB0D00C8437B /* CameraPreview.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraPreview.swift; sourceTree = "<group>"; };
+		D431F6D22121DBF300C8437B /* PageDetectorViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PageDetectorViewController.swift; sourceTree = "<group>"; };
+		D431F6D32121DBF300C8437B /* PageDetectorPreview.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PageDetectorPreview.swift; sourceTree = "<group>"; };
+		D431F6D42121DBF300C8437B /* CGRectOutlineView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CGRectOutlineView.swift; sourceTree = "<group>"; };
+		D431F6D52121DBF300C8437B /* PageDetectorTracker.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PageDetectorTracker.swift; sourceTree = "<group>"; };
 		D43C452F205B1DFF0072AF8F /* vectors.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = vectors.cpp; sourceTree = "<group>"; };
 		D43C4530205B1DFF0072AF8F /* vectors.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = vectors.hpp; sourceTree = "<group>"; };
 		D43C4533205B1ECB0072AF8F /* math.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = math.cpp; sourceTree = "<group>"; };
 		D43C4534205B1ECB0072AF8F /* math.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = math.hpp; sourceTree = "<group>"; };
 		D43C4537205B239C0072AF8F /* debug.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = debug.cpp; sourceTree = "<group>"; };
 		D43C4538205B239C0072AF8F /* debug.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = debug.hpp; sourceTree = "<group>"; };
-		D461D4D0211F63700082BBCC /* PageCapturePreview.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PageCapturePreview.swift; sourceTree = "<group>"; };
 		D461D4D1211F63700082BBCC /* PageCaptureViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PageCaptureViewController.swift; sourceTree = "<group>"; };
 		D461D4D6211F63870082BBCC /* input_image.jpeg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = input_image.jpeg; sourceTree = "<group>"; };
 		D461D4D7211F63870082BBCC /* cat.035.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = cat.035.jpg; sourceTree = "<group>"; };
@@ -164,7 +171,6 @@
 		D4BAD1C42034DBB200F4A32C /* NSArray+extras.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "NSArray+extras.m"; sourceTree = "<group>"; };
 		D4C8B37B21135C150037FDDE /* dewarp.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = dewarp.cpp; sourceTree = "<group>"; };
 		D4C8B37C21135C150037FDDE /* dewarp.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = dewarp.hpp; sourceTree = "<group>"; };
-		D4D259312120B99300E98268 /* PageOutlineTracker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PageOutlineTracker.swift; sourceTree = "<group>"; };
 		D4D83049206198F0001B1535 /* UIImage+extras.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIImage+extras.swift"; sourceTree = "<group>"; };
 		D4E45DAF211A52010094CE23 /* opencv2.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = opencv2.framework; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -276,6 +282,17 @@
 			path = SwiftVisionTests;
 			sourceTree = "<group>";
 		};
+		D431F6D12121DBF300C8437B /* PageDetectorViewController */ = {
+			isa = PBXGroup;
+			children = (
+				D431F6D22121DBF300C8437B /* PageDetectorViewController.swift */,
+				D431F6D32121DBF300C8437B /* PageDetectorPreview.swift */,
+				D431F6D42121DBF300C8437B /* CGRectOutlineView.swift */,
+				D431F6D52121DBF300C8437B /* PageDetectorTracker.swift */,
+			);
+			path = PageDetectorViewController;
+			sourceTree = "<group>";
+		};
 		D439946E20388B9700D9B783 /* helpers */ = {
 			isa = PBXGroup;
 			children = (
@@ -299,8 +316,6 @@
 			isa = PBXGroup;
 			children = (
 				D461D4D1211F63700082BBCC /* PageCaptureViewController.swift */,
-				D461D4D0211F63700082BBCC /* PageCapturePreview.swift */,
-				D4D259312120B99300E98268 /* PageOutlineTracker.swift */,
 			);
 			path = PageCapture;
 			sourceTree = "<group>";
@@ -319,6 +334,7 @@
 			isa = PBXGroup;
 			children = (
 				D461D4DE211F6B410082BBCC /* Camera.swift */,
+				D431F6C32121BB0D00C8437B /* CameraPreview.swift */,
 			);
 			path = Camera;
 			sourceTree = "<group>";
@@ -368,6 +384,7 @@
 		D48A95A4211CCAA900A12E4B /* PageDetector */ = {
 			isa = PBXGroup;
 			children = (
+				D431F6D12121DBF300C8437B /* PageDetectorViewController */,
 				D48A95A5211CCAE200A12E4B /* PageDetector.h */,
 				D48A95A6211CCAE200A12E4B /* PageDetector.mm */,
 			);
@@ -577,8 +594,10 @@
 				D4A572C3202A1E1500D8F4B0 /* TextDewarper.mm in Sources */,
 				D43C4539205B239C0072AF8F /* debug.cpp in Sources */,
 				D471D7FA20500F2200F38C26 /* UIImage+Contour.mm in Sources */,
+				D431F6D62121DBF300C8437B /* PageDetectorViewController.swift in Sources */,
 				D4C8B37D21135C150037FDDE /* dewarp.cpp in Sources */,
 				D461D4DF211F6B420082BBCC /* Camera.swift in Sources */,
+				D431F6C42121BB0D00C8437B /* CameraPreview.swift in Sources */,
 				D471D7F520500EE300F38C26 /* UIImage+OpenCV.mm in Sources */,
 				D43C4531205B1DFF0072AF8F /* vectors.cpp in Sources */,
 				D428ED33204987D6002A7322 /* UIColor+extras.m in Sources */,
@@ -587,6 +606,9 @@
 				D4BAD1C62034DBB200F4A32C /* NSArray+extras.m in Sources */,
 				D471D7E320500CE600F38C26 /* Contour.mm in Sources */,
 				D43C4535205B1ECB0072AF8F /* math.cpp in Sources */,
+				D431F6D92121DBF300C8437B /* PageDetectorTracker.swift in Sources */,
+				D431F6D82121DBF300C8437B /* CGRectOutlineView.swift in Sources */,
+				D431F6D72121DBF300C8437B /* PageDetectorPreview.swift in Sources */,
 				D471D7E620500CE600F38C26 /* ContourSpan.mm in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -599,8 +621,6 @@
 				D40B28522028860D00CA8559 /* AppDelegate.swift in Sources */,
 				D4D8304A206198F0001B1535 /* UIImage+extras.swift in Sources */,
 				D461D4D4211F63710082BBCC /* PageCaptureViewController.swift in Sources */,
-				D4D259322120B99300E98268 /* PageOutlineTracker.swift in Sources */,
-				D461D4D3211F63710082BBCC /* PageCapturePreview.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -56,9 +56,10 @@ class ViewController: UIViewController {
     }
 
     @IBAction private func takePhoto(){
-        let viewController = PageCaptureViewController.make(with: camera)
+        let viewController = PageCaptureViewController(with: camera)
         viewController.delegate = self
-        present(viewController, animated: true)
+        let navController = UINavigationController(rootViewController: viewController)
+        present(navController, animated: true)
     }
 
     private func loadImage(_ image:UIImage) {
@@ -75,30 +76,12 @@ extension ViewController: UIScrollViewDelegate {
     }
 }
 
-extension ViewController: PageCaptureDelegate {
-    func captureViewController(_ viewController: PageCaptureViewController, didCapturePage page: UIImage) {
+extension ViewController: PageDetectorDelegate {
+    func pageDetectorViewController(_ viewController: PageDetectorViewController) {
+        viewController.dismiss(animated: true)
+    }
+    func pageDetectorViewController(_ viewController: PageDetectorViewController, didCapturePage page: UIImage) {
         viewController.dismiss(animated: true)
         loadImage(page)
-    }
-
-    func captureViewControllerDidCancel(_ viewController: PageCaptureViewController) {
-        viewController.dismiss(animated: true)
-    }
-}
-
-extension ViewController: UIImagePickerControllerDelegate, UINavigationControllerDelegate {
-    public func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : Any]) {
-
-        picker.dismiss(animated: true, completion: nil)
-        guard let image = info[UIImagePickerControllerOriginalImage] as? UIImage else { return }
-
-        loadImage(image)
-    }
-
-    public func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
-        picker.dismiss(animated: true, completion: nil)
-        guard let image = UIImage(named: "input_image.jpeg") else { return }
-
-        loadImage(image)
     }
 }

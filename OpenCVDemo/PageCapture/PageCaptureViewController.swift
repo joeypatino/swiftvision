@@ -32,7 +32,7 @@ class PageCaptureViewController: UIViewController {
     }
     private let outlineTracker = PageOutlineTracker()
     private let pageDetector = PageDetector()
-    private var camera: Camera!
+    private var camera: Camera?
     private var previewType: PreviewType = .none
     weak var delegate: PageCaptureDelegate?
 
@@ -41,9 +41,9 @@ class PageCaptureViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        camera.delegate = self
-        camera.quality = .high
-        pageCapturePreview.session = camera.captureSession
+        camera?.delegate = self
+        camera?.quality = .high
+        pageCapturePreview.session = camera?.captureSession
 
         outlineTracker.trackingTrigger = { [weak self] outline in
             self?.capturePage(with: outline)
@@ -61,11 +61,11 @@ class PageCaptureViewController: UIViewController {
     }
 
     @IBAction func flashToggle(_ sender: UISwitch) {
-        camera.isFlashEnabled = sender.isOn
+        camera?.isFlashEnabled = sender.isOn
     }
 
     private func capturePage(with outline: CGRectOutline) {
-        camera.captureCurrentFrame { [unowned self] frame in
+        camera?.captureCurrentFrame { [unowned self] frame in
             let image = self.pageDetector.extract(outline, from: frame)
             self.delegate?.captureViewController(self, didCapturePage: image ?? frame)
         }

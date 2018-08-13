@@ -29,11 +29,8 @@ using namespace cv;
     self.inputImage = image;
     self.workingImage = [image resizeTo:CGSizeMake(1920, 1440)];
 
-    UIImage *mask = [[[self.workingImage
-                        threshold:55
-                        constant:25]
-                       dilate:CGSizeMake(9, 1)]
-                      erode:CGSizeMake(1, 3)];
+    UIImage *mask = [[self.workingImage erode:CGSizeMake(5, 5)] invert];
+
     CGRectOutline outline = [self outlineWithSize:self.workingImage.size];
     UIImage *minMask = [mask elementwiseMinimum:[self.workingImage rectangle:outline]];
     self.contours = [minMask contoursFilteredBy:filter];
@@ -45,7 +42,6 @@ using namespace cv;
 // MARK: - returns dewarped image
 - (UIImage *)dewarp {
     std::vector<std::vector<cv::Point2d>> allSpanPoints = [self allSamplePoints:self.spans];
-    UIImage *image = [self renderTextBounds:self.workingImage];
     DisparityModel *disparity = [[DisparityModel alloc] initWithImage:self.workingImage
                                                             keyPoints:allSpanPoints];
     return [disparity apply];
@@ -57,7 +53,11 @@ using namespace cv;
 }
 
 - (UIImage *)renderOutlines {
-    return [self render:[UIColor whiteColor] mode:ContourRenderingModeOutline];
+    return [self render:[UIColor redColor] mode:ContourRenderingModeOutline];
+}
+
+- (UIImage *)renderKeyPoints {
+    return [self renderKeyPoints:[UIColor greenColor] mode:ContourRenderingModeFill];
 }
 
 - (UIImage *)render:(UIColor *)color mode:(ContourRenderingMode)mode {
@@ -76,20 +76,29 @@ using namespace cv;
     return [[UIImage alloc] initWithCVMat:outImage];
 }
 
-- (UIImage *)renderKeyPoints {
-    return [self renderKeyPoints:[UIColor whiteColor] mode:ContourRenderingModeFill];
+- (UIImage *)renderKeyPoints:(UIColor *)color mode:(ContourRenderingMode)mode {
+    cv::Mat display = [self.inputImage mat];
+    for (ContourSpan *span in self.spans) {
+        for (int i = 0; i < span.keyPoints.size(); i++) {
+            cv::Point2d pt = span.keyPoints[i];
+            BOOL filled = (mode == ContourRenderingModeFill) ? ContourRenderingModeFill : ContourRenderingModeOutline;
+            cv::circle(display, pt, 6, [self scalarColorFrom:span.color], filled ? -1 : 1, LINE_AA);
+        }
+    }
+    return [[UIImage alloc] initWithCVMat:display];
 }
 
-- (UIImage *)renderKeyPoints:(UIColor *)color mode:(ContourRenderingMode)mode {
+- (UIImage *)renderTextLineCurves {
     std::vector<std::vector<Point2d>> allSpanPoints = [self allSamplePoints:self.spans];
     DisparityModel *disparity = [[DisparityModel alloc] initWithImage:self.workingImage keyPoints:allSpanPoints];
     return [disparity apply:DewarpOutputVerticalQuadraticCurves | DewarpOutputVerticalCenterLines];
+
 }
 
 // MARK: -
 - (CGRectOutline)outlineWithSize:(CGSize)size {
-    int PAGE_MARGIN_X = 20;
-    int PAGE_MARGIN_Y = 20;
+    int PAGE_MARGIN_X = 0;
+    int PAGE_MARGIN_Y = 0;
 
     int xmin = PAGE_MARGIN_X;
     int ymin = PAGE_MARGIN_Y;
@@ -111,28 +120,6 @@ using namespace cv;
     [color getRed:&red green:&green blue:&blue alpha:&alpha];
 
     return Scalar(red * 255.0, green * 255.0, blue * 255.0, alpha * 255.0);
-}
-
-- (UIImage *)renderTextBounds:(UIImage *)inImage {
-
-    cv::Mat outImage = [inImage mat];
-    CGRect rect = CGRectZero;
-    for (ContourSpan *span in self.spans) {
-        if (CGRectEqualToRect(rect, CGRectZero))
-            rect = span.boundingBox;
-        rect = CGRectUnion(rect, span.boundingBox);
-    }
-    rect = CGRectIntersection(CGRectInset(rect, -20, -20),
-                              CGRectMake(0, 0, inImage.size.width, inImage.size.height));
-
-    cv::Scalar color = [self scalarColorFrom:[UIColor lightGrayColor]];
-    cv::Rect roi = cv::Rect(rect.origin.x, rect.origin.y, rect.size.width, rect.size.height);
-    cv::rectangle(outImage, roi, color);
-
-    cv::Mat masked = cv::Mat(outImage.size(), outImage.type(), color);
-    outImage(roi).copyTo(masked);
-
-    return [[UIImage alloc] initWithCVMat:masked];
 }
 
 - (std::vector<vector<Point2d>>)allSamplePoints:(NSArray <ContourSpan *> *)spans {

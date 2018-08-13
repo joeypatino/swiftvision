@@ -14,10 +14,10 @@ using namespace cv;
 @implementation UIImage (Contour)
 // MARK: -
 - (NSArray<Contour *> *)contoursFilteredBy:(BOOL (^)(Contour *contour))filter {
-    int TEXT_MIN_WIDTH = 15;         //# min px width of detected text contour
-    int TEXT_MIN_HEIGHT = 2;        //# min px height of detected text contour
+    int TEXT_MIN_WIDTH = 22;         //# min px width of detected text contour
+    int TEXT_MIN_HEIGHT = 12;        //# min px height of detected text contour
     int TEXT_MIN_ASPECT = 1.5;      //# filter out text contours below this w/h ratio
-    int TEXT_MAX_THICKNESS = 10;    //# max px thickness of detected text contour
+    int TEXT_MAX_THICKNESS = 20;    //# max px thickness of detected text contour
 
     Mat cvMat = [self grayScaleMat];
     NSMutableArray <Contour *> *foundContours = @[].mutableCopy;
@@ -53,7 +53,7 @@ using namespace cv;
 }
 
 - (NSArray<ContourSpan *> *)spansFromContours:(NSArray<Contour *> *)contours {
-    CGFloat SPAN_MIN_WIDTH = 30;
+    CGFloat SPAN_MIN_WIDTH = 90;
 
     NSArray <Contour *> *sortedContours = [self sortContoursByBounds:contours];
     NSArray <ContourEdge *> *edges = [self generateContourEdgesFromContours:sortedContours];

@@ -111,7 +111,9 @@ final public class Camera: NSObject {
     // MARK: - Public
     public func captureCurrentFrame(captured: @escaping (UIImage) -> ()) {
         self.captureClosure = { image in
-            captured(image)
+            DispatchQueue.main.async {
+                captured(image)
+            }
         }
     }
 }

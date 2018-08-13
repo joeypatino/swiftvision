@@ -64,22 +64,19 @@ using namespace cv;
         outlinesI.push_back(pt);
     }
 
-    cv::Mat inImage = [image mat];
-    cv::Mat mask = cv::Mat::zeros(inImage.rows, inImage.cols, CV_8UC1);
+    UIImage *deskewed = [self deskew:image withOutline:outline];
+    cv::Mat inImage = [deskewed mat];
 
-    // CV_FILLED fills the connected components found
-    cv::drawContours(mask, outlinesI, -1, cv::Scalar(255), CV_FILLED, LINE_AA);
+    cv::Mat gray;
+    cv::cvtColor(inImage, gray, cv::COLOR_RGBA2GRAY);
 
-    // let's create a new image now
-    cv::Mat crop(inImage.rows, inImage.cols, CV_8UC4);
+    cv::Mat thresh;
+    cv::adaptiveThreshold(gray, thresh, 255, ADAPTIVE_THRESH_GAUSSIAN_C, THRESH_BINARY, 9, 5);
 
-    // set background to white
-    crop.setTo(cv::Scalar(255, 255, 255, 255));
+    cv::Mat outImage;
+    cv::cvtColor(thresh, outImage, cv::COLOR_GRAY2RGBA);
 
-    // and copy the masked component
-    inImage.copyTo(crop, mask);
-
-    return [[UIImage alloc] initWithCVMat:crop];
+    return [UIImage imageWithMat:outImage];
 }
 
 - (UIImage *)renderPageBounds:(UIImage *)image {
@@ -133,6 +130,31 @@ using namespace cv;
     return [[UIImage alloc] initWithCVMat:inImage];
 }
 
+- (UIImage *)process:(UIImage *)image {
+    return [UIImage imageWithMat:[self preprocessImage:image]];
+}
+
+/** Converts a CGRectOutline into a 'outlines' vector. */
+- (std::vector<std::vector<cv::Point2d>>)contoursFromOutline:(CGRectOutline)outline {
+    std::vector<std::vector<cv::Point2d>> outlines;
+    cv::Point2d topLeft = cv::Point2d(outline.topLeft.x, outline.topLeft.y);
+    cv::Point2d topRight = cv::Point2d(outline.topRight.x, outline.topRight.y);
+    cv::Point2d botRight = cv::Point2d(outline.botRight.x, outline.botRight.y);
+    cv::Point2d botLeft = cv::Point2d(outline.botLeft.x, outline.botLeft.y);
+    outlines.push_back({ topLeft, botLeft, botRight, topRight });
+    return outlines;
+}
+
+- (CGRectOutline)norm2Pix:(CGRectOutline)outline size:(CGSize)size {
+    if (CGRectOutlineEquals(outline, CGRectOutlineZeroMake()))
+        return outline;
+    outline.topLeft = normalizePoint(outline.topLeft, size);
+    outline.topRight = normalizePoint(outline.topRight, size);
+    outline.botRight = normalizePoint(outline.botRight, size);
+    outline.botLeft = normalizePoint(outline.botLeft, size);
+    return outline;
+}
+
 /** Preprocesses a UIImage for edge detection. */
 - (cv::Mat)preprocessImage:(UIImage *)image {
     cv::Mat inImage = [image mat];
@@ -156,138 +178,30 @@ using namespace cv;
     return outImage;
 }
 
-- (UIImage *)process:(UIImage *)image {
-    return [UIImage imageWithMat:[self preprocessImage:image]];
-}
+- (UIImage *)deskew:(UIImage *)image withOutline:(CGRectOutline)outline {
+    CGRectOutline normOutline = [self norm2Pix:outline size:image.size];
+    cv::Mat inImage = [image mat];
+    cv::Mat outImage;
+    int widthA = sqrt(pow(normOutline.botRight.x - normOutline.botLeft.x, 2) + pow(normOutline.botRight.y - normOutline.botLeft.y, 2));
+    int widthB = sqrt(pow(normOutline.topRight.x - normOutline.topLeft.x, 2) + pow(normOutline.topRight.y - normOutline.topLeft.y, 2));
+    int maxWidth = max(widthA, widthB);
 
-//- (UIImage *)gray:(UIImage *)image {
-//    cv::Mat inImage = [image mat];
-//    cv::Mat gray;
-//    gray = [self _gray:inImage];
-//    return [UIImage imageWithMat:gray];
-//}
-//
-//- (UIImage *)blurred:(UIImage *)image {
-//    cv::Mat inImage = [image mat];
-//    cv::Mat gray, blurred;
-//    gray = [self _gray:inImage];
-//    blurred = [self _blurred:gray];
-//    return [UIImage imageWithMat:blurred];
-//}
-//
-//- (UIImage *)dialate1:(UIImage *)image {
-//    cv::Mat inImage = [image mat];
-//    cv::Mat gray, blurred, dialate1;
-//    gray = [self _gray:inImage];
-//    blurred = [self _blurred:gray];
-//    dialate1 = [self _dialate1:blurred];
-//    return [UIImage imageWithMat:dialate1];
-//}
-//
-//- (UIImage *)threshhold:(UIImage *)image {
-//    cv::Mat inImage = [image mat];
-//    cv::Mat gray, blurred, dialate1, thresh;
-//    gray = [self _gray:inImage];
-//    blurred = [self _blurred:gray];
-//    dialate1 = [self _dialate1:blurred];
-//    thresh = [self _threshhold:dialate1];
-//    return [UIImage imageWithMat:thresh];
-//}
-//
-//- (UIImage *)canny:(UIImage *)image {
-//    cv::Mat inImage = [image mat];
-//    cv::Mat gray, blurred, dialate1, thresh, canny;
-//    gray = [self _gray:inImage];
-//    blurred = [self _blurred:gray];
-//    dialate1 = [self _dialate1:blurred];
-//    thresh = [self _threshhold:dialate1];
-//    canny = [self _canny:thresh];
-//    return [UIImage imageWithMat:canny];
-//}
-//
-//- (UIImage *)dialate2:(UIImage *)image {
-//    cv::Mat inImage = [image mat];
-//    cv::Mat gray, blurred, dialate1, thresh, canny, dialate2;
-//    gray = [self _gray:inImage];
-//    blurred = [self _blurred:gray];
-//    dialate1 = [self _dialate1:blurred];
-//    thresh = [self _threshhold:dialate1];
-//    canny = [self _canny:thresh];
-//    dialate2 = [self _dialate2:canny];
-//    return [UIImage imageWithMat:dialate2];
-//}
-//
-//- (cv::Mat)_gray:(cv::Mat)inImage {
-//    cv::Mat gray;
-//    cv::cvtColor(inImage, gray, cv::COLOR_RGBA2GRAY);
-//    return gray;
-//}
-//
-//- (cv::Mat)_blurred:(cv::Mat)inImage {
-//    cv::Mat blurred;
-//    cv::GaussianBlur(inImage, blurred, cv::Size(9, 9), 0);
-//    return blurred;
-//}
-//
-//- (cv::Mat)_dialate1:(cv::Mat)inImage {
-//    cv::Mat dialate1;
-//    cv::Mat dialateKernel1 = cv::Mat::ones(14, 14, CV_8UC1);
-//    cv::dilate(inImage, dialate1, dialateKernel1);
-//    return dialate1;
-//}
-//
-//- (cv::Mat)_threshhold:(cv::Mat)inImage {
-//    cv::Mat thresh;
-//    cv::adaptiveThreshold(inImage, thresh, 255, ADAPTIVE_THRESH_MEAN_C, THRESH_BINARY, 11, 2);
-//    return thresh;
-//}
-//
-//- (cv::Mat)_canny:(cv::Mat)inImage {
-//    cv::Mat canny;
-//    cv::Canny(inImage, canny, 255, 255, 3);
-//    return canny;
-//}
-//
-//- (cv::Mat)_dialate2:(cv::Mat)inImage {
-//    cv::Mat dialate;
-//    cv::Mat dialateKernel = cv::Mat::ones(2, 2, CV_8UC1);
-//    cv::dilate(inImage, dialate, dialateKernel);
-//    return dialate;
-//}
-//
-//- (cv::Mat)_morph:(cv::Mat)inImage {
-//    int operation = MORPH_OPEN;
-//    int morph_elem = MORPH_ELLIPSE;
-//    int morph_size = 3;
-//
-//    cv::Mat element = cv::getStructuringElement(morph_elem,
-//                                                cv::Size(2 * morph_size + 1, 2 * morph_size + 1),
-//                                                cv::Point( morph_size, morph_size));
-//
-//    cv::Mat morphed;
-//    cv::morphologyEx(inImage, morphed, operation, element);
-//    return morphed;
-//}
+    int heightA = sqrt(pow(normOutline.topRight.x - normOutline.botRight.x, 2) + pow(normOutline.topRight.y - normOutline.botRight.y, 2));
+    int heightB = sqrt(pow(normOutline.topLeft.x - normOutline.botLeft.x, 2) + pow(normOutline.topLeft.y - normOutline.botLeft.y, 2));
+    int maxHeight = max(heightA, heightB);
 
-/** Converts a CGRectOutline into a 'outlines' vector. */
-- (std::vector<std::vector<cv::Point2d>>)contoursFromOutline:(CGRectOutline)outline {
-    std::vector<std::vector<cv::Point2d>> outlines;
-    cv::Point2d topLeft = cv::Point2d(outline.topLeft.x, outline.topLeft.y);
-    cv::Point2d topRight = cv::Point2d(outline.topRight.x, outline.topRight.y);
-    cv::Point2d botRight = cv::Point2d(outline.botRight.x, outline.botRight.y);
-    cv::Point2d botLeft = cv::Point2d(outline.botLeft.x, outline.botLeft.y);
-    outlines.push_back({ topLeft, botLeft, botRight, topRight });
-    return outlines;
-}
+    CGRectOutline destinationPoints = CGRectOutlineMake(CGPointZero,
+                                                        CGPointMake(maxWidth - 1, 0),
+                                                        CGPointMake(maxWidth - 1, maxHeight - 1),
+                                                        CGPointMake(0, maxHeight - 1));
 
-- (CGRectOutline)norm2Pix:(CGRectOutline)outline size:(CGSize)size {
-    if (CGRectOutlineEquals(outline, CGRectOutlineZeroMake()))
-        return outline;
-    outline.topLeft = normalizePoint(outline.topLeft, size);
-    outline.topRight = normalizePoint(outline.topRight, size);
-    outline.botRight = normalizePoint(outline.botRight, size);
-    outline.botLeft = normalizePoint(outline.botLeft, size);
-    return outline;
+    std::vector<std::vector<cv::Point2d>> src = [self contoursFromOutline:normOutline];
+    std::vector<std::vector<cv::Point2d>> dst = [self contoursFromOutline:destinationPoints];
+    const cv::Point2f srcPts[] = { src[0][0], src[0][1], src[0][2], src[0][3] };
+    const cv::Point2f dstPts[] = { dst[0][0], dst[0][1], dst[0][2], dst[0][3] };
+    cv::Mat M = cv::getPerspectiveTransform(srcPts, dstPts);
+    cv::warpPerspective(inImage, outImage, M, cv::Size(maxWidth, maxHeight));
+    return [UIImage imageWithMat:outImage];
 }
 
 /** finds the boundary points of the largest contour in inImage.

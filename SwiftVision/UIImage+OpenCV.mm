@@ -28,6 +28,20 @@
     return [[UIImage alloc] initWithCVMat: outImage];
 }
 
+- (UIImage *)gray {
+    cv::Mat inImage = [self mat];
+    cv::Mat outImage;
+    cv::cvtColor(inImage, outImage, cv::COLOR_RGBA2GRAY);
+    return [[UIImage alloc] initWithCVMat:outImage];
+}
+
+- (UIImage *)invert {
+    cv::Mat inImage = [self mat];
+    cv::Mat outImage;
+    cv::bitwise_not(inImage, outImage);
+    return [[UIImage alloc] initWithCVMat:outImage];
+}
+
 - (UIImage *)threshold:(float)blockSize constant:(float)constant {
     cv::Mat inImage = [self mat];
     cv::Mat grayImage;

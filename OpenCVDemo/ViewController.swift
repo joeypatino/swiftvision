@@ -3,15 +3,19 @@ import SwiftVision
 
 class ViewController: UIViewController {
     @IBOutlet weak var imageView: UIImageView!
+    @IBOutlet weak var scrollView: UIScrollView!
     private let imagePicker = UIImagePickerController()
     private var imageContours = TextDewarper(image: UIImage().normalizedImage())
     private var dewarpedImage: UIImage?
     private let camera = Camera()
 
+    public override var preferredStatusBarStyle: UIStatusBarStyle { return .default }
+
     override func viewDidLoad() {
         super.viewDidLoad()
+        scrollView.minimumZoomScale = 1.0
+        scrollView.maximumZoomScale = 5.0
         camera.quality = .medium
-        imageView.image = imageContours.inputImage
     }
 
     @IBAction func originalAction(_ sender: Any) {
@@ -28,6 +32,10 @@ class ViewController: UIViewController {
 
     @IBAction func keyPointsAction(_ sender: Any) {
         imageView.image = imageContours.renderKeyPoints()
+    }
+
+    @IBAction func curvesAction(_ sender: Any) {
+        imageView.image = imageContours.renderTextLineCurves()
     }
 
     @IBAction func dewarpAction(_ sender: Any) {
@@ -58,6 +66,12 @@ class ViewController: UIViewController {
         imageContours = TextDewarper(image: image.normalizedImage())
         imageView.image = imageContours.inputImage
         dewarpAction(image)
+    }
+}
+
+extension ViewController: UIScrollViewDelegate {
+    func viewForZooming(in scrollView: UIScrollView) -> UIView? {
+        return imageView
     }
 }
 

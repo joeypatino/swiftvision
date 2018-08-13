@@ -60,9 +60,10 @@ class PageCaptureViewController: UIViewController {
     }
 
     private func capturePage(with outline: CGRectOutline) {
-        camera?.captureCurrentFrame { [unowned self] frame in
-            let image = self.pageDetector.extract(outline, from: frame)
-            self.delegate?.captureViewController(self, didCapturePage: image ?? frame)
+        camera?.captureCurrentFrame { [weak self] frame in
+            guard let weakSelf = self else { return }
+            let image = weakSelf.pageDetector.extract(outline, from: frame)
+            weakSelf.delegate?.captureViewController(weakSelf, didCapturePage: image ?? frame)
         }
     }
 }

@@ -556,14 +556,14 @@ rightQuadraticCurvePoints:(vectorPointD *)rightQuadraticCurvePoints
 
 - (void)debugVerticals:(Mat)display quadraticCurvePoints:(vvectorPointD *)quadraticCurvePoints curveCenterPoints:(vectorPointD *)curveCenterPoints {
     Scalar red = Scalar(255, 0, 0);
-    Scalar yellow = Scalar(255, 250, 205);
+    Scalar blue = Scalar(0, 0, 255);
 
     if (quadraticCurvePoints) {
         for (int i = 0; i < quadraticCurvePoints->size(); i++) {
             vectorPointD pts = quadraticCurvePoints->at(i);
             for (int j = 0; j < pts.size(); j++) {
                 DPoint p = pts[j];
-                circle(display, Point2d(p.x, p.y), 2, yellow, -1, cv::LINE_AA);
+                circle(display, Point2d(p.x, p.y), 2, red, -1, cv::LINE_AA);
             }
         }
         free(quadraticCurvePoints);
@@ -571,7 +571,7 @@ rightQuadraticCurvePoints:(vectorPointD *)rightQuadraticCurvePoints
     if (curveCenterPoints) {
         for (int i = 0; i < curveCenterPoints->size(); i++) {
             DPoint mid = curveCenterPoints->at(i);
-            circle(display, Point2d(mid.x, mid.y), 4, red, -1, cv::LINE_AA);
+            circle(display, Point2d(mid.x, mid.y), 3, blue, -1, cv::LINE_AA);
         }
         free(curveCenterPoints);
     }

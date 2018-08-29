@@ -20,7 +20,7 @@ final internal class PageOutlineTracker {
     }
 
     private var trackingErrorCnt: Int = 0
-    private let trackingMaxErrorCnt: Int = 3
+    private let trackingMaxErrorCnt: Int = 5
     private var trackerTimer: Timer?
     private var isTracking: Bool {
         return trackerTimer != nil && CGRectOutlineEquals(pageOutline, CGRectOutlineZeroMake())

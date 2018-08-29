@@ -10,7 +10,7 @@ import UIKit
 import AVFoundation
 
 open class CameraPreview: UIView {
-    public var session: AVCaptureSession? {
+    public weak var session: AVCaptureSession? {
         get { return videoPreviewLayer.session }
         set { videoPreviewLayer.session = newValue }
     }

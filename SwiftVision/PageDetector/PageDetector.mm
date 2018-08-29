@@ -48,21 +48,6 @@ using namespace cv;
 
 - (UIImage *)extract:(CGRectOutline)outline fromImage:(UIImage *)image {
     std::vector<std::vector<cv::Point2d>> normOutlines = [self contoursFromOutline:outline];
-    std::vector<std::vector<cv::Point2d>> outlines;
-    std::vector<std::vector<cv::Point>> outlinesI;
-    for (int i = 0; i < normOutlines.size(); i++) {
-        std::vector<cv::Point2d> pts = normOutlines[i];
-        outlines.push_back(vectors::norm2pix(cv::Size(image.size.width, image.size.height), pts));
-    }
-    for (int i = 0; i < outlines.size(); i++) {
-        std::vector<cv::Point2d> pts = outlines[i];
-        std::vector<cv::Point> pt;
-        for (int j = 0; j < pts.size(); j++) {
-            cv::Point2d ptd = pts[j];
-            pt.push_back(cv::Point(ptd.x, ptd.y));
-        }
-        outlinesI.push_back(pt);
-    }
 
     UIImage *deskewed = [self deskew:image withOutline:outline];
     cv::Mat inImage = [deskewed mat];
@@ -71,38 +56,21 @@ using namespace cv;
     cv::cvtColor(inImage, gray, cv::COLOR_RGBA2GRAY);
 
     cv::Mat thresh;
-    cv::adaptiveThreshold(gray, thresh, 255, ADAPTIVE_THRESH_GAUSSIAN_C, THRESH_BINARY, 9, 5);
+    cv::adaptiveThreshold(gray, thresh, 255, ADAPTIVE_THRESH_GAUSSIAN_C, THRESH_BINARY, 3, 7);
+
+    cv::Mat erode;
+    cv::Mat erodeKernel = cv::Mat::ones(2, 2, CV_8UC1);
+    cv::erode(thresh, erode, erodeKernel);
 
     cv::Mat outImage;
-    cv::cvtColor(thresh, outImage, cv::COLOR_GRAY2RGBA);
+    cv::cvtColor(erode, outImage, cv::COLOR_GRAY2RGBA);
 
     return [UIImage imageWithMat:outImage];
 }
 
 - (UIImage *)renderPageOutline:(UIImage *)image {
     CGRectOutline outline = [self pageOutline:image];
-    if (CGRectOutlineEquals(outline, CGRectOutlineZeroMake())) {
-        return image;
-    }
-    cv::Mat inImage = [image mat];
-    std::vector<std::vector<cv::Point2d>> normOutlines = [self contoursFromOutline:outline];
-    std::vector<std::vector<cv::Point2d>> outlines;
-    std::vector<std::vector<cv::Point>> outlinesI;
-    for (int i = 0; i < normOutlines.size(); i++) {
-        std::vector<cv::Point2d> pts = normOutlines[i];
-        outlines.push_back(vectors::norm2pix(cv::Size(image.size.width, image.size.height), pts));
-    }
-    for (int i = 0; i < outlines.size(); i++) {
-        std::vector<cv::Point2d> pts = outlines[i];
-        std::vector<cv::Point> pt;
-        for (int j = 0; j < pts.size(); j++) {
-            cv::Point2d ptd = pts[j];
-            pt.push_back(cv::Point(ptd.x, ptd.y));
-        }
-        outlinesI.push_back(pt);
-    }
-    cv::drawContours(inImage, outlinesI, -1, cv::Scalar(255,0,0), 1, LINE_AA);
-    return [[UIImage alloc] initWithCVMat:inImage];
+    return [self render:outline inImage:image];
 }
 
 - (UIImage *)render:(CGRectOutline)outline inImage:(UIImage *)image {
@@ -126,8 +94,28 @@ using namespace cv;
         }
         outlinesI.push_back(pt);
     }
-    cv::drawContours(inImage, outlinesI, -1, cv::Scalar(255,0,0), 1, LINE_AA);
+    cv::drawContours(inImage, outlinesI, -1, cv::Scalar(255,0,0), 10, LINE_AA);
+
+    cv::circle(inImage, outlines[0][0], 70, cv::Scalar(255, 255, 255), -1);
+    [self addLabel:"tl" toMat:inImage atPoint:outlines[0][0]];
+
+    cv::circle(inImage, outlines[0][1], 70, cv::Scalar(255, 255, 255), -1);
+    [self addLabel:"tr" toMat:inImage atPoint:outlines[0][1]];
+
+    cv::circle(inImage, outlines[0][2], 70, cv::Scalar(255, 255, 255), -1);
+    [self addLabel:"br" toMat:inImage atPoint:outlines[0][2]];
+
+    cv::circle(inImage, outlines[0][3], 70, cv::Scalar(255, 255, 255), -1);
+    [self addLabel:"bl" toMat:inImage atPoint:outlines[0][3]];
+
     return [[UIImage alloc] initWithCVMat:inImage];
+}
+
+- (void)addLabel:(cv::String)label toMat:(cv::Mat)mat atPoint:(cv::Point)p {
+
+    int font = cv::FONT_HERSHEY_PLAIN;
+    cv::Size s = cv::getTextSize(label, font, 6, 4, NULL);
+    cv::putText(mat, label, cv::Point(p.x - s.width/2, p.y + s.height/2), font, 6,  cv::Scalar(255, 0, 0), 4);
 }
 
 - (UIImage *)process:(UIImage *)image {
@@ -141,7 +129,7 @@ using namespace cv;
     cv::Point2d topRight = cv::Point2d(outline.topRight.x, outline.topRight.y);
     cv::Point2d botRight = cv::Point2d(outline.botRight.x, outline.botRight.y);
     cv::Point2d botLeft = cv::Point2d(outline.botLeft.x, outline.botLeft.y);
-    outlines.push_back({ topLeft, botLeft, botRight, topRight });
+    outlines.push_back({ topLeft, topRight, botRight, botLeft });
     return outlines;
 }
 
@@ -164,13 +152,13 @@ using namespace cv;
     cv::cvtColor(inImage, gray, cv::COLOR_RGBA2GRAY);
 
     cv::Mat blurred;
-    cv::GaussianBlur(gray, blurred, cv::Size(5, 5), 0);
+    cv::GaussianBlur(gray, blurred, cv::Size(23, 23), 0);
 
     cv::Mat canny;
     cv::Canny(blurred, canny, 10, 20);
 
     cv::Mat dialate;
-    cv::Mat dialateKernel = cv::Mat::ones(4, 4, CV_8UC1);
+    cv::Mat dialateKernel = cv::Mat::ones(8, 8, CV_8UC1);
     cv::dilate(canny, dialate, dialateKernel);
 
     // output the final results
@@ -220,7 +208,7 @@ using namespace cv;
         // to the contour perimeter
         cv::approxPolyDP(Mat(contours[i]),
                          approx,
-                         cv::arcLength(cv::Mat(contours[i]), true)*0.02,
+                         cv::arcLength(cv::Mat(contours[i]), true)*0.03,  // how square should this rect be?
                          true);
 
         // Note: absolute value of an area is used because
@@ -228,7 +216,7 @@ using namespace cv;
         // contour orientation
         double contourArea = fabs(cv::contourArea(cv::Mat(approx)));
         if (approx.size() == 4 &&
-            //            cv::isContourConvex(cv::Mat(approx)) &&
+            cv::isContourConvex(cv::Mat(approx)) &&
             contourArea > imageArea * 0.35 &&
             contourArea < imageArea * 0.8) {
 

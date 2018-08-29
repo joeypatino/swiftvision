@@ -26,7 +26,6 @@ final public class Camera: NSObject {
     private var captureClosure:((UIImage) -> ())?
     private let position = AVCaptureDevice.Position.back
     private var permissionGranted = false
-    private let videoOutput = AVCaptureVideoDataOutput()
     private let sessionQueue = DispatchQueue(label: "session_queue")
     private let bufferQueue = DispatchQueue(label: "buffer_queue")
     private let context = CIContext(options: [kCIContextUseSoftwareRenderer:false])
@@ -67,6 +66,7 @@ final public class Camera: NSObject {
         captureSession.addInput(captureDeviceInput)
 
         // setup the capture data output
+        let videoOutput = AVCaptureVideoDataOutput()
         videoOutput.setSampleBufferDelegate(self, queue: bufferQueue)
         guard
             captureSession.canAddOutput(videoOutput)
@@ -110,11 +110,7 @@ final public class Camera: NSObject {
 
     // MARK: - Public
     public func captureCurrentFrame(captured: @escaping (UIImage) -> ()) {
-        self.captureClosure = { image in
-            DispatchQueue.main.async {
-                captured(image)
-            }
-        }
+        self.captureClosure = captured
     }
 }
 

@@ -10,12 +10,11 @@ import UIKit
 
 public protocol PageDetectorDelegate: class {
     func pageDetectorViewController(_ viewController: PageDetectorViewController, didCapturePage page: UIImage)
-    func pageDetectorViewController(_ viewController: PageDetectorViewController)
+    func pageDetectorViewControllerDidCancel(_ viewController: PageDetectorViewController)
 }
 
 open class PageDetectorViewController: UIViewController {
     public weak var delegate: PageDetectorDelegate?
-    
     public var preview: PageDetectorPreview {
         return view as! PageDetectorPreview
     }
@@ -51,19 +50,25 @@ open class PageDetectorViewController: UIViewController {
         tracker.trackingTrigger = { [weak self] outline in
             self?.capturePage(with: outline)
         }
+        if !camera.captureSession.isRunning {
+            camera.captureSession.startRunning()
+        }
         setupAppearance()
         navigationItem.leftBarButtonItem = done
     }
 
     @objc private func cancel(_ sender: UIBarButtonItem) {
-        delegate?.pageDetectorViewController(self)
+        camera.captureSession.stopRunning()
+        delegate?.pageDetectorViewControllerDidCancel(self)
     }
 
     private func capturePage(with outline: CGRectOutline) {
         camera.captureCurrentFrame { [weak self] frame in
-            guard let weakSelf = self else { return }
-            let image = weakSelf.detector.extract(outline, from: frame)
-            weakSelf.delegate?.pageDetectorViewController(weakSelf, didCapturePage: image ?? frame)
+            let image = self?.detector.extract(outline, from: frame)
+            DispatchQueue.main.async {
+                guard let weakSelf = self else { return }
+                weakSelf.delegate?.pageDetectorViewController(weakSelf, didCapturePage: image ?? frame)
+            }
         }
     }
 

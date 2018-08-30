@@ -153,10 +153,6 @@ using namespace cv;
 
 // MARK: -
 - (ContourEdge *)contourEdgeWithAdjacentContour:(Contour *)otherContour {
-    double EDGE_MAX_OVERLAP = 1.0;   // max px horiz. overlap of contours in span
-    double EDGE_MAX_LENGTH = 100.0;  // max px length of edge connecting contours
-    double EDGE_MAX_ANGLE = 4.5;    // maximum change in angle allowed between contours
-
     Contour *contourA = self;
     Contour *contourB = otherContour;
     if (contourA.clxMin.x > contourB.clxMax.x) {
@@ -175,12 +171,7 @@ using namespace cv;
 
     Point2f minMaxDiff = [self convert:contourB.clxMin] - [self convert:contourA.clxMax];
     double dist = norm(minMaxDiff);
-
-    if (dist > EDGE_MAX_LENGTH || xOverlap > EDGE_MAX_OVERLAP || deltaAngle > EDGE_MAX_ANGLE) {
-        return nil;
-    } else {
-        return [[ContourEdge alloc] initWithDistance:dist angle:deltaAngle overlap:xOverlap contourA:contourA contourB:contourB];
-    }
+    return [[ContourEdge alloc] initWithDistance:dist angle:deltaAngle overlap:xOverlap contourA:contourA contourB:contourB];
 }
 
 - (Mat)generateMaskFromContour:(cv::Mat)mat {

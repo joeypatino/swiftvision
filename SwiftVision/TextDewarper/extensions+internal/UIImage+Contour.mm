@@ -1,5 +1,7 @@
 #import <opencv2/opencv.hpp>
 #import "UIImage+Contour.h"
+// config
+#import "TextDewarperConfiguration.h"
 // model
 #import "Contour.h"
 #import "ContourSpan.h"
@@ -13,12 +15,7 @@ using namespace cv;
 
 @implementation UIImage (Contour)
 // MARK: -
-- (NSArray<Contour *> *)contoursFilteredBy:(BOOL (^)(Contour *contour))filter {
-    int TEXT_MIN_WIDTH = 22;         //# min px width of detected text contour
-    int TEXT_MIN_HEIGHT = 12;        //# min px height of detected text contour
-    int TEXT_MIN_ASPECT = 1.5;      //# filter out text contours below this w/h ratio
-    int TEXT_MAX_THICKNESS = 20;    //# max px thickness of detected text contour
-
+- (NSArray<Contour *> *)contoursFilteredBy:(BOOL (^)(Contour *contour))filter usingConfiguration:(TextDewarperConfiguration *)configuration {
     Mat cvMat = [self grayScaleMat];
     NSMutableArray <Contour *> *foundContours = @[].mutableCopy;
     vector<vector<cv::Point> > contours;
@@ -27,9 +24,9 @@ using namespace cv;
     for (int j = 0; j < contours.size(); j++) {
         vector<cv::Point> points = contours.at(j);
         cv::Rect rect = cv::boundingRect(points);
-        if (rect.width < TEXT_MIN_WIDTH ||
-            rect.height < TEXT_MIN_HEIGHT ||
-            rect.width < TEXT_MIN_ASPECT * rect.height)
+        if (rect.width < configuration.contourMinWidth ||
+            rect.height < configuration.contourMinHeight ||
+            rect.width < configuration.contourMinAspect * rect.height)
             continue;
 
         Contour *contour = [[Contour alloc] initWithCVMat:Mat(points)];
@@ -43,7 +40,7 @@ using namespace cv;
 
         double max;
         minMaxLoc(summedMask, NULL, &max);
-        if (max > TEXT_MAX_THICKNESS)
+        if (max > configuration.contourMaxThickness)
            continue;
 
         [foundContours addObject:contour];
@@ -52,11 +49,9 @@ using namespace cv;
     return foundContours;
 }
 
-- (NSArray<ContourSpan *> *)spansFromContours:(NSArray<Contour *> *)contours {
-    CGFloat SPAN_MIN_WIDTH = 90;
-
+- (NSArray<ContourSpan *> *)spansFromContours:(NSArray<Contour *> *)contours usingConfiguration:(TextDewarperConfiguration *)configuration {
     NSArray <Contour *> *sortedContours = [self sortContoursByBounds:contours];
-    NSArray <ContourEdge *> *edges = [self generateContourEdgesFromContours:sortedContours];
+    NSArray <ContourEdge *> *edges = [self generateContourEdgesFromContours:sortedContours usingConfiguration:configuration];
     NSArray <ContourEdge *> *sortedEdges = [self sortedEdgesByScore:edges];
 
     for (ContourEdge *edge in sortedEdges) {
@@ -99,8 +94,8 @@ using namespace cv;
         }
 
         // add if long enough
-        if (width > SPAN_MIN_WIDTH) {
-            ContourSpan *span = [[ContourSpan alloc] initWithImage:self contours:curSpan];
+        if (width > configuration.contourSpanMinWidth) {
+            ContourSpan *span = [[ContourSpan alloc] initWithImage:self contours:curSpan samplingInterval:configuration.contourSpanSamplingInterval];
             [spans addObject:span];
         }
     }
@@ -109,16 +104,22 @@ using namespace cv;
 }
 
 // MARK: -
-- (NSArray <ContourEdge *> *)generateContourEdgesFromContours:(NSArray <Contour *> *)contours {
+- (NSArray <ContourEdge *> *)generateContourEdgesFromContours:(NSArray <Contour *> *)contours usingConfiguration:(TextDewarperConfiguration *)configuration {
     NSMutableArray <ContourEdge *> *edges = @[].mutableCopy;
     NSInteger contourCount = contours.count;
+
     for (int i = 0; i < contourCount; i++) {
         Contour *currentContour = contours[i];
         for (int j = 0; j < i; j++) {
             Contour *adjacentContour = contours[j];
             ContourEdge *edge = [currentContour contourEdgeWithAdjacentContour:adjacentContour];
-            if (edge)
-                [edges addObject:edge];
+
+            if (edge.distance > configuration.contourEdgeMaxLength ||
+                edge.overlap > configuration.contourEdgeMaxOverlap ||
+                edge.angle > configuration.contourEdgeMaxAngle)
+                continue;
+
+            [edges addObject:edge];
         }
     }
     return edges;

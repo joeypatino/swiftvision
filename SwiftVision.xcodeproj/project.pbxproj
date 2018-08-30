@@ -67,6 +67,9 @@
 		D4A649D9211B3C8000457B78 /* opencv2.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D4E45DAF211A52010094CE23 /* opencv2.framework */; };
 		D4BAD1C52034DBB200F4A32C /* NSArray+extras.h in Headers */ = {isa = PBXBuildFile; fileRef = D4BAD1C32034DBB200F4A32C /* NSArray+extras.h */; };
 		D4BAD1C62034DBB200F4A32C /* NSArray+extras.m in Sources */ = {isa = PBXBuildFile; fileRef = D4BAD1C42034DBB200F4A32C /* NSArray+extras.m */; };
+		D4BF20812137FE6E004B188C /* Platform.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4BF20802137FE6E004B188C /* Platform.swift */; };
+		D4BF2086213816C4004B188C /* TextDewarperConfiguration.h in Headers */ = {isa = PBXBuildFile; fileRef = D4BF2084213816C4004B188C /* TextDewarperConfiguration.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		D4BF2087213816C4004B188C /* TextDewarperConfiguration.m in Sources */ = {isa = PBXBuildFile; fileRef = D4BF2085213816C4004B188C /* TextDewarperConfiguration.m */; };
 		D4C8B37D21135C150037FDDE /* dewarp.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D4C8B37B21135C150037FDDE /* dewarp.cpp */; };
 		D4C8B37E21135C150037FDDE /* dewarp.hpp in Headers */ = {isa = PBXBuildFile; fileRef = D4C8B37C21135C150037FDDE /* dewarp.hpp */; };
 		D4D8304A206198F0001B1535 /* UIImage+extras.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4D83049206198F0001B1535 /* UIImage+extras.swift */; };
@@ -169,6 +172,9 @@
 		D4A572C8202A1E2800D8F4B0 /* UIImage+Mat.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = "UIImage+Mat.mm"; sourceTree = "<group>"; };
 		D4BAD1C32034DBB200F4A32C /* NSArray+extras.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "NSArray+extras.h"; sourceTree = "<group>"; };
 		D4BAD1C42034DBB200F4A32C /* NSArray+extras.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "NSArray+extras.m"; sourceTree = "<group>"; };
+		D4BF20802137FE6E004B188C /* Platform.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Platform.swift; sourceTree = "<group>"; };
+		D4BF2084213816C4004B188C /* TextDewarperConfiguration.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TextDewarperConfiguration.h; sourceTree = "<group>"; };
+		D4BF2085213816C4004B188C /* TextDewarperConfiguration.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TextDewarperConfiguration.m; sourceTree = "<group>"; };
 		D4C8B37B21135C150037FDDE /* dewarp.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = dewarp.cpp; sourceTree = "<group>"; };
 		D4C8B37C21135C150037FDDE /* dewarp.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = dewarp.hpp; sourceTree = "<group>"; };
 		D4D83049206198F0001B1535 /* UIImage+extras.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIImage+extras.swift"; sourceTree = "<group>"; };
@@ -264,6 +270,7 @@
 				D461D4CC211F63390082BBCC /* PageCapture */,
 				D40B28512028860D00CA8559 /* AppDelegate.swift */,
 				D40B28532028860D00CA8559 /* ViewController.swift */,
+				D4BF20802137FE6E004B188C /* Platform.swift */,
 				D40B285A2028860D00CA8559 /* LaunchScreen.storyboard */,
 				D40B28552028860D00CA8559 /* Main.storyboard */,
 				D40B28582028860D00CA8559 /* Assets.xcassets */,
@@ -396,6 +403,8 @@
 			children = (
 				D4A572C0202A1E1500D8F4B0 /* TextDewarper.h */,
 				D4A572C1202A1E1500D8F4B0 /* TextDewarper.mm */,
+				D4BF2084213816C4004B188C /* TextDewarperConfiguration.h */,
+				D4BF2085213816C4004B188C /* TextDewarperConfiguration.m */,
 				D471D7D920500CE600F38C26 /* models */,
 				D471D7EA20500D0800F38C26 /* models+internal */,
 				D471D7F720500F2200F38C26 /* extensions+internal */,
@@ -427,6 +436,7 @@
 				D4A3DB5221199E03000413B8 /* DataTypes.h in Headers */,
 				D471D7F620500EE300F38C26 /* UIImage+OpenCV.h in Headers */,
 				D48A95A7211CCAE200A12E4B /* PageDetector.h in Headers */,
+				D4BF2086213816C4004B188C /* TextDewarperConfiguration.h in Headers */,
 				D43C4532205B1DFF0072AF8F /* vectors.hpp in Headers */,
 				D4A572C2202A1E1500D8F4B0 /* TextDewarper.h in Headers */,
 				D471D7E520500CE600F38C26 /* Contour.h in Headers */,
@@ -604,6 +614,7 @@
 				D471D7E720500CE600F38C26 /* ContourEdge.m in Sources */,
 				D4BAD1C62034DBB200F4A32C /* NSArray+extras.m in Sources */,
 				D471D7E320500CE600F38C26 /* Contour.mm in Sources */,
+				D4BF2087213816C4004B188C /* TextDewarperConfiguration.m in Sources */,
 				D43C4535205B1ECB0072AF8F /* math.cpp in Sources */,
 				D431F6D62121DBF300C8437B /* PageDetectorViewController.swift in Sources */,
 				D431F6D92121DBF300C8437B /* PageDetectorTracker.swift in Sources */,
@@ -617,6 +628,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D4BF20812137FE6E004B188C /* Platform.swift in Sources */,
 				D40B28542028860D00CA8559 /* ViewController.swift in Sources */,
 				D40B28522028860D00CA8559 /* AppDelegate.swift in Sources */,
 				D4D8304A206198F0001B1535 /* UIImage+extras.swift in Sources */,

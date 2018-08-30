@@ -3,6 +3,7 @@
 #import "Contour.h"
 #import "ContourSpan.h"
 #import "ContourEdge.h"
+#import "TextDewarperConfiguration.h"
 
 typedef NS_ENUM(NSUInteger, ContourRenderingMode) {
     ContourRenderingModeOutline,
@@ -14,11 +15,13 @@ typedef NS_ENUM(NSUInteger, ContourRenderingMode) {
  * Creates a new TextDewarper engine for the input image..
  * For best results input image be a preprocessed binary image
  */
-- (instancetype _Nonnull)initWithImage:(UIImage * _Nonnull)image filteredBy:(nullable BOOL (^)(Contour *_Nonnull contour))filter;
+- (instancetype _Nonnull)initWithImage:(UIImage *_Nonnull)image configuration:(TextDewarperConfiguration *_Nonnull)configuration filteredBy:(nullable BOOL (^)(Contour *_Nonnull contour))filter;
 - (instancetype _Nonnull)init NS_UNAVAILABLE;
 
 /// returns the dewarped image
 - (UIImage *_Nullable)dewarp NS_SWIFT_NAME(dewarp());
+// returns pre processed image
+- (UIImage *_Nullable)renderProcessed NS_SWIFT_NAME(renderProcessed());
 /// returns an image containing all the contour outlines
 - (UIImage *_Nullable)renderOutlines NS_SWIFT_NAME(renderOutlines());
 /// returns an image containing all the contours masks.

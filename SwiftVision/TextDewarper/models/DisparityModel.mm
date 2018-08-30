@@ -578,6 +578,9 @@ rightQuadraticCurvePoints:(vectorPointD *)rightQuadraticCurvePoints
 }
 @end
 
+/**
+ * Unused!!
+ */
 @interface DisparityModel(Extras)
 @end
 @implementation DisparityModel(Extras)

@@ -12,9 +12,9 @@
 using namespace cv;
 
 @implementation ContourSpan
-- (instancetype)initWithImage:(UIImage *)image contours:(NSArray <Contour *> *)contours {
+- (instancetype)initWithImage:(UIImage *)image contours:(NSArray <Contour *> *)contours samplingInterval:(int)samplingInterval {
     self = [super init];
-    _samplingStep = 80;
+    _samplingStep = samplingInterval;
     _color = [UIColor randomColor];
     _image = image;
     _contours = contours;

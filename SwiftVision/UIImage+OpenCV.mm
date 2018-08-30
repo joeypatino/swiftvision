@@ -15,7 +15,7 @@
     float scl_x = width / size.width;
     float scl_y = height / size.height;
 
-    int scl = int(ceil(MAX(scl_x, scl_y)));
+    float scl = MAX(scl_x, scl_y);
 
     float inv_scl = 1.0;
     if (scl > 1.0) {
@@ -91,7 +91,7 @@
 - (UIImage *_Nullable)rectangle:(CGRectOutline)outline {
     int width = self.size.width;
     int height = self.size.height;
-    cv::Mat r = cv::Mat::zeros(height, width, cv::DataType<int>::type);
+    cv::Mat r = cv::Mat::zeros(height, width, CV_8UC4);
 
     cv::Point tl = cv::Point(outline.topLeft.x, outline.topLeft.y);
     cv::Point br = cv::Point(outline.botRight.x, outline.botRight.y);

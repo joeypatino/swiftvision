@@ -41,21 +41,28 @@
                                 <rect key="frame" x="0.0" y="587" width="375" height="40"/>
                                 <subviews>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="kDw-da-SVc">
-                                        <rect key="frame" x="0.0" y="0.0" width="125" height="40"/>
+                                        <rect key="frame" x="0.0" y="0.0" width="94" height="40"/>
                                         <state key="normal" title="original"/>
                                         <connections>
                                             <action selector="originalAction:" destination="BYZ-38-t0r" eventType="touchUpInside" id="VWa-i3-NuM"/>
                                         </connections>
                                     </button>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Zd3-BQ-iKy" userLabel="preprocessed">
+                                        <rect key="frame" x="94" y="0.0" width="93.5" height="40"/>
+                                        <state key="normal" title="processed"/>
+                                        <connections>
+                                            <action selector="processedAction:" destination="BYZ-38-t0r" eventType="touchUpInside" id="Egv-Vr-jda"/>
+                                        </connections>
+                                    </button>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Yx0-gu-hQT">
-                                        <rect key="frame" x="125" y="0.0" width="125" height="40"/>
+                                        <rect key="frame" x="187.5" y="0.0" width="94" height="40"/>
                                         <state key="normal" title="outlines"/>
                                         <connections>
                                             <action selector="outlinesAction:" destination="BYZ-38-t0r" eventType="touchUpInside" id="b8N-oT-xtB"/>
                                         </connections>
                                     </button>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="6BX-rm-lKE">
-                                        <rect key="frame" x="250" y="0.0" width="125" height="40"/>
+                                        <rect key="frame" x="281.5" y="0.0" width="93.5" height="40"/>
                                         <state key="normal" title="masks"/>
                                         <connections>
                                             <action selector="masksAction:" destination="BYZ-38-t0r" eventType="touchUpInside" id="0Cq-fi-2sC"/>

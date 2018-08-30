@@ -16,6 +16,7 @@ using namespace std;
 using namespace cv;
 
 @interface TextDewarper ()
+@property (nonatomic, strong) TextDewarperConfiguration *configuration;
 @property (nonatomic, strong) NSArray<Contour *> *contours;
 @property (nonatomic, strong) NSArray<ContourSpan *> *spans;
 @property (nonatomic, strong) UIImage *_Nonnull inputImage;
@@ -24,26 +25,31 @@ using namespace cv;
 
 // MARK: -
 @implementation TextDewarper
-- (instancetype)initWithImage:(UIImage *)image filteredBy:(BOOL (^)(Contour *c))filter {
+- (instancetype)initWithImage:(UIImage *)image configuration:(TextDewarperConfiguration *)configuration filteredBy:(BOOL (^)(Contour *c))filter {
     self = [super init];
     self.inputImage = image;
-    self.workingImage = [image resizeTo:CGSizeMake(1920, 1440)];
+    self.workingImage = [image resizeTo:CGSizeMake(1440, 1920)];
+    self.configuration = configuration;
 
-    UIImage *mask = [[self.workingImage erode:CGSizeMake(5, 5)] invert];
-
-    CGRectOutline outline = [self outlineWithSize:self.workingImage.size];
-    UIImage *minMask = [mask elementwiseMinimum:[self.workingImage rectangle:outline]];
-    self.contours = [minMask contoursFilteredBy:filter];
-    self.spans = [minMask spansFromContours:self.contours];
+    UIImage *processedImage = [self renderProcessed];
+    self.contours = [processedImage contoursFilteredBy:filter usingConfiguration:self.configuration];
+    self.spans = [processedImage spansFromContours:self.contours usingConfiguration:self.configuration];
 
     return self;
 }
 
 // MARK: - returns dewarped image
+- (UIImage *)renderProcessed {
+    CGRectOutline outline = [self outlineWithSize:self.workingImage.size insets:self.configuration.inputMaskInsets];
+    UIImage *processedImage = [[[self.workingImage invert] dilate:CGSizeMake(8, 3)] erode:CGSizeMake(6, 2)];
+    UIImage *mask = [processedImage rectangle:outline];
+    return [processedImage elementwiseMinimum:mask];
+}
+
+// MARK: - returns dewarped image
 - (UIImage *)dewarp {
     std::vector<std::vector<cv::Point2d>> allSpanPoints = [self allSamplePoints:self.spans];
-    DisparityModel *disparity = [[DisparityModel alloc] initWithImage:self.workingImage
-                                                            keyPoints:allSpanPoints];
+    DisparityModel *disparity = [[DisparityModel alloc] initWithImage:self.workingImage keyPoints:allSpanPoints];
     return [disparity apply];
 }
 
@@ -57,7 +63,7 @@ using namespace cv;
 }
 
 - (UIImage *)renderKeyPoints {
-    return [self renderKeyPoints:[UIColor greenColor] mode:ContourRenderingModeFill];
+    return [self renderKeyPoints:ContourRenderingModeFill];
 }
 
 - (UIImage *)render:(UIColor *)color mode:(ContourRenderingMode)mode {
@@ -76,8 +82,8 @@ using namespace cv;
     return [[UIImage alloc] initWithCVMat:outImage];
 }
 
-- (UIImage *)renderKeyPoints:(UIColor *)color mode:(ContourRenderingMode)mode {
-    cv::Mat display = [self.inputImage mat];
+- (UIImage *)renderKeyPoints:(ContourRenderingMode)mode {
+    cv::Mat display = [self.workingImage mat];
     for (ContourSpan *span in self.spans) {
         for (int i = 0; i < span.keyPoints.size(); i++) {
             cv::Point2d pt = span.keyPoints[i];
@@ -92,23 +98,19 @@ using namespace cv;
     std::vector<std::vector<Point2d>> allSpanPoints = [self allSamplePoints:self.spans];
     DisparityModel *disparity = [[DisparityModel alloc] initWithImage:self.workingImage keyPoints:allSpanPoints];
     return [disparity apply:DewarpOutputVerticalQuadraticCurves | DewarpOutputVerticalCenterLines];
-
 }
 
 // MARK: -
-- (CGRectOutline)outlineWithSize:(CGSize)size {
-    int PAGE_MARGIN_X = 0;
-    int PAGE_MARGIN_Y = 0;
+- (CGRectOutline)outlineWithSize:(CGSize)size insets:(UIEdgeInsets)insets {
+    int xmin = 0;
+    int ymin = 0;
+    int xmax = int(size.width);
+    int ymax = int(size.height);
 
-    int xmin = PAGE_MARGIN_X;
-    int ymin = PAGE_MARGIN_Y;
-    int xmax = int(size.width) - PAGE_MARGIN_X;
-    int ymax = int(size.height) - PAGE_MARGIN_Y;
-
-    return CGRectOutlineMake(CGPointMake(xmin, ymin),
-                             CGPointMake(xmax, ymin),
-                             CGPointMake(xmax, ymax),
-                             CGPointMake(xmin, ymax));
+    return CGRectOutlineMake(CGPointMake(xmin+insets.left, ymin+insets.top),
+                             CGPointMake(xmax-insets.right, ymin+insets.top),
+                             CGPointMake(xmax-insets.right, ymax-insets.bottom),
+                             CGPointMake(xmin+insets.left, ymax-insets.bottom));
 }
 
 // MARK: - Render helpers

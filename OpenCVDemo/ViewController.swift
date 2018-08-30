@@ -5,7 +5,7 @@ class ViewController: UIViewController {
     @IBOutlet weak var imageView: UIImageView!
     @IBOutlet weak var scrollView: UIScrollView!
     private let imagePicker = UIImagePickerController()
-    private var imageContours = TextDewarper(image: UIImage().normalizedImage())
+    private var imageContours = TextDewarper(image: UIImage(), configuration: TextDewarperConfiguration())
     private var dewarpedImage: UIImage?
     private let camera = Camera()
 
@@ -20,6 +20,10 @@ class ViewController: UIViewController {
 
     @IBAction func originalAction(_ sender: Any) {
         imageView.image = imageContours.inputImage
+    }
+
+    @IBAction func processedAction(_ sender: Any) {
+        imageView.image = imageContours.renderProcessed()
     }
 
     @IBAction func outlinesAction(_ sender: Any) {
@@ -64,9 +68,8 @@ class ViewController: UIViewController {
 
     private func loadImage(_ image:UIImage) {
         dewarpedImage = nil
-        imageContours = TextDewarper(image: image.normalizedImage())
+        imageContours = TextDewarper(image: image, configuration: TextDewarperConfiguration())
         imageView.image = imageContours.inputImage
-        dewarpAction(image)
     }
 }
 
@@ -77,9 +80,10 @@ extension ViewController: UIScrollViewDelegate {
 }
 
 extension ViewController: PageDetectorDelegate {
-    func pageDetectorViewController(_ viewController: PageDetectorViewController) {
+    func pageDetectorViewControllerDidCancel(_ viewController: PageDetectorViewController) {
         viewController.dismiss(animated: true)
     }
+
     func pageDetectorViewController(_ viewController: PageDetectorViewController, didCapturePage page: UIImage) {
         viewController.dismiss(animated: true)
         loadImage(page)

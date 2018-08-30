@@ -74,6 +74,7 @@ internal class CGRectOutlineView: UIView {
 
     private func drawOutline(_ outline: CGRectOutline) {
         shapeLayer?.path = path(from: outline)
+        setNeedsDisplay()
     }
 
     private func path(from outline: CGRectOutline) -> CGPath {

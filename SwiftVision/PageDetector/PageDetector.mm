@@ -232,11 +232,57 @@ using namespace cv;
                     cv::Point p = approx[i];
                     approxOut.push_back(cv::Point2d(p.x, p.y));
                 }
-                squares.push_back(approxOut);
+                squares.push_back(orderPoints(approxOut));
             }
         }
     }
     return squares;
+}
+
+double distanceCalculate(cv::Point p1, cv::Point p2) {
+    double x1 = p1.x;
+    double y1 = p1.y;
+    double x2 = p2.x;
+    double y2 = p2.y;
+    double x = x1 - x2;             //calculating number to square in next step
+    double y = y1 - y2;
+    double dist;
+
+    dist = pow(x, 2) + pow(y, 2);   //calculating Euclidean distance
+    dist = sqrt(dist);
+
+    return dist;
+}
+
+bool sortX(cv::Point2d a, cv::Point2d b) { return a.x < b.x; }
+bool sortY(cv::Point2d a, cv::Point2d b) { return a.y < b.y; }
+std::vector<cv::Point2d> orderPoints(std::vector<cv::Point2d> pts) {
+    // sort the points based on their x-coordinates
+    std::vector<cv::Point2d> xSorted = pts;
+    std::sort(xSorted.begin(), xSorted.end(), &sortX);
+
+    // grab the left-most and right-most points from the sorted x-roodinate points
+    std::vector<cv::Point> leftMost = std::vector<cv::Point>({xSorted[0], xSorted[1]});
+    std::vector<cv::Point> rightMost = std::vector<cv::Point>({xSorted[2], xSorted[3]});
+
+    // now, sort the left-most coordinates according to their
+    // y-coordinates so we can grab the top-left and bottom-left
+    // points, respectively
+    std::sort(leftMost.begin(), leftMost.end(), &sortY);
+    cv::Point tl = leftMost[0];
+    cv::Point bl = leftMost[1];
+
+    // now that we have the top-left coordinate, use it as an
+    // anchor to calculate the Euclidean distance between the
+    // top-left and right-most points; by the Pythagorean
+    // theorem, the point with the largest distance will be
+    // our bottom-right point
+    double d1 = distanceCalculate(tl, rightMost[0]);
+    double d2 = distanceCalculate(tl, rightMost[1]);
+    cv::Point br = d1 > d2 ? rightMost[0] : rightMost[1];
+    cv::Point tr = d1 > d2 ? rightMost[1] : rightMost[0];
+
+    return std::vector<cv::Point2d>({tl, tr, br, bl});
 }
 
 double angle( cv::Point2d pt1, cv::Point2d pt2, cv::Point2d pt0 ) {

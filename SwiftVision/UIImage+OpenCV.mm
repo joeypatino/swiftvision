@@ -88,7 +88,7 @@
     return [[UIImage alloc] initWithCVMat:expr];
 }
 
-- (UIImage *_Nullable)rectangle:(CGRectOutline)outline {
+- (UIImage *)rectangle:(CGRectOutline)outline {
     int width = self.size.width;
     int height = self.size.height;
     cv::Mat r = cv::Mat::zeros(height, width, CV_8UC4);
@@ -97,6 +97,17 @@
     cv::Point br = cv::Point(outline.botRight.x, outline.botRight.y);
     cv::rectangle(r, tl, br, cv::Scalar(255, 255, 255), -1);
     return [[UIImage alloc] initWithCVMat: r];
+}
+
+- (UIImage *)subImage:(CGRect)bounds {
+    cv::Mat inImage = [self mat];
+    cv::Rect rect = cv::Rect(bounds.origin.x,
+                             bounds.origin.y,
+                             bounds.origin.x + bounds.size.width,
+                             bounds.origin.y + bounds.size.height);
+    cv::Mat outImage = inImage(rect).clone();
+    UIImage *image = [[UIImage alloc] initWithCVMat:outImage];
+    return image;
 }
 
 @end

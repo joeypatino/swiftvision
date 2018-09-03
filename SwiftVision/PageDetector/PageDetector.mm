@@ -50,6 +50,9 @@ using namespace cv;
     std::vector<std::vector<cv::Point2d>> normOutlines = [self contoursFromOutline:outline];
 
     UIImage *deskewed = [self deskew:image withOutline:outline];
+    if (!self.processExtractedOutput)
+        return deskewed;
+
     cv::Mat inImage = [deskewed mat];
 
     cv::Mat gray;

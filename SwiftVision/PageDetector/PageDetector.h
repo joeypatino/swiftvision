@@ -11,6 +11,11 @@
  */
 @interface PageDetector : NSObject
 /**
+ * if yes, the extracted page will be processed (thresholded) before returned
+ * default is true
+ */
+@property (nonatomic, assign) BOOL processExtractedOutput;
+/**
  * Returns a "page" outline as a CGRectOutline struct.
  * This method analyzes 'image' and returns the largest rectangular outline
  * contained within.

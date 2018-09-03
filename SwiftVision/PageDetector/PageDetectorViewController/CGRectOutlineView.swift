@@ -13,20 +13,32 @@ internal class CGRectOutlineView: UIView {
         didSet { drawOutline(outline) }
     }
 
-    public var outlineStrokeColor: UIColor = .red {
-        didSet { drawOutline(outline) }
+    public var outlineStrokeColor: UIColor = .black {
+        didSet {
+            shapeLayer?.strokeColor = outlineStrokeColor.cgColor
+            drawOutline(outline)
+        }
     }
 
-    public var outlineFillColor: UIColor = .clear {
-        didSet { drawOutline(outline) }
+    public var outlineFillColor: UIColor = .init(red: 66/255, green: 134/255, blue: 244/255, alpha: 0.6) {
+        didSet {
+            shapeLayer?.fillColor = outlineFillColor.cgColor
+            drawOutline(outline)
+        }
     }
 
     public var outlineWidth: CGFloat = 2.0 {
-        didSet { drawOutline(outline) }
+        didSet {
+            shapeLayer?.lineWidth = outlineWidth
+            drawOutline(outline)
+        }
     }
 
-    public var cornerRadius: CGFloat = 4.0 {
-        didSet { drawOutline(outline) }
+    public var cornerRadius: CGFloat = 32.0 {
+        didSet {
+            shapeLayer?.cornerRadius = cornerRadius
+            drawOutline(outline)
+        }
     }
 
     private var shapeLayer: CAShapeLayer? {
@@ -74,7 +86,6 @@ internal class CGRectOutlineView: UIView {
 
     private func drawOutline(_ outline: CGRectOutline) {
         shapeLayer?.path = path(from: outline)
-        setNeedsDisplay()
     }
 
     private func path(from outline: CGRectOutline) -> CGPath {

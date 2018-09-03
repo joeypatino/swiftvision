@@ -56,7 +56,7 @@ using namespace cv;
     cv::cvtColor(inImage, gray, cv::COLOR_RGBA2GRAY);
 
     cv::Mat thresh;
-    cv::adaptiveThreshold(gray, thresh, 255, ADAPTIVE_THRESH_GAUSSIAN_C, THRESH_BINARY, 3, 7);
+    cv::adaptiveThreshold(gray, thresh, 255, ADAPTIVE_THRESH_GAUSSIAN_C, THRESH_BINARY, 3, 5);
 
     cv::Mat erode;
     cv::Mat erodeKernel = cv::Mat::ones(2, 2, CV_8UC1);

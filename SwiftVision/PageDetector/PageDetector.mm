@@ -9,6 +9,12 @@ using namespace cv;
 
 @implementation PageDetector
 
+- (instancetype)init {
+    self = [super init];
+    self.processExtractedOutput = false;
+    return self;
+}
+
 - (CGRectOutline)pageOutline:(UIImage *)image {
     cv::Mat inImage = [self preprocessImage:image];
     std::vector<std::vector<cv::Point2d>> points = [self findPageBounds:inImage];

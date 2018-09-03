@@ -44,6 +44,7 @@ open class PageDetectorViewController: UIViewController {
 
     override open func viewDidLoad() {
         super.viewDidLoad()
+        detector.processExtractedOutput = true
         camera.delegate = self
         camera.quality = .high
         preview.session = camera.captureSession

@@ -11,8 +11,9 @@
  */
 @interface PageDetector : NSObject
 /**
- * if yes, the extracted page will be processed (thresholded) before returned
- * default is true
+ * if true, the extracted page will be processed (thresholded) before returned.
+ * useful for black and white pages of text
+ * default is false
  */
 @property (nonatomic, assign) BOOL processExtractedOutput;
 /**

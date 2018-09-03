@@ -11,7 +11,8 @@ using namespace cv;
 
 - (instancetype)init {
     self = [super init];
-    self.processExtractedOutput = false;
+    self.shouldPreprocess = true;
+    self.shouldPostProcess = false;
     return self;
 }
 
@@ -56,7 +57,7 @@ using namespace cv;
     std::vector<std::vector<cv::Point2d>> normOutlines = [self contoursFromOutline:outline];
 
     UIImage *deskewed = [self deskew:image withOutline:outline];
-    if (!self.processExtractedOutput)
+    if (!self.shouldPostProcess)
         return deskewed;
 
     cv::Mat inImage = [deskewed mat];
@@ -155,6 +156,9 @@ using namespace cv;
 /** Preprocesses a UIImage for edge detection. */
 - (cv::Mat)preprocessImage:(UIImage *)image {
     cv::Mat inImage = [image mat];
+    if (!self.shouldPreprocess)
+        return inImage;
+
     cv::Mat outImage;
 
     cv::Mat gray;
@@ -209,6 +213,9 @@ using namespace cv;
     std::vector<std::vector<cv::Point2d>> squares;
     std::vector<std::vector<cv::Point>> contours;
     std::vector<cv::Point> approx;
+
+    if (!self.shouldPreprocess)
+        cv::cvtColor(inImage, inImage, cv::COLOR_RGBA2GRAY);
 
     // Find contours, store them in a list and test each
     cv::findContours(inImage, contours, CV_RETR_LIST, CV_CHAIN_APPROX_NONE);

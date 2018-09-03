@@ -15,7 +15,14 @@
  * useful for black and white pages of text
  * default is false
  */
-@property (nonatomic, assign) BOOL processExtractedOutput;
+@property (nonatomic, assign) BOOL shouldPostProcess;
+/**
+ * if true, the input image should be pre processed before attempting to
+ * find the page outline. set to false if you prefer to perform your
+ * own pre processing.
+ * default is true
+ */
+@property (nonatomic, assign) BOOL shouldPreprocess;
 /**
  * Returns a "page" outline as a CGRectOutline struct.
  * This method analyzes 'image' and returns the largest rectangular outline

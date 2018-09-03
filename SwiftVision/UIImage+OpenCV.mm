@@ -103,11 +103,52 @@
     cv::Mat inImage = [self mat];
     cv::Rect rect = cv::Rect(bounds.origin.x,
                              bounds.origin.y,
-                             bounds.origin.x + bounds.size.width,
-                             bounds.origin.y + bounds.size.height);
+                             bounds.size.width,
+                             bounds.size.height);
     cv::Mat outImage = inImage(rect).clone();
-    UIImage *image = [[UIImage alloc] initWithCVMat:outImage];
-    return image;
+    return [[UIImage alloc] initWithCVMat:outImage];
+}
+
+- (UIImage *)render:(CGRect)rect borderColor:(UIColor *)borderColor {
+    return [self render:rect borderColor:borderColor borderWidth: 1.0];
+}
+
+- (UIImage *)render:(CGRect)rect borderColor:(UIColor *)borderColor borderWidth:(NSInteger)borderWidth {
+    return [self render:rect borderColor:borderColor borderWidth: 1.0 fillColor: NULL];
+}
+
+- (UIImage *)render:(CGRect)rect borderColor:(UIColor *)borderColor borderWidth:(NSInteger)borderWidth fillColor:(UIColor *)fillColor {
+    cv::Mat inImage = [self mat];
+    cv::Rect roi = cv::Rect(rect.origin.x, rect.origin.y,
+                            rect.size.width, rect.size.height);
+
+    // fill
+    if (fillColor) {
+        const CGFloat *components = CGColorGetComponents(fillColor.CGColor);
+        CGFloat alpha = components[3];
+        cv::Scalar fill = [self scalarColorFrom:fillColor];
+        cv::Mat rectangle;
+        inImage.copyTo(rectangle);
+        cv::rectangle(rectangle, roi, fill, -1);
+        cv::addWeighted(rectangle, alpha, inImage, 1.0 - alpha, 0, inImage);
+    }
+
+    // border
+    cv::Scalar border = [self scalarColorFrom:borderColor];
+    cv::rectangle(inImage, roi, border, (int)borderWidth, cv::LINE_AA);
+
+    return [[UIImage alloc] initWithCVMat:inImage];
+}
+
+// MARK: - Render helpers
+- (cv::Scalar)scalarColorFrom:(UIColor *)color {
+    CGFloat red;
+    CGFloat green;
+    CGFloat blue;
+    CGFloat alpha;
+    [color getRed:&red green:&green blue:&blue alpha:&alpha];
+
+    return cv::Scalar(red * 255.0, green * 255.0, blue * 255.0, alpha * 255.0);
 }
 
 @end

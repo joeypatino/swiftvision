@@ -2,12 +2,12 @@
 #import "CGRectOutline.h"
 
 @interface UIImage (OpenCV)
+- (UIImage *_Nullable)gray;
+- (UIImage *_Nullable)invert;
 /**
  @param blockSize Size of a pixel neighborhood that is used to calculate a threshold value for the pixel: 3, 5, 7, and so on.
  @param constant Constant subtracted from the mean or weighted mean. Normally, it is positive but may be zero or negative as well.
  */
-- (UIImage *_Nullable)gray;
-- (UIImage *_Nullable)invert;
 - (UIImage *_Nullable)threshold:(float)blockSize constant:(float)constant;
 - (UIImage *_Nullable)dilate:(CGSize)kernelSize;
 - (UIImage *_Nullable)erode:(CGSize)kernelSize;
@@ -15,5 +15,9 @@
 - (UIImage *_Nullable)resizeTo:(CGSize)minSize;
 - (UIImage *_Nullable)rectangle:(CGRectOutline)outline;
 - (UIImage *_Nullable)subImage:(CGRect)bounds;
+
+- (UIImage *_Nullable)render:(CGRect)rect borderColor:(UIColor *_Nonnull)borderColor;
+- (UIImage *_Nullable)render:(CGRect)rect borderColor:(UIColor *_Nonnull)borderColor borderWidth:(NSInteger)borderWidth;
+- (UIImage *_Nullable)render:(CGRect)rect borderColor:(UIColor *_Nonnull)borderColor borderWidth:(NSInteger)borderWidth fillColor:(UIColor *_Nullable)fillColor;
 
 @end

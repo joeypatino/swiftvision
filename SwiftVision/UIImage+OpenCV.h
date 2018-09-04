@@ -19,8 +19,8 @@
 - (UIImage *_Nullable)rectangle:(CGRectOutline)outline;
 - (UIImage *_Nullable)subImage:(CGRect)bounds;
 
-- (UIImage *_Nullable)render:(CGRect)rect borderColor:(UIColor *_Nonnull)borderColor;
-- (UIImage *_Nullable)render:(CGRect)rect borderColor:(UIColor *_Nonnull)borderColor borderWidth:(NSInteger)borderWidth;
-- (UIImage *_Nullable)render:(CGRect)rect borderColor:(UIColor *_Nonnull)borderColor borderWidth:(NSInteger)borderWidth fillColor:(UIColor *_Nullable)fillColor;
+- (UIImage *_Nullable)renderRect:(CGRect)rect borderColor:(UIColor *_Nonnull)borderColor;
+- (UIImage *_Nullable)renderRect:(CGRect)rect borderColor:(UIColor *_Nonnull)borderColor borderWidth:(NSInteger)borderWidth;
+- (UIImage *_Nullable)renderRect:(CGRect)rect borderColor:(UIColor *_Nonnull)borderColor borderWidth:(NSInteger)borderWidth fillColor:(UIColor *_Nullable)fillColor;
 
 @end

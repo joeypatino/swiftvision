@@ -155,6 +155,16 @@ using namespace cv;
     return outline;
 }
 
+- (CGRectOutline)normalize:(CGRectOutline)outline withSize:(CGSize)size {
+    if (CGRectOutlineEquals(outline, CGRectOutlineZeroMake()))
+        return outline;
+    outline.topLeft = normalizePoint(outline.topLeft, size);
+    outline.topRight = normalizePoint(outline.topRight, size);
+    outline.botRight = normalizePoint(outline.botRight, size);
+    outline.botLeft = normalizePoint(outline.botLeft, size);
+    return outline;
+}
+
 /** Preprocesses a UIImage for edge detection. */
 - (cv::Mat)preprocessImage:(UIImage *)image {
     cv::Mat inImage = [image mat];
@@ -315,6 +325,14 @@ CGPoint denormalizePoint(CGPoint p, CGSize size) {
     float scale = MAX(size.height, size.width) * 0.5;
     CGPoint offset = CGPointMake(0.5 * size.width, 0.5 * size.height);
     return CGPointMake((p.x * scale) + offset.x, (p.y * scale) + offset.y);
+}
+
+CGPoint normalizePoint(CGPoint p, CGSize size) {
+    float height = size.height;
+    float width = size.width;
+    float scale = 2.0 / MAX(height, width);
+    CGSize offset = CGSizeMake(width * 0.5, height * 0.5);
+    return CGPointMake((p.x - offset.width) * scale, (p.y - offset.height) * scale);
 }
 
 @end

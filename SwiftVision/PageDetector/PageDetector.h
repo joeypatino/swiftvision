@@ -61,6 +61,11 @@
 - (CGRectOutline)denormalize:(CGRectOutline)outline withSize:(CGSize)size;
 
 /**
+ * normalize a CGRectOutline
+ */
+- (CGRectOutline)normalize:(CGRectOutline)outline withSize:(CGSize)size;
+
+/**
  * returns the processed version of 'image' used during "page" outline detection
  */
 - (UIImage *_Nullable)process:(UIImage *_Nonnull)image;

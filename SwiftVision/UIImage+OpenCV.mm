@@ -123,15 +123,15 @@
     return [[UIImage alloc] initWithCVMat:outImage];
 }
 
-- (UIImage *)render:(CGRect)rect borderColor:(UIColor *)borderColor {
-    return [self render:rect borderColor:borderColor borderWidth: 1.0];
+- (UIImage *)renderRect:(CGRect)rect borderColor:(UIColor *)borderColor {
+    return [self renderRect:rect borderColor:borderColor borderWidth: 1.0];
 }
 
-- (UIImage *)render:(CGRect)rect borderColor:(UIColor *)borderColor borderWidth:(NSInteger)borderWidth {
-    return [self render:rect borderColor:borderColor borderWidth: 1.0 fillColor: NULL];
+- (UIImage *)renderRect:(CGRect)rect borderColor:(UIColor *)borderColor borderWidth:(NSInteger)borderWidth {
+    return [self renderRect:rect borderColor:borderColor borderWidth: 1.0 fillColor: NULL];
 }
 
-- (UIImage *)render:(CGRect)rect borderColor:(UIColor *)borderColor borderWidth:(NSInteger)borderWidth fillColor:(UIColor *)fillColor {
+- (UIImage *)renderRect:(CGRect)rect borderColor:(UIColor *)borderColor borderWidth:(NSInteger)borderWidth fillColor:(UIColor *)fillColor {
     cv::Mat inImage = [self mat];
     cv::Rect roi = cv::Rect(rect.origin.x, rect.origin.y,
                             rect.size.width, rect.size.height);

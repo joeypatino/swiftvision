@@ -35,6 +35,20 @@
     return [[UIImage alloc] initWithCVMat:outImage];
 }
 
+- (UIImage *)canny:(double)threshold1 threshold2:(double)threshold2 {
+    cv::Mat inImage = [self mat];
+    cv::Mat canny;
+    cv::Canny(inImage, canny, threshold1, threshold2);
+    return [[UIImage alloc] initWithCVMat:canny];
+}
+
+- (UIImage *)blur:(CGSize)size sigmaX:(double)sigmaX {
+    cv::Mat inImage = [self mat];
+    cv::Mat blurred;
+    cv::GaussianBlur(inImage, blurred, cv::Size(size.width, size.height), sigmaX);
+    return [[UIImage alloc] initWithCVMat:blurred];
+}
+
 - (UIImage *)invert {
     cv::Mat inImage = [self mat];
     cv::Mat outImage;

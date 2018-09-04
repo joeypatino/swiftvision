@@ -10,6 +10,9 @@
  * All extracted images are deskewed based on the page outline provided.
  */
 @interface PageDetector : NSObject
+@property (nonatomic, assign) CGFloat minArea;
+@property (nonatomic, assign) CGFloat maxArea;
+
 /**
  * if true, the extracted page will be processed (thresholded) before returned.
  * useful for black and white pages of text

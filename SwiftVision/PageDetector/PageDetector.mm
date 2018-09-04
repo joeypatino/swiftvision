@@ -13,6 +13,8 @@ using namespace cv;
     self = [super init];
     self.shouldPreprocess = true;
     self.shouldPostProcess = false;
+    self.minArea = 0.35;
+    self.maxArea = 0.80;
     return self;
 }
 
@@ -233,8 +235,8 @@ using namespace cv;
         double contourArea = fabs(cv::contourArea(cv::Mat(approx)));
         if (approx.size() == 4 &&
             cv::isContourConvex(cv::Mat(approx)) &&
-            contourArea > imageArea * 0.35 &&
-            contourArea < imageArea * 0.8) {
+            contourArea > imageArea * self.minArea &&
+            contourArea < imageArea * self.maxArea) {
 
             double maxCosine = 0;
             for (int j = 2; j < 5; j++) {

@@ -11,6 +11,9 @@
 - (UIImage *_Nullable)threshold:(float)blockSize constant:(float)constant;
 - (UIImage *_Nullable)dilate:(CGSize)kernelSize;
 - (UIImage *_Nullable)erode:(CGSize)kernelSize;
+- (UIImage *_Nullable)blur:(CGSize)size sigmaX:(double)sigmaX;
+- (UIImage *_Nullable)canny:(double)threshold1 threshold2:(double)threshold2;
+
 - (UIImage *_Nullable)elementwiseMinimum:(UIImage *_Nonnull)img;
 - (UIImage *_Nullable)resizeTo:(CGSize)minSize;
 - (UIImage *_Nullable)rectangle:(CGRectOutline)outline;

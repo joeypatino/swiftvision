@@ -15,6 +15,10 @@ open class CameraPreview: UIView {
         set { videoPreviewLayer.session = newValue }
     }
 
+    public var cameraConnection: AVCaptureConnection? {
+        return videoPreviewLayer.connection
+    }
+
     private var videoPreviewLayer: AVCaptureVideoPreviewLayer {
         return layer as! AVCaptureVideoPreviewLayer
     }

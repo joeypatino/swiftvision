@@ -60,6 +60,19 @@ open class PageDetectorViewController: UIViewController {
         navigationItem.leftBarButtonItem = done
     }
 
+    override open func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
+        super.viewWillTransition(to: size, with: coordinator)
+        guard let connection = preview.cameraConnection else {
+            return
+        }
+        let deviceOrientation = UIDevice.current.orientation
+        guard let newOrientation = AVCaptureVideoOrientation(deviceOrientation: deviceOrientation),
+            deviceOrientation.isPortrait || deviceOrientation.isLandscape else {
+                return
+        }
+        connection.videoOrientation = newOrientation
+    }
+
     @objc private func cancel(_ sender: UIBarButtonItem) {
         camera.captureSession.stopRunning()
         delegate?.pageDetectorViewControllerDidCancel(self)
@@ -137,6 +150,18 @@ extension PageDetectorViewController: CameraDelegate {
                 self.tracker.pageOutline = outline
                 self.preview.outline = self.detector.denormalize(self.tracker.pageOutline, with: self.preview.frame.size)
             }
+        }
+    }
+}
+
+extension AVCaptureVideoOrientation {
+    init?(deviceOrientation: UIDeviceOrientation) {
+        switch deviceOrientation {
+        case .portrait: self = .portrait
+        case .portraitUpsideDown: self = .portraitUpsideDown
+        case .landscapeLeft: self = .landscapeRight
+        case .landscapeRight: self = .landscapeLeft
+        default: return nil
         }
     }
 }

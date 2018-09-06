@@ -22,6 +22,7 @@ open class PageDetectorViewController: UIViewController {
     }
     public let camera: Camera
     public let detector = PageDetector()
+    public var legacyPageDetection: Bool = false
     private let tracker = PageOutlineTracker()
     private lazy var done = UIBarButtonItem(barButtonSystemItem: .done, target: self, action: #selector(cancel))
     open override var preferredStatusBarStyle: UIStatusBarStyle { return .lightContent }
@@ -60,17 +61,14 @@ open class PageDetectorViewController: UIViewController {
         navigationItem.leftBarButtonItem = done
     }
 
+    open override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        updateCameraOrientation()
+    }
+
     override open func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
         super.viewWillTransition(to: size, with: coordinator)
-        guard let connection = preview.cameraConnection else {
-            return
-        }
-        let deviceOrientation = UIDevice.current.orientation
-        guard let newOrientation = AVCaptureVideoOrientation(deviceOrientation: deviceOrientation),
-            deviceOrientation.isPortrait || deviceOrientation.isLandscape else {
-                return
-        }
-        connection.videoOrientation = newOrientation
+        updateCameraOrientation()
     }
 
     @objc private func cancel(_ sender: UIBarButtonItem) {
@@ -92,58 +90,24 @@ open class PageDetectorViewController: UIViewController {
         done.tintColor = .white
         navigationController?.navigationBar.barStyle = .black
     }
+
+    private func updateCameraOrientation() {
+        guard let connection = preview.cameraConnection else {
+            return
+        }
+        let deviceOrientation = UIDevice.current.orientation
+        guard let newOrientation = AVCaptureVideoOrientation(deviceOrientation: deviceOrientation),
+            deviceOrientation.isPortrait || deviceOrientation.isLandscape else {
+                return
+        }
+        connection.videoOrientation = newOrientation
+    }
 }
 
 extension PageDetectorViewController: CameraDelegate {
     public func camera(_ camera:Camera, didOutput frame: UIImage) {
-
-        if #available(iOS 11.0, *) {
-            guard
-                let ciImage = CIImage(image: frame),
-                let ciImageOrientation = CGImagePropertyOrientation(rawValue: 6) else {
-                    return
-            }
-
-            let detectRequest = VNDetectRectanglesRequest {
-                request, error in
-                guard let results = request.results as? [VNRectangleObservation],
-                    let detectedRectangle = results.first else {
-                        DispatchQueue.main.async {
-                            self.tracker.pageOutline = CGRectOutlineZeroMake()
-                            self.preview.outline = CGRectOutlineZeroMake()
-                        }
-                        return
-                }
-
-                let topLeft = detectedRectangle.topRight
-                let topRight = detectedRectangle.bottomRight
-                let bottomRight = detectedRectangle.bottomLeft
-                let bottomLeft = detectedRectangle.topLeft
-                DispatchQueue.main.async {
-                    let convert: ((CGPoint) -> CGPoint) = {
-                        let transform = CGAffineTransform.identity
-                            .scaledBy(x: 1, y: -1)
-                            .translatedBy(x: 0, y: -self.preview.frame.size.height)
-                        return self.preview.pointConverted(fromCaptureDevicePoint: $0).applying(transform)
-                    }
-
-                    let outline = CGRectOutline(topLeft: convert(topLeft), botLeft: convert(bottomLeft),
-                                                botRight: convert(bottomRight), topRight: convert(topRight))
-                    let normOutline = self.detector.normalize(outline, with: self.preview.frame.size);
-                    self.tracker.pageOutline = normOutline
-                    self.preview.outline = self.detector.denormalize(self.tracker.pageOutline, with: self.preview.frame.size)
-                }
-            }
-            detectRequest.minimumConfidence = 0.5
-            let handler = VNImageRequestHandler(ciImage: ciImage, orientation: ciImageOrientation)
-            DispatchQueue.global(qos: .userInteractive).async {
-                do {
-                    try handler.perform([detectRequest])
-                } catch {
-                    print(error)
-                }
-            }
-
+        if #available(iOS 11.0, *), legacyPageDetection == false {
+            findPageOutline(in: frame)
         } else {
             let outline = detector.pageOutline(frame)
             DispatchQueue.main.async {
@@ -151,6 +115,71 @@ extension PageDetectorViewController: CameraDelegate {
                 self.preview.outline = self.detector.denormalize(self.tracker.pageOutline, with: self.preview.frame.size)
             }
         }
+    }
+}
+
+@available(iOS 11.0, *)
+extension PageDetectorViewController {
+
+    private func findPageOutline(in frame: UIImage) {
+        guard let ciImage = CIImage(image: frame) else {
+            return
+        }
+
+        let detectRequest = VNDetectRectanglesRequest(completionHandler: didDetectRectangle())
+        detectRequest.minimumConfidence = 0.5
+
+        let handler = VNImageRequestHandler(ciImage: ciImage)
+        DispatchQueue.global(qos: .userInteractive).async {
+            try? handler.perform([detectRequest])
+        }
+    }
+
+    private func didDetectRectangle() -> VNRequestCompletionHandler {
+        return {
+            request, error in
+            let error = {
+                DispatchQueue.main.async {
+                    self.tracker.pageOutline = CGRectOutlineZeroMake()
+                    self.preview.outline = CGRectOutlineZeroMake()
+                }
+            }
+            guard
+                let results = request.results as? [VNRectangleObservation],
+                let detectedRectangle = results.first else {
+                    error()
+                    return
+            }
+            self.handle(detectedRect: detectedRectangle)
+        }
+    }
+
+    private func handle(detectedRect: VNRectangleObservation) {
+        DispatchQueue.main.async {
+            let size = self.preview.frame.size
+            let outline = self.outline(from: detectedRect, destinationSize: size)
+            self.tracker.pageOutline = self.detector.normalize(outline, with: size)
+            self.preview.outline = self.detector.denormalize(self.tracker.pageOutline, with: size)
+        }
+    }
+
+    private func outline(from detectedRect: VNRectangleObservation, destinationSize size: CGSize) -> CGRectOutline {
+
+        let topLeft = detectedRect.topLeft
+        let topRight = detectedRect.topRight
+        let bottomRight = detectedRect.bottomRight
+        let bottomLeft = detectedRect.bottomLeft
+        let convert:(CGPoint) -> CGPoint = {
+            let transform = CGAffineTransform.identity
+                .scaledBy(x: 1, y: -1)
+                .translatedBy(x: 0, y: -size.height)
+            return CGPoint(x: $0.x * size.width, y: $0.y * size.height).applying(transform)
+        }
+
+        return CGRectOutline(topLeft: convert(topLeft),
+                             botLeft: convert(bottomLeft),
+                             botRight: convert(bottomRight),
+                             topRight: convert(topRight))
     }
 }
 

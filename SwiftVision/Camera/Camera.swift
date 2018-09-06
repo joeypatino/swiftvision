@@ -28,7 +28,10 @@ final public class Camera: NSObject {
     private var permissionGranted = false
     private let sessionQueue = DispatchQueue(label: "session_queue")
     private let bufferQueue = DispatchQueue(label: "buffer_queue")
-    private let context = CIContext(options: [kCIContextUseSoftwareRenderer:false])
+    private let context = CIContext()
+
+    private var lastKnownDeviceOrientation: UIDeviceOrientation = .portrait
+    private var deviceOrientationObserver: NSObjectProtocol?
 
     override public init() {
         super.init()
@@ -37,10 +40,19 @@ final public class Camera: NSObject {
             self.configureSession()
             self.captureSession.startRunning()
         }
+
+        UIDevice.current.beginGeneratingDeviceOrientationNotifications()
+        let center = NotificationCenter.default
+        let notification = Notification.Name.UIDeviceOrientationDidChange
+        deviceOrientationObserver = center.addObserver(forName: notification,
+                                                       object: nil, queue: nil, using: deviceOrientationChanged)
     }
 
     deinit {
         isFlashEnabled = false
+
+        UIDevice.current.endGeneratingDeviceOrientationNotifications()
+        deviceOrientationObserver = nil
     }
 
     private func configureFlash(enabled: Bool) {
@@ -112,26 +124,84 @@ final public class Camera: NSObject {
     public func captureCurrentFrame(captured: @escaping (UIImage) -> ()) {
         self.captureClosure = captured
     }
+
+    @objc private func deviceOrientationChanged(notification: Notification) {
+        let allowedOrientations:[UIDeviceOrientation] = [.portrait, .landscapeLeft, .landscapeRight, .portraitUpsideDown]
+        guard
+            let device = notification.object as? UIDevice,
+            allowedOrientations.contains(device.orientation) == true else {
+                return
+        }
+        lastKnownDeviceOrientation = device.orientation
+    }
 }
 
 extension Camera: AVCaptureVideoDataOutputSampleBufferDelegate {
     public func captureOutput(_ output: AVCaptureOutput, didOutput sampleBuffer: CMSampleBuffer, from connection: AVCaptureConnection) {
-        guard let image = sampleBuffer.image(using: context), captureSession.isRunning else { return }
+        guard
+            captureSession.isRunning
+            else { return }
+
+        guard
+            let orientation = UIImageOrientation(deviceOrientation: lastKnownDeviceOrientation),
+            let image = UIImage(cmSampleBuffer: sampleBuffer, context: context, orientation: orientation)
+            else { return }
+
         guard let captured = captureClosure else {
             delegate?.camera(self, didOutput: image)
             return
         }
+
         captured(image)
         captureClosure = nil
     }
 }
 
-extension CMSampleBuffer {
-    func image(using context: CIContext) -> UIImage? {
-        guard let imageBuffer = CMSampleBufferGetImageBuffer(self) else { return nil }
-        let ciImage = CIImage(cvPixelBuffer: imageBuffer)
-        guard let cgImage = context._createCGImage(ciImage, from: ciImage.extent) else { return nil }
-        return UIImage(cgImage: cgImage)
+extension UIImage {
+    convenience init?(cmSampleBuffer sampleBuffer: CMSampleBuffer, context: CIContext = CIContext(), orientation: UIImageOrientation) {
+        guard let imageBuffer = CMSampleBufferGetImageBuffer(sampleBuffer) else {
+            return nil
+        }
+
+        let ciImage = CIImage(cvPixelBuffer: imageBuffer).oriented(forExifOrientation: orientation.exif)
+        guard
+            let cgImage = context._createCGImage(ciImage, from: ciImage.extent)
+            else { return nil }
+
+        self.init(cgImage: cgImage)
+    }
+}
+
+extension UIImageOrientation {
+    init?(deviceOrientation: UIDeviceOrientation) {
+        switch deviceOrientation {
+        case .portrait: self = .up
+        case .portraitUpsideDown: self = .down
+        case .landscapeLeft: self = .left
+        case .landscapeRight: self = .right
+        default: return nil
+        }
+    }
+
+    var exif: Int32 {
+        switch (self) {
+        case .up:
+            return 1
+        case .down:
+            return 3
+        case .left:
+            return 8
+        case .right:
+            return 6
+        case .upMirrored:
+            return 2
+        case .downMirrored:
+            return 4
+        case .leftMirrored:
+            return 5
+        case .rightMirrored:
+            return 7
+        }
     }
 }
 

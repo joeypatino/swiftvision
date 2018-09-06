@@ -40,8 +40,4 @@ open class CameraPreview: UIView {
     private func commonInit() {
         videoPreviewLayer.videoGravity = .resizeAspectFill
     }
-
-    public func pointConverted(fromCaptureDevicePoint point: CGPoint) -> CGPoint {
-        return videoPreviewLayer.layerPointConverted(fromCaptureDevicePoint: point)
-    }
 }

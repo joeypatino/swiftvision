@@ -12,15 +12,14 @@ import Vision
 
 public protocol PageDetectorDelegate: class {
     func pageDetectorViewController(_ viewController: PageDetectorViewController, didCapturePage page: UIImage)
-    func pageDetectorViewControllerDidCancel(_ viewController: PageDetectorViewController)
 }
 
-open class PageDetectorViewController: UIViewController {
-    public weak var delegate: PageDetectorDelegate?
+final public class PageDetectorViewController: CameraViewController {
+    public weak var pageDetectionDelegate: PageDetectorDelegate?
     public var preview: PageDetectorPreview {
         return view as! PageDetectorPreview
     }
-    public let camera: Camera
+
     public var legacyPageDetection: Bool = false
     public var minimumAspectRatio: Float = 0.5
     public var maximumAspectRatio: Float = 1.0
@@ -29,21 +28,9 @@ open class PageDetectorViewController: UIViewController {
 
     private let detector = PageDetector()
     private let tracker = PageOutlineTracker()
-    private lazy var done = UIBarButtonItem(barButtonSystemItem: .done, target: self, action: #selector(cancel))
-    open override var preferredStatusBarStyle: UIStatusBarStyle { return .lightContent }
 
     open class var previewClass: UIView.Type {
         return PageDetectorPreview.self
-    }
-
-    public init(with camera: Camera) {
-        self.camera = camera
-        super.init(nibName: nil, bundle: nil)
-    }
-
-    required public init?(coder aDecoder: NSCoder) {
-        self.camera = Camera()
-        super.init(coder: aDecoder)
     }
 
     open override func loadView() {
@@ -52,33 +39,11 @@ open class PageDetectorViewController: UIViewController {
 
     override open func viewDidLoad() {
         super.viewDidLoad()
-        detector.shouldPostProcess = false
         camera.delegate = self
-        camera.quality = .high
-        preview.session = camera.captureSession
+        detector.shouldPostProcess = false
         tracker.trackingTrigger = { [weak self] outline in
             self?.capturePage(with: outline)
         }
-        if !camera.captureSession.isRunning {
-            camera.captureSession.startRunning()
-        }
-        setupAppearance()
-        navigationItem.leftBarButtonItem = done
-    }
-
-    open override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-        updateCameraOrientation()
-    }
-
-    override open func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
-        super.viewWillTransition(to: size, with: coordinator)
-        updateCameraOrientation()
-    }
-
-    @objc private func cancel(_ sender: UIBarButtonItem) {
-        camera.captureSession.stopRunning()
-        delegate?.pageDetectorViewControllerDidCancel(self)
     }
 
     private func capturePage(with outline: CGRectOutline) {
@@ -86,26 +51,9 @@ open class PageDetectorViewController: UIViewController {
             let image = self?.detector.extract(outline, from: frame)
             DispatchQueue.main.async {
                 guard let weakSelf = self else { return }
-                weakSelf.delegate?.pageDetectorViewController(weakSelf, didCapturePage: image ?? frame)
+                weakSelf.pageDetectionDelegate?.pageDetectorViewController(weakSelf, didCapturePage: image ?? frame)
             }
         }
-    }
-
-    private func setupAppearance() {
-        done.tintColor = .white
-        navigationController?.navigationBar.barStyle = .black
-    }
-
-    private func updateCameraOrientation() {
-        guard let connection = preview.cameraConnection else {
-            return
-        }
-        let deviceOrientation = UIDevice.current.orientation
-        guard let newOrientation = AVCaptureVideoOrientation(deviceOrientation: deviceOrientation),
-            deviceOrientation.isPortrait || deviceOrientation.isLandscape else {
-                return
-        }
-        connection.videoOrientation = newOrientation
     }
 }
 
@@ -188,17 +136,5 @@ extension PageDetectorViewController {
                              botLeft: convert(bottomLeft),
                              botRight: convert(bottomRight),
                              topRight: convert(topRight))
-    }
-}
-
-extension AVCaptureVideoOrientation {
-    init?(deviceOrientation: UIDeviceOrientation) {
-        switch deviceOrientation {
-        case .portrait: self = .portrait
-        case .portraitUpsideDown: self = .portraitUpsideDown
-        case .landscapeLeft: self = .landscapeRight
-        case .landscapeRight: self = .landscapeLeft
-        default: return nil
-        }
     }
 }

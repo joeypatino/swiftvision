@@ -21,8 +21,13 @@ open class PageDetectorViewController: UIViewController {
         return view as! PageDetectorPreview
     }
     public let camera: Camera
-    public let detector = PageDetector()
     public var legacyPageDetection: Bool = false
+    public var minimumAspectRatio: Float = 0.5
+    public var maximumAspectRatio: Float = 1.0
+    public var quadratureTolerance: Float = 30
+    public var minimumSize: Float = 0.2
+
+    private let detector = PageDetector()
     private let tracker = PageOutlineTracker()
     private lazy var done = UIBarButtonItem(barButtonSystemItem: .done, target: self, action: #selector(cancel))
     open override var preferredStatusBarStyle: UIStatusBarStyle { return .lightContent }
@@ -127,7 +132,10 @@ extension PageDetectorViewController {
         }
 
         let detectRequest = VNDetectRectanglesRequest(completionHandler: didDetectRectangle())
-        detectRequest.minimumConfidence = 0.5
+        detectRequest.minimumConfidence = 0.8
+        detectRequest.minimumSize = minimumSize
+        detectRequest.quadratureTolerance = quadratureTolerance
+        detectRequest.minimumAspectRatio = minimumAspectRatio
 
         let handler = VNImageRequestHandler(ciImage: ciImage)
         DispatchQueue.global(qos: .userInteractive).async {

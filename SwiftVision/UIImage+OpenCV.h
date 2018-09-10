@@ -23,4 +23,11 @@
 - (UIImage *_Nullable)renderRect:(CGRect)rect borderColor:(UIColor *_Nonnull)borderColor borderWidth:(NSInteger)borderWidth;
 - (UIImage *_Nullable)renderRect:(CGRect)rect borderColor:(UIColor *_Nonnull)borderColor borderWidth:(NSInteger)borderWidth fillColor:(UIColor *_Nullable)fillColor;
 
+/**
+ * attemps to isolate the text contents from the image. works by applying Morphological
+ * transformations in order to determine the largest mass of pixels. The returned image is
+ * then masked based on this result.
+ */
+- (UIImage *_Nullable)extractTextContents;
+
 @end

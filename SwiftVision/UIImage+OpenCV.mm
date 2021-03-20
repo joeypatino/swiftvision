@@ -160,15 +160,15 @@
     // Transform source image to gray if it is not
     cv::Mat gray;
     if (inImage.channels() == 3) {
-        cv::cvtColor(inImage, gray, CV_RGB2GRAY);
+        cv::cvtColor(inImage, gray, cv::COLOR_RGB2GRAY);
     } else if (inImage.channels() == 4) {
-        cv::cvtColor(inImage, gray, CV_RGBA2GRAY);
+        cv::cvtColor(inImage, gray, cv::COLOR_RGBA2GRAY);
     } else {
         gray = inImage;
     }
 
     cv::Mat bw;
-    cv::adaptiveThreshold(gray, bw, 255, CV_ADAPTIVE_THRESH_MEAN_C, cv::THRESH_BINARY, 7, 7);
+    cv::adaptiveThreshold(gray, bw, 255, cv::ADAPTIVE_THRESH_MEAN_C, cv::THRESH_BINARY, 7, 7);
 
     cv::Mat bwClone = bw.clone();
     cv::Mat structure = cv::getStructuringElement(cv::MORPH_RECT, cv::Size(16,4));
@@ -184,7 +184,7 @@
     cv::dilate(bwClone, bwClone, structure3, cv::Point(-1, -1));
 
     std::vector<std::vector<cv::Point>> contours;
-    cv::findContours(bwClone, contours, cv::RETR_EXTERNAL, CV_CHAIN_APPROX_NONE);
+    cv::findContours(bwClone, contours, cv::RETR_EXTERNAL, cv::CHAIN_APPROX_NONE);
 
     double largestContour = -1000000;
     int indexOfContour = -1;

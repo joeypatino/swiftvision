@@ -50,10 +50,10 @@ using namespace cv;
         }
 
         Mat totals;
-        reduce(mask, totals, 0, CV_REDUCE_SUM);
+        reduce(mask, totals, 0, REDUCE_SUM);
 
         Mat masksum;
-        reduce(contour.mask, masksum, 0, CV_REDUCE_SUM);
+        reduce(contour.mask, masksum, 0, REDUCE_SUM);
         Mat means = totals / masksum;
 
         int step = self.samplingStep;

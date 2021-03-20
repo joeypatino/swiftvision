@@ -9,12 +9,17 @@
 			<key>orderHint</key>
 			<integer>2</integer>
 		</dict>
-		<key>OpenCVDemo.xcscheme</key>
+		<key>SwiftVision.xcscheme</key>
+		<dict>
+			<key>orderHint</key>
+			<integer>1</integer>
+		</dict>
+		<key>SwiftVision.xcscheme_^#shared#^_</key>
 		<dict>
 			<key>orderHint</key>
 			<integer>0</integer>
 		</dict>
-		<key>SwiftVision.xcscheme</key>
+		<key>SwiftVisionDemo.xcscheme_^#shared#^_</key>
 		<dict>
 			<key>orderHint</key>
 			<integer>1</integer>

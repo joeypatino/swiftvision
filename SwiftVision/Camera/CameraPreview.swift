@@ -1,12 +1,3 @@
-//
-//  CameraPreview.swift
-//  SwiftVision
-//
-//  Created by Joey Patino on 8/13/18.
-//  Copyright © 2018 Joseph Patino. All rights reserved.
-//
-
-import UIKit
 import AVFoundation
 
 open class CameraPreview: UIView {

@@ -1,13 +1,3 @@
-//
-//  PageDetectorPreview.swift
-//  SwiftVision
-//
-//  Created by Joey Patino on 8/13/18.
-//  Copyright © 2018 Joseph Patino. All rights reserved.
-//
-
-import UIKit
-
 open class PageDetectorPreview: CameraPreview {
     public var outline: CGRectOutline {
         get { return outlineView.outline }
@@ -27,9 +17,9 @@ open class PageDetectorPreview: CameraPreview {
     }
 
     private func commonInit() {
+        backgroundColor = .white
         outlineView.frame = bounds
         outlineView.autoresizingMask = [.flexibleWidth, .flexibleHeight];
         addSubview(outlineView)
     }
 }
-

@@ -36,7 +36,7 @@ using namespace cv;
                 continue;
 
         Mat summedMask = Mat::zeros(0, 0, CV_64FC1);
-        cv::reduce(contour.mask, summedMask, 0, CV_REDUCE_SUM, CV_64FC1);
+        cv::reduce(contour.mask, summedMask, 0, REDUCE_SUM, CV_64FC1);
 
         double max;
         minMaxLoc(summedMask, NULL, &max);

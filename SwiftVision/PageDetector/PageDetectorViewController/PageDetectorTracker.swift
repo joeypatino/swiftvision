@@ -1,13 +1,3 @@
-//
-//  PageDetectorTracker.swift
-//  SwiftVision
-//
-//  Created by Joey Patino on 8/13/18.
-//  Copyright © 2018 Joseph Patino. All rights reserved.
-//
-
-import Foundation
-
 final internal class PageOutlineTracker {
     public var trackingTrigger: ((CGRectOutline) -> ())?
     public var trackingTimeout: TimeInterval = 1.0

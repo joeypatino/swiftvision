@@ -1,10 +1,3 @@
-//
-//  AVCaptureVideoOrientation.swift
-//  Pods-CarExpert
-//
-//  Created by Joey Patino on 9/10/18.
-//
-
 import AVFoundation
 
 public extension AVCaptureVideoOrientation {

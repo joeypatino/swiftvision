@@ -31,7 +31,7 @@ pod 'SwiftVision', :git => 'git@github.com:joeypatino/swiftvision.git'
 
 ## Usage example
 
-A working example can be found in the OpenCVDemo app included in the repo. Check out the source code for function documentation.
+A working example can be found in the SwiftVisionDemo app included in the repo. Check out the source code for documentation.
 
 ### Meta
 

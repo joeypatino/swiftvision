@@ -1,12 +1,3 @@
-//
-//  Camera.swift
-//  OpenCVDemo
-//
-//  Created by Joey Patino on 8/11/18.
-//  Copyright © 2018 Joseph Patino. All rights reserved.
-//
-
-import UIKit
 import AVFoundation
 
 public protocol CameraDelegate: class {
@@ -43,7 +34,7 @@ final public class Camera: NSObject {
 
         UIDevice.current.beginGeneratingDeviceOrientationNotifications()
         let center = NotificationCenter.default
-        let notification = Notification.Name.UIDeviceOrientationDidChange
+        let notification = UIDevice.orientationDidChangeNotification
         deviceOrientationObserver = center.addObserver(forName: notification,
                                                        object: nil, queue: nil, using: deviceOrientationChanged)
     }
@@ -143,7 +134,7 @@ extension Camera: AVCaptureVideoDataOutputSampleBufferDelegate {
             else { return }
 
         guard
-            let orientation = UIImageOrientation(deviceOrientation: lastKnownDeviceOrientation),
+            let orientation = UIImage.Orientation(deviceOrientation: lastKnownDeviceOrientation),
             let image = UIImage(cmSampleBuffer: sampleBuffer, context: context, orientation: orientation)
             else { return }
 
@@ -158,7 +149,7 @@ extension Camera: AVCaptureVideoDataOutputSampleBufferDelegate {
 }
 
 extension UIImage {
-    convenience init?(cmSampleBuffer sampleBuffer: CMSampleBuffer, context: CIContext = CIContext(), orientation: UIImageOrientation) {
+    convenience init?(cmSampleBuffer sampleBuffer: CMSampleBuffer, context: CIContext = CIContext(), orientation: UIImage.Orientation) {
         guard let imageBuffer = CMSampleBufferGetImageBuffer(sampleBuffer) else {
             return nil
         }
@@ -172,7 +163,7 @@ extension UIImage {
     }
 }
 
-extension UIImageOrientation {
+extension UIImage.Orientation {
     init?(deviceOrientation: UIDeviceOrientation) {
         switch deviceOrientation {
         case .portrait: self = .up
@@ -201,6 +192,8 @@ extension UIImageOrientation {
             return 5
         case .rightMirrored:
             return 7
+        @unknown default:
+            fatalError("unhandled device orientation")
         }
     }
 }
@@ -213,7 +206,7 @@ extension CIContext {
         let width = Int(rect.width)
         let height = Int(rect.height)
         let rawData = UnsafeMutablePointer<UInt8>.allocate(capacity: width * height * 4)
-        render(image, toBitmap: rawData, rowBytes: width * 4, bounds: rect, format: kCIFormatRGBA8, colorSpace: CGColorSpaceCreateDeviceRGB())
+        render(image, toBitmap: rawData, rowBytes: width * 4, bounds: rect, format: CIFormat.RGBA8, colorSpace: CGColorSpaceCreateDeviceRGB())
         guard let dataProvider = CGDataProvider(dataInfo: nil, data: rawData, size: height * width * 4, releaseData: { info, data, size in
             UnsafeRawPointer(data).deallocate()
         }) else { return nil}

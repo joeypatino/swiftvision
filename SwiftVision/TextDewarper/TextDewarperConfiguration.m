@@ -1,11 +1,3 @@
-//
-//  TextDewarperConfiguration.m
-//  SwiftVision
-//
-//  Created by Joey Patino on 8/30/18.
-//  Copyright © 2018 Joseph Patino. All rights reserved.
-//
-
 #import "TextDewarperConfiguration.h"
 
 @implementation TextDewarperConfiguration

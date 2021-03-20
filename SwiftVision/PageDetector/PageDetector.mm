@@ -230,7 +230,7 @@ using namespace cv;
         cv::cvtColor(inImage, inImage, cv::COLOR_RGBA2GRAY);
 
     // Find contours, store them in a list and test each
-    cv::findContours(inImage, contours, CV_RETR_LIST, CV_CHAIN_APPROX_NONE);
+    cv::findContours(inImage, contours, RETR_LIST, CHAIN_APPROX_NONE);
     for (size_t i = 0; i < contours.size(); i++) {
         // approximate contour with accuracy proportional
         // to the contour perimeter

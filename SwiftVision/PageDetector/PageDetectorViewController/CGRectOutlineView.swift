@@ -1,13 +1,3 @@
-//
-//  CGRectOutlineView.swift
-//  SwiftVision
-//
-//  Created by Joey Patino on 8/13/18.
-//  Copyright © 2018 Joseph Patino. All rights reserved.
-//
-
-import UIKit
-
 internal class CGRectOutlineView: UIView {
     public var outline: CGRectOutline = CGRectOutlineZeroMake() {
         didSet { drawOutline(outline) }
@@ -76,7 +66,7 @@ internal class CGRectOutlineView: UIView {
         ctx.circle(at: outline.botRight, color: .white, radius: 30)
         ctx.circle(at: outline.botLeft, color: .white, radius: 30)
 
-        let attributes:[NSAttributedStringKey: Any] = [.font: UIFont.boldSystemFont(ofSize: 12),
+        let attributes:[NSAttributedString.Key: Any] = [.font: UIFont.boldSystemFont(ofSize: 12),
                                                        .foregroundColor: UIColor.red]
         NSString(string:"tl").draw(at: outline.topLeft, withAttributes: attributes)
         NSString(string:"tr").draw(at: outline.topRight, withAttributes: attributes)
@@ -100,7 +90,7 @@ internal class CGRectOutlineView: UIView {
 }
 
 public extension CGContext {
-    public func circle(at point: CGPoint, color:UIColor, radius: CGFloat) {
+    func circle(at point: CGPoint, color:UIColor, radius: CGFloat) {
         let size = CGSize(width: radius, height: radius)
         let origin = CGPoint(x: point.x - radius/2, y: point.y - radius/2)
         let rect = CGRect(origin: origin, size: size)

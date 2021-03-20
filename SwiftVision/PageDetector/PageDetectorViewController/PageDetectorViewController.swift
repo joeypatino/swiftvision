@@ -1,12 +1,3 @@
-//
-//  PageDetectorViewController.swift
-//  SwiftVision
-//
-//  Created by Joey Patino on 8/13/18.
-//  Copyright © 2018 Joseph Patino. All rights reserved.
-//
-
-import UIKit
 import AVFoundation
 import Vision
 
@@ -14,7 +5,7 @@ public protocol PageDetectorDelegate: class {
     func pageDetectorViewController(_ viewController: PageDetectorViewController, didCapturePage page: UIImage)
 }
 
-final public class PageDetectorViewController: CameraViewController {
+open class PageDetectorViewController: CameraViewController {
     public weak var pageDetectionDelegate: PageDetectorDelegate?
     public var preview: PageDetectorPreview {
         return view as! PageDetectorPreview
@@ -25,15 +16,15 @@ final public class PageDetectorViewController: CameraViewController {
     public var maximumAspectRatio: Float = 1.0
     public var quadratureTolerance: Float = 30
     public var minimumSize: Float = 0.2
+    public let detector = PageDetector()
 
-    private let detector = PageDetector()
     private let tracker = PageOutlineTracker()
 
     open class var previewClass: UIView.Type {
         return PageDetectorPreview.self
     }
 
-    open override func loadView() {
+    public override func loadView() {
         view = type(of: self).previewClass.init()
     }
 

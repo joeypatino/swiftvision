@@ -13,6 +13,7 @@
 written mainly as an experiment in text dewarping using OpenCV but continued to expand to include numerous image
 editing functions and various related classes. 
 
+Lots of credit on the page dewarping process goes to the great write-up by Matt Zucker https://mzucker.github.io/2016/08/15/page-dewarping.html
 ## Requirements
 
 - iOS 9.0+

@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
   s.name         = 'SwiftVision'
-  s.version      = '0.2.1'
+  s.version      = '0.2.2'
   s.summary      = 'A framework for image dewarping and manipulation.'
   s.homepage     = 'https://www.github.com/joeypatino/swiftvision.git'
   s.description  = <<-DESC

@@ -1,6 +1,6 @@
 import AVFoundation
 
-public protocol CameraDelegate: class {
+public protocol CameraDelegate: AnyObject {
     func camera(_ camera:Camera, didOutput frame: UIImage)
 }
 

@@ -15,6 +15,9 @@ class ViewController: UIViewController {
         scrollView.minimumZoomScale = 1.0
         scrollView.maximumZoomScale = 5.0
         camera.quality = .medium
+        
+        let input1 = #imageLiteral(resourceName: "boston_cooking_a.jpg")
+        loadImage(input1)
     }
 
     @IBAction func originalAction(_ sender: Any) {
@@ -60,8 +63,6 @@ class ViewController: UIViewController {
 
     @IBAction private func takePhoto() {
         let viewController = PageDetectorViewController(with: camera)
-        //let viewController = PageCaptureViewController(with: camera)
-        //viewController.delegate = self
         viewController.pageDetectionDelegate = self
         let navController = UINavigationController(rootViewController: viewController)
         present(navController, animated: true)
@@ -69,14 +70,14 @@ class ViewController: UIViewController {
 
     private func loadImage(_ image:UIImage) {
         dewarpedImage = nil
-        imageContours = TextDewarper(image: image, configuration: TextDewarperConfiguration())
+        imageContours = TextDewarper(image: image.normalizedImage(), configuration: TextDewarperConfiguration())
         imageView.image = imageContours.inputImage
     }
 }
 
 extension ViewController: UIScrollViewDelegate {
     func viewForZooming(in scrollView: UIScrollView) -> UIView? {
-        return imageView
+        imageView
     }
 }
 

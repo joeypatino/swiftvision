@@ -23,9 +23,9 @@
                                         cvMat.rows,                                 //height
                                         8,                                          //bits per component
                                         8 * cvMat.elemSize(),                       //bits per pixel
-                                        cvMat.step[0],                            //bytesPerRow
+                                        cvMat.cols * cvMat.elemSize(),              //bytesPerRow
                                         colorSpace,                                 //colorspace
-                                        kCGImageAlphaNone|kCGBitmapByteOrderDefault,// bitmap info
+                                        kCGImageAlphaNoneSkipLast,                  // bitmap info
                                         provider,                                   //CGDataProviderRef
                                         NULL,                                       //decode
                                         false,                                      //should interpolate
@@ -53,10 +53,9 @@
                                                     cols,                       // Width of bitmap
                                                     rows,                       // Height of bitmap
                                                     8,                          // Bits per component
-                                                    cvMat.step[0],              // Bytes per row
+                                                    4*cvMat.cols,              // Bytes per row
                                                     colorSpace,                 // Colorspace
-                                                    kCGImageAlphaNoneSkipLast |
-                                                    kCGBitmapByteOrderDefault); // Bitmap info flags
+                                                    kCGImageAlphaNoneSkipLast); // Bitmap info flags
 
     CGContextDrawImage(contextRef, CGRectMake(0, 0, cols, rows), self.CGImage);
     CGContextRelease(contextRef);

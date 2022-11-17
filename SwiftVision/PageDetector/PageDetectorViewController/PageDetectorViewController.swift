@@ -1,7 +1,7 @@
 import AVFoundation
 import Vision
 
-public protocol PageDetectorDelegate: class {
+public protocol PageDetectorDelegate: AnyObject {
     func pageDetectorViewController(_ viewController: PageDetectorViewController, didCapturePage page: UIImage)
 }
 

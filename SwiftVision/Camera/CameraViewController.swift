@@ -1,6 +1,6 @@
 import AVFoundation
 
-public protocol CameraViewControllerDelegate: class {
+public protocol CameraViewControllerDelegate: AnyObject {
     func cameraViewControllerDidCancel(_ viewController: CameraViewController)
 }
 

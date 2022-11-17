@@ -41,7 +41,7 @@ using namespace cv;
 // MARK: - returns dewarped image
 - (UIImage *)renderProcessed {
     CGRectOutline outline = [self outlineWithSize:self.workingImage.size insets:self.configuration.inputMaskInsets];
-    UIImage *processedImage = [[[self.workingImage invert] dilate:CGSizeMake(8, 3)] erode:CGSizeMake(6, 2)];
+    UIImage *processedImage = [[[[self.workingImage invert] threshold:7 constant:8] dilate:CGSizeMake(8, 3)] erode:CGSizeMake(6, 2)];
     UIImage *mask = [processedImage rectangle:outline];
     return [processedImage elementwiseMinimum:mask];
 }

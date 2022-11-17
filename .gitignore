@@ -2,3 +2,7 @@ SwiftVision.xcodeproj/project.xcworkspace/xcuserdata
 SwiftVision.xcodeproj/xcuserdata
 .DS_Store
 /SwiftVision.xcodeproj/xcuserdata
+opencv2.xcframework/ios-arm64_armv7/opencv2.framework/opencv2
+opencv2.xcframework/macos-arm64/opencv2.framework/opencv2
+opencv2.xcframework/ios-arm64-maccatalyst/opencv2.framework/opencv2
+opencv2.xcframework/ios-arm64_x86_64-simulator/opencv2.framework/opencv2

@@ -1509,6 +1509,24 @@ CV_EXPORTS @interface Photo : NSObject
 + (void)stylization:(Mat*)src dst:(Mat*)dst NS_SWIFT_NAME(stylization(src:dst:));
 
 
+//
+//  void cv::cuda::nonLocalMeans(GpuMat src, GpuMat& dst, float h, int search_window = 21, int block_size = 7, int borderMode = BORDER_DEFAULT,  _hidden_  stream = Stream::Null())
+//
+// Unknown type 'GpuMat' (I), skipping the function
+
+
+//
+//  void cv::cuda::fastNlMeansDenoising(GpuMat src, GpuMat& dst, float h, int search_window = 21, int block_size = 7, Stream stream = Stream::Null())
+//
+// Unknown type 'GpuMat' (I), skipping the function
+
+
+//
+//  void cv::cuda::fastNlMeansDenoisingColored(GpuMat src, GpuMat& dst, float h_luminance, float photo_render, int search_window = 21, int block_size = 7, Stream stream = Stream::Null())
+//
+// Unknown type 'GpuMat' (I), skipping the function
+
+
 
 @end
 

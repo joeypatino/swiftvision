@@ -59,7 +59,7 @@ CV_EXPORTS @interface TextDetectionModel : Model
  * - top-right
  * - bottom-right
  *
- * Use cv::getPerspectiveTransform function to retrive image region without perspective transformations.
+ * Use cv::getPerspectiveTransform function to retrieve image region without perspective transformations.
  *
  * NOTE: If DL model doesn't support that kind of output then result may be derived from detectTextRectangles() output.
  *

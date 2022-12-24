@@ -188,9 +188,9 @@ CV_EXPORTS @interface Feature2D : Algorithm
 
 
 //
-//  void cv::Feature2D::write(Ptr_FileStorage fs, String name = String())
+//  void cv::Feature2D::write(FileStorage fs, String name)
 //
-// Unknown type 'Ptr_FileStorage' (I), skipping the function
+// Unknown type 'FileStorage' (I), skipping the function
 
 
 

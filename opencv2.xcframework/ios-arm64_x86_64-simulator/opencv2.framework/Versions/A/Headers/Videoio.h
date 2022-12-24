@@ -62,7 +62,34 @@ typedef NS_ENUM(int, VideoCaptureAPIs) {
     CAP_OPENCV_MJPEG = 2200,
     CAP_INTEL_MFX = 2300,
     CAP_XINE = 2400,
-    CAP_UEYE = 2500
+    CAP_UEYE = 2500,
+    CAP_OBSENSOR = 2600
+};
+
+
+// C++: enum VideoCaptureOBSensorDataType (cv.VideoCaptureOBSensorDataType)
+typedef NS_ENUM(int, VideoCaptureOBSensorDataType) {
+    CAP_OBSENSOR_DEPTH_MAP = 0,
+    CAP_OBSENSOR_BGR_IMAGE = 1,
+    CAP_OBSENSOR_IR_IMAGE = 2
+};
+
+
+// C++: enum VideoCaptureOBSensorGenerators (cv.VideoCaptureOBSensorGenerators)
+typedef NS_ENUM(int, VideoCaptureOBSensorGenerators) {
+    CAP_OBSENSOR_DEPTH_GENERATOR = 1 << 29,
+    CAP_OBSENSOR_IMAGE_GENERATOR = 1 << 28,
+    CAP_OBSENSOR_IR_GENERATOR = 1 << 27,
+    CAP_OBSENSOR_GENERATORS_MASK = CAP_OBSENSOR_DEPTH_GENERATOR + CAP_OBSENSOR_IMAGE_GENERATOR + CAP_OBSENSOR_IR_GENERATOR
+};
+
+
+// C++: enum VideoCaptureOBSensorProperties (cv.VideoCaptureOBSensorProperties)
+typedef NS_ENUM(int, VideoCaptureOBSensorProperties) {
+    CAP_PROP_OBSENSOR_INTRINSIC_FX = 26001,
+    CAP_PROP_OBSENSOR_INTRINSIC_FY = 26002,
+    CAP_PROP_OBSENSOR_INTRINSIC_CX = 26003,
+    CAP_PROP_OBSENSOR_INTRINSIC_CY = 26004
 };
 
 
@@ -118,7 +145,26 @@ typedef NS_ENUM(int, VideoCaptureProperties) {
     CAP_PROP_ORIENTATION_META = 48,
     CAP_PROP_ORIENTATION_AUTO = 49,
     CAP_PROP_HW_ACCELERATION = 50,
-    CAP_PROP_HW_DEVICE = 51
+    CAP_PROP_HW_DEVICE = 51,
+    CAP_PROP_HW_ACCELERATION_USE_OPENCL = 52,
+    CAP_PROP_OPEN_TIMEOUT_MSEC = 53,
+    CAP_PROP_READ_TIMEOUT_MSEC = 54,
+    CAP_PROP_STREAM_OPEN_TIME_USEC = 55,
+    CAP_PROP_VIDEO_TOTAL_CHANNELS = 56,
+    CAP_PROP_VIDEO_STREAM = 57,
+    CAP_PROP_AUDIO_STREAM = 58,
+    CAP_PROP_AUDIO_POS = 59,
+    CAP_PROP_AUDIO_SHIFT_NSEC = 60,
+    CAP_PROP_AUDIO_DATA_DEPTH = 61,
+    CAP_PROP_AUDIO_SAMPLES_PER_SECOND = 62,
+    CAP_PROP_AUDIO_BASE_INDEX = 63,
+    CAP_PROP_AUDIO_TOTAL_CHANNELS = 64,
+    CAP_PROP_AUDIO_TOTAL_STREAMS = 65,
+    CAP_PROP_AUDIO_SYNCHRONIZE = 66,
+    CAP_PROP_LRF_HAS_KEY_FRAME = 67,
+    CAP_PROP_CODEC_EXTRADATA_INDEX = 68,
+    CAP_PROP_FRAME_TYPE = 69,
+    CAP_PROP_N_THREADS = 70
 };
 
 
@@ -130,7 +176,8 @@ typedef NS_ENUM(int, VideoWriterProperties) {
     VIDEOWRITER_PROP_IS_COLOR = 4,
     VIDEOWRITER_PROP_DEPTH = 5,
     VIDEOWRITER_PROP_HW_ACCELERATION = 6,
-    VIDEOWRITER_PROP_HW_DEVICE = 7
+    VIDEOWRITER_PROP_HW_DEVICE = 7,
+    VIDEOWRITER_PROP_HW_ACCELERATION_USE_OPENCL = 8
 };
 
 
@@ -143,7 +190,7 @@ NS_ASSUME_NONNULL_BEGIN
  *
  * Member classes: `VideoCapture`, `VideoWriter`
  *
- * Member enums: `VideoCaptureAPIs`, `VideoCaptureProperties`, `VideoWriterProperties`, `VideoAccelerationType`
+ * Member enums: `VideoCaptureAPIs`, `VideoCaptureProperties`, `VideoWriterProperties`, `VideoAccelerationType`, `VideoCaptureOBSensorDataType`, `VideoCaptureOBSensorGenerators`, `VideoCaptureOBSensorProperties`
  */
 CV_EXPORTS @interface Videoio : NSObject
 
@@ -443,6 +490,51 @@ CV_EXPORTS @interface Videoio : NSObject
 //  vector_VideoCaptureAPIs cv::videoio_registry::getWriterBackends()
 //
     // Return type 'vector_VideoCaptureAPIs' is not supported, skipping the function
+
+
+//
+//  bool cv::videoio_registry::hasBackend(VideoCaptureAPIs api)
+//
+/**
+ * Returns true if backend is available
+ */
++ (BOOL)hasBackend:(VideoCaptureAPIs)api NS_SWIFT_NAME(hasBackend(api:));
+
+
+//
+//  bool cv::videoio_registry::isBackendBuiltIn(VideoCaptureAPIs api)
+//
+/**
+ * Returns true if backend is built in (false if backend is used as plugin)
+ */
++ (BOOL)isBackendBuiltIn:(VideoCaptureAPIs)api NS_SWIFT_NAME(isBackendBuiltIn(api:));
+
+
+//
+//  string cv::videoio_registry::getCameraBackendPluginVersion(VideoCaptureAPIs api, int& version_ABI, int& version_API)
+//
+/**
+ * Returns description and ABI/API version of videoio plugin's camera interface
+ */
++ (NSString*)getCameraBackendPluginVersion:(VideoCaptureAPIs)api version_ABI:(int*)version_ABI version_API:(int*)version_API NS_SWIFT_NAME(getCameraBackendPluginVersion(api:version_ABI:version_API:));
+
+
+//
+//  string cv::videoio_registry::getStreamBackendPluginVersion(VideoCaptureAPIs api, int& version_ABI, int& version_API)
+//
+/**
+ * Returns description and ABI/API version of videoio plugin's stream capture interface
+ */
++ (NSString*)getStreamBackendPluginVersion:(VideoCaptureAPIs)api version_ABI:(int*)version_ABI version_API:(int*)version_API NS_SWIFT_NAME(getStreamBackendPluginVersion(api:version_ABI:version_API:));
+
+
+//
+//  string cv::videoio_registry::getWriterBackendPluginVersion(VideoCaptureAPIs api, int& version_ABI, int& version_API)
+//
+/**
+ * Returns description and ABI/API version of videoio plugin's writer interface
+ */
++ (NSString*)getWriterBackendPluginVersion:(VideoCaptureAPIs)api version_ABI:(int*)version_ABI version_API:(int*)version_API NS_SWIFT_NAME(getWriterBackendPluginVersion(api:version_ABI:version_API:));
 
 
 

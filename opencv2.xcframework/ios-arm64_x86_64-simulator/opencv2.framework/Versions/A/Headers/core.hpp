@@ -819,12 +819,45 @@ mixChannels , or split .
 @param minLoc pointer to the returned minimum location (in 2D case); NULL is used if not required.
 @param maxLoc pointer to the returned maximum location (in 2D case); NULL is used if not required.
 @param mask optional mask used to select a sub-array.
-@sa max, min, compare, inRange, extractImageCOI, mixChannels, split, Mat::reshape
+@sa max, min, reduceArgMin, reduceArgMax, compare, inRange, extractImageCOI, mixChannels, split, Mat::reshape
 */
 CV_EXPORTS_W void minMaxLoc(InputArray src, CV_OUT double* minVal,
                             CV_OUT double* maxVal = 0, CV_OUT Point* minLoc = 0,
                             CV_OUT Point* maxLoc = 0, InputArray mask = noArray());
 
+/**
+ * @brief Finds indices of min elements along provided axis
+ *
+ * @note
+ *      - If input or output array is not continuous, this function will create an internal copy.
+ *      - NaN handling is left unspecified, see patchNaNs().
+ *      - The returned index is always in bounds of input matrix.
+ *
+ * @param src input single-channel array.
+ * @param dst output array of type CV_32SC1 with the same dimensionality as src,
+ * except for axis being reduced - it should be set to 1.
+ * @param lastIndex whether to get the index of first or last occurrence of min.
+ * @param axis axis to reduce along.
+ * @sa reduceArgMax, minMaxLoc, min, max, compare, reduce
+ */
+CV_EXPORTS_W void reduceArgMin(InputArray src, OutputArray dst, int axis, bool lastIndex = false);
+
+/**
+ * @brief Finds indices of max elements along provided axis
+ *
+ * @note
+ *      - If input or output array is not continuous, this function will create an internal copy.
+ *      - NaN handling is left unspecified, see patchNaNs().
+ *      - The returned index is always in bounds of input matrix.
+ *
+ * @param src input single-channel array.
+ * @param dst output array of type CV_32SC1 with the same dimensionality as src,
+ * except for axis being reduced - it should be set to 1.
+ * @param lastIndex whether to get the index of first or last occurrence of max.
+ * @param axis axis to reduce along.
+ * @sa reduceArgMin, minMaxLoc, min, max, compare, reduce
+ */
+CV_EXPORTS_W void reduceArgMax(InputArray src, OutputArray dst, int axis, bool lastIndex = false);
 
 /** @brief Finds the global minimum and maximum in an array
 
@@ -886,7 +919,7 @@ a single row. 1 means that the matrix is reduced to a single column.
 @param rtype reduction operation that could be one of #ReduceTypes
 @param dtype when negative, the output vector will have the same type as the input matrix,
 otherwise, its type will be CV_MAKE_TYPE(CV_MAT_DEPTH(dtype), src.channels()).
-@sa repeat
+@sa repeat, reduceArgMin, reduceArgMax
 */
 CV_EXPORTS_W void reduce(InputArray src, OutputArray dst, int dim, int rtype, int dtype = -1);
 
@@ -1068,6 +1101,13 @@ around both axes.
 @sa transpose , repeat , completeSymm
 */
 CV_EXPORTS_W void flip(InputArray src, OutputArray dst, int flipCode);
+
+/** @brief Flips a n-dimensional at given axis
+ *  @param src input array
+ *  @param dst output array that has the same shape of src
+ *  @param axis axis that performs a flip on. 0 <= axis < src.dims.
+ */
+CV_EXPORTS_W void flipND(InputArray src, OutputArray dst, int axis);
 
 enum RotateFlags {
     ROTATE_90_CLOCKWISE = 0, //!<Rotate 90 degrees clockwise
@@ -1705,6 +1745,16 @@ should be done separately if needed.
 @param dst output array of the same type as src.
 */
 CV_EXPORTS_W void transpose(InputArray src, OutputArray dst);
+
+/** @brief Transpose for n-dimensional matrices.
+ *
+ * @note Input should be continuous single-channel matrix.
+ * @param src input array.
+ * @param order a permutation of [0,1,..,N-1] where N is the number of axes of src.
+ * The i’th axis of dst will correspond to the axis numbered order[i] of the input.
+ * @param dst output array of the same type as src.
+ */
+CV_EXPORTS_W void transposeND(InputArray src, const std::vector<int>& order, OutputArray dst);
 
 /** @brief Performs the matrix transformation of every array element.
 
@@ -3099,12 +3149,16 @@ public:
 
     /** @brief Stores algorithm parameters in a file storage
     */
-    virtual void write(FileStorage& fs) const { CV_UNUSED(fs); }
+    CV_WRAP virtual void write(FileStorage& fs) const { CV_UNUSED(fs); }
 
-    /** @brief simplified API for language bindings
+    /**
     * @overload
     */
-    CV_WRAP void write(const Ptr<FileStorage>& fs, const String& name = String()) const;
+    CV_WRAP void write(FileStorage& fs, const String& name) const;
+#if CV_VERSION_MAJOR < 5
+    /** @deprecated */
+    void write(const Ptr<FileStorage>& fs, const String& name = String()) const;
+#endif
 
     /** @brief Reads algorithm parameters from a file storage
     */

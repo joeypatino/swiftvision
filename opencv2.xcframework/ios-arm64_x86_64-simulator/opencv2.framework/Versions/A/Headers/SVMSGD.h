@@ -19,15 +19,15 @@
 
 // C++: enum MarginType (cv.ml.SVMSGD.MarginType)
 typedef NS_ENUM(int, MarginType) {
-    SOFT_MARGIN = 0,
-    HARD_MARGIN = 1
+    SVMSGD_SOFT_MARGIN NS_SWIFT_NAME(SOFT_MARGIN) = 0,
+    SVMSGD_HARD_MARGIN NS_SWIFT_NAME(HARD_MARGIN) = 1
 };
 
 
 // C++: enum SvmsgdType (cv.ml.SVMSGD.SvmsgdType)
 typedef NS_ENUM(int, SvmsgdType) {
-    SGD = 0,
-    ASGD = 1
+    SVMSGD_SGD NS_SWIFT_NAME(SGD) = 0,
+    SVMSGD_ASGD NS_SWIFT_NAME(ASGD) = 1
 };
 
 

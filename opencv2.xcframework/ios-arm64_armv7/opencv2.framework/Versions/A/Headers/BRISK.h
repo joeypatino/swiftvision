@@ -242,6 +242,23 @@ CV_EXPORTS @interface BRISK : Feature2D
 - (int)getOctaves NS_SWIFT_NAME(getOctaves());
 
 
+//
+//  void cv::BRISK::setPatternScale(float patternScale)
+//
+/**
+ * Set detection patternScale.
+ * @param patternScale apply this scale to the pattern used for sampling the neighbourhood of a
+ *     keypoint.
+ */
+- (void)setPatternScale:(float)patternScale NS_SWIFT_NAME(setPatternScale(patternScale:));
+
+
+//
+//  float cv::BRISK::getPatternScale()
+//
+- (float)getPatternScale NS_SWIFT_NAME(getPatternScale());
+
+
 
 @end
 

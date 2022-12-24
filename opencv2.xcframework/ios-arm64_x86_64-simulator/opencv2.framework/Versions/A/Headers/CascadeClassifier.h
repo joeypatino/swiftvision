@@ -107,12 +107,6 @@ CV_EXPORTS @interface CascadeClassifier : NSObject
  *     cvHaarDetectObjects. It is not used for a new cascade.
  * @param minSize Minimum possible object size. Objects smaller than that are ignored.
  * @param maxSize Maximum possible object size. Objects larger than that are ignored. If `maxSize == minSize` model is evaluated on single scale.
- *
- *     The function is parallelized with the TBB library.
- *
- *     NOTE:
- *        -   (Python) A face detection example using cascade classifiers can be found at
- *             opencv_source_code/samples/python/facedetect.py
  */
 - (void)detectMultiScale:(Mat*)image objects:(NSMutableArray<Rect2i*>*)objects scaleFactor:(double)scaleFactor minNeighbors:(int)minNeighbors flags:(int)flags minSize:(Size2i*)minSize maxSize:(Size2i*)maxSize NS_SWIFT_NAME(detectMultiScale(image:objects:scaleFactor:minNeighbors:flags:minSize:maxSize:));
 
@@ -129,12 +123,6 @@ CV_EXPORTS @interface CascadeClassifier : NSObject
  * @param flags Parameter with the same meaning for an old cascade as in the function
  *     cvHaarDetectObjects. It is not used for a new cascade.
  * @param minSize Minimum possible object size. Objects smaller than that are ignored.
- *
- *     The function is parallelized with the TBB library.
- *
- *     NOTE:
- *        -   (Python) A face detection example using cascade classifiers can be found at
- *             opencv_source_code/samples/python/facedetect.py
  */
 - (void)detectMultiScale:(Mat*)image objects:(NSMutableArray<Rect2i*>*)objects scaleFactor:(double)scaleFactor minNeighbors:(int)minNeighbors flags:(int)flags minSize:(Size2i*)minSize NS_SWIFT_NAME(detectMultiScale(image:objects:scaleFactor:minNeighbors:flags:minSize:));
 
@@ -150,12 +138,6 @@ CV_EXPORTS @interface CascadeClassifier : NSObject
  *     to retain it.
  * @param flags Parameter with the same meaning for an old cascade as in the function
  *     cvHaarDetectObjects. It is not used for a new cascade.
- *
- *     The function is parallelized with the TBB library.
- *
- *     NOTE:
- *        -   (Python) A face detection example using cascade classifiers can be found at
- *             opencv_source_code/samples/python/facedetect.py
  */
 - (void)detectMultiScale:(Mat*)image objects:(NSMutableArray<Rect2i*>*)objects scaleFactor:(double)scaleFactor minNeighbors:(int)minNeighbors flags:(int)flags NS_SWIFT_NAME(detectMultiScale(image:objects:scaleFactor:minNeighbors:flags:));
 
@@ -170,12 +152,6 @@ CV_EXPORTS @interface CascadeClassifier : NSObject
  * @param minNeighbors Parameter specifying how many neighbors each candidate rectangle should have
  *     to retain it.
  *     cvHaarDetectObjects. It is not used for a new cascade.
- *
- *     The function is parallelized with the TBB library.
- *
- *     NOTE:
- *        -   (Python) A face detection example using cascade classifiers can be found at
- *             opencv_source_code/samples/python/facedetect.py
  */
 - (void)detectMultiScale:(Mat*)image objects:(NSMutableArray<Rect2i*>*)objects scaleFactor:(double)scaleFactor minNeighbors:(int)minNeighbors NS_SWIFT_NAME(detectMultiScale(image:objects:scaleFactor:minNeighbors:));
 
@@ -189,12 +165,6 @@ CV_EXPORTS @interface CascadeClassifier : NSObject
  * @param scaleFactor Parameter specifying how much the image size is reduced at each image scale.
  *     to retain it.
  *     cvHaarDetectObjects. It is not used for a new cascade.
- *
- *     The function is parallelized with the TBB library.
- *
- *     NOTE:
- *        -   (Python) A face detection example using cascade classifiers can be found at
- *             opencv_source_code/samples/python/facedetect.py
  */
 - (void)detectMultiScale:(Mat*)image objects:(NSMutableArray<Rect2i*>*)objects scaleFactor:(double)scaleFactor NS_SWIFT_NAME(detectMultiScale(image:objects:scaleFactor:));
 
@@ -207,12 +177,6 @@ CV_EXPORTS @interface CascadeClassifier : NSObject
  *     rectangles may be partially outside the original image.
  *     to retain it.
  *     cvHaarDetectObjects. It is not used for a new cascade.
- *
- *     The function is parallelized with the TBB library.
- *
- *     NOTE:
- *        -   (Python) A face detection example using cascade classifiers can be found at
- *             opencv_source_code/samples/python/facedetect.py
  */
 - (void)detectMultiScale:(Mat*)image objects:(NSMutableArray<Rect2i*>*)objects NS_SWIFT_NAME(detectMultiScale(image:objects:));
 

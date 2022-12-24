@@ -24,12 +24,36 @@ class ViewController: UIViewController {
         imageView.image = imageContours.inputImage
     }
 
+    @IBAction func thresholdAction(_ sender: Any) {
+        imageView.image = imageContours.renderThresholded()
+    }
+
+    @IBAction func dilateAction(_ sender: Any) {
+        imageView.image = imageContours.renderDilated()
+    }
+
+    @IBAction func erodeAction(_ sender: Any) {
+        imageView.image = imageContours.renderEroded()
+    }
+
+    @IBAction func inputMaskAction(_ sender: Any) {
+        imageView.image = imageContours.renderInputMask()
+    }
+
     @IBAction func processedAction(_ sender: Any) {
         imageView.image = imageContours.renderProcessed()
     }
 
     @IBAction func outlinesAction(_ sender: Any) {
         imageView.image = imageContours.renderOutlines()
+    }
+
+    @IBAction func contoursAction(_ sender: Any) {
+        imageView.image = imageContours.renderContours()
+    }
+
+    @IBAction func spansAction(_ sender: Any) {
+        imageView.image = imageContours.renderSpans()
     }
 
     @IBAction func masksAction(_ sender: Any) {

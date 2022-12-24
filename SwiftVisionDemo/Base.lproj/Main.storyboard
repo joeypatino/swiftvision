@@ -1,11 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14113" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="tBN-NT-TTb">
-    <device id="retina4_7" orientation="portrait">
-        <adaptation id="fullscreen"/>
-    </device>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="20037" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="tBN-NT-TTb">
+    <device id="retina4_7" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14088"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="20020"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -13,16 +11,16 @@
         <!--View Controller-->
         <scene sceneID="tne-QT-ifu">
             <objects>
-                <viewController id="BYZ-38-t0r" customClass="ViewController" customModule="OpenCVDemo" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController id="BYZ-38-t0r" customClass="ViewController" customModule="SwiftVisionDemo" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="8bC-Xf-vdC">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="SZW-Nc-DcX">
-                                <rect key="frame" x="0.0" y="64" width="375" height="523"/>
+                            <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" verticalCompressionResistancePriority="749" translatesAutoresizingMaskIntoConstraints="NO" id="SZW-Nc-DcX">
+                                <rect key="frame" x="0.0" y="44" width="375" height="475"/>
                                 <subviews>
                                     <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="rvT-VK-Sfj">
-                                        <rect key="frame" x="0.0" y="0.0" width="375" height="523"/>
+                                        <rect key="frame" x="0.0" y="0.0" width="375" height="475"/>
                                     </imageView>
                                 </subviews>
                                 <constraints>
@@ -37,82 +35,128 @@
                                     <outlet property="delegate" destination="BYZ-38-t0r" id="KJn-ff-aTy"/>
                                 </connections>
                             </scrollView>
-                            <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" translatesAutoresizingMaskIntoConstraints="NO" id="3Cq-iU-8ST">
-                                <rect key="frame" x="0.0" y="587" width="375" height="40"/>
+                            <stackView opaque="NO" contentMode="scaleToFill" verticalHuggingPriority="1000" distribution="fillEqually" translatesAutoresizingMaskIntoConstraints="NO" id="vWK-cT-HVa">
+                                <rect key="frame" x="0.0" y="519" width="375" height="64"/>
                                 <subviews>
-                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="kDw-da-SVc">
-                                        <rect key="frame" x="0.0" y="0.0" width="94" height="40"/>
-                                        <state key="normal" title="original"/>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="fcN-rS-n5q">
+                                        <rect key="frame" x="0.0" y="0.0" width="94" height="64"/>
+                                        <fontDescription key="fontDescription" name="Avenir-Medium" family="Avenir" pointSize="13"/>
+                                        <state key="normal" title="SOURCE"/>
                                         <connections>
-                                            <action selector="originalAction:" destination="BYZ-38-t0r" eventType="touchUpInside" id="VWa-i3-NuM"/>
+                                            <action selector="originalAction:" destination="BYZ-38-t0r" eventType="touchUpInside" id="W8k-Dm-xBP"/>
                                         </connections>
                                     </button>
-                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Zd3-BQ-iKy" userLabel="preprocessed">
-                                        <rect key="frame" x="94" y="0.0" width="93.5" height="40"/>
-                                        <state key="normal" title="processed"/>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="0Yq-Ma-Tgz">
+                                        <rect key="frame" x="94" y="0.0" width="93.5" height="64"/>
+                                        <fontDescription key="fontDescription" name="Avenir-Medium" family="Avenir" pointSize="13"/>
+                                        <state key="normal" title="MASKED"/>
                                         <connections>
-                                            <action selector="processedAction:" destination="BYZ-38-t0r" eventType="touchUpInside" id="Egv-Vr-jda"/>
+                                            <action selector="inputMaskAction:" destination="BYZ-38-t0r" eventType="touchUpInside" id="5XG-Zj-V3j"/>
                                         </connections>
                                     </button>
-                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Yx0-gu-hQT">
-                                        <rect key="frame" x="187.5" y="0.0" width="94" height="40"/>
-                                        <state key="normal" title="outlines"/>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="fzW-U9-7FY" userLabel="CONTOURS">
+                                        <rect key="frame" x="187.5" y="0.0" width="94" height="64"/>
+                                        <fontDescription key="fontDescription" name="Avenir-Medium" family="Avenir" pointSize="13"/>
+                                        <state key="normal" title="CONTOURS"/>
                                         <connections>
-                                            <action selector="outlinesAction:" destination="BYZ-38-t0r" eventType="touchUpInside" id="b8N-oT-xtB"/>
+                                            <action selector="contoursAction:" destination="BYZ-38-t0r" eventType="touchUpInside" id="Myk-Eh-cgy"/>
                                         </connections>
                                     </button>
-                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="6BX-rm-lKE">
-                                        <rect key="frame" x="281.5" y="0.0" width="93.5" height="40"/>
-                                        <state key="normal" title="masks"/>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="4wA-Bd-3Td" userLabel="SPANS">
+                                        <rect key="frame" x="281.5" y="0.0" width="93.5" height="64"/>
+                                        <fontDescription key="fontDescription" name="Avenir-Medium" family="Avenir" pointSize="13"/>
+                                        <state key="normal" title="SPANS"/>
                                         <connections>
-                                            <action selector="masksAction:" destination="BYZ-38-t0r" eventType="touchUpInside" id="0Cq-fi-2sC"/>
+                                            <action selector="spansAction:" destination="BYZ-38-t0r" eventType="touchUpInside" id="Ucx-ix-nar"/>
                                         </connections>
                                     </button>
                                 </subviews>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="64" id="un5-mM-TwA"/>
+                                </constraints>
                             </stackView>
-                            <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" translatesAutoresizingMaskIntoConstraints="NO" id="TQt-Ln-hPQ">
-                                <rect key="frame" x="0.0" y="627" width="375" height="40"/>
+                            <stackView opaque="NO" contentMode="scaleToFill" verticalHuggingPriority="1000" distribution="fillEqually" translatesAutoresizingMaskIntoConstraints="NO" id="3Cq-iU-8ST">
+                                <rect key="frame" x="0.0" y="583" width="375" height="42"/>
                                 <subviews>
-                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Nfz-87-OuT">
-                                        <rect key="frame" x="0.0" y="0.0" width="125" height="40"/>
-                                        <state key="normal" title="key points"/>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Zd3-BQ-iKy">
+                                        <rect key="frame" x="0.0" y="0.0" width="125" height="42"/>
+                                        <fontDescription key="fontDescription" name="Avenir-Medium" family="Avenir" pointSize="13"/>
+                                        <state key="normal" title="THRESHOLD"/>
+                                        <connections>
+                                            <action selector="thresholdAction:" destination="BYZ-38-t0r" eventType="touchUpInside" id="aOY-lR-B6x"/>
+                                        </connections>
+                                    </button>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Yx0-gu-hQT">
+                                        <rect key="frame" x="125" y="0.0" width="125" height="42"/>
+                                        <fontDescription key="fontDescription" name="Avenir-Medium" family="Avenir" pointSize="13"/>
+                                        <state key="normal" title="DILATE"/>
+                                        <connections>
+                                            <action selector="dilateAction:" destination="BYZ-38-t0r" eventType="touchUpInside" id="k9R-Xm-CFN"/>
+                                        </connections>
+                                    </button>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="6BX-rm-lKE">
+                                        <rect key="frame" x="250" y="0.0" width="125" height="42"/>
+                                        <fontDescription key="fontDescription" name="Avenir-Medium" family="Avenir" pointSize="13"/>
+                                        <state key="normal" title="ERODE"/>
+                                        <connections>
+                                            <action selector="erodeAction:" destination="BYZ-38-t0r" eventType="touchUpInside" id="lrG-Ic-1h9"/>
+                                        </connections>
+                                    </button>
+                                </subviews>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="42" id="q1N-0x-RtD"/>
+                                </constraints>
+                            </stackView>
+                            <stackView opaque="NO" contentMode="scaleToFill" verticalHuggingPriority="1000" distribution="fillEqually" translatesAutoresizingMaskIntoConstraints="NO" id="TQt-Ln-hPQ">
+                                <rect key="frame" x="0.0" y="625" width="375" height="42"/>
+                                <subviews>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="5wJ-gz-uZ2">
+                                        <rect key="frame" x="0.0" y="0.0" width="125" height="42"/>
+                                        <fontDescription key="fontDescription" name="Avenir-Medium" family="Avenir" pointSize="13"/>
+                                        <state key="normal" title="PROCESSED"/>
+                                        <connections>
+                                            <action selector="processedAction:" destination="BYZ-38-t0r" eventType="touchUpInside" id="Zee-8t-jyH"/>
+                                        </connections>
+                                    </button>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Nfz-87-OuT">
+                                        <rect key="frame" x="125" y="0.0" width="125" height="42"/>
+                                        <fontDescription key="fontDescription" name="Avenir-Medium" family="Avenir" pointSize="13"/>
+                                        <state key="normal" title="KEY POINTS"/>
                                         <connections>
                                             <action selector="keyPointsAction:" destination="BYZ-38-t0r" eventType="touchUpInside" id="4an-iK-D1D"/>
                                         </connections>
                                     </button>
-                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="LAH-wB-SRe">
-                                        <rect key="frame" x="125" y="0.0" width="125" height="40"/>
-                                        <state key="normal" title="curves"/>
-                                        <connections>
-                                            <action selector="curvesAction:" destination="BYZ-38-t0r" eventType="touchUpInside" id="mcY-MT-pAX"/>
-                                        </connections>
-                                    </button>
-                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="HPq-rV-kn3">
-                                        <rect key="frame" x="250" y="0.0" width="125" height="40"/>
-                                        <state key="normal" title="dewarped"/>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="HPq-rV-kn3">
+                                        <rect key="frame" x="250" y="0.0" width="125" height="42"/>
+                                        <fontDescription key="fontDescription" name="Avenir-Medium" family="Avenir" pointSize="13"/>
+                                        <state key="normal" title="DEWARP"/>
                                         <connections>
                                             <action selector="dewarpAction:" destination="BYZ-38-t0r" eventType="touchUpInside" id="evY-36-hVd"/>
                                         </connections>
                                     </button>
                                 </subviews>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="42" id="rw3-mU-6C9"/>
+                                </constraints>
                             </stackView>
                         </subviews>
+                        <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
                             <constraint firstItem="TQt-Ln-hPQ" firstAttribute="top" secondItem="3Cq-iU-8ST" secondAttribute="bottom" id="9tw-38-ody"/>
                             <constraint firstItem="SZW-Nc-DcX" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" id="C78-H7-W9q"/>
                             <constraint firstAttribute="trailing" secondItem="SZW-Nc-DcX" secondAttribute="trailing" id="DQi-Bh-9GZ"/>
+                            <constraint firstItem="3Cq-iU-8ST" firstAttribute="top" secondItem="vWK-cT-HVa" secondAttribute="bottom" id="FYK-Ir-dn7"/>
                             <constraint firstItem="3Cq-iU-8ST" firstAttribute="trailing" secondItem="TQt-Ln-hPQ" secondAttribute="trailing" id="Gkv-1F-FdL"/>
                             <constraint firstItem="3Cq-iU-8ST" firstAttribute="leading" secondItem="TQt-Ln-hPQ" secondAttribute="leading" id="MVJ-hj-8cG"/>
                             <constraint firstItem="TQt-Ln-hPQ" firstAttribute="bottom" secondItem="6Tk-OE-BBY" secondAttribute="bottom" id="U3b-mh-Xcd"/>
-                            <constraint firstItem="TQt-Ln-hPQ" firstAttribute="top" secondItem="8bC-Xf-vdC" secondAttribute="top" constant="627" id="VlF-Yh-GLQ"/>
+                            <constraint firstItem="vWK-cT-HVa" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" id="gUT-aG-Uuw"/>
                             <constraint firstItem="SZW-Nc-DcX" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leading" id="isM-Of-55G"/>
                             <constraint firstItem="SZW-Nc-DcX" firstAttribute="trailing" secondItem="3Cq-iU-8ST" secondAttribute="trailing" id="jF7-a0-U1Q"/>
-                            <constraint firstItem="3Cq-iU-8ST" firstAttribute="top" secondItem="8bC-Xf-vdC" secondAttribute="top" constant="587" id="kJ6-a1-OKG"/>
-                            <constraint firstItem="3Cq-iU-8ST" firstAttribute="top" secondItem="SZW-Nc-DcX" secondAttribute="bottom" id="pP9-US-BX1"/>
+                            <constraint firstItem="SZW-Nc-DcX" firstAttribute="bottom" secondItem="vWK-cT-HVa" secondAttribute="top" id="u1u-CU-gOE"/>
                             <constraint firstItem="SZW-Nc-DcX" firstAttribute="leading" secondItem="3Cq-iU-8ST" secondAttribute="leading" id="uUz-Sj-kj7"/>
+                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="vWK-cT-HVa" secondAttribute="trailing" id="w2J-2C-Boz"/>
                         </constraints>
-                        <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
                     </view>
                     <navigationItem key="navigationItem" id="if3-uk-j09">
                         <barButtonItem key="rightBarButtonItem" systemItem="camera" id="Ucw-fG-NAH">
@@ -135,7 +179,7 @@
             <objects>
                 <navigationController id="tBN-NT-TTb" sceneMemberID="viewController">
                     <navigationBar key="navigationBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="jFe-E9-R72">
-                        <rect key="frame" x="0.0" y="20" width="375" height="44"/>
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
                     </navigationBar>
                     <connections>

@@ -118,6 +118,18 @@ CV_EXPORTS @interface GFTTDetector : Feature2D
 
 
 //
+//  void cv::GFTTDetector::setGradientSize(int gradientSize_)
+//
+- (void)setGradientSize:(int)gradientSize_ NS_SWIFT_NAME(setGradientSize(gradientSize_:));
+
+
+//
+//  int cv::GFTTDetector::getGradientSize()
+//
+- (int)getGradientSize NS_SWIFT_NAME(getGradientSize());
+
+
+//
 //  void cv::GFTTDetector::setHarrisDetector(bool val)
 //
 - (void)setHarrisDetector:(BOOL)val NS_SWIFT_NAME(setHarrisDetector(val:));

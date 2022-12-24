@@ -19,27 +19,27 @@
 
 // C++: enum ActivationFunctions (cv.ml.ANN_MLP.ActivationFunctions)
 typedef NS_ENUM(int, ActivationFunctions) {
-    IDENTITY = 0,
-    SIGMOID_SYM = 1,
-    GAUSSIAN = 2,
-    RELU = 3,
-    LEAKYRELU = 4
+    ANN_MLP_IDENTITY NS_SWIFT_NAME(IDENTITY) = 0,
+    ANN_MLP_SIGMOID_SYM NS_SWIFT_NAME(SIGMOID_SYM) = 1,
+    ANN_MLP_GAUSSIAN NS_SWIFT_NAME(GAUSSIAN) = 2,
+    ANN_MLP_RELU NS_SWIFT_NAME(RELU) = 3,
+    ANN_MLP_LEAKYRELU NS_SWIFT_NAME(LEAKYRELU) = 4
 };
 
 
 // C++: enum TrainFlags (cv.ml.ANN_MLP.TrainFlags)
 typedef NS_ENUM(int, TrainFlags) {
-    UPDATE_WEIGHTS = 1,
-    NO_INPUT_SCALE = 2,
-    NO_OUTPUT_SCALE = 4
+    ANN_MLP_UPDATE_WEIGHTS NS_SWIFT_NAME(UPDATE_WEIGHTS) = 1,
+    ANN_MLP_NO_INPUT_SCALE NS_SWIFT_NAME(NO_INPUT_SCALE) = 2,
+    ANN_MLP_NO_OUTPUT_SCALE NS_SWIFT_NAME(NO_OUTPUT_SCALE) = 4
 };
 
 
 // C++: enum TrainingMethods (cv.ml.ANN_MLP.TrainingMethods)
 typedef NS_ENUM(int, TrainingMethods) {
-    BACKPROP = 0,
-    RPROP = 1,
-    ANNEAL = 2
+    ANN_MLP_BACKPROP NS_SWIFT_NAME(BACKPROP) = 0,
+    ANN_MLP_RPROP NS_SWIFT_NAME(RPROP) = 1,
+    ANN_MLP_ANNEAL NS_SWIFT_NAME(ANNEAL) = 2
 };
 
 

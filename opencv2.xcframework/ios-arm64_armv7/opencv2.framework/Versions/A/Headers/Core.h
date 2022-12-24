@@ -143,12 +143,12 @@ typedef NS_ENUM(int, Code) {
 
 // C++: enum FormatType (cv.Formatter.FormatType)
 typedef NS_ENUM(int, FormatType) {
-    Formatter_FMT_DEFAULT = 0,
-    Formatter_FMT_MATLAB = 1,
-    Formatter_FMT_CSV = 2,
-    Formatter_FMT_PYTHON = 3,
-    Formatter_FMT_NUMPY = 4,
-    Formatter_FMT_C = 5
+    Formatter_FMT_DEFAULT NS_SWIFT_NAME(FMT_DEFAULT) = 0,
+    Formatter_FMT_MATLAB NS_SWIFT_NAME(FMT_MATLAB) = 1,
+    Formatter_FMT_CSV NS_SWIFT_NAME(FMT_CSV) = 2,
+    Formatter_FMT_PYTHON NS_SWIFT_NAME(FMT_PYTHON) = 3,
+    Formatter_FMT_NUMPY NS_SWIFT_NAME(FMT_NUMPY) = 4,
+    Formatter_FMT_C NS_SWIFT_NAME(FMT_C) = 5
 };
 
 
@@ -184,26 +184,26 @@ typedef NS_ENUM(int, NormTypes) {
 
 // C++: enum Flags (cv.PCA.Flags)
 typedef NS_ENUM(int, Flags) {
-    PCA_DATA_AS_ROW = 0,
-    PCA_DATA_AS_COL = 1,
-    PCA_USE_AVG = 2
+    PCA_DATA_AS_ROW NS_SWIFT_NAME(DATA_AS_ROW) = 0,
+    PCA_DATA_AS_COL NS_SWIFT_NAME(DATA_AS_COL) = 1,
+    PCA_USE_AVG NS_SWIFT_NAME(USE_AVG) = 2
 };
 
 
 // C++: enum Param (cv.Param)
 typedef NS_ENUM(int, Param) {
-    Param_INT = 0,
-    Param_BOOLEAN = 1,
-    Param_REAL = 2,
-    Param_STRING = 3,
-    Param_MAT = 4,
-    Param_MAT_VECTOR = 5,
-    Param_ALGORITHM = 6,
-    Param_FLOAT = 7,
-    Param_UNSIGNED_INT = 8,
-    Param_UINT64 = 9,
-    Param_UCHAR = 11,
-    Param_SCALAR = 12
+    Param_INT NS_SWIFT_NAME(INT) = 0,
+    Param_BOOLEAN NS_SWIFT_NAME(BOOLEAN) = 1,
+    Param_REAL NS_SWIFT_NAME(REAL) = 2,
+    Param_STRING NS_SWIFT_NAME(STRING) = 3,
+    Param_MAT NS_SWIFT_NAME(MAT) = 4,
+    Param_MAT_VECTOR NS_SWIFT_NAME(MAT_VECTOR) = 5,
+    Param_ALGORITHM NS_SWIFT_NAME(ALGORITHM) = 6,
+    Param_FLOAT NS_SWIFT_NAME(FLOAT) = 7,
+    Param_UNSIGNED_INT NS_SWIFT_NAME(UNSIGNED_INT) = 8,
+    Param_UINT64 NS_SWIFT_NAME(UINT64) = 9,
+    Param_UCHAR NS_SWIFT_NAME(UCHAR) = 11,
+    Param_SCALAR NS_SWIFT_NAME(SCALAR) = 12
 };
 
 
@@ -1799,6 +1799,80 @@ CV_EXPORTS @interface Core : NSObject
 
 
 //
+//  void cv::reduceArgMin(Mat src, Mat& dst, int axis, bool lastIndex = false)
+//
+/**
+ * Finds indices of min elements along provided axis
+ *
+ * NOTE:
+ * - If input or output array is not continuous, this function will create an internal copy.
+ * - NaN handling is left unspecified, see patchNaNs().
+ * - The returned index is always in bounds of input matrix.
+ *
+ * @param src input single-channel array.
+ * @param dst output array of type CV_32SC1 with the same dimensionality as src,
+ * except for axis being reduced - it should be set to 1.
+ * @param lastIndex whether to get the index of first or last occurrence of min.
+ * @param axis axis to reduce along.
+ * @see `+reduceArgMax:dst:axis:lastIndex:`, `+minMaxLoc:mask:`, `+min:src2:dst:`, `+max:src2:dst:`, `+compare:src2:dst:cmpop:`, `+reduce:dst:dim:rtype:dtype:`
+ */
++ (void)reduceArgMin:(Mat*)src dst:(Mat*)dst axis:(int)axis lastIndex:(BOOL)lastIndex NS_SWIFT_NAME(reduceArgMin(src:dst:axis:lastIndex:));
+
+/**
+ * Finds indices of min elements along provided axis
+ *
+ * NOTE:
+ * - If input or output array is not continuous, this function will create an internal copy.
+ * - NaN handling is left unspecified, see patchNaNs().
+ * - The returned index is always in bounds of input matrix.
+ *
+ * @param src input single-channel array.
+ * @param dst output array of type CV_32SC1 with the same dimensionality as src,
+ * except for axis being reduced - it should be set to 1.
+ * @param axis axis to reduce along.
+ * @see `+reduceArgMax:dst:axis:lastIndex:`, `+minMaxLoc:mask:`, `+min:src2:dst:`, `+max:src2:dst:`, `+compare:src2:dst:cmpop:`, `+reduce:dst:dim:rtype:dtype:`
+ */
++ (void)reduceArgMin:(Mat*)src dst:(Mat*)dst axis:(int)axis NS_SWIFT_NAME(reduceArgMin(src:dst:axis:));
+
+
+//
+//  void cv::reduceArgMax(Mat src, Mat& dst, int axis, bool lastIndex = false)
+//
+/**
+ * Finds indices of max elements along provided axis
+ *
+ * NOTE:
+ * - If input or output array is not continuous, this function will create an internal copy.
+ * - NaN handling is left unspecified, see patchNaNs().
+ * - The returned index is always in bounds of input matrix.
+ *
+ * @param src input single-channel array.
+ * @param dst output array of type CV_32SC1 with the same dimensionality as src,
+ * except for axis being reduced - it should be set to 1.
+ * @param lastIndex whether to get the index of first or last occurrence of max.
+ * @param axis axis to reduce along.
+ * @see `+reduceArgMin:dst:axis:lastIndex:`, `+minMaxLoc:mask:`, `+min:src2:dst:`, `+max:src2:dst:`, `+compare:src2:dst:cmpop:`, `+reduce:dst:dim:rtype:dtype:`
+ */
++ (void)reduceArgMax:(Mat*)src dst:(Mat*)dst axis:(int)axis lastIndex:(BOOL)lastIndex NS_SWIFT_NAME(reduceArgMax(src:dst:axis:lastIndex:));
+
+/**
+ * Finds indices of max elements along provided axis
+ *
+ * NOTE:
+ * - If input or output array is not continuous, this function will create an internal copy.
+ * - NaN handling is left unspecified, see patchNaNs().
+ * - The returned index is always in bounds of input matrix.
+ *
+ * @param src input single-channel array.
+ * @param dst output array of type CV_32SC1 with the same dimensionality as src,
+ * except for axis being reduced - it should be set to 1.
+ * @param axis axis to reduce along.
+ * @see `+reduceArgMin:dst:axis:lastIndex:`, `+minMaxLoc:mask:`, `+min:src2:dst:`, `+max:src2:dst:`, `+compare:src2:dst:cmpop:`, `+reduce:dst:dim:rtype:dtype:`
+ */
++ (void)reduceArgMax:(Mat*)src dst:(Mat*)dst axis:(int)axis NS_SWIFT_NAME(reduceArgMax(src:dst:axis:));
+
+
+//
 //  void cv::reduce(Mat src, Mat& dst, int dim, int rtype, int dtype = -1)
 //
 /**
@@ -1824,7 +1898,7 @@ CV_EXPORTS @interface Core : NSObject
  * @param rtype reduction operation that could be one of #ReduceTypes
  * @param dtype when negative, the output vector will have the same type as the input matrix,
  * otherwise, its type will be CV_MAKE_TYPE(CV_MAT_DEPTH(dtype), src.channels()).
- * @see `+repeat:ny:nx:dst:`
+ * @see `+repeat:ny:nx:dst:`, `+reduceArgMin:dst:axis:lastIndex:`, `+reduceArgMax:dst:axis:lastIndex:`
  */
 + (void)reduce:(Mat*)src dst:(Mat*)dst dim:(int)dim rtype:(int)rtype dtype:(int)dtype NS_SWIFT_NAME(reduce(src:dst:dim:rtype:dtype:));
 
@@ -1850,7 +1924,7 @@ CV_EXPORTS @interface Core : NSObject
  * a single row. 1 means that the matrix is reduced to a single column.
  * @param rtype reduction operation that could be one of #ReduceTypes
  * otherwise, its type will be CV_MAKE_TYPE(CV_MAT_DEPTH(dtype), src.channels()).
- * @see `+repeat:ny:nx:dst:`
+ * @see `+repeat:ny:nx:dst:`, `+reduceArgMin:dst:axis:lastIndex:`, `+reduceArgMax:dst:axis:lastIndex:`
  */
 + (void)reduce:(Mat*)src dst:(Mat*)dst dim:(int)dim rtype:(int)rtype NS_SWIFT_NAME(reduce(src:dst:dim:rtype:));
 
@@ -1962,6 +2036,18 @@ CV_EXPORTS @interface Core : NSObject
  * @see `+transpose:dst:`, `+repeat:ny:nx:dst:`, `+completeSymm:lowerToUpper:`
  */
 + (void)flip:(Mat*)src dst:(Mat*)dst flipCode:(int)flipCode NS_SWIFT_NAME(flip(src:dst:flipCode:));
+
+
+//
+//  void cv::flipND(Mat src, Mat& dst, int axis)
+//
+/**
+ * Flips a n-dimensional at given axis
+ * @param src input array
+ * @param dst output array that has the same shape of src
+ * @param axis axis that performs a flip on. 0 <= axis < src.dims.
+ */
++ (void)flipND:(Mat*)src dst:(Mat*)dst axis:(int)axis NS_SWIFT_NAME(flipND(src:dst:axis:));
 
 
 //
@@ -2417,7 +2503,13 @@ CV_EXPORTS @interface Core : NSObject
  * @param src input floating-point array.
  * @param dst output array of the same size and type as src.
  */
+
+#pragma push_macro("sqrt")
+#undef sqrt
+
 + (void)sqrt:(Mat*)src dst:(Mat*)dst NS_SWIFT_NAME(sqrt(src:dst:));
+
+#pragma pop_macro("sqrt")
 
 
 //
@@ -2447,7 +2539,13 @@ CV_EXPORTS @interface Core : NSObject
  * @param dst output array of the same size and type as src.
  * @see `+sqrt:dst:`, `+exp:dst:`, `+log:dst:`, `+cartToPolar:y:magnitude:angle:angleInDegrees:`, `+polarToCart:angle:x:y:angleInDegrees:`
  */
+
+#pragma push_macro("pow")
+#undef pow
+
 + (void)pow:(Mat*)src power:(double)power dst:(Mat*)dst NS_SWIFT_NAME(pow(src:power:dst:));
+
+#pragma pop_macro("pow")
 
 
 //
@@ -2468,7 +2566,13 @@ CV_EXPORTS @interface Core : NSObject
  * @param dst output array of the same size and type as src.
  * @see `+log:dst:`, `+cartToPolar:y:magnitude:angle:angleInDegrees:`, `+polarToCart:angle:x:y:angleInDegrees:`, `+phase:y:angle:angleInDegrees:`, `+pow:power:dst:`, `+sqrt:dst:`, `+magnitude:y:magnitude:`
  */
+
+#pragma push_macro("exp")
+#undef exp
+
 + (void)exp:(Mat*)src dst:(Mat*)dst NS_SWIFT_NAME(exp(src:dst:));
+
+#pragma pop_macro("exp")
 
 
 //
@@ -2486,7 +2590,13 @@ CV_EXPORTS @interface Core : NSObject
  * @param dst output array of the same size and type as src .
  * @see `+exp:dst:`, `+cartToPolar:y:magnitude:angle:angleInDegrees:`, `+polarToCart:angle:x:y:angleInDegrees:`, `+phase:y:angle:angleInDegrees:`, `+pow:power:dst:`, `+sqrt:dst:`, `+magnitude:y:magnitude:`
  */
+
+#pragma push_macro("log")
+#undef log
+
 + (void)log:(Mat*)src dst:(Mat*)dst NS_SWIFT_NAME(log(src:dst:));
+
+#pragma pop_macro("log")
 
 
 //
@@ -2929,6 +3039,21 @@ CV_EXPORTS @interface Core : NSObject
  * @param dst output array of the same type as src.
  */
 + (void)transpose:(Mat*)src dst:(Mat*)dst NS_SWIFT_NAME(transpose(src:dst:));
+
+
+//
+//  void cv::transposeND(Mat src, vector_int order, Mat& dst)
+//
+/**
+ * Transpose for n-dimensional matrices.
+ *
+ * NOTE: Input should be continuous single-channel matrix.
+ * @param src input array.
+ * @param order a permutation of [0,1,..,N-1] where N is the number of axes of src.
+ * The i’th axis of dst will correspond to the axis numbered order[i] of the input.
+ * @param dst output array of the same type as src.
+ */
++ (void)transposeND:(Mat*)src order:(IntVector*)order dst:(Mat*)dst NS_SWIFT_NAME(transposeND(src:order:dst:));
 
 
 //

@@ -18,8 +18,8 @@
 
 // C++: enum GridType (cv.CirclesGridFinderParameters.GridType)
 typedef NS_ENUM(int, GridType) {
-    SYMMETRIC_GRID = 0,
-    ASYMMETRIC_GRID = 1
+    CirclesGridFinderParameters_SYMMETRIC_GRID NS_SWIFT_NAME(SYMMETRIC_GRID) = 0,
+    CirclesGridFinderParameters_ASYMMETRIC_GRID NS_SWIFT_NAME(ASYMMETRIC_GRID) = 1
 };
 
 

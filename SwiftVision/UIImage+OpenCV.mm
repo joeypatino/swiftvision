@@ -113,6 +113,39 @@
     return [[UIImage alloc] initWithCVMat: r];
 }
 
+- (UIImage *)rectangle:(CGRectOutline)outline color:(UIColor *)color {
+    int width = self.size.width;
+    int height = self.size.height;
+    cv::Mat r = cv::Mat::zeros(height, width, CV_8UC4);
+
+    CGFloat top = outline.topLeft.y;
+    CGFloat left = outline.topLeft.x;
+    CGFloat right = width - outline.botRight.x;
+    CGFloat bottom = height - outline.botRight.y;
+    
+    CGFloat red, green, blue = 0;
+    CGFloat alpha = 1;
+    [color getRed:&red green:&green blue:&blue alpha:&alpha];
+    cv::rectangle(r, cv::Point(0,0),
+                  cv::Point(width, top),
+                  cv::Scalar(red*255, green*255, blue*255), -1);
+    
+    cv::rectangle(r, cv::Point(0,top),
+                  cv::Point(left,height-bottom),
+                  cv::Scalar(red*255, green*255, blue*255), -1);
+    
+    cv::rectangle(r, cv::Point(width-right,top),
+                  cv::Point(width,height-bottom),
+                  cv::Scalar(red*255, green*255, blue*255), -1);
+    
+    cv::rectangle(r, cv::Point(0,height-bottom),
+                  cv::Point(width,height),
+                  cv::Scalar(red*255, green*255, blue*255), -1);
+    cv::Mat rectImg;
+    cv::addWeighted(r, alpha, [self mat], 1, 0, rectImg);
+    return [[UIImage alloc] initWithCVMat: rectImg];
+}
+
 - (UIImage *)subImage:(CGRect)bounds {
     cv::Mat inImage = [self mat];
     cv::Rect rect = cv::Rect(bounds.origin.x,

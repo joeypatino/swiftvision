@@ -196,7 +196,7 @@ CV_EXPORTS @interface VideoCapture : NSObject
 //  bool cv::VideoCapture::open(String filename, int apiPreference, vector_int params)
 //
 /**
- *  Opens a camera for video capturing
+ *  Opens a video file or a capturing device or an IP video stream for video capturing with API Preference and parameters
  *
  *     
  *
@@ -242,7 +242,7 @@ CV_EXPORTS @interface VideoCapture : NSObject
 //  bool cv::VideoCapture::open(int index, int apiPreference, vector_int params)
 //
 /**
- * Returns true if video capturing has been initialized already.
+ *  Opens a camera for video capturing with API Preference and parameters
  *
  *     
  *
@@ -418,6 +418,12 @@ CV_EXPORTS @interface VideoCapture : NSObject
 //  bool cv::VideoCapture::getExceptionMode()
 //
 - (BOOL)getExceptionMode NS_SWIFT_NAME(getExceptionMode());
+
+
+//
+// static bool cv::VideoCapture::waitAny(vector_VideoCapture streams, vector_int& readyIndex, int64 timeoutNs = 0)
+//
+// Unknown type 'vector_VideoCapture' (I), skipping the function
 
 
 

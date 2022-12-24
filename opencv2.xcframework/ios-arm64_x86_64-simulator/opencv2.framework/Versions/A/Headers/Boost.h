@@ -18,10 +18,10 @@
 
 // C++: enum Types (cv.ml.Boost.Types)
 typedef NS_ENUM(int, Types) {
-    DISCRETE = 0,
-    REAL = 1,
-    LOGIT = 2,
-    GENTLE = 3
+    Boost_DISCRETE NS_SWIFT_NAME(DISCRETE) = 0,
+    Boost_REAL NS_SWIFT_NAME(REAL) = 1,
+    Boost_LOGIT NS_SWIFT_NAME(LOGIT) = 2,
+    Boost_GENTLE NS_SWIFT_NAME(GENTLE) = 3
 };
 
 

@@ -19,16 +19,16 @@
 
 // C++: enum Methods (cv.ml.LogisticRegression.Methods)
 typedef NS_ENUM(int, Methods) {
-    BATCH = 0,
-    MINI_BATCH = 1
+    LogisticRegression_BATCH NS_SWIFT_NAME(BATCH) = 0,
+    LogisticRegression_MINI_BATCH NS_SWIFT_NAME(MINI_BATCH) = 1
 };
 
 
 // C++: enum RegKinds (cv.ml.LogisticRegression.RegKinds)
 typedef NS_ENUM(int, RegKinds) {
-    REG_DISABLE = -1,
-    REG_L1 = 0,
-    REG_L2 = 1
+    LogisticRegression_REG_DISABLE NS_SWIFT_NAME(REG_DISABLE) = -1,
+    LogisticRegression_REG_L1 NS_SWIFT_NAME(REG_L1) = 0,
+    LogisticRegression_REG_L2 NS_SWIFT_NAME(REG_L2) = 1
 };
 
 

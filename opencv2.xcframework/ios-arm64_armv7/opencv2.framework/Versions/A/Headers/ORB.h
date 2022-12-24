@@ -18,8 +18,8 @@
 
 // C++: enum ScoreType (cv.ORB.ScoreType)
 typedef NS_ENUM(int, ScoreType) {
-    HARRIS_SCORE = 0,
-    FAST_SCORE = 1
+    ORB_HARRIS_SCORE NS_SWIFT_NAME(HARRIS_SCORE) = 0,
+    ORB_FAST_SCORE NS_SWIFT_NAME(FAST_SCORE) = 1
 };
 
 

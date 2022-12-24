@@ -60,9 +60,15 @@ CV_EXPORTS @interface Algorithm : NSObject
 
 
 //
-//  void cv::Algorithm::write(Ptr_FileStorage fs, String name = String())
+//  void cv::Algorithm::write(FileStorage fs)
 //
-// Unknown type 'Ptr_FileStorage' (I), skipping the function
+// Unknown type 'FileStorage' (I), skipping the function
+
+
+//
+//  void cv::Algorithm::write(FileStorage fs, String name)
+//
+// Unknown type 'FileStorage' (I), skipping the function
 
 
 //

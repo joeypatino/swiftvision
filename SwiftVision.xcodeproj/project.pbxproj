@@ -60,10 +60,6 @@
 		D461356D26057FFF00BCB071 /* PtraArray.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D461353926057FFF00BCB071 /* PtraArray.cpp */; };
 		D461356E26057FFF00BCB071 /* vectors.hpp in Headers */ = {isa = PBXBuildFile; fileRef = D461353A26057FFF00BCB071 /* vectors.hpp */; };
 		D461357026057FFF00BCB071 /* SwiftVision.h in Headers */ = {isa = PBXBuildFile; fileRef = D461353C26057FFF00BCB071 /* SwiftVision.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		D461357D2605813300BCB071 /* opencv2.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = D4227F492605691800D3B92B /* opencv2.xcframework */; };
-		D461357E2605813300BCB071 /* opencv2.xcframework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = D4227F492605691800D3B92B /* opencv2.xcframework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
-		D46135822605814900BCB071 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D46135812605814900BCB071 /* UIKit.framework */; };
-		D46135842605815000BCB071 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D46135832605815000BCB071 /* CoreGraphics.framework */; };
 		D4BE4B362604C96A0045A66B /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4BE4B352604C96A0045A66B /* AppDelegate.swift */; };
 		D4BE4B3A2604C96A0045A66B /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4BE4B392604C96A0045A66B /* ViewController.swift */; };
 		D4BE4B3D2604C96A0045A66B /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = D4BE4B3B2604C96A0045A66B /* Main.storyboard */; };
@@ -75,6 +71,8 @@
 		D4BE4B582604C9D90045A66B /* PageCaptureViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4BE4B522604C9D90045A66B /* PageCaptureViewController.swift */; };
 		D4BE4B592604C9D90045A66B /* UIImage+extras.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4BE4B532604C9D90045A66B /* UIImage+extras.swift */; };
 		D4BE4B5A2604C9D90045A66B /* Platform.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4BE4B542604C9D90045A66B /* Platform.swift */; };
+		D4F2B97829564E7900483D0B /* opencv2.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = D4F2B97629564E3500483D0B /* opencv2.xcframework */; };
+		D4F2B97929564E7900483D0B /* opencv2.xcframework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = D4F2B97629564E3500483D0B /* opencv2.xcframework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -94,7 +92,7 @@
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
-				D461357E2605813300BCB071 /* opencv2.xcframework in Embed Frameworks */,
+				D4F2B97929564E7900483D0B /* opencv2.xcframework in Embed Frameworks */,
 			);
 			name = "Embed Frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -118,7 +116,6 @@
 		D4227F46260560E400D3B92B /* SwiftVision.podspec */ = {isa = PBXFileReference; lastKnownFileType = text; path = SwiftVision.podspec; sourceTree = "<group>"; };
 		D4227F47260560E400D3B92B /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		D4227F48260560E400D3B92B /* LICENSE.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = LICENSE.md; sourceTree = "<group>"; };
-		D4227F492605691800D3B92B /* opencv2.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; path = opencv2.xcframework; sourceTree = "<group>"; };
 		D429817C2052AF0300A28DF5 /* SwiftVisionTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = SwiftVisionTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		D429817E2052AF0300A28DF5 /* SwiftVisionTests.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = SwiftVisionTests.mm; sourceTree = "<group>"; };
 		D42981802052AF0300A28DF5 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -174,8 +171,6 @@
 		D461353A26057FFF00BCB071 /* vectors.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = vectors.hpp; sourceTree = "<group>"; };
 		D461353B26057FFF00BCB071 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		D461353C26057FFF00BCB071 /* SwiftVision.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SwiftVision.h; sourceTree = "<group>"; };
-		D46135812605814900BCB071 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = Platforms/MacOSX.platform/Developer/SDKs/MacOSX11.1.sdk/System/iOSSupport/System/Library/Frameworks/UIKit.framework; sourceTree = DEVELOPER_DIR; };
-		D46135832605815000BCB071 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = Platforms/MacOSX.platform/Developer/SDKs/MacOSX11.1.sdk/System/Library/Frameworks/CoreGraphics.framework; sourceTree = DEVELOPER_DIR; };
 		D4711A0820502C1200F38C26 /* Accelerate.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Accelerate.framework; path = System/Library/Frameworks/Accelerate.framework; sourceTree = SDKROOT; };
 		D4711A0A20502C7500F38C26 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		D4711A0C20502C8300F38C26 /* CoreFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreFoundation.framework; path = System/Library/Frameworks/CoreFoundation.framework; sourceTree = SDKROOT; };
@@ -192,6 +187,7 @@
 		D4BE4B522604C9D90045A66B /* PageCaptureViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PageCaptureViewController.swift; sourceTree = "<group>"; };
 		D4BE4B532604C9D90045A66B /* UIImage+extras.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIImage+extras.swift"; sourceTree = "<group>"; };
 		D4BE4B542604C9D90045A66B /* Platform.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Platform.swift; sourceTree = "<group>"; };
+		D4F2B97629564E3500483D0B /* opencv2.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; path = opencv2.xcframework; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -206,9 +202,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				D46135842605815000BCB071 /* CoreGraphics.framework in Frameworks */,
-				D461357D2605813300BCB071 /* opencv2.xcframework in Frameworks */,
-				D46135822605814900BCB071 /* UIKit.framework in Frameworks */,
+				D4F2B97829564E7900483D0B /* opencv2.xcframework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -250,9 +244,7 @@
 		D40B28442028858A00CA8559 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				D46135832605815000BCB071 /* CoreGraphics.framework */,
-				D46135812605814900BCB071 /* UIKit.framework */,
-				D4227F492605691800D3B92B /* opencv2.xcframework */,
+				D4F2B97629564E3500483D0B /* opencv2.xcframework */,
 				D4711A0C20502C8300F38C26 /* CoreFoundation.framework */,
 				D4711A0A20502C7500F38C26 /* Foundation.framework */,
 				D4711A0820502C1200F38C26 /* Accelerate.framework */,
@@ -543,7 +535,7 @@
 			isa = PBXProject;
 			attributes = {
 				LastSwiftUpdateCheck = 1240;
-				LastUpgradeCheck = 1240;
+				LastUpgradeCheck = 1340;
 				ORGANIZATIONNAME = "Joseph Patino";
 				TargetAttributes = {
 					D429817B2052AF0300A28DF5 = {
@@ -821,7 +813,7 @@
 					"$(PROJECT_DIR)/SwiftVision",
 				);
 				INFOPLIST_FILE = SwiftVisionTests/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -844,7 +836,7 @@
 					"$(PROJECT_DIR)/SwiftVision",
 				);
 				INFOPLIST_FILE = SwiftVisionTests/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -863,7 +855,7 @@
 				CLANG_ENABLE_OBJC_WEAK = NO;
 				CLANG_WARN_DOCUMENTATION_COMMENTS = NO;
 				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = NO;
-				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_IDENTITY = "";
 				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				DEFINES_MODULE = YES;
@@ -874,7 +866,7 @@
 				GCC_PREFIX_HEADER = "$(PROJECT_DIR)/SwiftVision/PrefixHeader.pch";
 				INFOPLIST_FILE = SwiftVision/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -888,6 +880,7 @@
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				"PROVISIONING_PROFILE_SPECIFIER[sdk=macosx*]" = "";
 				SKIP_INSTALL = YES;
+				SUPPORTS_MACCATALYST = NO;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
@@ -902,7 +895,7 @@
 				CLANG_ENABLE_OBJC_WEAK = NO;
 				CLANG_WARN_DOCUMENTATION_COMMENTS = NO;
 				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = NO;
-				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_IDENTITY = "";
 				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				DEFINES_MODULE = YES;
@@ -913,7 +906,7 @@
 				GCC_PREFIX_HEADER = "$(PROJECT_DIR)/SwiftVision/PrefixHeader.pch";
 				INFOPLIST_FILE = SwiftVision/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -926,6 +919,7 @@
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				"PROVISIONING_PROFILE_SPECIFIER[sdk=macosx*]" = "";
 				SKIP_INSTALL = YES;
+				SUPPORTS_MACCATALYST = NO;
 				SWIFT_OPTIMIZATION_LEVEL = "-O";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -943,7 +937,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 6C6HU52U6Y;
 				INFOPLIST_FILE = SwiftVisionDemo/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -970,7 +964,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 6C6HU52U6Y;
 				INFOPLIST_FILE = SwiftVisionDemo/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",

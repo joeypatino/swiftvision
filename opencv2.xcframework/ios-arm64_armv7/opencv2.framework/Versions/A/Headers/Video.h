@@ -28,7 +28,7 @@ NS_ASSUME_NONNULL_BEGIN
 /**
  * The Video module
  *
- * Member classes: `KalmanFilter`, `DenseOpticalFlow`, `SparseOpticalFlow`, `FarnebackOpticalFlow`, `VariationalRefinement`, `DISOpticalFlow`, `SparsePyrLKOpticalFlow`, `Tracker`, `TrackerMIL`, `TrackerMILParams`, `TrackerGOTURN`, `TrackerGOTURNParams`, `BackgroundSubtractor`, `BackgroundSubtractorMOG2`, `BackgroundSubtractorKNN`
+ * Member classes: `KalmanFilter`, `DenseOpticalFlow`, `SparseOpticalFlow`, `FarnebackOpticalFlow`, `VariationalRefinement`, `DISOpticalFlow`, `SparsePyrLKOpticalFlow`, `Tracker`, `TrackerMIL`, `TrackerMILParams`, `TrackerGOTURN`, `TrackerGOTURNParams`, `TrackerDaSiamRPN`, `TrackerDaSiamRPNParams`, `TrackerNano`, `TrackerNanoParams`, `BackgroundSubtractor`, `BackgroundSubtractorMOG2`, `BackgroundSubtractorKNN`
  *
  */
 CV_EXPORTS @interface Video : NSObject

@@ -818,7 +818,74 @@ public:
     //bool update(InputArray image, CV_OUT Rect& boundingBox) CV_OVERRIDE;
 };
 
+class CV_EXPORTS_W TrackerDaSiamRPN : public Tracker
+{
+protected:
+    TrackerDaSiamRPN();  // use ::create()
+public:
+    virtual ~TrackerDaSiamRPN() CV_OVERRIDE;
 
+    struct CV_EXPORTS_W_SIMPLE Params
+    {
+        CV_WRAP Params();
+        CV_PROP_RW std::string model;
+        CV_PROP_RW std::string kernel_cls1;
+        CV_PROP_RW std::string kernel_r1;
+        CV_PROP_RW int backend;
+        CV_PROP_RW int target;
+    };
+
+    /** @brief Constructor
+    @param parameters DaSiamRPN parameters TrackerDaSiamRPN::Params
+    */
+    static CV_WRAP
+    Ptr<TrackerDaSiamRPN> create(const TrackerDaSiamRPN::Params& parameters = TrackerDaSiamRPN::Params());
+
+    /** @brief Return tracking score
+    */
+    CV_WRAP virtual float getTrackingScore() = 0;
+
+    //void init(InputArray image, const Rect& boundingBox) CV_OVERRIDE;
+    //bool update(InputArray image, CV_OUT Rect& boundingBox) CV_OVERRIDE;
+};
+
+/** @brief the Nano tracker is a super lightweight dnn-based general object tracking.
+ *
+ *  Nano tracker is much faster and extremely lightweight due to special model structure, the whole model size is about 1.9 MB.
+ *  Nano tracker needs two models: one for feature extraction (backbone) and the another for localization (neckhead).
+ *  Please download these two onnx models at:https://github.com/HonglinChu/SiamTrackers/tree/master/NanoTrack/models/nanotrackv2.
+ *  Original repo is here: https://github.com/HonglinChu/NanoTrack
+ *  Author:HongLinChu, 1628464345@qq.com
+ */
+class CV_EXPORTS_W TrackerNano : public Tracker
+{
+protected:
+    TrackerNano();  // use ::create()
+public:
+    virtual ~TrackerNano() CV_OVERRIDE;
+
+    struct CV_EXPORTS_W_SIMPLE Params
+    {
+        CV_WRAP Params();
+        CV_PROP_RW std::string backbone;
+        CV_PROP_RW std::string neckhead;
+        CV_PROP_RW int backend;
+        CV_PROP_RW int target;
+    };
+
+    /** @brief Constructor
+    @param parameters NanoTrack parameters TrackerNano::Params
+    */
+    static CV_WRAP
+    Ptr<TrackerNano> create(const TrackerNano::Params& parameters = TrackerNano::Params());
+
+    /** @brief Return tracking score
+    */
+    CV_WRAP virtual float getTrackingScore() = 0;
+
+    //void init(InputArray image, const Rect& boundingBox) CV_OVERRIDE;
+    //bool update(InputArray image, CV_OUT Rect& boundingBox) CV_OVERRIDE;
+};
 
 //! @} video_track
 

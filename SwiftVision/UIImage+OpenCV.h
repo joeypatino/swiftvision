@@ -17,6 +17,7 @@
 - (UIImage *_Nullable)elementwiseMinimum:(UIImage *_Nonnull)img;
 - (UIImage *_Nullable)resizeTo:(CGSize)minSize;
 - (UIImage *_Nullable)rectangle:(CGRectOutline)outline;
+- (UIImage *_Nullable)rectangle:(CGRectOutline)outline color:(UIColor *_Nonnull)color;
 - (UIImage *_Nullable)subImage:(CGRect)bounds;
 
 - (UIImage *_Nullable)renderRect:(CGRect)rect borderColor:(UIColor *_Nonnull)borderColor;

@@ -18,9 +18,9 @@
 
 // C++: enum FastDetectorType (cv.FastFeatureDetector.DetectorType)
 typedef NS_ENUM(int, FastDetectorType) {
-    TYPE_5_8 = 0,
-    TYPE_7_12 = 1,
-    TYPE_9_16 = 2
+    FastFeatureDetector_TYPE_5_8 NS_SWIFT_NAME(TYPE_5_8) = 0,
+    FastFeatureDetector_TYPE_7_12 NS_SWIFT_NAME(TYPE_7_12) = 1,
+    FastFeatureDetector_TYPE_9_16 NS_SWIFT_NAME(TYPE_9_16) = 2
 };
 
 

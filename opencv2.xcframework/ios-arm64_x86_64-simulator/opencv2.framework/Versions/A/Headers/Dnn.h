@@ -18,6 +18,7 @@
 @class Mat;
 @class Net;
 @class Rect2d;
+@class Rect2i;
 @class RotatedRect;
 @class Scalar;
 @class Size2i;
@@ -30,7 +31,17 @@ typedef NS_ENUM(int, Backend) {
     DNN_BACKEND_INFERENCE_ENGINE = 0+2,
     DNN_BACKEND_OPENCV = 0+3,
     DNN_BACKEND_VKCOM = 0+4,
-    DNN_BACKEND_CUDA = 0+5
+    DNN_BACKEND_CUDA = 0+5,
+    DNN_BACKEND_WEBNN = 0+6,
+    DNN_BACKEND_TIMVX = 0+7,
+    DNN_BACKEND_CANN = 0+8
+};
+
+
+// C++: enum SoftNMSMethod (cv.dnn.SoftNMSMethod)
+typedef NS_ENUM(int, SoftNMSMethod) {
+    SoftNMSMethod_SOFTNMS_LINEAR NS_SWIFT_NAME(SOFTNMS_LINEAR) = 1,
+    SoftNMSMethod_SOFTNMS_GAUSSIAN NS_SWIFT_NAME(SOFTNMS_GAUSSIAN) = 2
 };
 
 
@@ -44,7 +55,8 @@ typedef NS_ENUM(int, Target) {
     DNN_TARGET_FPGA = 0+5,
     DNN_TARGET_CUDA = 0+6,
     DNN_TARGET_CUDA_FP16 = 0+7,
-    DNN_TARGET_HDDL = 0+8
+    DNN_TARGET_HDDL = 0+8,
+    DNN_TARGET_NPU = 0+9
 };
 
 
@@ -57,7 +69,7 @@ NS_ASSUME_NONNULL_BEGIN
  *
  * Member classes: `DictValue`, `Layer`, `Net`, `Model`, `ClassificationModel`, `KeypointsModel`, `SegmentationModel`, `DetectionModel`, `TextRecognitionModel`, `TextDetectionModel`, `TextDetectionModel_EAST`, `TextDetectionModel_DB`
  *
- * Member enums: `Backend`, `Target`
+ * Member enums: `Backend`, `Target`, `SoftNMSMethod`
  */
 CV_EXPORTS @interface Dnn : NSObject
 
@@ -811,6 +823,111 @@ CV_EXPORTS @interface Dnn : NSObject
 
 
 //
+//  void cv::dnn::NMSBoxesBatched(vector_Rect2d bboxes, vector_float scores, vector_int class_ids, float score_threshold, float nms_threshold, vector_int& indices, float eta = 1.f, int top_k = 0)
+//
+/**
+ * Performs batched non maximum suppression on given boxes and corresponding scores across different classes.
+ *
+ * @param bboxes a set of bounding boxes to apply NMS.
+ * @param scores a set of corresponding confidences.
+ * @param class_ids a set of corresponding class ids. Ids are integer and usually start from 0.
+ * @param score_threshold a threshold used to filter boxes by score.
+ * @param nms_threshold a threshold used in non maximum suppression.
+ * @param indices the kept indices of bboxes after NMS.
+ * @param eta a coefficient in adaptive threshold formula: `$$nms\_threshold_{i+1}=eta\cdot nms\_threshold_i$$`.
+ * @param top_k if `>0`, keep at most @p top_k picked indices.
+ */
++ (void)NMSBoxesBatched:(NSArray<Rect2d*>*)bboxes scores:(FloatVector*)scores class_ids:(IntVector*)class_ids score_threshold:(float)score_threshold nms_threshold:(float)nms_threshold indices:(IntVector*)indices eta:(float)eta top_k:(int)top_k NS_SWIFT_NAME(NMSBoxesBatched(bboxes:scores:class_ids:score_threshold:nms_threshold:indices:eta:top_k:));
+
+/**
+ * Performs batched non maximum suppression on given boxes and corresponding scores across different classes.
+ *
+ * @param bboxes a set of bounding boxes to apply NMS.
+ * @param scores a set of corresponding confidences.
+ * @param class_ids a set of corresponding class ids. Ids are integer and usually start from 0.
+ * @param score_threshold a threshold used to filter boxes by score.
+ * @param nms_threshold a threshold used in non maximum suppression.
+ * @param indices the kept indices of bboxes after NMS.
+ * @param eta a coefficient in adaptive threshold formula: `$$nms\_threshold_{i+1}=eta\cdot nms\_threshold_i$$`.
+ */
++ (void)NMSBoxesBatched:(NSArray<Rect2d*>*)bboxes scores:(FloatVector*)scores class_ids:(IntVector*)class_ids score_threshold:(float)score_threshold nms_threshold:(float)nms_threshold indices:(IntVector*)indices eta:(float)eta NS_SWIFT_NAME(NMSBoxesBatched(bboxes:scores:class_ids:score_threshold:nms_threshold:indices:eta:));
+
+/**
+ * Performs batched non maximum suppression on given boxes and corresponding scores across different classes.
+ *
+ * @param bboxes a set of bounding boxes to apply NMS.
+ * @param scores a set of corresponding confidences.
+ * @param class_ids a set of corresponding class ids. Ids are integer and usually start from 0.
+ * @param score_threshold a threshold used to filter boxes by score.
+ * @param nms_threshold a threshold used in non maximum suppression.
+ * @param indices the kept indices of bboxes after NMS.
+ */
++ (void)NMSBoxesBatched:(NSArray<Rect2d*>*)bboxes scores:(FloatVector*)scores class_ids:(IntVector*)class_ids score_threshold:(float)score_threshold nms_threshold:(float)nms_threshold indices:(IntVector*)indices NS_SWIFT_NAME(NMSBoxesBatched(bboxes:scores:class_ids:score_threshold:nms_threshold:indices:));
+
+
+//
+//  void cv::dnn::softNMSBoxes(vector_Rect bboxes, vector_float scores, vector_float& updated_scores, float score_threshold, float nms_threshold, vector_int& indices, size_t top_k = 0, float sigma = 0.5, SoftNMSMethod method = SoftNMSMethod::SOFTNMS_GAUSSIAN)
+//
+/**
+ * Performs soft non maximum suppression given boxes and corresponding scores.
+ * Reference: https://arxiv.org/abs/1704.04503
+ * @param bboxes a set of bounding boxes to apply Soft NMS.
+ * @param scores a set of corresponding confidences.
+ * @param updated_scores a set of corresponding updated confidences.
+ * @param score_threshold a threshold used to filter boxes by score.
+ * @param nms_threshold a threshold used in non maximum suppression.
+ * @param indices the kept indices of bboxes after NMS.
+ * @param top_k keep at most @p top_k picked indices.
+ * @param sigma parameter of Gaussian weighting.
+ * @param method Gaussian or linear.
+ * @see `SoftNMSMethod`
+ */
++ (void)softNMSBoxes:(NSArray<Rect2i*>*)bboxes scores:(FloatVector*)scores updated_scores:(FloatVector*)updated_scores score_threshold:(float)score_threshold nms_threshold:(float)nms_threshold indices:(IntVector*)indices top_k:(size_t)top_k sigma:(float)sigma method:(SoftNMSMethod)method NS_SWIFT_NAME(softNMSBoxes(bboxes:scores:updated_scores:score_threshold:nms_threshold:indices:top_k:sigma:method:));
+
+/**
+ * Performs soft non maximum suppression given boxes and corresponding scores.
+ * Reference: https://arxiv.org/abs/1704.04503
+ * @param bboxes a set of bounding boxes to apply Soft NMS.
+ * @param scores a set of corresponding confidences.
+ * @param updated_scores a set of corresponding updated confidences.
+ * @param score_threshold a threshold used to filter boxes by score.
+ * @param nms_threshold a threshold used in non maximum suppression.
+ * @param indices the kept indices of bboxes after NMS.
+ * @param top_k keep at most @p top_k picked indices.
+ * @param sigma parameter of Gaussian weighting.
+ * @see `SoftNMSMethod`
+ */
++ (void)softNMSBoxes:(NSArray<Rect2i*>*)bboxes scores:(FloatVector*)scores updated_scores:(FloatVector*)updated_scores score_threshold:(float)score_threshold nms_threshold:(float)nms_threshold indices:(IntVector*)indices top_k:(size_t)top_k sigma:(float)sigma NS_SWIFT_NAME(softNMSBoxes(bboxes:scores:updated_scores:score_threshold:nms_threshold:indices:top_k:sigma:));
+
+/**
+ * Performs soft non maximum suppression given boxes and corresponding scores.
+ * Reference: https://arxiv.org/abs/1704.04503
+ * @param bboxes a set of bounding boxes to apply Soft NMS.
+ * @param scores a set of corresponding confidences.
+ * @param updated_scores a set of corresponding updated confidences.
+ * @param score_threshold a threshold used to filter boxes by score.
+ * @param nms_threshold a threshold used in non maximum suppression.
+ * @param indices the kept indices of bboxes after NMS.
+ * @param top_k keep at most @p top_k picked indices.
+ * @see `SoftNMSMethod`
+ */
++ (void)softNMSBoxes:(NSArray<Rect2i*>*)bboxes scores:(FloatVector*)scores updated_scores:(FloatVector*)updated_scores score_threshold:(float)score_threshold nms_threshold:(float)nms_threshold indices:(IntVector*)indices top_k:(size_t)top_k NS_SWIFT_NAME(softNMSBoxes(bboxes:scores:updated_scores:score_threshold:nms_threshold:indices:top_k:));
+
+/**
+ * Performs soft non maximum suppression given boxes and corresponding scores.
+ * Reference: https://arxiv.org/abs/1704.04503
+ * @param bboxes a set of bounding boxes to apply Soft NMS.
+ * @param scores a set of corresponding confidences.
+ * @param updated_scores a set of corresponding updated confidences.
+ * @param score_threshold a threshold used to filter boxes by score.
+ * @param nms_threshold a threshold used in non maximum suppression.
+ * @param indices the kept indices of bboxes after NMS.
+ * @see `SoftNMSMethod`
+ */
++ (void)softNMSBoxes:(NSArray<Rect2i*>*)bboxes scores:(FloatVector*)scores updated_scores:(FloatVector*)updated_scores score_threshold:(float)score_threshold nms_threshold:(float)nms_threshold indices:(IntVector*)indices NS_SWIFT_NAME(softNMSBoxes(bboxes:scores:updated_scores:score_threshold:nms_threshold:indices:));
+
+
+//
 //  String cv::dnn::getInferenceEngineBackendType()
 //
 /**
@@ -818,9 +935,11 @@ CV_EXPORTS @interface Dnn : NSObject
  *
  * See values of `CV_DNN_BACKEND_INFERENCE_ENGINE_*` macros.
  *
- * Default value is controlled through `OPENCV_DNN_BACKEND_INFERENCE_ENGINE_TYPE` runtime parameter (environment variable).
+ * `OPENCV_DNN_BACKEND_INFERENCE_ENGINE_TYPE` runtime parameter (environment variable) is ignored since 4.6.0.
+ *
+ * @deprecated
  */
-+ (NSString*)getInferenceEngineBackendType NS_SWIFT_NAME(getInferenceEngineBackendType());
++ (NSString*)getInferenceEngineBackendType NS_SWIFT_NAME(getInferenceEngineBackendType()) DEPRECATED_ATTRIBUTE;
 
 
 //
@@ -832,8 +951,10 @@ CV_EXPORTS @interface Dnn : NSObject
  * See values of `CV_DNN_BACKEND_INFERENCE_ENGINE_*` macros.
  *
  * @return previous value of internal backend API
+ *
+ * @deprecated
  */
-+ (NSString*)setInferenceEngineBackendType:(NSString*)newBackendType NS_SWIFT_NAME(setInferenceEngineBackendType(newBackendType:));
++ (NSString*)setInferenceEngineBackendType:(NSString*)newBackendType NS_SWIFT_NAME(setInferenceEngineBackendType(newBackendType:)) DEPRECATED_ATTRIBUTE;
 
 
 //
@@ -857,6 +978,17 @@ CV_EXPORTS @interface Dnn : NSObject
  * See values of `CV_DNN_INFERENCE_ENGINE_VPU_TYPE_*` macros.
  */
 + (NSString*)getInferenceEngineVPUType NS_SWIFT_NAME(getInferenceEngineVPUType());
+
+
+//
+//  String cv::dnn::getInferenceEngineCPUType()
+//
+/**
+ * Returns Inference Engine CPU type.
+ *
+ * Specify OpenVINO plugin: CPU or ARM.
+ */
++ (NSString*)getInferenceEngineCPUType NS_SWIFT_NAME(getInferenceEngineCPUType());
 
 
 //

@@ -161,6 +161,12 @@ CV_EXPORTS @interface SimpleBlobDetectorParams : NSObject
 
 @property float maxConvexity;
 
+    //
+    // C++: bool cv::SimpleBlobDetector::Params::collectContours
+    //
+
+@property BOOL collectContours;
+
 
 @end
 

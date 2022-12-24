@@ -183,7 +183,7 @@ CV_EXPORTS @interface IntelligentScissorsMB : NSObject
 //  IntelligentScissorsMB cv::segmentation::IntelligentScissorsMB::applyImageFeatures(Mat non_edge, Mat gradient_direction, Mat gradient_magnitude, Mat image = Mat())
 //
 /**
- * Specify custom features of imput image
+ * Specify custom features of input image
  *
  * Customized advanced variant of applyImage() call.
  *
@@ -195,7 +195,7 @@ CV_EXPORTS @interface IntelligentScissorsMB : NSObject
 - (IntelligentScissorsMB*)applyImageFeatures:(Mat*)non_edge gradient_direction:(Mat*)gradient_direction gradient_magnitude:(Mat*)gradient_magnitude image:(Mat*)image NS_SWIFT_NAME(applyImageFeatures(non_edge:gradient_direction:gradient_magnitude:image:));
 
 /**
- * Specify custom features of imput image
+ * Specify custom features of input image
  *
  * Customized advanced variant of applyImage() call.
  *

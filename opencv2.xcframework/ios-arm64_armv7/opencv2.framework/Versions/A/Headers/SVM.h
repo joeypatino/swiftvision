@@ -20,34 +20,34 @@
 
 // C++: enum KernelTypes (cv.ml.SVM.KernelTypes)
 typedef NS_ENUM(int, KernelTypes) {
-    CUSTOM = -1,
-    LINEAR = 0,
-    POLY = 1,
-    RBF = 2,
-    SIGMOID = 3,
-    CHI2 = 4,
-    INTER = 5
+    SVM_CUSTOM NS_SWIFT_NAME(CUSTOM) = -1,
+    SVM_LINEAR NS_SWIFT_NAME(LINEAR) = 0,
+    SVM_POLY NS_SWIFT_NAME(POLY) = 1,
+    SVM_RBF NS_SWIFT_NAME(RBF) = 2,
+    SVM_SIGMOID NS_SWIFT_NAME(SIGMOID) = 3,
+    SVM_CHI2 NS_SWIFT_NAME(CHI2) = 4,
+    SVM_INTER NS_SWIFT_NAME(INTER) = 5
 };
 
 
 // C++: enum ParamTypes (cv.ml.SVM.ParamTypes)
 typedef NS_ENUM(int, ParamTypes) {
-    C = 0,
-    GAMMA = 1,
-    P = 2,
-    NU = 3,
-    COEF = 4,
-    DEGREE = 5
+    SVM_C NS_SWIFT_NAME(C) = 0,
+    SVM_GAMMA NS_SWIFT_NAME(GAMMA) = 1,
+    SVM_P NS_SWIFT_NAME(P) = 2,
+    SVM_NU NS_SWIFT_NAME(NU) = 3,
+    SVM_COEF NS_SWIFT_NAME(COEF) = 4,
+    SVM_DEGREE NS_SWIFT_NAME(DEGREE) = 5
 };
 
 
 // C++: enum SVMTypes (cv.ml.SVM.Types)
 typedef NS_ENUM(int, SVMTypes) {
-    C_SVC = 100,
-    NU_SVC = 101,
-    ONE_CLASS = 102,
-    EPS_SVR = 103,
-    NU_SVR = 104
+    SVM_C_SVC NS_SWIFT_NAME(C_SVC) = 100,
+    SVM_NU_SVC NS_SWIFT_NAME(NU_SVC) = 101,
+    SVM_ONE_CLASS NS_SWIFT_NAME(ONE_CLASS) = 102,
+    SVM_EPS_SVR NS_SWIFT_NAME(EPS_SVR) = 103,
+    SVM_NU_SVR NS_SWIFT_NAME(NU_SVR) = 104
 };
 
 

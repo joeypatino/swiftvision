@@ -21,6 +21,7 @@ using namespace cv;
 @property (nonatomic, strong) NSArray<ContourSpan *> *spans;
 @property (nonatomic, strong) UIImage *_Nonnull inputImage;
 @property (nonatomic, strong) UIImage *_Nonnull workingImage;
+@property (nonatomic, assign) CGRectOutline outline;
 @end
 
 // MARK: -
@@ -30,7 +31,8 @@ using namespace cv;
     self.inputImage = image;
     self.workingImage = [image resizeTo:CGSizeMake(1440, 1920)];
     self.configuration = configuration;
-
+    self.outline = [self outlineWithSize:self.workingImage.size insets:self.configuration.inputMaskInsets];
+    
     UIImage *processedImage = [self renderProcessed];
     self.contours = [processedImage contoursFilteredBy:filter usingConfiguration:self.configuration];
     self.spans = [processedImage spansFromContours:self.contours usingConfiguration:self.configuration];
@@ -38,12 +40,52 @@ using namespace cv;
     return self;
 }
 
-// MARK: - returns dewarped image
+- (UIImage *)threshold {
+    return [self.workingImage threshold:55 constant:25];
+}
+
+- (UIImage *)dilate {
+    return [[self threshold] dilate:CGSizeMake(9, 1)];
+}
+
+- (UIImage *)erode {
+    return [[self dilate] erode:CGSizeMake(1, 3)];
+}
+
+- (UIImage *)mask {
+    UIImage *mask = [self.workingImage rectangle:self.outline];
+    return [self.workingImage elementwiseMinimum:mask];
+}
+
+- (UIImage *)outlinedMask {
+    return [[self mask] rectangle:self.outline color:[[UIColor redColor] colorWithAlphaComponent:0.4]];
+}
+
+- (UIImage *)processedImage {
+    return [self erode];
+}
+
+// MARK: - returns pre-processed image
 - (UIImage *)renderProcessed {
-    CGRectOutline outline = [self outlineWithSize:self.workingImage.size insets:self.configuration.inputMaskInsets];
-    UIImage *processedImage = [[[[self.workingImage invert] threshold:7 constant:8] dilate:CGSizeMake(8, 3)] erode:CGSizeMake(6, 2)];
-    UIImage *mask = [processedImage rectangle:outline];
+    UIImage *processedImage = [self processedImage];
+    UIImage *mask = [processedImage rectangle:self.outline];
     return [processedImage elementwiseMinimum:mask];
+}
+
+- (UIImage *)renderThresholded {
+    return [self threshold];
+}
+
+- (UIImage *)renderDilated {
+    return [self dilate];
+}
+
+- (UIImage *)renderEroded {
+    return [self erode];
+}
+
+- (UIImage *)renderInputMask {
+    return [self outlinedMask];
 }
 
 // MARK: - returns dewarped image
@@ -55,18 +97,61 @@ using namespace cv;
 
 // MARK: - Debug
 - (UIImage *)renderMasks {
-   return [self render:[UIColor blackColor] mode:ContourRenderingModeFill];
+   return [self renderAllContoursInColor:[UIColor blackColor] mode:ContourRenderingModeFill];
 }
 
 - (UIImage *)renderOutlines {
-    return [self render:[UIColor redColor] mode:ContourRenderingModeOutline];
+    return [self renderAllContoursInColor:[UIColor redColor] mode:ContourRenderingModeOutline];
+}
+
+- (UIImage *)renderSpans {
+    return [self renderSpansUsingMode:ContourRenderingModeFill];
+}
+
+- (UIImage *)renderContours {
+    return [self renderContoursUsingMode:ContourRenderingModeFill];
 }
 
 - (UIImage *)renderKeyPoints {
     return [self renderKeyPoints:ContourRenderingModeFill];
 }
 
-- (UIImage *)render:(UIColor *)color mode:(ContourRenderingMode)mode {
+- (UIImage *)renderSpansUsingMode:(ContourRenderingMode)mode {
+    cv::Mat outImage = [self.workingImage mat];
+
+    vector<vector<cv::Point>> spans;
+    for (int i = 0; i < self.spans.count; i++){
+        ContourSpan *span = self.spans[i];
+        cv::Scalar spanColor = [self scalarColorFrom:span.color];
+        BOOL filled = (mode == ContourRenderingModeFill) ? ContourRenderingModeFill : ContourRenderingModeOutline;
+        
+        vector<vector<cv::Point>> contourToDraw;
+        for (int i = 0; i < span.contours.count; i++){
+            Contour *contour = span.contours[i];
+            contourToDraw.push_back(contour.opencvContour);
+        }
+        cv::drawContours(outImage, contourToDraw, -1, spanColor, filled ? -1 : 1);
+    }
+    return [[UIImage alloc] initWithCVMat:outImage];
+}
+
+- (UIImage *)renderContoursUsingMode:(ContourRenderingMode)mode {
+    cv::Mat outImage = [self.workingImage mat];
+
+    vector<vector<cv::Point>> contours;
+    for (int i = 0; i < self.contours.count; i++){
+        Contour *contour = self.contours[i];
+        cv::Scalar contourColor = [self scalarColorFrom:contour.color];
+        BOOL filled = (mode == ContourRenderingModeFill) ? ContourRenderingModeFill : ContourRenderingModeOutline;
+        
+        vector<vector<cv::Point>> contourToDraw;
+        contourToDraw.push_back(contour.opencvContour);
+        cv::drawContours(outImage, contourToDraw, -1, contourColor, filled ? -1 : 1);
+    }
+    return [[UIImage alloc] initWithCVMat:outImage];
+}
+
+- (UIImage *)renderAllContoursInColor:(UIColor *)color mode:(ContourRenderingMode)mode {
     cv::Mat outImage = [self.workingImage mat];
 
     vector<vector<cv::Point>> contours;

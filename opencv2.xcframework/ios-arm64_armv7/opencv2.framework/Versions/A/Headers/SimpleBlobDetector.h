@@ -13,6 +13,7 @@
 #import <Foundation/Foundation.h>
 #import "Feature2D.h"
 
+@class Point2i;
 @class SimpleBlobDetectorParams;
 
 
@@ -82,6 +83,12 @@ CV_EXPORTS @interface SimpleBlobDetector : Feature2D
 //  String cv::SimpleBlobDetector::getDefaultName()
 //
 - (NSString*)getDefaultName NS_SWIFT_NAME(getDefaultName());
+
+
+//
+//  vector_vector_Point cv::SimpleBlobDetector::getBlobContours()
+//
+- (NSArray<NSArray<Point2i*>*>*)getBlobContours NS_SWIFT_NAME(getBlobContours());
 
 
 

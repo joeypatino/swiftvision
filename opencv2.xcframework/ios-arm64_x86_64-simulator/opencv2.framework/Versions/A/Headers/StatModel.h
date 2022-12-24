@@ -19,10 +19,10 @@
 
 // C++: enum StatModelFlags (cv.ml.StatModel.Flags)
 typedef NS_ENUM(int, StatModelFlags) {
-    UPDATE_MODEL = 1,
-    RAW_OUTPUT = 1,
-    COMPRESSED_INPUT = 2,
-    PREPROCESSED_INPUT = 4
+    StatModel_UPDATE_MODEL NS_SWIFT_NAME(UPDATE_MODEL) = 1,
+    StatModel_RAW_OUTPUT NS_SWIFT_NAME(RAW_OUTPUT) = 1,
+    StatModel_COMPRESSED_INPUT NS_SWIFT_NAME(COMPRESSED_INPUT) = 2,
+    StatModel_PREPROCESSED_INPUT NS_SWIFT_NAME(PREPROCESSED_INPUT) = 4
 };
 
 

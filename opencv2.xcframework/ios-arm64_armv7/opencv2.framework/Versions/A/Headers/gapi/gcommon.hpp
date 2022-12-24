@@ -44,12 +44,14 @@ namespace detail
         CV_UNKNOWN,    // Unknown, generic, opaque-to-GAPI data type unsupported in graph seriallization
         CV_BOOL,       // bool user G-API data
         CV_INT,        // int user G-API data
+        CV_INT64,      // int64_t user G-API data
         CV_DOUBLE,     // double user G-API data
         CV_FLOAT,      // float user G-API data
         CV_UINT64,     // uint64_t user G-API data
         CV_STRING,     // std::string user G-API data
         CV_POINT,      // cv::Point user G-API data
         CV_POINT2F,    // cv::Point2f user G-API data
+        CV_POINT3F,    // cv::Point3f user G-API data
         CV_SIZE,       // cv::Size user G-API data
         CV_RECT,       // cv::Rect user G-API data
         CV_SCALAR,     // cv::Scalar user G-API data
@@ -61,6 +63,7 @@ namespace detail
     template<typename T> struct GOpaqueTraits;
     template<typename T> struct GOpaqueTraits    { static constexpr const OpaqueKind kind = OpaqueKind::CV_UNKNOWN; };
     template<> struct GOpaqueTraits<int>         { static constexpr const OpaqueKind kind = OpaqueKind::CV_INT; };
+    template<> struct GOpaqueTraits<int64_t>     { static constexpr const OpaqueKind kind = OpaqueKind::CV_INT64; };
     template<> struct GOpaqueTraits<double>      { static constexpr const OpaqueKind kind = OpaqueKind::CV_DOUBLE; };
     template<> struct GOpaqueTraits<float>       { static constexpr const OpaqueKind kind = OpaqueKind::CV_FLOAT; };
     template<> struct GOpaqueTraits<uint64_t>    { static constexpr const OpaqueKind kind = OpaqueKind::CV_UINT64; };
@@ -70,16 +73,17 @@ namespace detail
     template<> struct GOpaqueTraits<cv::Scalar>  { static constexpr const OpaqueKind kind = OpaqueKind::CV_SCALAR; };
     template<> struct GOpaqueTraits<cv::Point>   { static constexpr const OpaqueKind kind = OpaqueKind::CV_POINT; };
     template<> struct GOpaqueTraits<cv::Point2f> { static constexpr const OpaqueKind kind = OpaqueKind::CV_POINT2F; };
+    template<> struct GOpaqueTraits<cv::Point3f> { static constexpr const OpaqueKind kind = OpaqueKind::CV_POINT3F; };
     template<> struct GOpaqueTraits<cv::Mat>     { static constexpr const OpaqueKind kind = OpaqueKind::CV_MAT; };
     template<> struct GOpaqueTraits<cv::Rect>    { static constexpr const OpaqueKind kind = OpaqueKind::CV_RECT; };
     template<> struct GOpaqueTraits<cv::GMat>    { static constexpr const OpaqueKind kind = OpaqueKind::CV_MAT; };
     template<> struct GOpaqueTraits<cv::gapi::wip::draw::Prim>
                                                  { static constexpr const OpaqueKind kind = OpaqueKind::CV_DRAW_PRIM; };
     using GOpaqueTraitsArrayTypes = std::tuple<int, double, float, uint64_t, bool, std::string, cv::Size, cv::Scalar, cv::Point, cv::Point2f,
-                                               cv::Mat, cv::Rect, cv::gapi::wip::draw::Prim>;
+                                               cv::Point3f, cv::Mat, cv::Rect, cv::gapi::wip::draw::Prim>;
     // GOpaque is not supporting cv::Mat and cv::Scalar since there are GScalar and GMat types
-    using GOpaqueTraitsOpaqueTypes = std::tuple<int, double, float, uint64_t, bool, std::string, cv::Size, cv::Point, cv::Point2f, cv::Rect,
-                                                cv::gapi::wip::draw::Prim>;
+    using GOpaqueTraitsOpaqueTypes = std::tuple<int, double, float, uint64_t, bool, std::string, cv::Size, cv::Point, cv::Point2f, cv::Point3f,
+                                                cv::Rect, cv::gapi::wip::draw::Prim>;
 } // namespace detail
 
 // This definition is here because it is reused by both public(?) and internal
@@ -132,12 +136,12 @@ namespace detail {
  *
  * For example, if an example computation is executed like this:
  *
- * @snippet modules/gapi/samples/api_ref_snippets.cpp graph_decl_apply
+ * @snippet samples/cpp/tutorial_code/gapi/doc_snippets/api_ref_snippets.cpp graph_decl_apply
  *
  * Extra parameter specifying which kernels to compile with can be
  * passed like this:
  *
- * @snippet modules/gapi/samples/api_ref_snippets.cpp apply_with_param
+ * @snippet samples/cpp/tutorial_code/gapi/doc_snippets/api_ref_snippets.cpp apply_with_param
  */
 
 /**
@@ -194,6 +198,14 @@ private:
 };
 
 using GCompileArgs = std::vector<GCompileArg>;
+
+inline cv::GCompileArgs& operator += (      cv::GCompileArgs &lhs,
+                                      const cv::GCompileArgs &rhs)
+{
+    lhs.reserve(lhs.size() + rhs.size());
+    lhs.insert(lhs.end(), rhs.begin(), rhs.end());
+    return lhs;
+}
 
 /**
  * @brief Wraps a list of arguments (a parameter pack) into a vector of

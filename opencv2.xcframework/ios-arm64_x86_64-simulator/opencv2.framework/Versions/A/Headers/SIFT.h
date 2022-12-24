@@ -205,6 +205,66 @@ CV_EXPORTS @interface SIFT : Feature2D
 - (NSString*)getDefaultName NS_SWIFT_NAME(getDefaultName());
 
 
+//
+//  void cv::SIFT::setNFeatures(int maxFeatures)
+//
+- (void)setNFeatures:(int)maxFeatures NS_SWIFT_NAME(setNFeatures(maxFeatures:));
+
+
+//
+//  int cv::SIFT::getNFeatures()
+//
+- (int)getNFeatures NS_SWIFT_NAME(getNFeatures());
+
+
+//
+//  void cv::SIFT::setNOctaveLayers(int nOctaveLayers)
+//
+- (void)setNOctaveLayers:(int)nOctaveLayers NS_SWIFT_NAME(setNOctaveLayers(nOctaveLayers:));
+
+
+//
+//  int cv::SIFT::getNOctaveLayers()
+//
+- (int)getNOctaveLayers NS_SWIFT_NAME(getNOctaveLayers());
+
+
+//
+//  void cv::SIFT::setContrastThreshold(double contrastThreshold)
+//
+- (void)setContrastThreshold:(double)contrastThreshold NS_SWIFT_NAME(setContrastThreshold(contrastThreshold:));
+
+
+//
+//  double cv::SIFT::getContrastThreshold()
+//
+- (double)getContrastThreshold NS_SWIFT_NAME(getContrastThreshold());
+
+
+//
+//  void cv::SIFT::setEdgeThreshold(double edgeThreshold)
+//
+- (void)setEdgeThreshold:(double)edgeThreshold NS_SWIFT_NAME(setEdgeThreshold(edgeThreshold:));
+
+
+//
+//  double cv::SIFT::getEdgeThreshold()
+//
+- (double)getEdgeThreshold NS_SWIFT_NAME(getEdgeThreshold());
+
+
+//
+//  void cv::SIFT::setSigma(double sigma)
+//
+- (void)setSigma:(double)sigma NS_SWIFT_NAME(setSigma(sigma:));
+
+
+//
+//  double cv::SIFT::getSigma()
+//
+- (double)getSigma NS_SWIFT_NAME(getSigma());
+
+
 
 @end
 

@@ -23,14 +23,14 @@
 
 // C++: enum DescriptorStorageFormat (cv.HOGDescriptor.DescriptorStorageFormat)
 typedef NS_ENUM(int, DescriptorStorageFormat) {
-    DESCR_FORMAT_COL_BY_COL = 0,
-    DESCR_FORMAT_ROW_BY_ROW = 1
+    HOGDescriptor_DESCR_FORMAT_COL_BY_COL NS_SWIFT_NAME(DESCR_FORMAT_COL_BY_COL) = 0,
+    HOGDescriptor_DESCR_FORMAT_ROW_BY_ROW NS_SWIFT_NAME(DESCR_FORMAT_ROW_BY_ROW) = 1
 };
 
 
 // C++: enum HistogramNormType (cv.HOGDescriptor.HistogramNormType)
 typedef NS_ENUM(int, HistogramNormType) {
-    L2Hys = 0
+    HOGDescriptor_L2Hys NS_SWIFT_NAME(L2Hys) = 0
 };
 
 
@@ -82,7 +82,7 @@ CV_EXPORTS @interface HOGDescriptor : NSObject
 //   cv::HOGDescriptor::HOGDescriptor()
 //
 /**
- * Creates the HOG descriptor and detector with default params.
+ * Creates the HOG descriptor and detector with default parameters.
  *
  *     aqual to HOGDescriptor(Size(64,128), Size(16,16), Size(8,8), Size(8,8), 9 )
  */
@@ -206,6 +206,8 @@ CV_EXPORTS @interface HOGDescriptor : NSObject
 //
 /**
  *
+ *
+ *     Creates the HOG descriptor and detector and loads HOGDescriptor parameters and coefficients for the linear SVM classifier from a file.
  * @param filename The file name containing HOGDescriptor properties and coefficients for the linear SVM classifier.
  */
 - (instancetype)initWithFilename:(NSString*)filename;
@@ -252,15 +254,15 @@ CV_EXPORTS @interface HOGDescriptor : NSObject
 //  bool cv::HOGDescriptor::load(String filename, String objname = String())
 //
 /**
- * loads HOGDescriptor parameters and coefficients for the linear SVM classifier from a file.
- * @param filename Path of the file to read.
+ * loads HOGDescriptor parameters and coefficients for the linear SVM classifier from a file
+ * @param filename Name of the file to read.
  * @param objname The optional name of the node to read (if empty, the first top-level node will be used).
  */
 - (BOOL)load:(NSString*)filename objname:(NSString*)objname NS_SWIFT_NAME(load(filename:objname:));
 
 /**
- * loads HOGDescriptor parameters and coefficients for the linear SVM classifier from a file.
- * @param filename Path of the file to read.
+ * loads HOGDescriptor parameters and coefficients for the linear SVM classifier from a file
+ * @param filename Name of the file to read.
  */
 - (BOOL)load:(NSString*)filename NS_SWIFT_NAME(load(filename:));
 
@@ -385,7 +387,7 @@ CV_EXPORTS @interface HOGDescriptor : NSObject
 
 
 //
-//  void cv::HOGDescriptor::detectMultiScale(Mat img, vector_Rect& foundLocations, vector_double& foundWeights, double hitThreshold = 0, Size winStride = Size(), Size padding = Size(), double scale = 1.05, double finalThreshold = 2.0, bool useMeanshiftGrouping = false)
+//  void cv::HOGDescriptor::detectMultiScale(Mat img, vector_Rect& foundLocations, vector_double& foundWeights, double hitThreshold = 0, Size winStride = Size(), Size padding = Size(), double scale = 1.05, double groupThreshold = 2.0, bool useMeanshiftGrouping = false)
 //
 /**
  * Detects objects of different sizes in the input image. The detected objects are returned as a list
@@ -399,10 +401,11 @@ CV_EXPORTS @interface HOGDescriptor : NSObject
  * @param winStride Window stride. It must be a multiple of block stride.
  * @param padding Padding
  * @param scale Coefficient of the detection window increase.
- * @param finalThreshold Final threshold
+ * @param groupThreshold Coefficient to regulate the similarity threshold. When detected, some objects can be covered
+ *     by many rectangles. 0 means not to perform grouping.
  * @param useMeanshiftGrouping indicates grouping algorithm
  */
-- (void)detectMultiScale:(Mat*)img foundLocations:(NSMutableArray<Rect2i*>*)foundLocations foundWeights:(DoubleVector*)foundWeights hitThreshold:(double)hitThreshold winStride:(Size2i*)winStride padding:(Size2i*)padding scale:(double)scale finalThreshold:(double)finalThreshold useMeanshiftGrouping:(BOOL)useMeanshiftGrouping NS_SWIFT_NAME(detectMultiScale(img:foundLocations:foundWeights:hitThreshold:winStride:padding:scale:finalThreshold:useMeanshiftGrouping:));
+- (void)detectMultiScale:(Mat*)img foundLocations:(NSMutableArray<Rect2i*>*)foundLocations foundWeights:(DoubleVector*)foundWeights hitThreshold:(double)hitThreshold winStride:(Size2i*)winStride padding:(Size2i*)padding scale:(double)scale groupThreshold:(double)groupThreshold useMeanshiftGrouping:(BOOL)useMeanshiftGrouping NS_SWIFT_NAME(detectMultiScale(img:foundLocations:foundWeights:hitThreshold:winStride:padding:scale:groupThreshold:useMeanshiftGrouping:));
 
 /**
  * Detects objects of different sizes in the input image. The detected objects are returned as a list
@@ -416,9 +419,10 @@ CV_EXPORTS @interface HOGDescriptor : NSObject
  * @param winStride Window stride. It must be a multiple of block stride.
  * @param padding Padding
  * @param scale Coefficient of the detection window increase.
- * @param finalThreshold Final threshold
+ * @param groupThreshold Coefficient to regulate the similarity threshold. When detected, some objects can be covered
+ *     by many rectangles. 0 means not to perform grouping.
  */
-- (void)detectMultiScale:(Mat*)img foundLocations:(NSMutableArray<Rect2i*>*)foundLocations foundWeights:(DoubleVector*)foundWeights hitThreshold:(double)hitThreshold winStride:(Size2i*)winStride padding:(Size2i*)padding scale:(double)scale finalThreshold:(double)finalThreshold NS_SWIFT_NAME(detectMultiScale(img:foundLocations:foundWeights:hitThreshold:winStride:padding:scale:finalThreshold:));
+- (void)detectMultiScale:(Mat*)img foundLocations:(NSMutableArray<Rect2i*>*)foundLocations foundWeights:(DoubleVector*)foundWeights hitThreshold:(double)hitThreshold winStride:(Size2i*)winStride padding:(Size2i*)padding scale:(double)scale groupThreshold:(double)groupThreshold NS_SWIFT_NAME(detectMultiScale(img:foundLocations:foundWeights:hitThreshold:winStride:padding:scale:groupThreshold:));
 
 /**
  * Detects objects of different sizes in the input image. The detected objects are returned as a list
@@ -432,6 +436,7 @@ CV_EXPORTS @interface HOGDescriptor : NSObject
  * @param winStride Window stride. It must be a multiple of block stride.
  * @param padding Padding
  * @param scale Coefficient of the detection window increase.
+ *     by many rectangles. 0 means not to perform grouping.
  */
 - (void)detectMultiScale:(Mat*)img foundLocations:(NSMutableArray<Rect2i*>*)foundLocations foundWeights:(DoubleVector*)foundWeights hitThreshold:(double)hitThreshold winStride:(Size2i*)winStride padding:(Size2i*)padding scale:(double)scale NS_SWIFT_NAME(detectMultiScale(img:foundLocations:foundWeights:hitThreshold:winStride:padding:scale:));
 
@@ -446,6 +451,7 @@ CV_EXPORTS @interface HOGDescriptor : NSObject
  *     But if the free coefficient is omitted (which is allowed), you can specify it manually here.
  * @param winStride Window stride. It must be a multiple of block stride.
  * @param padding Padding
+ *     by many rectangles. 0 means not to perform grouping.
  */
 - (void)detectMultiScale:(Mat*)img foundLocations:(NSMutableArray<Rect2i*>*)foundLocations foundWeights:(DoubleVector*)foundWeights hitThreshold:(double)hitThreshold winStride:(Size2i*)winStride padding:(Size2i*)padding NS_SWIFT_NAME(detectMultiScale(img:foundLocations:foundWeights:hitThreshold:winStride:padding:));
 
@@ -459,6 +465,7 @@ CV_EXPORTS @interface HOGDescriptor : NSObject
  *     Usually it is 0 and should be specified in the detector coefficients (as the last free coefficient).
  *     But if the free coefficient is omitted (which is allowed), you can specify it manually here.
  * @param winStride Window stride. It must be a multiple of block stride.
+ *     by many rectangles. 0 means not to perform grouping.
  */
 - (void)detectMultiScale:(Mat*)img foundLocations:(NSMutableArray<Rect2i*>*)foundLocations foundWeights:(DoubleVector*)foundWeights hitThreshold:(double)hitThreshold winStride:(Size2i*)winStride NS_SWIFT_NAME(detectMultiScale(img:foundLocations:foundWeights:hitThreshold:winStride:));
 
@@ -471,6 +478,7 @@ CV_EXPORTS @interface HOGDescriptor : NSObject
  * @param hitThreshold Threshold for the distance between features and SVM classifying plane.
  *     Usually it is 0 and should be specified in the detector coefficients (as the last free coefficient).
  *     But if the free coefficient is omitted (which is allowed), you can specify it manually here.
+ *     by many rectangles. 0 means not to perform grouping.
  */
 - (void)detectMultiScale:(Mat*)img foundLocations:(NSMutableArray<Rect2i*>*)foundLocations foundWeights:(DoubleVector*)foundWeights hitThreshold:(double)hitThreshold NS_SWIFT_NAME(detectMultiScale(img:foundLocations:foundWeights:hitThreshold:));
 
@@ -482,6 +490,7 @@ CV_EXPORTS @interface HOGDescriptor : NSObject
  * @param foundWeights Vector that will contain confidence values for each detected object.
  *     Usually it is 0 and should be specified in the detector coefficients (as the last free coefficient).
  *     But if the free coefficient is omitted (which is allowed), you can specify it manually here.
+ *     by many rectangles. 0 means not to perform grouping.
  */
 - (void)detectMultiScale:(Mat*)img foundLocations:(NSMutableArray<Rect2i*>*)foundLocations foundWeights:(DoubleVector*)foundWeights NS_SWIFT_NAME(detectMultiScale(img:foundLocations:foundWeights:));
 

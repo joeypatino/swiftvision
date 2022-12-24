@@ -83,7 +83,9 @@ CV_EXPORTS @interface TextRecognitionModel : Model
 //
 /**
  * Set the decoding method of translating the network output into string
- * @param decodeType The decoding method of translating the network output into string: {'CTC-greedy': greedy decoding for the output of CTC-based methods}
+ * @param decodeType The decoding method of translating the network output into string, currently supported type:
+ * - `"CTC-greedy"` greedy decoding for the output of CTC-based methods
+ * - `"CTC-prefix-beam-search"` Prefix beam search decoding for the output of CTC-based methods
  */
 - (TextRecognitionModel*)setDecodeType:(NSString*)decodeType NS_SWIFT_NAME(setDecodeType(decodeType:));
 
@@ -96,6 +98,25 @@ CV_EXPORTS @interface TextRecognitionModel : Model
  * @return the decoding method
  */
 - (NSString*)getDecodeType NS_SWIFT_NAME(getDecodeType());
+
+
+//
+//  TextRecognitionModel cv::dnn::TextRecognitionModel::setDecodeOptsCTCPrefixBeamSearch(int beamSize, int vocPruneSize = 0)
+//
+/**
+ * Set the decoding method options for `"CTC-prefix-beam-search"` decode usage
+ * @param beamSize Beam size for search
+ * @param vocPruneSize Parameter to optimize big vocabulary search,
+ * only take top @p vocPruneSize tokens in each search step, @p vocPruneSize <= 0 stands for disable this prune.
+ */
+- (TextRecognitionModel*)setDecodeOptsCTCPrefixBeamSearch:(int)beamSize vocPruneSize:(int)vocPruneSize NS_SWIFT_NAME(setDecodeOptsCTCPrefixBeamSearch(beamSize:vocPruneSize:));
+
+/**
+ * Set the decoding method options for `"CTC-prefix-beam-search"` decode usage
+ * @param beamSize Beam size for search
+ * only take top @p vocPruneSize tokens in each search step, @p vocPruneSize <= 0 stands for disable this prune.
+ */
+- (TextRecognitionModel*)setDecodeOptsCTCPrefixBeamSearch:(int)beamSize NS_SWIFT_NAME(setDecodeOptsCTCPrefixBeamSearch(beamSize:));
 
 
 //

@@ -21,11 +21,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 // C++: class QRCodeDetector
 /**
- * Groups the object candidate rectangles.
- *     rectList  Input/output vector of rectangles. Output vector includes retained and grouped rectangles. (The Python list is not modified in place.)
- *     weights Input/output vector of weights of rectangles. Output vector includes weights of retained and grouped rectangles. (The Python list is not modified in place.)
- *     groupThreshold Minimum possible number of rectangles minus 1. The threshold is used in a group of rectangles to retain it.
- *     eps Relative difference between sides of the rectangles to merge them into a group.
+ * The QRCodeDetector module
  *
  * Member of `Objdetect`
  */
@@ -71,6 +67,17 @@ CV_EXPORTS @interface QRCodeDetector : NSObject
  *      of the scheme 1:1:3:1:1 according to QR code standard.
  */
 - (void)setEpsY:(double)epsY NS_SWIFT_NAME(setEpsY(epsY:));
+
+
+//
+//  void cv::QRCodeDetector::setUseAlignmentMarkers(bool useAlignmentMarkers)
+//
+/**
+ * use markers to improve the position of the corners of the QR code
+ *
+ * alignmentMarkers using by default
+ */
+- (void)setUseAlignmentMarkers:(BOOL)useAlignmentMarkers NS_SWIFT_NAME(setUseAlignmentMarkers(useAlignmentMarkers:));
 
 
 //

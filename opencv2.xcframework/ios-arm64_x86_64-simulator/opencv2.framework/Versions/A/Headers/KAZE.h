@@ -18,10 +18,10 @@
 
 // C++: enum DiffusivityType (cv.KAZE.DiffusivityType)
 typedef NS_ENUM(int, DiffusivityType) {
-    DIFF_PM_G1 = 0,
-    DIFF_PM_G2 = 1,
-    DIFF_WEICKERT = 2,
-    DIFF_CHARBONNIER = 3
+    KAZE_DIFF_PM_G1 NS_SWIFT_NAME(DIFF_PM_G1) = 0,
+    KAZE_DIFF_PM_G2 NS_SWIFT_NAME(DIFF_PM_G2) = 1,
+    KAZE_DIFF_WEICKERT NS_SWIFT_NAME(DIFF_WEICKERT) = 2,
+    KAZE_DIFF_CHARBONNIER NS_SWIFT_NAME(DIFF_CHARBONNIER) = 3
 };
 
 

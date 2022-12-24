@@ -18,10 +18,10 @@
 
 // C++: enum DTreeFlags (cv.ml.DTrees.Flags)
 typedef NS_ENUM(int, DTreeFlags) {
-    PREDICT_AUTO = 0,
-    PREDICT_SUM = (1<<8),
-    PREDICT_MAX_VOTE = (2<<8),
-    PREDICT_MASK = (3<<8)
+    DTrees_PREDICT_AUTO NS_SWIFT_NAME(PREDICT_AUTO) = 0,
+    DTrees_PREDICT_SUM NS_SWIFT_NAME(PREDICT_SUM) = (1<<8),
+    DTrees_PREDICT_MAX_VOTE NS_SWIFT_NAME(PREDICT_MAX_VOTE) = (2<<8),
+    DTrees_PREDICT_MASK NS_SWIFT_NAME(PREDICT_MASK) = (3<<8)
 };
 
 

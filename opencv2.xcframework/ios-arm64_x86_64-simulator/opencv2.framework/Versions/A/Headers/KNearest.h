@@ -18,8 +18,8 @@
 
 // C++: enum KNearestTypes (cv.ml.KNearest.Types)
 typedef NS_ENUM(int, KNearestTypes) {
-    BRUTE_FORCE = 1,
-    KDTREE = 2
+    KNearest_BRUTE_FORCE NS_SWIFT_NAME(BRUTE_FORCE) = 1,
+    KNearest_KDTREE NS_SWIFT_NAME(KDTREE) = 2
 };
 
 

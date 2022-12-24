@@ -34,8 +34,7 @@ NS_ASSUME_NONNULL_BEGIN
  * than union-find method; it actually get 1.5~2m/s on my centrino L7200 1.2GHz laptop.
  *
  * - the color image algorithm is taken from: CITE: forssen2007maximally ; it should be much slower
- * than grey image method ( 3~4 times ); the chi_table.h file is taken directly from paper's source
- * code which is distributed under GPL.
+ * than grey image method ( 3~4 times )
  *
  * - (Python) A complete example showing the use of the %MSER detector can be found at samples/python/mser.py
  *
@@ -58,106 +57,106 @@ CV_EXPORTS @interface MSER : Feature2D
 
 
 //
-// static Ptr_MSER cv::MSER::create(int _delta = 5, int _min_area = 60, int _max_area = 14400, double _max_variation = 0.25, double _min_diversity = .2, int _max_evolution = 200, double _area_threshold = 1.01, double _min_margin = 0.003, int _edge_blur_size = 5)
+// static Ptr_MSER cv::MSER::create(int delta = 5, int min_area = 60, int max_area = 14400, double max_variation = 0.25, double min_diversity = .2, int max_evolution = 200, double area_threshold = 1.01, double min_margin = 0.003, int edge_blur_size = 5)
 //
 /**
  * Full constructor for %MSER detector
  *
- * @param _delta it compares `$$(size_{i}-size_{i-delta})/size_{i-delta}$$`
- * @param _min_area prune the area which smaller than minArea
- * @param _max_area prune the area which bigger than maxArea
- * @param _max_variation prune the area have similar size to its children
- * @param _min_diversity for color image, trace back to cut off mser with diversity less than min_diversity
- * @param _max_evolution  for color image, the evolution steps
- * @param _area_threshold for color image, the area threshold to cause re-initialize
- * @param _min_margin for color image, ignore too small margin
- * @param _edge_blur_size for color image, the aperture size for edge blur
+ * @param delta it compares `$$(size_{i}-size_{i-delta})/size_{i-delta}$$`
+ * @param min_area prune the area which smaller than minArea
+ * @param max_area prune the area which bigger than maxArea
+ * @param max_variation prune the area have similar size to its children
+ * @param min_diversity for color image, trace back to cut off mser with diversity less than min_diversity
+ * @param max_evolution  for color image, the evolution steps
+ * @param area_threshold for color image, the area threshold to cause re-initialize
+ * @param min_margin for color image, ignore too small margin
+ * @param edge_blur_size for color image, the aperture size for edge blur
  */
-+ (MSER*)create:(int)_delta _min_area:(int)_min_area _max_area:(int)_max_area _max_variation:(double)_max_variation _min_diversity:(double)_min_diversity _max_evolution:(int)_max_evolution _area_threshold:(double)_area_threshold _min_margin:(double)_min_margin _edge_blur_size:(int)_edge_blur_size NS_SWIFT_NAME(create(_delta:_min_area:_max_area:_max_variation:_min_diversity:_max_evolution:_area_threshold:_min_margin:_edge_blur_size:));
++ (MSER*)create:(int)delta min_area:(int)min_area max_area:(int)max_area max_variation:(double)max_variation min_diversity:(double)min_diversity max_evolution:(int)max_evolution area_threshold:(double)area_threshold min_margin:(double)min_margin edge_blur_size:(int)edge_blur_size NS_SWIFT_NAME(create(delta:min_area:max_area:max_variation:min_diversity:max_evolution:area_threshold:min_margin:edge_blur_size:));
 
 /**
  * Full constructor for %MSER detector
  *
- * @param _delta it compares `$$(size_{i}-size_{i-delta})/size_{i-delta}$$`
- * @param _min_area prune the area which smaller than minArea
- * @param _max_area prune the area which bigger than maxArea
- * @param _max_variation prune the area have similar size to its children
- * @param _min_diversity for color image, trace back to cut off mser with diversity less than min_diversity
- * @param _max_evolution  for color image, the evolution steps
- * @param _area_threshold for color image, the area threshold to cause re-initialize
- * @param _min_margin for color image, ignore too small margin
+ * @param delta it compares `$$(size_{i}-size_{i-delta})/size_{i-delta}$$`
+ * @param min_area prune the area which smaller than minArea
+ * @param max_area prune the area which bigger than maxArea
+ * @param max_variation prune the area have similar size to its children
+ * @param min_diversity for color image, trace back to cut off mser with diversity less than min_diversity
+ * @param max_evolution  for color image, the evolution steps
+ * @param area_threshold for color image, the area threshold to cause re-initialize
+ * @param min_margin for color image, ignore too small margin
  */
-+ (MSER*)create:(int)_delta _min_area:(int)_min_area _max_area:(int)_max_area _max_variation:(double)_max_variation _min_diversity:(double)_min_diversity _max_evolution:(int)_max_evolution _area_threshold:(double)_area_threshold _min_margin:(double)_min_margin NS_SWIFT_NAME(create(_delta:_min_area:_max_area:_max_variation:_min_diversity:_max_evolution:_area_threshold:_min_margin:));
++ (MSER*)create:(int)delta min_area:(int)min_area max_area:(int)max_area max_variation:(double)max_variation min_diversity:(double)min_diversity max_evolution:(int)max_evolution area_threshold:(double)area_threshold min_margin:(double)min_margin NS_SWIFT_NAME(create(delta:min_area:max_area:max_variation:min_diversity:max_evolution:area_threshold:min_margin:));
 
 /**
  * Full constructor for %MSER detector
  *
- * @param _delta it compares `$$(size_{i}-size_{i-delta})/size_{i-delta}$$`
- * @param _min_area prune the area which smaller than minArea
- * @param _max_area prune the area which bigger than maxArea
- * @param _max_variation prune the area have similar size to its children
- * @param _min_diversity for color image, trace back to cut off mser with diversity less than min_diversity
- * @param _max_evolution  for color image, the evolution steps
- * @param _area_threshold for color image, the area threshold to cause re-initialize
+ * @param delta it compares `$$(size_{i}-size_{i-delta})/size_{i-delta}$$`
+ * @param min_area prune the area which smaller than minArea
+ * @param max_area prune the area which bigger than maxArea
+ * @param max_variation prune the area have similar size to its children
+ * @param min_diversity for color image, trace back to cut off mser with diversity less than min_diversity
+ * @param max_evolution  for color image, the evolution steps
+ * @param area_threshold for color image, the area threshold to cause re-initialize
  */
-+ (MSER*)create:(int)_delta _min_area:(int)_min_area _max_area:(int)_max_area _max_variation:(double)_max_variation _min_diversity:(double)_min_diversity _max_evolution:(int)_max_evolution _area_threshold:(double)_area_threshold NS_SWIFT_NAME(create(_delta:_min_area:_max_area:_max_variation:_min_diversity:_max_evolution:_area_threshold:));
++ (MSER*)create:(int)delta min_area:(int)min_area max_area:(int)max_area max_variation:(double)max_variation min_diversity:(double)min_diversity max_evolution:(int)max_evolution area_threshold:(double)area_threshold NS_SWIFT_NAME(create(delta:min_area:max_area:max_variation:min_diversity:max_evolution:area_threshold:));
 
 /**
  * Full constructor for %MSER detector
  *
- * @param _delta it compares `$$(size_{i}-size_{i-delta})/size_{i-delta}$$`
- * @param _min_area prune the area which smaller than minArea
- * @param _max_area prune the area which bigger than maxArea
- * @param _max_variation prune the area have similar size to its children
- * @param _min_diversity for color image, trace back to cut off mser with diversity less than min_diversity
- * @param _max_evolution  for color image, the evolution steps
+ * @param delta it compares `$$(size_{i}-size_{i-delta})/size_{i-delta}$$`
+ * @param min_area prune the area which smaller than minArea
+ * @param max_area prune the area which bigger than maxArea
+ * @param max_variation prune the area have similar size to its children
+ * @param min_diversity for color image, trace back to cut off mser with diversity less than min_diversity
+ * @param max_evolution  for color image, the evolution steps
  */
-+ (MSER*)create:(int)_delta _min_area:(int)_min_area _max_area:(int)_max_area _max_variation:(double)_max_variation _min_diversity:(double)_min_diversity _max_evolution:(int)_max_evolution NS_SWIFT_NAME(create(_delta:_min_area:_max_area:_max_variation:_min_diversity:_max_evolution:));
++ (MSER*)create:(int)delta min_area:(int)min_area max_area:(int)max_area max_variation:(double)max_variation min_diversity:(double)min_diversity max_evolution:(int)max_evolution NS_SWIFT_NAME(create(delta:min_area:max_area:max_variation:min_diversity:max_evolution:));
 
 /**
  * Full constructor for %MSER detector
  *
- * @param _delta it compares `$$(size_{i}-size_{i-delta})/size_{i-delta}$$`
- * @param _min_area prune the area which smaller than minArea
- * @param _max_area prune the area which bigger than maxArea
- * @param _max_variation prune the area have similar size to its children
- * @param _min_diversity for color image, trace back to cut off mser with diversity less than min_diversity
+ * @param delta it compares `$$(size_{i}-size_{i-delta})/size_{i-delta}$$`
+ * @param min_area prune the area which smaller than minArea
+ * @param max_area prune the area which bigger than maxArea
+ * @param max_variation prune the area have similar size to its children
+ * @param min_diversity for color image, trace back to cut off mser with diversity less than min_diversity
  */
-+ (MSER*)create:(int)_delta _min_area:(int)_min_area _max_area:(int)_max_area _max_variation:(double)_max_variation _min_diversity:(double)_min_diversity NS_SWIFT_NAME(create(_delta:_min_area:_max_area:_max_variation:_min_diversity:));
++ (MSER*)create:(int)delta min_area:(int)min_area max_area:(int)max_area max_variation:(double)max_variation min_diversity:(double)min_diversity NS_SWIFT_NAME(create(delta:min_area:max_area:max_variation:min_diversity:));
 
 /**
  * Full constructor for %MSER detector
  *
- * @param _delta it compares `$$(size_{i}-size_{i-delta})/size_{i-delta}$$`
- * @param _min_area prune the area which smaller than minArea
- * @param _max_area prune the area which bigger than maxArea
- * @param _max_variation prune the area have similar size to its children
+ * @param delta it compares `$$(size_{i}-size_{i-delta})/size_{i-delta}$$`
+ * @param min_area prune the area which smaller than minArea
+ * @param max_area prune the area which bigger than maxArea
+ * @param max_variation prune the area have similar size to its children
  */
-+ (MSER*)create:(int)_delta _min_area:(int)_min_area _max_area:(int)_max_area _max_variation:(double)_max_variation NS_SWIFT_NAME(create(_delta:_min_area:_max_area:_max_variation:));
++ (MSER*)create:(int)delta min_area:(int)min_area max_area:(int)max_area max_variation:(double)max_variation NS_SWIFT_NAME(create(delta:min_area:max_area:max_variation:));
 
 /**
  * Full constructor for %MSER detector
  *
- * @param _delta it compares `$$(size_{i}-size_{i-delta})/size_{i-delta}$$`
- * @param _min_area prune the area which smaller than minArea
- * @param _max_area prune the area which bigger than maxArea
+ * @param delta it compares `$$(size_{i}-size_{i-delta})/size_{i-delta}$$`
+ * @param min_area prune the area which smaller than minArea
+ * @param max_area prune the area which bigger than maxArea
  */
-+ (MSER*)create:(int)_delta _min_area:(int)_min_area _max_area:(int)_max_area NS_SWIFT_NAME(create(_delta:_min_area:_max_area:));
++ (MSER*)create:(int)delta min_area:(int)min_area max_area:(int)max_area NS_SWIFT_NAME(create(delta:min_area:max_area:));
 
 /**
  * Full constructor for %MSER detector
  *
- * @param _delta it compares `$$(size_{i}-size_{i-delta})/size_{i-delta}$$`
- * @param _min_area prune the area which smaller than minArea
+ * @param delta it compares `$$(size_{i}-size_{i-delta})/size_{i-delta}$$`
+ * @param min_area prune the area which smaller than minArea
  */
-+ (MSER*)create:(int)_delta _min_area:(int)_min_area NS_SWIFT_NAME(create(_delta:_min_area:));
++ (MSER*)create:(int)delta min_area:(int)min_area NS_SWIFT_NAME(create(delta:min_area:));
 
 /**
  * Full constructor for %MSER detector
  *
- * @param _delta it compares `$$(size_{i}-size_{i-delta})/size_{i-delta}$$`
+ * @param delta it compares `$$(size_{i}-size_{i-delta})/size_{i-delta}$$`
  */
-+ (MSER*)create:(int)_delta NS_SWIFT_NAME(create(_delta:));
++ (MSER*)create:(int)delta NS_SWIFT_NAME(create(delta:));
 
 /**
  * Full constructor for %MSER detector
@@ -213,6 +212,78 @@ CV_EXPORTS @interface MSER : Feature2D
 //  int cv::MSER::getMaxArea()
 //
 - (int)getMaxArea NS_SWIFT_NAME(getMaxArea());
+
+
+//
+//  void cv::MSER::setMaxVariation(double maxVariation)
+//
+- (void)setMaxVariation:(double)maxVariation NS_SWIFT_NAME(setMaxVariation(maxVariation:));
+
+
+//
+//  double cv::MSER::getMaxVariation()
+//
+- (double)getMaxVariation NS_SWIFT_NAME(getMaxVariation());
+
+
+//
+//  void cv::MSER::setMinDiversity(double minDiversity)
+//
+- (void)setMinDiversity:(double)minDiversity NS_SWIFT_NAME(setMinDiversity(minDiversity:));
+
+
+//
+//  double cv::MSER::getMinDiversity()
+//
+- (double)getMinDiversity NS_SWIFT_NAME(getMinDiversity());
+
+
+//
+//  void cv::MSER::setMaxEvolution(int maxEvolution)
+//
+- (void)setMaxEvolution:(int)maxEvolution NS_SWIFT_NAME(setMaxEvolution(maxEvolution:));
+
+
+//
+//  int cv::MSER::getMaxEvolution()
+//
+- (int)getMaxEvolution NS_SWIFT_NAME(getMaxEvolution());
+
+
+//
+//  void cv::MSER::setAreaThreshold(double areaThreshold)
+//
+- (void)setAreaThreshold:(double)areaThreshold NS_SWIFT_NAME(setAreaThreshold(areaThreshold:));
+
+
+//
+//  double cv::MSER::getAreaThreshold()
+//
+- (double)getAreaThreshold NS_SWIFT_NAME(getAreaThreshold());
+
+
+//
+//  void cv::MSER::setMinMargin(double min_margin)
+//
+- (void)setMinMargin:(double)min_margin NS_SWIFT_NAME(setMinMargin(min_margin:));
+
+
+//
+//  double cv::MSER::getMinMargin()
+//
+- (double)getMinMargin NS_SWIFT_NAME(getMinMargin());
+
+
+//
+//  void cv::MSER::setEdgeBlurSize(int edge_blur_size)
+//
+- (void)setEdgeBlurSize:(int)edge_blur_size NS_SWIFT_NAME(setEdgeBlurSize(edge_blur_size:));
+
+
+//
+//  int cv::MSER::getEdgeBlurSize()
+//
+- (int)getEdgeBlurSize NS_SWIFT_NAME(getEdgeBlurSize());
 
 
 //

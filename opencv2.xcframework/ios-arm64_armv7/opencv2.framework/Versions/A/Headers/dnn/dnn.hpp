@@ -52,6 +52,11 @@
 
 namespace cv {
 namespace dnn {
+
+namespace accessor {
+class DnnNetAccessor;  // forward declaration
+}
+
 CV__DNN_INLINE_NS_BEGIN
 //! @addtogroup dnn
 //! @{
@@ -65,18 +70,23 @@ CV__DNN_INLINE_NS_BEGIN
     enum Backend
     {
         //! DNN_BACKEND_DEFAULT equals to DNN_BACKEND_INFERENCE_ENGINE if
-        //! OpenCV is built with Intel's Inference Engine library or
+        //! OpenCV is built with Intel OpenVINO or
         //! DNN_BACKEND_OPENCV otherwise.
         DNN_BACKEND_DEFAULT = 0,
         DNN_BACKEND_HALIDE,
-        DNN_BACKEND_INFERENCE_ENGINE,            //!< Intel's Inference Engine computational backend
-                                                 //!< @sa setInferenceEngineBackendType
+        DNN_BACKEND_INFERENCE_ENGINE,            //!< Intel OpenVINO computational backend
+                                                 //!< @note Tutorial how to build OpenCV with OpenVINO: @ref tutorial_dnn_openvino
         DNN_BACKEND_OPENCV,
         DNN_BACKEND_VKCOM,
         DNN_BACKEND_CUDA,
-#ifdef __OPENCV_BUILD
+        DNN_BACKEND_WEBNN,
+        DNN_BACKEND_TIMVX,
+        DNN_BACKEND_CANN,
+#if defined(__OPENCV_BUILD) || defined(BUILD_PLUGIN)
+#if !defined(OPENCV_BINDING_PARSER)
         DNN_BACKEND_INFERENCE_ENGINE_NGRAPH = 1000000,     // internal - use DNN_BACKEND_INFERENCE_ENGINE + setInferenceEngineBackendType()
         DNN_BACKEND_INFERENCE_ENGINE_NN_BUILDER_2019,      // internal - use DNN_BACKEND_INFERENCE_ENGINE + setInferenceEngineBackendType()
+#endif
 #endif
     };
 
@@ -94,11 +104,24 @@ CV__DNN_INLINE_NS_BEGIN
         DNN_TARGET_FPGA,  //!< FPGA device with CPU fallbacks using Inference Engine's Heterogeneous plugin.
         DNN_TARGET_CUDA,
         DNN_TARGET_CUDA_FP16,
-        DNN_TARGET_HDDL
+        DNN_TARGET_HDDL,
+        DNN_TARGET_NPU,
     };
 
     CV_EXPORTS std::vector< std::pair<Backend, Target> > getAvailableBackends();
     CV_EXPORTS_W std::vector<Target> getAvailableTargets(dnn::Backend be);
+
+    /**
+     * @brief Enables detailed logging of the DNN model loading with CV DNN API.
+     * @param[in] isDiagnosticsMode Indicates whether diagnostic mode should be set.
+     *
+     * Diagnostic mode provides detailed logging of the model loading stage to explore
+     * potential problems (ex.: not implemented layer type).
+     *
+     * @note In diagnostic mode series of assertions will be skipped, it can lead to the
+     * expected application crash.
+     */
+    CV_EXPORTS void enableModelDiagnostics(bool isDiagnosticsMode);
 
     /** @brief This class provides all data needed to initialize layer.
      *
@@ -121,7 +144,7 @@ CV__DNN_INLINE_NS_BEGIN
     class BackendNode
     {
     public:
-        BackendNode(int backendId);
+        explicit BackendNode(int backendId);
 
         virtual ~BackendNode(); //!< Virtual destructor to make polymorphism.
 
@@ -223,6 +246,15 @@ CV__DNN_INLINE_NS_BEGIN
          */
         virtual void forward(InputArrayOfArrays inputs, OutputArrayOfArrays outputs, OutputArrayOfArrays internals);
 
+        /** @brief Tries to quantize the given layer and compute the quantization parameters required for fixed point implementation.
+         *  @param[in] scales input and output scales.
+         *  @param[in] zeropoints input and output zeropoints.
+         *  @param[out] params Quantized parameters required for fixed point implementation of that layer.
+         *  @returns True if layer can be quantized.
+         */
+        virtual bool tryQuantize(const std::vector<std::vector<float> > &scales,
+                                 const std::vector<std::vector<int> > &zeropoints, LayerParams& params);
+
         /** @brief Given the @p input blobs, computes the output @p blobs.
          *  @param[in]  inputs  the input blobs.
          *  @param[out] outputs allocated output blobs, which will store results of the computation.
@@ -255,18 +287,18 @@ CV__DNN_INLINE_NS_BEGIN
          * Each layer input and output can be labeled to easily identify them using "%<layer_name%>[.output_name]" notation.
          * This method maps label of input blob to its index into input vector.
          */
-        virtual int inputNameToIndex(String inputName);
+        virtual int inputNameToIndex(String inputName);  // FIXIT const
         /** @brief Returns index of output blob in output array.
          *  @see inputNameToIndex()
          */
-        CV_WRAP virtual int outputNameToIndex(const String& outputName);
+        CV_WRAP virtual int outputNameToIndex(const String& outputName);  // FIXIT const
 
         /**
          * @brief Ask layer if it support specific backend for doing computations.
          * @param[in] backendId computation backend identifier.
          * @see Backend
          */
-        virtual bool supportBackend(int backendId);
+        virtual bool supportBackend(int backendId);  // FIXIT const
 
         /**
          * @brief Returns Halide backend node.
@@ -280,11 +312,11 @@ CV__DNN_INLINE_NS_BEGIN
          */
         virtual Ptr<BackendNode> initHalide(const std::vector<Ptr<BackendWrapper> > &inputs);
 
-        virtual Ptr<BackendNode> initInfEngine(const std::vector<Ptr<BackendWrapper> > &inputs);
-
         virtual Ptr<BackendNode> initNgraph(const std::vector<Ptr<BackendWrapper> > &inputs, const std::vector<Ptr<BackendNode> >& nodes);
 
         virtual Ptr<BackendNode> initVkCom(const std::vector<Ptr<BackendWrapper> > &inputs);
+
+        virtual Ptr<BackendNode> initWebnn(const std::vector<Ptr<BackendWrapper> > &inputs, const std::vector<Ptr<BackendNode> >& nodes);
 
         /**
          * @brief Returns a CUDA backend node
@@ -298,6 +330,28 @@ CV__DNN_INLINE_NS_BEGIN
             const std::vector<Ptr<BackendWrapper>>& inputs,
             const std::vector<Ptr<BackendWrapper>>& outputs
         );
+
+        /**
+         * @brief Returns a TimVX backend node
+         *
+         * @param   timVxInfo  void pointer to CSLContext object
+         * @param   inputsWrapper   layer inputs
+         * @param   outputsWrapper  layer outputs
+         * @param   isLast if the node is the last one of the TimVX Graph.
+         */
+        virtual Ptr<BackendNode> initTimVX(void* timVxInfo,
+                                           const std::vector<Ptr<BackendWrapper> > &inputsWrapper,
+                                           const std::vector<Ptr<BackendWrapper> > &outputsWrapper,
+                                           bool isLast);
+
+        /**
+         * @brief Returns a CANN backend node
+         *
+         * @param   inputsWrapper   layer inputs
+         * @param   index           layer id for op name
+         * @param   nodes           inputs of this node
+         */
+        virtual Ptr<BackendNode> initCann(const std::vector<Ptr<BackendWrapper> > &inputsWrapper, const int index, const std::vector<Ptr<BackendNode> >& nodes);
 
        /**
         * @brief Automatic Halide scheduling based on layer hyper-parameters.
@@ -357,7 +411,17 @@ CV__DNN_INLINE_NS_BEGIN
         virtual void getScaleShift(Mat& scale, Mat& shift) const;
 
         /**
-         * @brief "Deattaches" all the layers, attached to particular layer.
+         * @brief Returns scale and zeropoint of layers
+         * @param[out] scale Output scale
+         * @param[out] zeropoint Output zeropoint
+         *
+         * By default, @p scale is 1 and @p zeropoint is 0.
+         */
+        virtual void getScaleZeropoint(float& scale, int& zeropoint) const;
+
+
+        /**
+         * @brief "Detaches" all the layers, attached to particular layer.
          */
         virtual void unsetAttached();
 
@@ -441,30 +505,49 @@ CV__DNN_INLINE_NS_BEGIN
         /** @brief Adds new layer to the net.
          *  @param name   unique name of the adding layer.
          *  @param type   typename of the adding layer (type must be registered in LayerRegister).
+         *  @param dtype  datatype of output blobs.
          *  @param params parameters which will be used to initialize the creating layer.
          *  @returns unique identifier of created layer, or -1 if a failure will happen.
          */
+        int addLayer(const String &name, const String &type, const int &dtype, LayerParams &params);
+
+        /** @overload Datatype of output blobs set to default CV_32F */
         int addLayer(const String &name, const String &type, LayerParams &params);
+
         /** @brief Adds new layer and connects its first input to the first output of previously added layer.
          *  @see addLayer()
          */
+        int addLayerToPrev(const String &name, const String &type, const int &dtype, LayerParams &params);
+
+        /** @overload */
         int addLayerToPrev(const String &name, const String &type, LayerParams &params);
 
         /** @brief Converts string name of the layer to the integer identifier.
          *  @returns id of the layer, or -1 if the layer wasn't found.
          */
-        CV_WRAP int getLayerId(const String &layer);
+        CV_WRAP int getLayerId(const String &layer) const;
 
         CV_WRAP std::vector<String> getLayerNames() const;
 
-        /** @brief Container for strings and integers. */
+        /** @brief Container for strings and integers.
+         *
+         * @deprecated Use getLayerId() with int result.
+         */
         typedef DictValue LayerId;
 
         /** @brief Returns pointer to layer with specified id or name which the network use. */
-        CV_WRAP Ptr<Layer> getLayer(LayerId layerId);
+        CV_WRAP Ptr<Layer> getLayer(int layerId) const;
+        /** @overload
+         *  @deprecated Use int getLayerId(const String &layer)
+         */
+        CV_WRAP inline Ptr<Layer> getLayer(const String& layerName) const { return getLayer(getLayerId(layerName)); }
+        /** @overload
+         *  @deprecated to be removed
+         */
+        CV_WRAP Ptr<Layer> getLayer(const LayerId& layerId) const;
 
         /** @brief Returns pointers to input layers of specific layer. */
-        std::vector<Ptr<Layer> > getLayerInputs(LayerId layerId); // FIXIT: CV_WRAP
+        std::vector<Ptr<Layer> > getLayerInputs(int layerId) const; // FIXIT: CV_WRAP
 
         /** @brief Connects output of the first layer to input of the second layer.
          *  @param outPin descriptor of the first layer output.
@@ -488,6 +571,18 @@ CV__DNN_INLINE_NS_BEGIN
          *  @param inpNum number of the second layer input
          */
         void connect(int outLayerId, int outNum, int inpLayerId, int inpNum);
+
+        /** @brief Registers network output with name
+         *
+         *  Function may create additional 'Identity' layer.
+         *
+         *  @param outputName identifier of the output
+         *  @param layerId identifier of the second layer
+         *  @param outputPort number of the second layer input
+         *
+         *  @returns index of bound layer (the same as layerId or newly created)
+         */
+        int registerOutput(const std::string& outputName, int layerId, int outputPort);
 
         /** @brief Sets outputs names of the network input pseudo layer.
          *
@@ -538,6 +633,27 @@ CV__DNN_INLINE_NS_BEGIN
          */
         CV_WRAP_AS(forwardAndRetrieve) void forward(CV_OUT std::vector<std::vector<Mat> >& outputBlobs,
                                                     const std::vector<String>& outBlobNames);
+
+        /** @brief Returns a quantized Net from a floating-point Net.
+         *  @param calibData Calibration data to compute the quantization parameters.
+         *  @param inputsDtype Datatype of quantized net's inputs. Can be CV_32F or CV_8S.
+         *  @param outputsDtype Datatype of quantized net's outputs. Can be CV_32F or CV_8S.
+         *  @param perChannel Quantization granularity of quantized Net. The default is true, that means quantize model
+         *  in per-channel way (channel-wise). Set it false to quantize model in per-tensor way (or tensor-wise).
+         */
+        CV_WRAP Net quantize(InputArrayOfArrays calibData, int inputsDtype, int outputsDtype, bool perChannel=true);
+
+        /** @brief Returns input scale and zeropoint for a quantized Net.
+         *  @param scales output parameter for returning input scales.
+         *  @param zeropoints output parameter for returning input zeropoints.
+         */
+        CV_WRAP void getInputDetails(CV_OUT std::vector<float>& scales, CV_OUT std::vector<int>& zeropoints) const;
+
+        /** @brief Returns output scale and zeropoint for a quantized Net.
+         *  @param scales output parameter for returning output scales.
+         *  @param zeropoints output parameter for returning output zeropoints.
+         */
+        CV_WRAP void getOutputDetails(CV_OUT std::vector<float>& scales, CV_OUT std::vector<int>& zeropoints) const;
 
         /**
          * @brief Compile Halide layers.
@@ -601,20 +717,26 @@ CV__DNN_INLINE_NS_BEGIN
          *  @note If shape of the new blob differs from the previous shape,
          *  then the following forward pass may fail.
         */
-        CV_WRAP void setParam(LayerId layer, int numParam, const Mat &blob);
+        CV_WRAP void setParam(int layer, int numParam, const Mat &blob);
+        CV_WRAP inline void setParam(const String& layerName, int numParam, const Mat &blob) { return setParam(getLayerId(layerName), numParam, blob); }
 
         /** @brief Returns parameter blob of the layer.
          *  @param layer name or id of the layer.
          *  @param numParam index of the layer parameter in the Layer::blobs array.
          *  @see Layer::blobs
          */
-        CV_WRAP Mat getParam(LayerId layer, int numParam = 0);
+        CV_WRAP Mat getParam(int layer, int numParam = 0) const;
+        CV_WRAP inline Mat getParam(const String& layerName, int numParam = 0) const { return getParam(getLayerId(layerName), numParam); }
 
         /** @brief Returns indexes of layers with unconnected outputs.
+         *
+         * FIXIT: Rework API to registerOutput() approach, deprecate this call
          */
         CV_WRAP std::vector<int> getUnconnectedOutLayers() const;
 
         /** @brief Returns names of layers with unconnected outputs.
+         *
+         * FIXIT: Rework API to registerOutput() approach, deprecate this call
          */
         CV_WRAP std::vector<String> getUnconnectedOutLayersNames() const;
 
@@ -725,16 +847,28 @@ CV__DNN_INLINE_NS_BEGIN
          */
         CV_WRAP void enableFusion(bool fusion);
 
+        /** @brief Enables or disables the Winograd compute branch. The Winograd compute branch can speed up
+         * 3x3 Convolution at a small loss of accuracy.
+        * @param useWinograd true to enable the Winograd compute branch. The default is true.
+        */
+        CV_WRAP void enableWinograd(bool useWinograd);
+
         /** @brief Returns overall time for inference and timings (in ticks) for layers.
+         *
          * Indexes in returned vector correspond to layers ids. Some layers can be fused with others,
-         * in this case zero ticks count will be return for that skipped layers.
-         * @param timings vector for tick timings for all layers.
+         * in this case zero ticks count will be return for that skipped layers. Supported by DNN_BACKEND_OPENCV on DNN_TARGET_CPU only.
+         *
+         * @param[out] timings vector for tick timings for all layers.
          * @return overall ticks for model inference.
          */
         CV_WRAP int64 getPerfProfile(CV_OUT std::vector<double>& timings);
 
-    private:
+
         struct Impl;
+        inline Impl* getImpl() const { return impl.get(); }
+        inline Impl& getImplRef() const { CV_DbgAssert(impl); return *impl.get(); }
+        friend class accessor::DnnNetAccessor;
+    protected:
         Ptr<Impl> impl;
     };
 
@@ -1070,6 +1204,60 @@ CV__DNN_INLINE_NS_BEGIN
                              CV_OUT std::vector<int>& indices,
                              const float eta = 1.f, const int top_k = 0);
 
+    /** @brief Performs batched non maximum suppression on given boxes and corresponding scores across different classes.
+
+     * @param bboxes a set of bounding boxes to apply NMS.
+     * @param scores a set of corresponding confidences.
+     * @param class_ids a set of corresponding class ids. Ids are integer and usually start from 0.
+     * @param score_threshold a threshold used to filter boxes by score.
+     * @param nms_threshold a threshold used in non maximum suppression.
+     * @param indices the kept indices of bboxes after NMS.
+     * @param eta a coefficient in adaptive threshold formula: \f$nms\_threshold_{i+1}=eta\cdot nms\_threshold_i\f$.
+     * @param top_k if `>0`, keep at most @p top_k picked indices.
+     */
+    CV_EXPORTS void NMSBoxesBatched(const std::vector<Rect>& bboxes, const std::vector<float>& scores, const std::vector<int>& class_ids,
+                                    const float score_threshold, const float nms_threshold,
+                                    CV_OUT std::vector<int>& indices,
+                                    const float eta = 1.f, const int top_k = 0);
+
+    CV_EXPORTS_W void NMSBoxesBatched(const std::vector<Rect2d>& bboxes, const std::vector<float>& scores, const std::vector<int>& class_ids,
+                                      const float score_threshold, const float nms_threshold,
+                                      CV_OUT std::vector<int>& indices,
+                                      const float eta = 1.f, const int top_k = 0);
+
+    /**
+     * @brief Enum of Soft NMS methods.
+     * @see softNMSBoxes
+     */
+    enum class SoftNMSMethod
+    {
+        SOFTNMS_LINEAR = 1,
+        SOFTNMS_GAUSSIAN = 2
+    };
+
+    /** @brief Performs soft non maximum suppression given boxes and corresponding scores.
+     * Reference: https://arxiv.org/abs/1704.04503
+     * @param bboxes a set of bounding boxes to apply Soft NMS.
+     * @param scores a set of corresponding confidences.
+     * @param updated_scores a set of corresponding updated confidences.
+     * @param score_threshold a threshold used to filter boxes by score.
+     * @param nms_threshold a threshold used in non maximum suppression.
+     * @param indices the kept indices of bboxes after NMS.
+     * @param top_k keep at most @p top_k picked indices.
+     * @param sigma parameter of Gaussian weighting.
+     * @param method Gaussian or linear.
+     * @see SoftNMSMethod
+     */
+    CV_EXPORTS_W void softNMSBoxes(const std::vector<Rect>& bboxes,
+                                   const std::vector<float>& scores,
+                                   CV_OUT std::vector<float>& updated_scores,
+                                   const float score_threshold,
+                                   const float nms_threshold,
+                                   CV_OUT std::vector<int>& indices,
+                                   size_t top_k = 0,
+                                   const float sigma = 0.5,
+                                   SoftNMSMethod method = SoftNMSMethod::SOFTNMS_GAUSSIAN);
+
 
      /** @brief This class is presented high-level API for neural networks.
       *
@@ -1187,6 +1375,9 @@ CV__DNN_INLINE_NS_BEGIN
      class CV_EXPORTS_W_SIMPLE ClassificationModel : public Model
      {
      public:
+         CV_DEPRECATED_EXTERNAL  // avoid using in C++ code, will be moved to "protected" (need to fix bindings first)
+         ClassificationModel();
+
          /**
           * @brief Create classification model from network represented in one of the supported formats.
           * An order of @p model and @p config arguments does not matter.
@@ -1200,6 +1391,24 @@ CV__DNN_INLINE_NS_BEGIN
           * @param[in] network Net object.
           */
          CV_WRAP ClassificationModel(const Net& network);
+
+         /**
+          * @brief Set enable/disable softmax post processing option.
+          *
+          * If this option is true, softmax is applied after forward inference within the classify() function
+          * to convert the confidences range to [0.0-1.0].
+          * This function allows you to toggle this behavior.
+          * Please turn true when not contain softmax layer in model.
+          * @param[in] enable Set enable softmax post processing within the classify() function.
+          */
+         CV_WRAP ClassificationModel& setEnableSoftmaxPostProcessing(bool enable);
+
+         /**
+          * @brief Get enable/disable softmax post processing option.
+          *
+          * This option defaults to false, softmax post processing is not applied within the classify() function.
+          */
+         CV_WRAP bool getEnableSoftmaxPostProcessing() const;
 
          /** @brief Given the @p input frame, create input blob, run net and return top-1 prediction.
           *  @param[in]  frame  The input image.
@@ -1359,7 +1568,9 @@ public:
 
     /**
      * @brief Set the decoding method of translating the network output into string
-     * @param[in] decodeType The decoding method of translating the network output into string: {'CTC-greedy': greedy decoding for the output of CTC-based methods}
+     * @param[in] decodeType The decoding method of translating the network output into string, currently supported type:
+     *    - `"CTC-greedy"` greedy decoding for the output of CTC-based methods
+     *    - `"CTC-prefix-beam-search"` Prefix beam search decoding for the output of CTC-based methods
      */
     CV_WRAP
     TextRecognitionModel& setDecodeType(const std::string& decodeType);
@@ -1370,6 +1581,15 @@ public:
      */
     CV_WRAP
     const std::string& getDecodeType() const;
+
+    /**
+     * @brief Set the decoding method options for `"CTC-prefix-beam-search"` decode usage
+     * @param[in] beamSize Beam size for search
+     * @param[in] vocPruneSize Parameter to optimize big vocabulary search,
+     * only take top @p vocPruneSize tokens in each search step, @p vocPruneSize <= 0 stands for disable this prune.
+     */
+    CV_WRAP
+    TextRecognitionModel& setDecodeOptsCTCPrefixBeamSearch(int beamSize, int vocPruneSize = 0);
 
     /**
      * @brief Set the vocabulary for recognition.
@@ -1424,7 +1644,7 @@ public:
      * - top-right
      * - bottom-right
      *
-     * Use cv::getPerspectiveTransform function to retrive image region without perspective transformations.
+     * Use cv::getPerspectiveTransform function to retrieve image region without perspective transformations.
      *
      * @note If DL model doesn't support that kind of output then result may be derived from detectTextRectangles() output.
      *

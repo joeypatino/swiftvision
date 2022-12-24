@@ -17,6 +17,7 @@
 @class ByteVector;
 @class DictValue;
 @class DoubleVector;
+@class FloatVector;
 @class IntVector;
 @class Layer;
 @class Mat;
@@ -135,12 +136,32 @@ CV_EXPORTS @interface Net : NSObject
 
 
 //
-//  Ptr_Layer cv::dnn::Net::getLayer(LayerId layerId)
+//  Ptr_Layer cv::dnn::Net::getLayer(int layerId)
 //
 /**
  * Returns pointer to layer with specified id or name which the network use.
  */
-- (Layer*)getLayer:(DictValue*)layerId NS_SWIFT_NAME(getLayer(layerId:));
+- (Layer*)getLayer:(int)layerId NS_SWIFT_NAME(getLayer(layerId:));
+
+
+//
+//  Ptr_Layer cv::dnn::Net::getLayer(String layerName)
+//
+/**
+ *
+ * @deprecated Use int getLayerId(const String &layer)
+ */
+- (Layer*)getLayerByName:(NSString*)layerName NS_SWIFT_NAME(getLayer(layerName:)) DEPRECATED_ATTRIBUTE;
+
+
+//
+//  Ptr_Layer cv::dnn::Net::getLayer(LayerId layerId)
+//
+/**
+ *
+ * @deprecated to be removed
+ */
+- (Layer*)getLayerByDictValue:(DictValue*)layerId NS_SWIFT_NAME(getLayer(layerId:)) DEPRECATED_ATTRIBUTE;
 
 
 //
@@ -253,6 +274,51 @@ CV_EXPORTS @interface Net : NSObject
 
 
 //
+//  Net cv::dnn::Net::quantize(vector_Mat calibData, int inputsDtype, int outputsDtype, bool perChannel = true)
+//
+/**
+ * Returns a quantized Net from a floating-point Net.
+ * @param calibData Calibration data to compute the quantization parameters.
+ * @param inputsDtype Datatype of quantized net's inputs. Can be CV_32F or CV_8S.
+ * @param outputsDtype Datatype of quantized net's outputs. Can be CV_32F or CV_8S.
+ * @param perChannel Quantization granularity of quantized Net. The default is true, that means quantize model
+ * in per-channel way (channel-wise). Set it false to quantize model in per-tensor way (or tensor-wise).
+ */
+- (Net*)quantize:(NSArray<Mat*>*)calibData inputsDtype:(int)inputsDtype outputsDtype:(int)outputsDtype perChannel:(BOOL)perChannel NS_SWIFT_NAME(quantize(calibData:inputsDtype:outputsDtype:perChannel:));
+
+/**
+ * Returns a quantized Net from a floating-point Net.
+ * @param calibData Calibration data to compute the quantization parameters.
+ * @param inputsDtype Datatype of quantized net's inputs. Can be CV_32F or CV_8S.
+ * @param outputsDtype Datatype of quantized net's outputs. Can be CV_32F or CV_8S.
+ * in per-channel way (channel-wise). Set it false to quantize model in per-tensor way (or tensor-wise).
+ */
+- (Net*)quantize:(NSArray<Mat*>*)calibData inputsDtype:(int)inputsDtype outputsDtype:(int)outputsDtype NS_SWIFT_NAME(quantize(calibData:inputsDtype:outputsDtype:));
+
+
+//
+//  void cv::dnn::Net::getInputDetails(vector_float& scales, vector_int& zeropoints)
+//
+/**
+ * Returns input scale and zeropoint for a quantized Net.
+ * @param scales output parameter for returning input scales.
+ * @param zeropoints output parameter for returning input zeropoints.
+ */
+- (void)getInputDetails:(FloatVector*)scales zeropoints:(IntVector*)zeropoints NS_SWIFT_NAME(getInputDetails(scales:zeropoints:));
+
+
+//
+//  void cv::dnn::Net::getOutputDetails(vector_float& scales, vector_int& zeropoints)
+//
+/**
+ * Returns output scale and zeropoint for a quantized Net.
+ * @param scales output parameter for returning output scales.
+ * @param zeropoints output parameter for returning output zeropoints.
+ */
+- (void)getOutputDetails:(FloatVector*)scales zeropoints:(IntVector*)zeropoints NS_SWIFT_NAME(getOutputDetails(scales:zeropoints:));
+
+
+//
 //  void cv::dnn::Net::setHalideScheduler(String scheduler)
 //
 /**
@@ -359,7 +425,7 @@ CV_EXPORTS @interface Net : NSObject
 
 
 //
-//  void cv::dnn::Net::setParam(LayerId layer, int numParam, Mat blob)
+//  void cv::dnn::Net::setParam(int layer, int numParam, Mat blob)
 //
 /**
  * Sets the new value for the learned param of the layer.
@@ -370,11 +436,17 @@ CV_EXPORTS @interface Net : NSObject
  * NOTE: If shape of the new blob differs from the previous shape,
  * then the following forward pass may fail.
  */
-- (void)setParam:(DictValue*)layer numParam:(int)numParam blob:(Mat*)blob NS_SWIFT_NAME(setParam(layer:numParam:blob:));
+- (void)setParam:(int)layer numParam:(int)numParam blob:(Mat*)blob NS_SWIFT_NAME(setParam(layer:numParam:blob:));
 
 
 //
-//  Mat cv::dnn::Net::getParam(LayerId layer, int numParam = 0)
+//  void cv::dnn::Net::setParam(String layerName, int numParam, Mat blob)
+//
+- (void)setParamByName:(NSString*)layerName numParam:(int)numParam blob:(Mat*)blob NS_SWIFT_NAME(setParam(layerName:numParam:blob:));
+
+
+//
+//  Mat cv::dnn::Net::getParam(int layer, int numParam = 0)
 //
 /**
  * Returns parameter blob of the layer.
@@ -382,14 +454,22 @@ CV_EXPORTS @interface Net : NSObject
  * @param numParam index of the layer parameter in the Layer::blobs array.
  * @see `Layer::blobs`
  */
-- (Mat*)getParam:(DictValue*)layer numParam:(int)numParam NS_SWIFT_NAME(getParam(layer:numParam:));
+- (Mat*)getParam:(int)layer numParam:(int)numParam NS_SWIFT_NAME(getParam(layer:numParam:));
 
 /**
  * Returns parameter blob of the layer.
  * @param layer name or id of the layer.
  * @see `Layer::blobs`
  */
-- (Mat*)getParam:(DictValue*)layer NS_SWIFT_NAME(getParam(layer:));
+- (Mat*)getParam:(int)layer NS_SWIFT_NAME(getParam(layer:));
+
+
+//
+//  Mat cv::dnn::Net::getParam(String layerName, int numParam = 0)
+//
+- (Mat*)getParamByName:(NSString*)layerName numParam:(int)numParam NS_SWIFT_NAME(getParam(layerName:numParam:));
+
+- (Mat*)getParamByName:(NSString*)layerName NS_SWIFT_NAME(getParam(layerName:));
 
 
 //
@@ -397,6 +477,8 @@ CV_EXPORTS @interface Net : NSObject
 //
 /**
  * Returns indexes of layers with unconnected outputs.
+ *
+ * FIXIT: Rework API to registerOutput() approach, deprecate this call
  */
 - (IntVector*)getUnconnectedOutLayers NS_SWIFT_NAME(getUnconnectedOutLayers());
 
@@ -406,6 +488,8 @@ CV_EXPORTS @interface Net : NSObject
 //
 /**
  * Returns names of layers with unconnected outputs.
+ *
+ * FIXIT: Rework API to registerOutput() approach, deprecate this call
  */
 - (NSArray<NSString*>*)getUnconnectedOutLayersNames NS_SWIFT_NAME(getUnconnectedOutLayersNames());
 
@@ -511,12 +595,25 @@ CV_EXPORTS @interface Net : NSObject
 
 
 //
+//  void cv::dnn::Net::enableWinograd(bool useWinograd)
+//
+/**
+ * Enables or disables the Winograd compute branch. The Winograd compute branch can speed up
+ * 3x3 Convolution at a small loss of accuracy.
+ * @param useWinograd true to enable the Winograd compute branch. The default is true.
+ */
+- (void)enableWinograd:(BOOL)useWinograd NS_SWIFT_NAME(enableWinograd(useWinograd:));
+
+
+//
 //  int64 cv::dnn::Net::getPerfProfile(vector_double& timings)
 //
 /**
  * Returns overall time for inference and timings (in ticks) for layers.
+ *
  * Indexes in returned vector correspond to layers ids. Some layers can be fused with others,
- * in this case zero ticks count will be return for that skipped layers.
+ * in this case zero ticks count will be return for that skipped layers. Supported by DNN_BACKEND_OPENCV on DNN_TARGET_CPU only.
+ *
  * @param timings vector for tick timings for all layers.
  * @return overall ticks for model inference.
  */

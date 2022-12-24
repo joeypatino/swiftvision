@@ -268,13 +268,18 @@ namespace cv {
 #define CV_CPU_AVX_5124FMAPS    27
 
 #define CV_CPU_NEON             100
+#define CV_CPU_NEON_DOTPROD     101
 
 #define CV_CPU_MSA              150
+
+#define CV_CPU_RISCVV           170
 
 #define CV_CPU_VSX              200
 #define CV_CPU_VSX3             201
 
 #define CV_CPU_RVV              210
+
+#define CV_CPU_LASX             230
 
 // CPU features groups
 #define CV_CPU_AVX512_SKX       256
@@ -322,13 +327,18 @@ enum CpuFeatures {
     CPU_AVX_5124FMAPS   = 27,
 
     CPU_NEON            = 100,
+    CPU_NEON_DOTPROD    = 101,
 
     CPU_MSA             = 150,
+
+    CPU_RISCVV          = 170,
 
     CPU_VSX             = 200,
     CPU_VSX3            = 201,
 
     CPU_RVV             = 210,
+
+    CPU_LASX             = 230,
 
     CPU_AVX512_SKX      = 256, //!< Skylake-X with AVX-512F/CD/BW/DQ/VL
     CPU_AVX512_COMMON   = 257, //!< Common instructions AVX-512F/CD for all CPUs that support AVX-512
@@ -680,7 +690,7 @@ __CV_ENUM_FLAGS_BITWISE_XOR_EQ   (EnumType, EnumType)                           
 #  define CV_XADD(addr, delta) (int)_InterlockedExchangeAdd((long volatile*)addr, delta)
 #else
   #ifdef OPENCV_FORCE_UNSAFE_XADD
-    CV_INLINE CV_XADD(int* addr, int delta) { int tmp = *addr; *addr += delta; return tmp; }
+    CV_INLINE int CV_XADD(int* addr, int delta) { int tmp = *addr; *addr += delta; return tmp; }
   #else
     #error "OpenCV: can't define safe CV_XADD macro for current platform (unsupported). Define CV_XADD macro through custom port header (see OPENCV_INCLUDE_PORT_FILE)"
   #endif
@@ -701,14 +711,49 @@ __CV_ENUM_FLAGS_BITWISE_XOR_EQ   (EnumType, EnumType)                           
 #  endif
 #endif
 
+/****************************************************************************************\
+*                       CV_NODISCARD_STD attribute (C++17)                               *
+* encourages the compiler to issue a warning if the return value is discarded            *
+\****************************************************************************************/
+#ifndef CV_NODISCARD_STD
+#  ifndef __has_cpp_attribute
+//   workaround preprocessor non-compliance https://reviews.llvm.org/D57851
+#    define __has_cpp_attribute(__x) 0
+#  endif
+#  if __has_cpp_attribute(nodiscard)
+#    define CV_NODISCARD_STD [[nodiscard]]
+#  elif __cplusplus >= 201703L
+//   available when compiler is C++17 compliant
+#    define CV_NODISCARD_STD [[nodiscard]]
+#  elif defined(__INTEL_COMPILER)
+     // see above, available when C++17 is enabled
+#  elif defined(_MSC_VER) && _MSC_VER >= 1911 && _MSVC_LANG >= 201703L
+//   available with VS2017 v15.3+ with /std:c++17 or higher; works on functions and classes
+#    define CV_NODISCARD_STD [[nodiscard]]
+#  elif defined(__GNUC__) && (((__GNUC__ * 100) + __GNUC_MINOR__) >= 700) && (__cplusplus >= 201103L)
+//   available with GCC 7.0+; works on functions, works or silently fails on classes
+#    define CV_NODISCARD_STD [[nodiscard]]
+#  elif defined(__GNUC__) && (((__GNUC__ * 100) + __GNUC_MINOR__) >= 408) && (__cplusplus >= 201103L)
+//   available with GCC 4.8+ but it usually does nothing and can fail noisily -- therefore not used
+//   define CV_NODISCARD_STD [[gnu::warn_unused_result]]
+#  endif
+#endif
+#ifndef CV_NODISCARD_STD
+#  define CV_NODISCARD_STD /* nothing by default */
+#endif
+
 
 /****************************************************************************************\
-*                                  CV_NODISCARD attribute                                *
-* encourages the compiler to issue a warning if the return value is discarded (C++17)    *
+*                      CV_NODISCARD attribute (deprecated, GCC only)                     *
+* DONT USE: use instead the standard CV_NODISCARD_STD macro above                        *
+*           this legacy method silently fails to issue warning until some version        *
+*           after gcc 6.3.0. Yet with gcc 7+ you can use the above standard method       *
+*           which makes this method useless. Don't use it.                               *
+* @deprecated use instead CV_NODISCARD_STD                                               *
 \****************************************************************************************/
 #ifndef CV_NODISCARD
 #  if defined(__GNUC__)
-#    define CV_NODISCARD __attribute__((__warn_unused_result__)) // at least available with GCC 3.4
+#    define CV_NODISCARD __attribute__((__warn_unused_result__))
 #  elif defined(__clang__) && defined(__has_attribute)
 #    if __has_attribute(__warn_unused_result__)
 #      define CV_NODISCARD __attribute__((__warn_unused_result__))
@@ -765,7 +810,7 @@ __CV_ENUM_FLAGS_BITWISE_XOR_EQ   (EnumType, EnumType)                           
 #  define CV_CONSTEXPR
 #endif
 
-// Integer types portatibility
+// Integer types portability
 #ifdef OPENCV_STDINT_HEADER
 #include OPENCV_STDINT_HEADER
 #elif defined(__cplusplus)

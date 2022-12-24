@@ -18,10 +18,10 @@
 
 // C++: enum AgastDetectorType (cv.AgastFeatureDetector.DetectorType)
 typedef NS_ENUM(int, AgastDetectorType) {
-    AGAST_5_8 = 0,
-    AGAST_7_12d = 1,
-    AGAST_7_12s = 2,
-    OAST_9_16 = 3
+    AgastFeatureDetector_AGAST_5_8 NS_SWIFT_NAME(AGAST_5_8) = 0,
+    AgastFeatureDetector_AGAST_7_12d NS_SWIFT_NAME(AGAST_7_12d) = 1,
+    AgastFeatureDetector_AGAST_7_12s NS_SWIFT_NAME(AGAST_7_12s) = 2,
+    AgastFeatureDetector_OAST_9_16 NS_SWIFT_NAME(OAST_9_16) = 3
 };
 
 

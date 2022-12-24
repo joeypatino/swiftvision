@@ -19,12 +19,12 @@
 
 // C++: enum MatcherType (cv.DescriptorMatcher.MatcherType)
 typedef NS_ENUM(int, MatcherType) {
-    FLANNBASED = 1,
-    BRUTEFORCE = 2,
-    BRUTEFORCE_L1 = 3,
-    BRUTEFORCE_HAMMING = 4,
-    BRUTEFORCE_HAMMINGLUT = 5,
-    BRUTEFORCE_SL2 = 6
+    DescriptorMatcher_FLANNBASED NS_SWIFT_NAME(FLANNBASED) = 1,
+    DescriptorMatcher_BRUTEFORCE NS_SWIFT_NAME(BRUTEFORCE) = 2,
+    DescriptorMatcher_BRUTEFORCE_L1 NS_SWIFT_NAME(BRUTEFORCE_L1) = 3,
+    DescriptorMatcher_BRUTEFORCE_HAMMING NS_SWIFT_NAME(BRUTEFORCE_HAMMING) = 4,
+    DescriptorMatcher_BRUTEFORCE_HAMMINGLUT NS_SWIFT_NAME(BRUTEFORCE_HAMMINGLUT) = 5,
+    DescriptorMatcher_BRUTEFORCE_SL2 NS_SWIFT_NAME(BRUTEFORCE_SL2) = 6
 };
 
 
@@ -469,9 +469,9 @@ CV_EXPORTS @interface DescriptorMatcher : Algorithm
 
 
 //
-//  void cv::DescriptorMatcher::write(Ptr_FileStorage fs, String name = String())
+//  void cv::DescriptorMatcher::write(FileStorage fs, String name)
 //
-// Unknown type 'Ptr_FileStorage' (I), skipping the function
+// Unknown type 'FileStorage' (I), skipping the function
 
 
 

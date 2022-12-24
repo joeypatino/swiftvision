@@ -6,6 +6,7 @@
 #import "TextDewarperConfiguration.h"
 
 typedef NS_ENUM(NSUInteger, ContourRenderingMode) {
+    ContourRenderingModeContour,
     ContourRenderingModeOutline,
     ContourRenderingModeFill
 };
@@ -20,12 +21,26 @@ typedef NS_ENUM(NSUInteger, ContourRenderingMode) {
 
 /// returns the dewarped image
 - (UIImage *_Nullable)dewarp NS_SWIFT_NAME(dewarp());
-// returns pre processed image
+
+// returns thresholded input image
+- (UIImage *_Nullable)renderThresholded NS_SWIFT_NAME(renderThresholded());
+// returns dilated input image
+- (UIImage *_Nullable)renderDilated NS_SWIFT_NAME(renderDilated());
+// returns eroded input image
+- (UIImage *_Nullable)renderEroded NS_SWIFT_NAME(renderEroded());
+// returns input mask image
+- (UIImage *_Nullable)renderInputMask NS_SWIFT_NAME(renderInputMask());
+
+// returns pre-processed image (threshold, dilate, erode)
 - (UIImage *_Nullable)renderProcessed NS_SWIFT_NAME(renderProcessed());
 /// returns an image containing all the contour outlines
 - (UIImage *_Nullable)renderOutlines NS_SWIFT_NAME(renderOutlines());
 /// returns an image containing all the contours masks.
 - (UIImage *_Nullable)renderMasks NS_SWIFT_NAME(renderMasks());
+/// returns an image containing all the text spans contours.
+- (UIImage *_Nullable)renderContours NS_SWIFT_NAME(renderContours());
+/// returns an image containing all the text spans
+- (UIImage *_Nullable)renderSpans NS_SWIFT_NAME(renderSpans());
 /// returns an image containing all the text spans centerpoints.
 - (UIImage *_Nullable)renderKeyPoints NS_SWIFT_NAME(renderKeyPoints());
 /// returns an image containing all the text line quadratic curves.

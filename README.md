@@ -3,7 +3,7 @@
 ![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)
 [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](http://makeapullrequest.com)
 
-# SwiftVision
+## SwiftVision
 SwiftVision is a Swift framework for image manipulation that utilizes OpenCV, an open-source computer vision library. It includes a feature for dewarping book pages, allowing them to appear flat.
 
 ### Features
@@ -32,7 +32,7 @@ pod 'SwiftVision', :git => 'git@github.com:joeypatino/swiftvision.git'
 
 A working example of how to use SwiftVision can be found in the included SwiftVisionDemo app. You can use this demo app to explore the framework's features and see how to implement them in your own project.
 
-### Contributing
+## Contributing
 
 Contributions to SwiftVision are welcome! If you find a bug or would like to make an improvement, please report it on the project's GitHub page at https://github.com/joeypatino/swiftvision.
 

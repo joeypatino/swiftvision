@@ -4,19 +4,18 @@
 [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](http://makeapullrequest.com)
 
 # SwiftVision
-<br />
-<p align="left">
-    SwiftVision is a framework for image dewarping and manipulation, written in Swift and using OpenCV
-</p>
+SwiftVision is a Swift framework for image manipulation that utilizes OpenCV, an open-source computer vision library. It includes a feature for dewarping book pages, allowing them to appear flat.
 
-> Note: There might be better and more efficient means of image processing / manipulation on iOS. This library was 
-written mainly as an experiment in text dewarping using OpenCV but continued to expand to include numerous image
-editing functions and various related classes. 
+### Features
 
-Lots of credit on the page dewarping process goes to the great write-up by Matt Zucker https://mzucker.github.io/2016/08/15/page-dewarping.html
-## Requirements
+- Image manipulation using OpenCV: SwiftVision provides a wide range of image editing functions such as scaling, rotating, blurring, thresholding, and more.
+- Dewarping of book pages: SwiftVision's book dewarping feature is based on a model that assumes a book's surface is warped like a cylinder. This model allows a user to take a picture of a book page from various points of view, which can be difficult with other dewarping techniques that require the camera to be strictly parallel to the book surface. 
 
-- iOS 9.0+
+> A lot of credit for the page dewarping process goes to the great write-up by Matt Zucker: https://mzucker.github.io/2016/08/15/page-dewarping.html.
+
+### Requirements
+
+- iOS 12.0+
 
 ## Installation
 
@@ -24,17 +23,23 @@ Lots of credit on the page dewarping process goes to the great write-up by Matt 
 You can use [CocoaPods](http://cocoapods.org/) to install `SwiftVision` by adding it to your `Podfile`:
 
 ```ruby
-platform :ios, '9.0'
+platform :ios, '12.0'
 use_frameworks!
 pod 'SwiftVision', :git => 'git@github.com:joeypatino/swiftvision.git'
 ```
 
-## Usage example
+### Usage example
 
-A working example can be found in the SwiftVisionDemo app included in the repo. Check out the source code for documentation.
+A working example of how to use SwiftVision can be found in the included SwiftVisionDemo app. You can use this demo app to explore the framework's features and see how to implement them in your own project.
+
+### Contributing
+
+Contributions to SwiftVision are welcome! If you find a bug or would like to make an improvement, please report it on the project's GitHub page at https://github.com/joeypatino/swiftvision.
 
 ### Meta
 
-Joey Patino – [@nsinvalidarg](https://twitter.com/nsinvalidarg) – joey.patino@protonmail.com
+Joey Patino – [@nsinvalidarg](https://twitter.com/nsinvalidarg) – joey.patino@pm.me
 
-Distributed under the MIT license
+### License
+
+SwiftVision is released under the MIT License. See the LICENSE file for details.
